@@ -6,7 +6,7 @@ import chad.geom.Vertex3;
 
 class Cylinder {
 	public static function create(start : Vector3, end : Vector3, radius = 1.0) {
-		var slices = Math.ceil(64 * radius);
+		var slices = Math.ceil(128 * radius);
 
 		var ray = end.subtract(start);
 		var axisZ = ray.normalize(),

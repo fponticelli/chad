@@ -114,7 +114,7 @@ chad.csg.Cylinder = function() { }
 chad.csg.Cylinder.__name__ = true;
 chad.csg.Cylinder.create = function(start,end,radius) {
 	if(radius == null) radius = 1.0;
-	var slices = Math.ceil(64 * radius);
+	var slices = Math.ceil(128 * radius);
 	var ray = [end[0] - start[0],end[1] - start[1],end[2] - start[2]];
 	var axisZ = (function($this) {
 		var $r;
@@ -388,7 +388,7 @@ chad.csg.Sphere = function() { }
 chad.csg.Sphere.__name__ = true;
 chad.csg.Sphere.create = function(position,radius) {
 	if(radius == null) radius = 1.0;
-	var slices = Math.ceil(64 * radius), stacks = Math.ceil(slices / 2);
+	var slices = Math.ceil(128 * radius), stacks = Math.ceil(slices / 2);
 	var polygons = [], vertices = [];
 	var vertex = function(theta,phi) {
 		theta *= Math.PI * 2;
