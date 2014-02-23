@@ -14,7 +14,7 @@ Main.main = function() {
 	(window || {}).Main = Main;
 }
 Main.geom = function() {
-	var cube = chad.csg.Box.create((function($this) {
+	return chad.export.ThreeJS.toModel(chad.csg.Box.create((function($this) {
 		var $r;
 		var arr = [-0.5,-0.5,-0.5];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
@@ -44,8 +44,7 @@ Main.geom = function() {
 		var arr = [1.0,1.0,1.0];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
 		return $r;
-	}(this)))).intersect(chad.csg.Sphere.create([0.1,0.1,0.1],0.7));
-	return chad.export.ThreeJS.toModel(cube);
+	}(this)))).intersect(chad.csg.Sphere.create([0.0,0.0,0.0],0.7)));
 }
 var IMap = function() { }
 IMap.__name__ = true;
