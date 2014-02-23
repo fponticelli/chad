@@ -49,7 +49,42 @@ Main.geom = function() {
 		var arr = [0.0,0.0,0.0];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
 		return $r;
-	}(this)),0.7)).subtract(chad.csg.Sphere.create([0.5,0.5,0.5],0.35)));
+	}(this)),0.7)).subtract(chad.csg.Sphere.create((function($this) {
+		var $r;
+		var arr = [0.5,0.5,0.5];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),0.35)).subtract(chad.csg.Cylinder.create((function($this) {
+		var $r;
+		var arr = [0.0,0.0,-0.95];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),(function($this) {
+		var $r;
+		var arr = [0.0,0.0,0.95];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),0.25)).subtract(chad.csg.Cylinder.create((function($this) {
+		var $r;
+		var arr = [0.0,-0.95,0.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),(function($this) {
+		var $r;
+		var arr = [0.0,0.95,0.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),0.35)).subtract(chad.csg.Cylinder.create((function($this) {
+		var $r;
+		var arr = [-0.95,0.0,0.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),(function($this) {
+		var $r;
+		var arr = [0.95,0.0,0.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),0.15)));
 }
 var IMap = function() { }
 IMap.__name__ = true;
@@ -74,6 +109,160 @@ chad.csg.Box.create = function(position,size) {
 			}(this)));
 		}));
 	}));
+}
+chad.csg.Cylinder = function() { }
+chad.csg.Cylinder.__name__ = true;
+chad.csg.Cylinder.create = function(start,end,radius) {
+	if(radius == null) radius = 1.0;
+	var slices = Math.ceil(64 * radius);
+	var ray = [end[0] - start[0],end[1] - start[1],end[2] - start[2]];
+	var axisZ = (function($this) {
+		var $r;
+		var divisor = Math.sqrt((function($this) {
+			var $r;
+			var prod = (function($this) {
+				var $r;
+				var arr = [null == ray[0]?0:ray[0],null == ray[1]?0:ray[1],null == ray[2]?0:ray[2]];
+				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+				return $r;
+			}($this));
+			$r = ray[0] * prod[0] + ray[1] * prod[1] + ray[2] * prod[2];
+			return $r;
+		}($this)));
+		$r = [ray[0] / divisor,ray[1] / divisor,ray[2] / divisor];
+		return $r;
+	}(this)), isY = Math.abs(axisZ[1]) > 0.5;
+	var axisX = (function($this) {
+		var $r;
+		var divisor = Math.sqrt((function($this) {
+			var $r;
+			var prod = (function($this) {
+				var $r;
+				var arr = [null == [[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][0]?0:[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][0],null == [[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][1]?0:[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][1],null == [[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][2]?0:[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][2]];
+				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+				return $r;
+			}($this));
+			$r = [[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][0] * prod[0] + [[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][1] * prod[1] + [[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][2] * prod[2];
+			return $r;
+		}($this)));
+		$r = [[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][0] / divisor,[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][1] / divisor,[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][2] / divisor];
+		return $r;
+	}(this));
+	var axisY = (function($this) {
+		var $r;
+		var divisor = Math.sqrt((function($this) {
+			var $r;
+			var prod = (function($this) {
+				var $r;
+				var arr = [null == [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][0]?0:[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][0],null == [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][1]?0:[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][1],null == [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][2]?0:[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][2]];
+				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+				return $r;
+			}($this));
+			$r = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][0] * prod[0] + [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][1] * prod[1] + [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][2] * prod[2];
+			return $r;
+		}($this)));
+		$r = [[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][0] / divisor,[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][1] / divisor,[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][2] / divisor];
+		return $r;
+	}(this));
+	var s = new chad.geom.Vertex3(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
+	var e = new chad.geom.Vertex3(end,(function($this) {
+		var $r;
+		var divisor = Math.sqrt((function($this) {
+			var $r;
+			var prod = (function($this) {
+				var $r;
+				var arr = [null == axisZ[0]?0:axisZ[0],null == axisZ[1]?0:axisZ[1],null == axisZ[2]?0:axisZ[2]];
+				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+				return $r;
+			}($this));
+			$r = axisZ[0] * prod[0] + axisZ[1] * prod[1] + axisZ[2] * prod[2];
+			return $r;
+		}($this)));
+		$r = [axisZ[0] / divisor,axisZ[1] / divisor,axisZ[2] / divisor];
+		return $r;
+	}(this)));
+	var polygons = [];
+	var point = function(stack,slice,normalBlend) {
+		var angle = slice * Math.PI * 2;
+		var out = (function($this) {
+			var $r;
+			var other = (function($this) {
+				var $r;
+				var multiplier = Math.sin(angle);
+				$r = [axisY[0] * multiplier,axisY[1] * multiplier,axisY[2] * multiplier];
+				return $r;
+			}($this));
+			$r = [((function($this) {
+				var $r;
+				var multiplier = Math.cos(angle);
+				$r = [axisX[0] * multiplier,axisX[1] * multiplier,axisX[2] * multiplier];
+				return $r;
+			}($this)))[0] + other[0],((function($this) {
+				var $r;
+				var multiplier = Math.cos(angle);
+				$r = [axisX[0] * multiplier,axisX[1] * multiplier,axisX[2] * multiplier];
+				return $r;
+			}($this)))[1] + other[1],((function($this) {
+				var $r;
+				var multiplier = Math.cos(angle);
+				$r = [axisX[0] * multiplier,axisX[1] * multiplier,axisX[2] * multiplier];
+				return $r;
+			}($this)))[2] + other[2]];
+			return $r;
+		}(this));
+		var pos = (function($this) {
+			var $r;
+			var other = [out[0] * radius,out[1] * radius,out[2] * radius];
+			$r = [((function($this) {
+				var $r;
+				var other1 = [ray[0] * stack,ray[1] * stack,ray[2] * stack];
+				$r = [start[0] + other1[0],start[1] + other1[1],start[2] + other1[2]];
+				return $r;
+			}($this)))[0] + other[0],((function($this) {
+				var $r;
+				var other1 = [ray[0] * stack,ray[1] * stack,ray[2] * stack];
+				$r = [start[0] + other1[0],start[1] + other1[1],start[2] + other1[2]];
+				return $r;
+			}($this)))[1] + other[1],((function($this) {
+				var $r;
+				var other1 = [ray[0] * stack,ray[1] * stack,ray[2] * stack];
+				$r = [start[0] + other1[0],start[1] + other1[1],start[2] + other1[2]];
+				return $r;
+			}($this)))[2] + other[2]];
+			return $r;
+		}(this));
+		var normal = (function($this) {
+			var $r;
+			var other = [axisZ[0] * normalBlend,axisZ[1] * normalBlend,axisZ[2] * normalBlend];
+			$r = [((function($this) {
+				var $r;
+				var multiplier = 1 - Math.abs(normalBlend);
+				$r = [out[0] * multiplier,out[1] * multiplier,out[2] * multiplier];
+				return $r;
+			}($this)))[0] + other[0],((function($this) {
+				var $r;
+				var multiplier = 1 - Math.abs(normalBlend);
+				$r = [out[0] * multiplier,out[1] * multiplier,out[2] * multiplier];
+				return $r;
+			}($this)))[1] + other[1],((function($this) {
+				var $r;
+				var multiplier = 1 - Math.abs(normalBlend);
+				$r = [out[0] * multiplier,out[1] * multiplier,out[2] * multiplier];
+				return $r;
+			}($this)))[2] + other[2]];
+			return $r;
+		}(this));
+		return new chad.geom.Vertex3(pos,normal);
+	};
+	var _g = 0;
+	while(_g < slices) {
+		var i = _g++;
+		var t0 = i / slices, t1 = (i + 1) / slices;
+		polygons.push(new chad.geom.Polygon([s,point(0,t0,-1),point(0,t1,-1)]));
+		polygons.push(new chad.geom.Polygon([point(0,t1,0),point(0,t0,0),point(1,t0,0),point(1,t1,0)]));
+		polygons.push(new chad.geom.Polygon([e,point(1,t1,1),point(1,t0,1)]));
+	}
+	return chad.csg.Solid.fromPolygons(polygons);
 }
 chad.csg.Node = function(polygons) {
 	this.plane = null;
@@ -199,7 +388,7 @@ chad.csg.Sphere = function() { }
 chad.csg.Sphere.__name__ = true;
 chad.csg.Sphere.create = function(position,radius) {
 	if(radius == null) radius = 1.0;
-	var slices = Math.ceil(48 * radius), stacks = Math.ceil(slices / 2);
+	var slices = Math.ceil(64 * radius), stacks = Math.ceil(slices / 2);
 	var polygons = [], vertices = [];
 	var vertex = function(theta,phi) {
 		theta *= Math.PI * 2;

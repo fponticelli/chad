@@ -14,6 +14,9 @@ class Main {
 				.subtract(Box.create(-1.1, 1.0))
 				.intersect(Sphere.create(0.0, 0.7))
 				.subtract(Sphere.create(0.5, 0.35))
+				.subtract(Cylinder.create([0.0,0.0,-0.95], [0.0,0.0,0.95], 0.25))
+				.subtract(Cylinder.create([0.0,-0.95,0.0], [0.0,0.95,0.0], 0.35))
+				.subtract(Cylinder.create([-0.95,0.0,0.0], [0.95,0.0,0.0], 0.15))
 		);
 	}
 }
