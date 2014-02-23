@@ -6,7 +6,7 @@ import chad.geom.Vertex3;
 
 class Sphere {
 	public static function create(position : Vector3, radius = 1.0) {
-		var slices = Math.ceil(36 * radius),
+		var slices = Math.ceil(48 * radius),
 			stacks = Math.ceil(slices/2);
 
 		var polygons = [],

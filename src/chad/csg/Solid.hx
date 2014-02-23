@@ -23,42 +23,48 @@ class Solid {
 	}
 
 	public function union(other : Solid) {
-		var a = Node.build(polygons),
-			b = Node.build(other.polygons),
-			ac = a.clipTo(b),
-			bc = b.clipTo(ac),
-			bci = bc.invert(),
-			bcic = bci.clipTo(ac),
-			bcici = bcic.invert();
+		var a = new Node(polygons.copy()),
+			b = new Node(other.polygons.copy());
 
-		return fromPolygons(ac.all().concat(bcici.all()));
+		a.clipTo(b);
+		b.clipTo(a);
+		b.invert();
+		b.clipTo(a);
+		b.invert();
+		a.build(b.all());
+
+		return fromPolygons(a.all());
 	}
 
 	public function subtract(other : Solid) {
-		var a = Node.build(polygons),
-			b = Node.build(other.polygons),
-			ai = a.invert(),
-			aic = ai.clipTo(b),
-			bc = b.clipTo(aic),
-			bci = bc.invert(),
-			bcic = bci.clipTo(aic),
-			bcici = bcic.invert(),
-			n = Node.build(aic.all().concat(bcici.all()));
+		var a = new Node(polygons.copy()),
+			b = new Node(other.polygons.copy());
 
-		return fromPolygons(n.invert().all());
+		a.invert();
+		a.clipTo(b);
+		b.clipTo(a);
+		b.invert();
+		b.clipTo(a);
+		b.invert();
+		a.build(b.all());
+		a.invert();
+
+		return fromPolygons(a.all());
 	}
 
 	public function intersect(other : Solid) {
-		var a = Node.build(polygons),
-			b = Node.build(other.polygons),
-			ai = a.invert(),
-			bc = b.clipTo(ai),
-			bci = bc.invert(),
-			aic = ai.clipTo(bci),
-			bcic = bci.clipTo(aic),
-			n = Node.build(aic.all().concat(bcic.all()));
+		var a = new Node(polygons.copy()),
+			b = new Node(other.polygons.copy());
 
-		return fromPolygons(n.invert().all());
+		a.invert();
+		b.clipTo(a);
+		b.invert();
+		a.clipTo(b);
+		b.clipTo(a);
+		a.build(b.all());
+		a.invert();
+
+		return fromPolygons(a.all());
 	}
 
 	public function iterator()

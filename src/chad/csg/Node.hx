@@ -1,59 +1,69 @@
 package chad.csg;
 
 import chad.geom.Polygon;
+import chad.geom.Plane;
 
 class Node {
 	var polygons : Array<Polygon>;
+	var plane : Plane;
 
 	public var front(default, null) : Node;
 	public var back(default, null) : Node;
 
-	public static var empty(default, null) : Node = new Node([], null, null);
-
-	public static function build(polygons : Array<Polygon>) {
-		if(polygons.length == 0)
-			return null;
-
-		var plane     = polygons[0].plane,
-			front     = [],
-			back      = [],
-			npolygons = [],
-			result;
-		for(polygon in polygons) {
-			result = plane.splitPolygon(polygon);
-			npolygons = npolygons.concat(result[0]).concat(result[1]);
-			front = front.concat(result[2]);
-			back = back.concat(result[3]);
-		}
-		return new Node(npolygons, build(front), build(back));
+	// please ensure polygons is unmutable and not null
+	public function new(?polygons : Array<Polygon>) {
+		this.plane = null;
+		this.front = null;
+		this.back = null;
+		this.polygons = [];
+		if(null != polygons)
+			build(polygons);
 	}
 
-	// please ensure polygons is unmutable and not null
-	private function new(polygons : Array<Polygon>, front : Node, back : Node) {
-		this.polygons = polygons;
-		this.front = front;
-		this.back = back;
+	public function build(polygons : Array<Polygon>) {
+		if(polygons.length == 0)
+			return;
+
+		if(null == plane)
+			plane = polygons[0].plane;
+
+		var front     = [],
+			back      = [];
+		for(polygon in polygons) {
+			plane.splitPolygon(polygon, this.polygons, this.polygons, front, back);
+		}
+		if(front.length > 0) {
+			if(null == this.front)
+				this.front = new Node();
+			this.front.build(front);
+		}
+		if(back.length > 0) {
+			if(null == this.back)
+				this.back = new Node();
+			this.back.build(back);
+		}
 	}
 
 	public function invert() {
-		return new Node(
-			polygons.map(function(polygon) return polygon.flip()),
-			null == back ? null : back.invert(),
-			null == front ? null : front.invert()
-		);
+		for(i in 0...polygons.length) {
+			polygons[i] = polygons[i].flip();
+		}
+		plane = plane.flip();
+		if(null != front) front.invert();
+		if(null != back) back.invert();
+		var temp = front;
+		front = back;
+		back = temp;
 	}
 
 	public function clipPolygons(polygons : Array<Polygon>) : Array<Polygon> {
-		//if (!this.plane) return polygons.slice();
-		if(this.polygons.length == 0) return polygons;
-		var plane = this.polygons[0].plane,
-			front = [],
-			back  = [],
-			result;
+		if (null == this.plane)
+			return polygons.copy();
+
+		var front = [],
+			back  = [];
 		for(polygon in polygons) {
-			result = plane.splitPolygon(polygon);
-			front = front.concat(result[0]).concat(result[2]);
-			back = back.concat(result[1]).concat(result[3]);
+			plane.splitPolygon(polygon, front, back, front, back);
 		}
 		if(null != this.front)
 			front = this.front.clipPolygons(front);
@@ -65,11 +75,11 @@ class Node {
 	}
 
 	public function clipTo(other : Node) {
-		return new Node(
-			other.clipPolygons(polygons),
-			null == front ? null : front.clipTo(other),
-			null == back ? null : back.clipTo(other)
-		);
+		polygons = other.clipPolygons(polygons);
+		if(null != front)
+			front.clipTo(other);
+		if(null != back)
+			back.clipTo(other);
 	}
 
 	public function iterator()

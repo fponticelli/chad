@@ -21,7 +21,7 @@ class Plane {
 	public function flip()
 		return new Plane(normal.negate(), -w);
 
-	public function splitPolygon(polygon : Polygon) {
+	public function splitPolygon(polygon : Polygon, coplanarFront : Array<Polygon>, coplanarBack : Array<Polygon>, front : Array<Polygon>, back : Array<Polygon>) {
 		var polygonType = 0,
 			types = [],
 			t, type;
@@ -32,14 +32,13 @@ class Plane {
 			types.push(type);
 		}
 
-		var result = [[],[],[],[]]; // coplanar front, coplanar back, front, back
 		switch (polygonType) {
 			case COPLANAR:
-				(normal.dot(polygon.plane.normal) > 0 ? result[0] : result[1]).push(polygon);
+				(normal.dot(polygon.plane.normal) > 0 ? coplanarFront : coplanarBack).push(polygon);
 			case FRONT:
-				result[2].push(polygon);
+				front.push(polygon);
 			case BACK:
-				result[3].push(polygon);
+				back.push(polygon);
 			case SPANNING:
 				var f = [],
 					b = [],
@@ -64,11 +63,10 @@ class Plane {
 					}
 				}
 				if (f.length >= 3)
-					result[2].push(new Polygon(f));
+					front.push(new Polygon(f));
 				if (b.length >= 3)
-					result[3].push(new Polygon(b));
+					back.push(new Polygon(b));
 		}
-		return result;
 	}
 
 	static inline var COPLANAR = 0;

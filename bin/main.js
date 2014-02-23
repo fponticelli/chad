@@ -24,7 +24,32 @@ Main.geom = function() {
 		var arr = [1.0,1.0,1.0];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
 		return $r;
-	}(this))).intersect(chad.csg.Sphere.create([0.0,0.0,0.0],0.7)));
+	}(this))).union(chad.csg.Box.create((function($this) {
+		var $r;
+		var arr = [0.1,0.1,0.1];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),(function($this) {
+		var $r;
+		var arr = [1.0,1.0,1.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)))).subtract(chad.csg.Box.create((function($this) {
+		var $r;
+		var arr = [-1.1,-1.1,-1.1];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),(function($this) {
+		var $r;
+		var arr = [1.0,1.0,1.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)))).intersect(chad.csg.Sphere.create((function($this) {
+		var $r;
+		var arr = [0.0,0.0,0.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),0.7)).subtract(chad.csg.Sphere.create([0.5,0.5,0.5],0.35)));
 }
 var IMap = function() { }
 IMap.__name__ = true;
@@ -50,26 +75,14 @@ chad.csg.Box.create = function(position,size) {
 		}));
 	}));
 }
-chad.csg.Node = function(polygons,front,back) {
-	this.polygons = polygons;
-	this.front = front;
-	this.back = back;
+chad.csg.Node = function(polygons) {
+	this.plane = null;
+	this.front = null;
+	this.back = null;
+	this.polygons = [];
+	if(null != polygons) this.build(polygons);
 };
 chad.csg.Node.__name__ = true;
-chad.csg.Node.build = function(polygons) {
-	if(polygons.length == 0) return null;
-	var plane = polygons[0].get_plane(), front = [], back = [], npolygons = [], result;
-	var _g = 0;
-	while(_g < polygons.length) {
-		var polygon = polygons[_g];
-		++_g;
-		result = plane.splitPolygon(polygon);
-		npolygons = npolygons.concat(result[0]).concat(result[1]);
-		front = front.concat(result[2]);
-		back = back.concat(result[3]);
-	}
-	return new chad.csg.Node(npolygons,chad.csg.Node.build(front),chad.csg.Node.build(back));
-}
 chad.csg.Node.prototype = {
 	toString: function() {
 		return "Node [length: " + this.all().length + ", front: " + Std.string(null == this.front) + ", back: " + Std.string(null == this.back) + "]";
@@ -81,27 +94,54 @@ chad.csg.Node.prototype = {
 		return HxOverrides.iter(this.polygons);
 	}
 	,clipTo: function(other) {
-		return new chad.csg.Node(other.clipPolygons(this.polygons),null == this.front?null:this.front.clipTo(other),null == this.back?null:this.back.clipTo(other));
+		this.polygons = other.clipPolygons(this.polygons);
+		if(null != this.front) this.front.clipTo(other);
+		if(null != this.back) this.back.clipTo(other);
 	}
 	,clipPolygons: function(polygons) {
-		if(this.polygons.length == 0) return polygons;
-		var plane = this.polygons[0].get_plane(), front = [], back = [], result;
+		if(null == this.plane) return polygons.slice();
+		var front = [], back = [];
 		var _g = 0;
 		while(_g < polygons.length) {
 			var polygon = polygons[_g];
 			++_g;
-			result = plane.splitPolygon(polygon);
-			front = front.concat(result[0]).concat(result[2]);
-			back = back.concat(result[1]).concat(result[3]);
+			this.plane.splitPolygon(polygon,front,back,front,back);
 		}
 		if(null != this.front) front = this.front.clipPolygons(front);
 		if(null != this.back) back = this.back.clipPolygons(back); else back = [];
 		return front.concat(back);
 	}
 	,invert: function() {
-		return new chad.csg.Node(this.polygons.map(function(polygon) {
-			return polygon.flip();
-		}),null == this.back?null:this.back.invert(),null == this.front?null:this.front.invert());
+		var _g1 = 0, _g = this.polygons.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.polygons[i] = this.polygons[i].flip();
+		}
+		this.plane = this.plane.flip();
+		if(null != this.front) this.front.invert();
+		if(null != this.back) this.back.invert();
+		var temp = this.front;
+		this.front = this.back;
+		this.back = temp;
+	}
+	,build: function(polygons) {
+		if(polygons.length == 0) return;
+		if(null == this.plane) this.plane = polygons[0].get_plane();
+		var front = [], back = [];
+		var _g = 0;
+		while(_g < polygons.length) {
+			var polygon = polygons[_g];
+			++_g;
+			this.plane.splitPolygon(polygon,this.polygons,this.polygons,front,back);
+		}
+		if(front.length > 0) {
+			if(null == this.front) this.front = new chad.csg.Node();
+			this.front.build(front);
+		}
+		if(back.length > 0) {
+			if(null == this.back) this.back = new chad.csg.Node();
+			this.back.build(back);
+		}
 	}
 	,__class__: chad.csg.Node
 }
@@ -121,16 +161,37 @@ chad.csg.Solid.prototype = {
 		return HxOverrides.iter(this.polygons);
 	}
 	,intersect: function(other) {
-		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ai = a.invert(), bc = b.clipTo(ai), bci = bc.invert(), aic = ai.clipTo(bci), bcic = bci.clipTo(aic), n = chad.csg.Node.build(aic.all().concat(bcic.all()));
-		return chad.csg.Solid.fromPolygons(n.invert().all());
+		var a = new chad.csg.Node(this.polygons.slice()), b = new chad.csg.Node(other.polygons.slice());
+		a.invert();
+		b.clipTo(a);
+		b.invert();
+		a.clipTo(b);
+		b.clipTo(a);
+		a.build(b.all());
+		a.invert();
+		return chad.csg.Solid.fromPolygons(a.all());
 	}
 	,subtract: function(other) {
-		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ai = a.invert(), aic = ai.clipTo(b), bc = b.clipTo(aic), bci = bc.invert(), bcic = bci.clipTo(aic), bcici = bcic.invert(), n = chad.csg.Node.build(aic.all().concat(bcici.all()));
-		return chad.csg.Solid.fromPolygons(n.invert().all());
+		var a = new chad.csg.Node(this.polygons.slice()), b = new chad.csg.Node(other.polygons.slice());
+		a.invert();
+		a.clipTo(b);
+		b.clipTo(a);
+		b.invert();
+		b.clipTo(a);
+		b.invert();
+		a.build(b.all());
+		a.invert();
+		return chad.csg.Solid.fromPolygons(a.all());
 	}
 	,union: function(other) {
-		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ac = a.clipTo(b), bc = b.clipTo(ac), bci = bc.invert(), bcic = bci.clipTo(ac), bcici = bcic.invert();
-		return chad.csg.Solid.fromPolygons(ac.all().concat(bcici.all()));
+		var a = new chad.csg.Node(this.polygons.slice()), b = new chad.csg.Node(other.polygons.slice());
+		a.clipTo(b);
+		b.clipTo(a);
+		b.invert();
+		b.clipTo(a);
+		b.invert();
+		a.build(b.all());
+		return chad.csg.Solid.fromPolygons(a.all());
 	}
 	,__class__: chad.csg.Solid
 }
@@ -138,7 +199,7 @@ chad.csg.Sphere = function() { }
 chad.csg.Sphere.__name__ = true;
 chad.csg.Sphere.create = function(position,radius) {
 	if(radius == null) radius = 1.0;
-	var slices = Math.ceil(36 * radius), stacks = Math.ceil(slices / 2);
+	var slices = Math.ceil(48 * radius), stacks = Math.ceil(slices / 2);
 	var polygons = [], vertices = [];
 	var vertex = function(theta,phi) {
 		theta *= Math.PI * 2;
@@ -294,7 +355,7 @@ chad.geom.Plane.fromPoints = function(a,b,c) {
 	return new chad.geom.Plane(n,n[0] * a[0] + n[1] * a[1] + n[2] * a[2]);
 }
 chad.geom.Plane.prototype = {
-	splitPolygon: function(polygon) {
+	splitPolygon: function(polygon,coplanarFront,coplanarBack,front,back) {
 		var polygonType = 0, types = [], t, type;
 		var $it0 = polygon.iterator();
 		while( $it0.hasNext() ) {
@@ -309,7 +370,6 @@ chad.geom.Plane.prototype = {
 			polygonType |= type;
 			types.push(type);
 		}
-		var result = [[],[],[],[]];
 		switch(polygonType) {
 		case 0:
 			((function($this) {
@@ -317,13 +377,13 @@ chad.geom.Plane.prototype = {
 				var prod = polygon.get_plane().normal;
 				$r = $this.normal[0] * prod[0] + $this.normal[1] * prod[1] + $this.normal[2] * prod[2];
 				return $r;
-			}(this)) > 0?result[0]:result[1]).push(polygon);
+			}(this)) > 0?coplanarFront:coplanarBack).push(polygon);
 			break;
 		case 1:
-			result[2].push(polygon);
+			front.push(polygon);
 			break;
 		case 2:
-			result[3].push(polygon);
+			back.push(polygon);
 			break;
 		case 3:
 			var f = [], b = [], len = polygon.vertices.length, j, ti, vi, tj, vj, t1, v;
@@ -359,11 +419,10 @@ chad.geom.Plane.prototype = {
 					b.push(v);
 				}
 			}
-			if(f.length >= 3) result[2].push(new chad.geom.Polygon(f));
-			if(b.length >= 3) result[3].push(new chad.geom.Polygon(b));
+			if(f.length >= 3) front.push(new chad.geom.Polygon(f));
+			if(b.length >= 3) back.push(new chad.geom.Polygon(b));
 			break;
 		}
-		return result;
 	}
 	,flip: function() {
 		return new chad.geom.Plane([-this.normal[0],-this.normal[1],-this.normal[2]],-this.w);
@@ -784,7 +843,6 @@ Bool.__ename__ = ["Bool"];
 var Class = { __name__ : ["Class"]};
 var Enum = { };
 chad.csg.Box.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
-chad.csg.Node.empty = new chad.csg.Node([],null,null);
 chad.csg.Solid.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 chad.geom.Plane.EPSILON = 1e-5;
 chad.geom.Plane.COPLANAR = 0;
