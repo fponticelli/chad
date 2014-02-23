@@ -14,7 +14,7 @@ Main.main = function() {
 	(window || {}).Main = Main;
 }
 Main.geom = function() {
-	var cube = chad.csg.Solid.box((function($this) {
+	var cube = chad.csg.Box.create((function($this) {
 		var $r;
 		var arr = [-0.5,-0.5,-0.5];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
@@ -24,7 +24,7 @@ Main.geom = function() {
 		var arr = [1.0,1.0,1.0];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
 		return $r;
-	}(this))).union(chad.csg.Solid.box((function($this) {
+	}(this))).union(chad.csg.Box.create((function($this) {
 		var $r;
 		var arr = [0.1,0.1,0.1];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
@@ -34,7 +34,17 @@ Main.geom = function() {
 		var arr = [1.0,1.0,1.0];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
 		return $r;
-	}(this)))).subtract(chad.csg.Solid.box([-1.1,-1.1,-1.1],[1.0,1.0,1.0]));
+	}(this)))).subtract(chad.csg.Box.create((function($this) {
+		var $r;
+		var arr = [-1.1,-1.1,-1.1];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)),(function($this) {
+		var $r;
+		var arr = [1.0,1.0,1.0];
+		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+		return $r;
+	}(this)))).intersect(chad.csg.Sphere.create([0.1,0.1,0.1],0.7));
 	return chad.export.ThreeJS.toModel(cube);
 }
 var IMap = function() { }
@@ -46,6 +56,21 @@ Std.string = function(s) {
 }
 var chad = {}
 chad.csg = {}
+chad.csg.Box = function() { }
+chad.csg.Box.__name__ = true;
+chad.csg.Box.create = function(position,size) {
+	return chad.csg.Solid.fromPolygons(chad.csg.Box.baseCube.map(function(info) {
+		return new chad.geom.Polygon(info.p.map(function(i) {
+			var pos = [position[0] + size[0] * ((i & 1) != 0?1:0),position[1] + size[1] * ((i & 2) != 0?1:0),position[2] + size[2] * ((i & 4) != 0?1:0)];
+			return new chad.geom.Vertex3(pos,(function($this) {
+				var $r;
+				var arr = info.n;
+				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
+				return $r;
+			}(this)));
+		}));
+	}));
+}
 chad.csg.Node = function(polygons,front,back) {
 	this.polygons = polygons;
 	this.front = front;
@@ -109,19 +134,6 @@ chad.csg.Solid.fromPolygons = function(polygons) {
 	solid.polygons = polygons;
 	return solid;
 }
-chad.csg.Solid.box = function(position,size) {
-	return chad.csg.Solid.fromPolygons(chad.csg.Solid.baseCube.map(function(info) {
-		return new chad.geom.Polygon(info.p.map(function(i) {
-			var pos = [position[0] + size[0] * ((i & 1) != 0?1:0),position[1] + size[1] * ((i & 2) != 0?1:0),position[2] + size[2] * ((i & 4) != 0?1:0)];
-			return new chad.geom.Vertex3(pos,(function($this) {
-				var $r;
-				var arr = info.n;
-				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-				return $r;
-			}(this)));
-		}));
-	}));
-}
 chad.csg.Solid.prototype = {
 	toString: function() {
 		return "Solid [" + this.polygons.length + "]";
@@ -129,15 +141,52 @@ chad.csg.Solid.prototype = {
 	,iterator: function() {
 		return HxOverrides.iter(this.polygons);
 	}
+	,intersect: function(other) {
+		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ai = a.invert(), bc = b.clipTo(ai), bci = bc.invert(), aic = ai.clipTo(bci), bcic = bci.clipTo(aic), n = chad.csg.Node.build(aic.all().concat(bcic.all()));
+		return chad.csg.Solid.fromPolygons(n.invert().all());
+	}
 	,subtract: function(other) {
 		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ai = a.invert(), aic = ai.clipTo(b), bc = b.clipTo(aic), bci = bc.invert(), bcic = bci.clipTo(aic), bcici = bcic.invert(), n = chad.csg.Node.build(aic.all().concat(bcici.all()));
 		return chad.csg.Solid.fromPolygons(n.invert().all());
 	}
 	,union: function(other) {
-		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ac = a.clipTo(b), bc = b.clipTo(ac), bci = bc.invert(), bcic = bci.clipTo(ac), bcici = bcic.invert();
-		return chad.csg.Solid.fromPolygons(ac.all().concat(bcici.all()));
+		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ac = a.clipTo(b), bc = b.clipTo(ac), bci = bc.invert(), bcic = bci.clipTo(ac), bcici = bcic.invert(), n = chad.csg.Node.build(ac.all().concat(bcici.all()));
+		return chad.csg.Solid.fromPolygons(n.all());
 	}
 	,__class__: chad.csg.Solid
+}
+chad.csg.Sphere = function() { }
+chad.csg.Sphere.__name__ = true;
+chad.csg.Sphere.create = function(position,radius) {
+	if(radius == null) radius = 1.0;
+	var slices = 16, stacks = 8;
+	var polygons = [], vertices = [];
+	var vertex = function(theta,phi) {
+		theta *= Math.PI * 2;
+		phi *= Math.PI;
+		var dir = [Math.cos(theta) * Math.sin(phi),Math.cos(phi),Math.sin(theta) * Math.sin(phi)];
+		vertices.push(new chad.geom.Vertex3((function($this) {
+			var $r;
+			var other = [dir[0] * radius,dir[1] * radius,dir[2] * radius];
+			$r = [position[0] + other[0],position[1] + other[1],position[2] + other[2]];
+			return $r;
+		}(this)),dir));
+	};
+	var _g = 0;
+	while(_g < slices) {
+		var i = _g++;
+		var _g1 = 0;
+		while(_g1 < stacks) {
+			var j = _g1++;
+			vertices = [];
+			vertex(i / slices,j / stacks);
+			if(j > 0) vertex((i + 1) / slices,j / stacks);
+			if(j < stacks - 1) vertex((i + 1) / slices,(j + 1) / stacks);
+			vertex(i / slices,(j + 1) / stacks);
+			polygons.push(new chad.geom.Polygon(vertices));
+		}
+	}
+	return chad.csg.Solid.fromPolygons(polygons);
 }
 chad["export"] = {}
 chad.export.ThreeJS = function() { }
@@ -756,6 +805,7 @@ var Bool = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = { __name__ : ["Class"]};
 var Enum = { };
+chad.csg.Box.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 chad.csg.Node.empty = new chad.csg.Node([],null,null);
 chad.csg.Solid.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 chad.geom.Plane.EPSILON = 1e-5;

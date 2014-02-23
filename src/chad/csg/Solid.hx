@@ -1,8 +1,6 @@
 package chad.csg;
 
 import chad.geom.Polygon;
-import chad.geom.Vector3;
-import chad.geom.Vertex3;
 
 class Solid {
 	static var baseCube = [
@@ -24,21 +22,6 @@ class Solid {
 		return solid;
 	}
 
-	public static function box(position : Vector3, size : Vector3) {
-		return fromPolygons(
-			baseCube.map(function(info) {
-				return new Polygon(info.p.map(function(i) {
-					var pos = new Vector3(
-						position.x + size.x * ((i & 1 != 0) ? 1 : 0),
-						position.y + size.y * ((i & 2 != 0) ? 1 : 0),
-						position.z + size.z * ((i & 4 != 0) ? 1 : 0)
-					);
-					return new Vertex3(pos, Vector3.fromArray(info.n));
-				}));
-			})
-		);
-	}
-
 	public function union(other : Solid) {
 		var a = Node.build(polygons),
 			b = Node.build(other.polygons),
@@ -46,9 +29,10 @@ class Solid {
 			bc = b.clipTo(ac),
 			bci = bc.invert(),
 			bcic = bci.clipTo(ac),
-			bcici = bcic.invert();
+			bcici = bcic.invert(),
+			n = Node.build(ac.all().concat(bcici.all()));
 
-		return fromPolygons(ac.all().concat(bcici.all()));
+		return fromPolygons(n.all());
 	}
 
 	public function subtract(other : Solid) {
@@ -61,7 +45,21 @@ class Solid {
 			bcic = bci.clipTo(aic),
 			bcici = bcic.invert(),
 			n = Node.build(aic.all().concat(bcici.all()));
-			return fromPolygons(n.invert().all());
+
+		return fromPolygons(n.invert().all());
+	}
+
+	public function intersect(other : Solid) {
+		var a = Node.build(polygons),
+			b = Node.build(other.polygons),
+			ai = a.invert(),
+			bc = b.clipTo(ai),
+			bci = bc.invert(),
+			aic = ai.clipTo(bci),
+			bcic = bci.clipTo(aic),
+			n = Node.build(aic.all().concat(bcic.all()));
+
+		return fromPolygons(n.invert().all());
 	}
 
 	public function iterator()
