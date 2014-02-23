@@ -1,0 +1,5 @@
+-cp demo
+-cp src
+-main Main
+-js bin/main.js
+#-cmd node bin/main.js
