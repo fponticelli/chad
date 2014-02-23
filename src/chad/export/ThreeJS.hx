@@ -28,13 +28,14 @@ class ThreeJS {
 
 		for(polygon in solid) {
 			index = 0;
-			var arr = [0], first;
-			for(vertex in polygon) {
-				arr.push(vertices.get(vertex.position.toString()).index);
-				if(arr.length == 4) {
-					faces = faces.concat(arr);
-					arr = [0, arr[1], arr[3]];
-				}
+			var arr = polygon.all();
+			for(i in 2...arr.length) {
+				faces = faces.concat([
+					0,
+					vertices.get(arr[0].position.toString()).index,
+					vertices.get(arr[i-1].position.toString()).index,
+					vertices.get(arr[i].position.toString()).index
+				]);
 			}
 		}
 

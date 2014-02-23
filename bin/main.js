@@ -24,27 +24,7 @@ Main.geom = function() {
 		var arr = [1.0,1.0,1.0];
 		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
 		return $r;
-	}(this))).union(chad.csg.Box.create((function($this) {
-		var $r;
-		var arr = [0.1,0.1,0.1];
-		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-		return $r;
-	}(this)),(function($this) {
-		var $r;
-		var arr = [1.0,1.0,1.0];
-		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-		return $r;
-	}(this)))).subtract(chad.csg.Box.create((function($this) {
-		var $r;
-		var arr = [-1.1,-1.1,-1.1];
-		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-		return $r;
-	}(this)),(function($this) {
-		var $r;
-		var arr = [1.0,1.0,1.0];
-		$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-		return $r;
-	}(this)))).intersect(chad.csg.Sphere.create([0.0,0.0,0.0],0.7)));
+	}(this))).intersect(chad.csg.Sphere.create([0.0,0.0,0.0],0.7)));
 }
 var IMap = function() { }
 IMap.__name__ = true;
@@ -149,8 +129,8 @@ chad.csg.Solid.prototype = {
 		return chad.csg.Solid.fromPolygons(n.invert().all());
 	}
 	,union: function(other) {
-		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ac = a.clipTo(b), bc = b.clipTo(ac), bci = bc.invert(), bcic = bci.clipTo(ac), bcici = bcic.invert(), n = chad.csg.Node.build(ac.all().concat(bcici.all()));
-		return chad.csg.Solid.fromPolygons(n.all());
+		var a = chad.csg.Node.build(this.polygons), b = chad.csg.Node.build(other.polygons), ac = a.clipTo(b), bc = b.clipTo(ac), bci = bc.invert(), bcic = bci.clipTo(ac), bcici = bcic.invert();
+		return chad.csg.Solid.fromPolygons(ac.all().concat(bcici.all()));
 	}
 	,__class__: chad.csg.Solid
 }
@@ -158,7 +138,7 @@ chad.csg.Sphere = function() { }
 chad.csg.Sphere.__name__ = true;
 chad.csg.Sphere.create = function(position,radius) {
 	if(radius == null) radius = 1.0;
-	var slices = 16, stacks = 8;
+	var slices = Math.ceil(36 * radius), stacks = Math.ceil(slices / 2);
 	var polygons = [], vertices = [];
 	var vertex = function(theta,phi) {
 		theta *= Math.PI * 2;
@@ -219,15 +199,11 @@ chad.export.ThreeJS.toModel = function(solid) {
 	while( $it2.hasNext() ) {
 		var polygon = $it2.next();
 		index = 0;
-		var arr = [0], first;
-		var $it3 = polygon.iterator();
-		while( $it3.hasNext() ) {
-			var vertex = $it3.next();
-			arr.push(vertices.get("Vector3 " + Std.string(vertex.position)).index);
-			if(arr.length == 4) {
-				faces = faces.concat(arr);
-				arr = [0,arr[1],arr[3]];
-			}
+		var arr = polygon.all();
+		var _g1 = 2, _g = arr.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			faces = faces.concat([0,vertices.get("Vector3 " + Std.string(arr[0].position)).index,vertices.get("Vector3 " + Std.string(arr[i - 1].position)).index,vertices.get("Vector3 " + Std.string(arr[i].position)).index]);
 		}
 	}
 	return { metadata : { formatVersion : 3}, vertices : chad.export.ThreeJS.getVertices(vertices), faces : faces};
@@ -412,6 +388,9 @@ chad.geom.Polygon.fromVertices = function(vertices) {
 chad.geom.Polygon.prototype = {
 	get_plane: function() {
 		return null == this.plane?this.plane = chad.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position):this.plane;
+	}
+	,all: function() {
+		return this.vertices.slice();
 	}
 	,iterator: function() {
 		return HxOverrides.iter(this.vertices);

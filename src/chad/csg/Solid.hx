@@ -29,10 +29,9 @@ class Solid {
 			bc = b.clipTo(ac),
 			bci = bc.invert(),
 			bcic = bci.clipTo(ac),
-			bcici = bcic.invert(),
-			n = Node.build(ac.all().concat(bcici.all()));
+			bcici = bcic.invert();
 
-		return fromPolygons(n.all());
+		return fromPolygons(ac.all().concat(bcici.all()));
 	}
 
 	public function subtract(other : Solid) {

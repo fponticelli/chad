@@ -25,21 +25,28 @@ var geometry = loader.parse(def).geometry;
 console.log(geometry);
 
 
-var material = new THREE.MeshBasicMaterial({
-			wireframe : true,
-			color: 0xccffdd
-		});
-var cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+var obj = THREE.SceneUtils.createMultiMaterialObject(geometry, [
+//		new THREE.MeshDepthMaterial({ color: 0x999999}),
+		new THREE.MeshBasicMaterial({ wireframe : true })
+	]);
+
+scene.add(obj);
 
 var debugaxis = function(axisLength){
     //Create axis (point1, point2, colour)
+    var p0 = new THREE.Vector3(0, 0, 0);
     function createAxis(p1, p2, color){
-            var line, lineGeometry = new THREE.Geometry(),
-            lineMat = new THREE.LineBasicMaterial({color: color, lineWidth: 1});
-            lineGeometry.vertices.push(p1, p2);
-            line = new THREE.Line(lineGeometry, lineMat);
-            scene.add(line);
+            var len = axisLength / 30,
+            	dashLineGeometry = new THREE.Geometry(),
+            	lineGeometry = new THREE.Geometry(),
+            	dashLineMat = new THREE.LineDashedMaterial({color: color, linewidth: 2, dashSize : len, gapSize : len}),
+            	lineMat = new THREE.LineBasicMaterial({color: color, linewidth: 2});
+            dashLineGeometry.vertices.push(p1, p0);
+            lineGeometry.vertices.push(p0, p2);
+            dashLineGeometry.computeLineDistances();
+            lineGeometry.computeLineDistances();
+            scene.add(new THREE.Line(dashLineGeometry, dashLineMat, THREE.LinePieces));
+            scene.add(new THREE.Line(lineGeometry, lineMat, THREE.LinePieces));
     }
 
     createAxis(new THREE.Vector3(-axisLength, 0, 0), new THREE.Vector3(axisLength, 0, 0), 0xFF0000);

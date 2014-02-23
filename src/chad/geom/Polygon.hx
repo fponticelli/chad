@@ -33,6 +33,9 @@ class Polygon {
 	public function iterator()
 		return vertices.iterator();
 
+	public function all()
+		return vertices.copy();
+
 	function get_plane()
 		return null == plane ? plane = Plane.fromPoints(vertices[0].position, vertices[1].position, vertices[2].position) : plane;
 
