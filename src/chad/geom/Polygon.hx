@@ -3,14 +3,14 @@ package chad.geom;
 class Polygon {
 	@:isVar public var plane(get, null) : Plane;
 
-	var vertices : Array<Vertex3>;
+	var vertices : Array<Vertex3D>;
 
 	// please ensure that vertices is not mutable
-	public function new(vertices : Array<Vertex3>) {
+	public function new(vertices : Array<Vertex3D>) {
 		this.vertices = vertices;
 	}
 
-	public static function fromVertices(vertices : Iterable<Vertex3>) {
+	public static function fromVertices(vertices : Iterable<Vertex3D>) {
 		if(Std.is(vertices, Array)) {
 			return new Polygon(cast(vertices).copy());
 		} else {

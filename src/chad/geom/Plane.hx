@@ -1,20 +1,20 @@
 package chad.geom;
 
-import chad.geom.Vector3;
+import chad.geom.Vector3D;
 
 @:access(chad.geom.Polygon)
 class Plane {
 	public inline static var EPSILON = 1e-5;
 
-	public static function fromVector3Ds(a : Vector3, b : Vector3, c : Vector3)
+	public static function fromVector3DDs(a : Vector3D, b : Vector3D, c : Vector3D)
 	{
 		var n = b.subtract(a).cross(c.subtract(a)).normalize();
 		return new Plane(n, n.dot(a));
 	};
 
-	// like fromVector3Ds, but allow the vectors to be on one point or one line
+	// like fromVector3DDs, but allow the vectors to be on one point or one line
 	// in such a case a random plane through the given points is constructed
-	public static function anyPlaneFromVector3Ds(a : Vector3, b : Vector3, c : Vector3)
+	public static function anyPlaneFromVector3DDs(a : Vector3D, b : Vector3D, c : Vector3D)
 	{
 		var v1 = b.subtract(a),
 			v2 = c.subtract(a);
@@ -33,22 +33,22 @@ class Plane {
 		return new Plane(normal, normal.dot(a));
 	}
 
-	public static function fromPoints(a : Vector3, b : Vector3, c : Vector3)
+	public static function fromPoints(a : Vector3D, b : Vector3D, c : Vector3D)
 	{
 		var n = b.subtract(a).cross(c.subtract(a)).normalize();
 		return new Plane(n, n.dot(a));
 	}
 
-	public static function fromNormalAndPoint(normal : Vector3, point : Vector3)
+	public static function fromNormalAndPoint(normal : Vector3D, point : Vector3D)
 	{
 		normal = normal.normalize();
 		return new Plane(normal, point.dot(normal));
 	}
 
-	@:isVar public var normal(default, null) : Vector3;
+	@:isVar public var normal(default, null) : Vector3D;
 	@:isVar public var w(default, null) : Float;
 
-	public function new(normal : Vector3, w : Float)
+	public function new(normal : Vector3D, w : Float)
 	{
 		this.normal = normal;
 		this.w = w;
@@ -129,7 +129,7 @@ class Plane {
 		point2 = point2.multiply4x4(matrix);
 		point3 = point3.multiply4x4(matrix);
 		// and create a new plane from the transformed points:
-		var newplane = Plane.fromVector3Ds(point1, point2, point3);
+		var newplane = Plane.fromVector3DDs(point1, point2, point3);
 		if(ismirror) {
 			// the transform is mirroring
 			// We should mirror the plane:
@@ -140,7 +140,7 @@ class Plane {
 
 	// robust splitting of a line by a plane
 	// will work even if the line is parallel to the plane
-	public function splitLineBetweenPoints(p1 : Vector3, p2 : Vector3)
+	public function splitLineBetweenPoints(p1 : Vector3D, p2 : Vector3D)
 	{
 		var direction = p2.subtract(p1),
 			lambda = (w - normal.dot(p1)) / normal.dot(direction);
@@ -153,7 +153,7 @@ class Plane {
 		return p1.add(direction.multiply(lambda));
 	}
 
-	public function intersectWithLine(line : Line3D) : Vector3
+	public function intersectWithLine(line : Line3D) : Vector3D
 		return line.intersectWithPlane(this);
 
 	// intersection of two planes

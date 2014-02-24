@@ -2,15 +2,15 @@ package chad.geom;
 
 class Box
 {
-	public static function create(a : Vector3, b : Vector3)
+	public static function create(a : Vector3D, b : Vector3D)
 	{
 		return new Box(a.min(b), a.max(b));
 	}
 
-	public var min(default, null) : Vector3;
-	public var max(default, null) : Vector3;
+	public var min(default, null) : Vector3D;
+	public var max(default, null) : Vector3D;
 
-	function new(min : Vector3, max : Vector3)
+	function new(min : Vector3D, max : Vector3D)
 	{
 		this.min = min;
 		this.max = max;

@@ -39,7 +39,7 @@ abstract Matrix4x4(Array<Float>)
 	}
 
 	// Matrix for rotation about arbitrary point and axis
-	static public function rotation(rotationCenter : Vector3, rotationAxis : Vector3, degrees : Float)
+	static public function rotation(rotationCenter : Vector3D, rotationAxis : Vector3D, degrees : Float)
 	{
 		var rotationPlane = Plane.fromNormalAndPoint(rotationAxis, rotationCenter),
 			orthobasis = OrthoNormalBasis.fromPlane(rotationPlane),
@@ -52,7 +52,7 @@ abstract Matrix4x4(Array<Float>)
 	}
 
 	// Create an affine matrix for translation:
-	static public function translation(vec : Vector3)
+	static public function translation(vec : Vector3D)
 		return new Matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, vec.x, vec.y, vec.z, 1);
 
 	// Create an affine matrix for mirroring into an arbitrary plane:
@@ -71,7 +71,7 @@ abstract Matrix4x4(Array<Float>)
 	}
 
 	// Create an affine matrix for scaling:
-	static public function scaling(vec : Vector3)
+	static public function scaling(vec : Vector3D)
 		return new Matrix4x4(vec.x, 0, 0, 0, 0, vec.y, 0, 0, 0, 0, vec.z, 0, 0, 0, 0, 1);
 
 	public inline function new(e0 : Float, e1 : Float, e2 : Float, e3 : Float, e4 : Float, e5 : Float, e6 : Float, e7 : Float, e8 : Float, e9 : Float, e10 : Float, e11 : Float, e12 : Float, e13 : Float, e14 : Float, e15 : Float)
@@ -151,7 +151,7 @@ abstract Matrix4x4(Array<Float>)
 		);
 	}
 
-	public function rightMultiplyVector3(vector : Vector3)
+	public function rightMultiplyVector3D(vector : Vector3D)
 	{
 		var v0 = vector.x,
 			v1 = vector.y,
@@ -168,10 +168,10 @@ abstract Matrix4x4(Array<Float>)
 			y *= invw;
 			z *= invw;
 		}
-		return new Vector3(x, y, z);
+		return new Vector3D(x, y, z);
 	}
 
-	public function leftMultiplyVector3(vector : Vector3)
+	public function leftMultiplyVector3D(vector : Vector3D)
 	{
 		var v0 = vector.x,
 			v1 = vector.y,
@@ -188,10 +188,10 @@ abstract Matrix4x4(Array<Float>)
 			y *= invw;
 			z *= invw;
 		}
-		return new Vector3(x, y, z);
+		return new Vector3D(x, y, z);
 	}
 
-	public function rightMultiplyVector2(vector : Vector2)
+	public function rightMultiplyVector2D(vector : Vector2D)
 	{
 		var v0 = vector.x,
 			v1 = vector.y,
@@ -208,10 +208,10 @@ abstract Matrix4x4(Array<Float>)
 			y *= invw;
 			z *= invw;
 		}
-		return new Vector2(x, y);
+		return new Vector2D(x, y);
 	}
 
-	public function leftMultiplyVector2(vector : Vector2)
+	public function leftMultiplyVector2D(vector : Vector2D)
 	{
 		var v0 = vector.x,
 			v1 = vector.y,
@@ -228,15 +228,15 @@ abstract Matrix4x4(Array<Float>)
 			y *= invw;
 			z *= invw;
 		}
-		return new Vector2(x, y);
+		return new Vector2D(x, y);
 	}
 
 	// determine whether this matrix is a mirroring transformation
 	public function isMirroring()
 	{
-		var u = new Vector3(at(0), at(4), at(8)),
-			v = new Vector3(at(1), at(5), at(9)),
-			w = new Vector3(at(2), at(6), at(10));
+		var u = new Vector3D(at(0), at(4), at(8)),
+			v = new Vector3D(at(1), at(5), at(9)),
+			w = new Vector3D(at(2), at(6), at(10));
 
 		// for a true orthogonal, non-mirrored base, u.cross(v) == w
 		// If they have an opposite direction then we are mirroring

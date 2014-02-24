@@ -1,7 +1,7 @@
 package chad.geom;
 
 class Line2D {
-	public static function fromPoints(p1 : Vector2, p2 : Vector2)
+	public static function fromPoints(p1 : Vector2D, p2 : Vector2D)
 	{
 		var direction = p2.subtract(p1),
 			normal = direction.normal().negate().normalize(),
@@ -9,10 +9,10 @@ class Line2D {
 		return new Line2D(normal, w);
 	}
 
-	public var normal(default, null) : Vector2;
+	public var normal(default, null) : Vector2D;
 	public var w(default, null) : Float;
 
-	public function new(normal : Vector2, w : Float)
+	public function new(normal : Vector2D, w : Float)
 	{
 		var l = normal.length;
 		this.w = w * l;
@@ -36,16 +36,16 @@ class Line2D {
 	public function xAtY(y : Float)
 		return (w - normal.y * y) / normal.x;
 
-	public function absDistanceToPoint(point : Vector2)
+	public function absDistanceToPoint(point : Vector2D)
 		return Math.abs(point.dot(normal) - w);
 
-	// intersection between two lines, returns point as Vector2
+	// intersection between two lines, returns point as Vector2D
 	public function intersectWithLine(line2d : Line2D)
 		return Util.solve2Linear(normal.x, normal.y, line2d.normal.x, line2d.normal.y, w, line2d.w);
 
 	public function transform(matrix : Matrix4x4)
 	{
-		var origin = new Vector2(0, 0),
+		var origin = new Vector2D(0, 0),
 			pointOnPlane = normal.multiply(w),
 			neworigin = origin.multiply4x4(matrix),
 			neworiginPlusNormal = normal.multiply4x4(matrix),

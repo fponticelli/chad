@@ -126,7 +126,7 @@ chad.csg.Box.create = function(position,size) {
 	return chad.csg.Solid.fromPolygons(chad.csg.Box.baseCube.map(function(info) {
 		return new chad.geom.Polygon(info.p.map(function(i) {
 			var pos = [position[0] + size[0] * ((i & 1) != 0?1:0),position[1] + size[1] * ((i & 2) != 0?1:0),position[2] + size[2] * ((i & 4) != 0?1:0)];
-			return new chad.geom.Vertex3(pos,(function($this) {
+			return new chad.geom.Vertex3D(pos,(function($this) {
 				var $r;
 				var arr = info.n;
 				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
@@ -189,8 +189,8 @@ chad.csg.Cylinder.create = function(start,end,radius) {
 		$r = [[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][0] / divisor,[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][1] / divisor,[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][2] / divisor];
 		return $r;
 	}(this));
-	var s = new chad.geom.Vertex3(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
-	var e = new chad.geom.Vertex3(end,(function($this) {
+	var s = new chad.geom.Vertex3D(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
+	var e = new chad.geom.Vertex3D(end,(function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
 			var $r;
@@ -277,7 +277,7 @@ chad.csg.Cylinder.create = function(start,end,radius) {
 			}($this)))[2] + other[2]];
 			return $r;
 		}(this));
-		return new chad.geom.Vertex3(pos,normal);
+		return new chad.geom.Vertex3D(pos,normal);
 	};
 	var _g = 0;
 	while(_g < slices) {
@@ -419,7 +419,7 @@ chad.csg.Sphere.create = function(position,radius) {
 		theta *= Math.PI * 2;
 		phi *= Math.PI;
 		var dir = [Math.cos(theta) * Math.sin(phi),Math.cos(phi),Math.sin(theta) * Math.sin(phi)];
-		vertices.push(new chad.geom.Vertex3((function($this) {
+		vertices.push(new chad.geom.Vertex3D((function($this) {
 			var $r;
 			var other = [dir[0] * radius,dir[1] * radius,dir[2] * radius];
 			$r = [position[0] + other[0],position[1] + other[1],position[2] + other[2]];
@@ -466,7 +466,7 @@ chad.export.ThreeJS.toModel = function(solid) {
 		var $it1 = polygon.iterator();
 		while( $it1.hasNext() ) {
 			var vertex = $it1.next();
-			var key = "Vector3 " + Std.string(vertex.position);
+			var key = "Vector3D " + Std.string(vertex.position);
 			if(!vertices.exists(key)) vertices.set(key,{ index : index++, vertex : vertex.position});
 		}
 	}
@@ -478,7 +478,7 @@ chad.export.ThreeJS.toModel = function(solid) {
 		var _g1 = 2, _g = arr.length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			faces = faces.concat([0,vertices.get("Vector3 " + Std.string(arr[0].position)).index,vertices.get("Vector3 " + Std.string(arr[i - 1].position)).index,vertices.get("Vector3 " + Std.string(arr[i].position)).index]);
+			faces = faces.concat([0,vertices.get("Vector3D " + Std.string(arr[0].position)).index,vertices.get("Vector3D " + Std.string(arr[i - 1].position)).index,vertices.get("Vector3D " + Std.string(arr[i].position)).index]);
 		}
 	}
 	return { metadata : { formatVersion : 3}, vertices : chad.export.ThreeJS.getVertices(vertices), faces : faces};
@@ -571,7 +571,7 @@ chad.geom.Line2D.prototype = {
 			var multiplier = $this.w;
 			$r = [$this.normal[0] * multiplier,$this.normal[1] * multiplier];
 			return $r;
-		}(this)), neworigin = chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2(matrix,origin), neworiginPlusNormal = chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2(matrix,this.normal), newnormal = [neworiginPlusNormal[0] - neworigin[0],neworiginPlusNormal[1] - neworigin[1]], newpointOnPlane = chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2(matrix,pointOnPlane), neww = newnormal[0] * newpointOnPlane[0] + newnormal[1] * newpointOnPlane[1];
+		}(this)), neworigin = chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2D(matrix,origin), neworiginPlusNormal = chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2D(matrix,this.normal), newnormal = [neworiginPlusNormal[0] - neworigin[0],neworiginPlusNormal[1] - neworigin[1]], newpointOnPlane = chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2D(matrix,pointOnPlane), neww = newnormal[0] * newpointOnPlane[0] + newnormal[1] * newpointOnPlane[1];
 		return new chad.geom.Line2D(newnormal,neww);
 	}
 	,intersectWithLine: function(line2d) {
@@ -731,12 +731,12 @@ chad.geom.Line3D.prototype = {
 		}(this));
 	}
 	,transform: function(matrix4x4) {
-		var newpoint = chad.geom._Vector3.Vector3_Impl_.multiply4x4(this.point,matrix4x4), pointaddDirection = (function($this) {
+		var newpoint = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(this.point,matrix4x4), pointaddDirection = (function($this) {
 			var $r;
 			var other = $this.direction;
 			$r = [$this.point[0] + other[0],$this.point[1] + other[1],$this.point[2] + other[2]];
 			return $r;
-		}(this)), newPointaddDirection = chad.geom._Vector3.Vector3_Impl_.multiply4x4(pointaddDirection,matrix4x4), newdirection = [newPointaddDirection[0] - newpoint[0],newPointaddDirection[1] - newpoint[1],newPointaddDirection[2] - newpoint[2]];
+		}(this)), newPointaddDirection = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(pointaddDirection,matrix4x4), newdirection = [newPointaddDirection[0] - newpoint[0],newPointaddDirection[1] - newpoint[1],newPointaddDirection[2] - newpoint[2]];
 		return new chad.geom.Line3D(newpoint,newdirection);
 	}
 	,reverse: function() {
@@ -783,7 +783,7 @@ chad.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ = function(degrees) {
 	return [cos,sin,0,0,-sin,cos,0,0,0,0,1,0,0,0,0,1];
 }
 chad.geom._Matrix4x4.Matrix4x4_Impl_.rotation = function(rotationCenter,rotationAxis,degrees) {
-	var rotationPlane = chad.geom.Plane.fromNormalAndPoint(rotationAxis,rotationCenter), orthobasis = new chad.geom.OrthoNormalBasis(rotationPlane,chad.geom._Vector3.Vector3_Impl_.randomNonParallelVector(rotationPlane.normal)), transformation = chad.geom._Matrix4x4.Matrix4x4_Impl_.translation([-rotationCenter[0],-rotationCenter[1],-rotationCenter[2]]);
+	var rotationPlane = chad.geom.Plane.fromNormalAndPoint(rotationAxis,rotationCenter), orthobasis = new chad.geom.OrthoNormalBasis(rotationPlane,chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector(rotationPlane.normal)), transformation = chad.geom._Matrix4x4.Matrix4x4_Impl_.translation([-rotationCenter[0],-rotationCenter[1],-rotationCenter[2]]);
 	transformation = chad.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getProjectionMatrix());
 	transformation = chad.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,chad.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ(degrees));
 	transformation = chad.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getInverseProjectionMatrix());
@@ -816,7 +816,7 @@ chad.geom._Matrix4x4.Matrix4x4_Impl_.multiply = function(this1,other) {
 	var t0 = this1[0], t1 = this1[1], t2 = this1[2], t3 = this1[3], t4 = this1[4], t5 = this1[5], t6 = this1[6], t7 = this1[7], t8 = this1[8], t9 = this1[9], t10 = this1[10], t11 = this1[11], t12 = this1[12], t13 = this1[13], t14 = this1[14], t15 = this1[15], m0 = other[0], m1 = other[1], m2 = other[2], m3 = other[3], m4 = other[4], m5 = other[5], m6 = other[6], m7 = other[7], m8 = other[8], m9 = other[9], m10 = other[10], m11 = other[11], m12 = other[12], m13 = other[13], m14 = other[14], m15 = other[15];
 	return [t0 * m0 + t1 * m4 + t2 * m8 + t3 * m12,t0 * m1 + t1 * m5 + t2 * m9 + t3 * m13,t0 * m2 + t1 * m6 + t2 * m10 + t3 * m14,t0 * m3 + t1 * m7 + t2 * m11 + t3 * m15,t4 * m0 + t5 * m4 + t6 * m8 + t7 * m12,t4 * m1 + t5 * m5 + t6 * m9 + t7 * m13,t4 * m2 + t5 * m6 + t6 * m10 + t7 * m14,t4 * m3 + t5 * m7 + t6 * m11 + t7 * m15,t8 * m0 + t9 * m4 + t10 * m8 + t11 * m12,t8 * m1 + t9 * m5 + t10 * m9 + t11 * m13,t8 * m2 + t9 * m6 + t10 * m10 + t11 * m14,t8 * m3 + t9 * m7 + t10 * m11 + t11 * m15,t12 * m0 + t13 * m4 + t14 * m8 + t15 * m12,t12 * m1 + t13 * m5 + t14 * m9 + t15 * m13,t12 * m2 + t13 * m6 + t14 * m10 + t15 * m14,t12 * m3 + t13 * m7 + t14 * m11 + t15 * m15];
 }
-chad.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyVector3 = function(this1,vector) {
+chad.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyVector3D = function(this1,vector) {
 	var v0 = vector[0], v1 = vector[1], v2 = vector[2], v3 = 1, x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + v3 * this1[3], y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + v3 * this1[7], z = v0 * this1[8] + v1 * this1[9] + v2 * this1[10] + v3 * this1[11], w = v0 * this1[12] + v1 * this1[13] + v2 * this1[14] + v3 * this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
@@ -826,7 +826,7 @@ chad.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyVector3 = function(this1,vecto
 	}
 	return [x,y,z];
 }
-chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector3 = function(this1,vector) {
+chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector3D = function(this1,vector) {
 	var v0 = vector[0], v1 = vector[1], v2 = vector[2], v3 = 1, x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + v3 * this1[12], y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + v3 * this1[13], z = v0 * this1[2] + v1 * this1[6] + v2 * this1[10] + v3 * this1[14], w = v0 * this1[3] + v1 * this1[7] + v2 * this1[11] + v3 * this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
@@ -836,7 +836,7 @@ chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector3 = function(this1,vector
 	}
 	return [x,y,z];
 }
-chad.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyVector2 = function(this1,vector) {
+chad.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyVector2D = function(this1,vector) {
 	var v0 = vector[0], v1 = vector[1], v2 = 0, v3 = 1, x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + v3 * this1[3], y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + v3 * this1[7], z = v0 * this1[8] + v1 * this1[9] + v2 * this1[10] + v3 * this1[11], w = v0 * this1[12] + v1 * this1[13] + v2 * this1[14] + v3 * this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
@@ -846,7 +846,7 @@ chad.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyVector2 = function(this1,vecto
 	}
 	return [x,y];
 }
-chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2 = function(this1,vector) {
+chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2D = function(this1,vector) {
 	var v0 = vector[0], v1 = vector[1], v2 = 0, v3 = 1, x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + v3 * this1[12], y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + v3 * this1[13], z = v0 * this1[2] + v1 * this1[6] + v2 * this1[10] + v3 * this1[14], w = v0 * this1[3] + v1 * this1[7] + v2 * this1[11] + v3 * this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
@@ -869,7 +869,7 @@ chad.geom.Plane = function(normal,w) {
 	this.w = w;
 };
 chad.geom.Plane.__name__ = true;
-chad.geom.Plane.fromVector3Ds = function(a,b,c) {
+chad.geom.Plane.fromVector3DDs = function(a,b,c) {
 	var n = (function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
@@ -948,7 +948,7 @@ chad.geom.Plane.fromVector3Ds = function(a,b,c) {
 	}(this));
 	return new chad.geom.Plane(n,n[0] * a[0] + n[1] * a[1] + n[2] * a[2]);
 }
-chad.geom.Plane.anyPlaneFromVector3Ds = function(a,b,c) {
+chad.geom.Plane.anyPlaneFromVector3DDs = function(a,b,c) {
 	var v1 = [b[0] - a[0],b[1] - a[1],b[2] - a[2]], v2 = [c[0] - a[0],c[1] - a[1],c[2] - a[2]];
 	if(Math.sqrt((function($this) {
 		var $r;
@@ -960,7 +960,7 @@ chad.geom.Plane.anyPlaneFromVector3Ds = function(a,b,c) {
 		}($this));
 		$r = v1[0] * prod[0] + v1[1] * prod[1] + v1[2] * prod[2];
 		return $r;
-	}(this))) < 1e-5) v1 = chad.geom._Vector3.Vector3_Impl_.randomNonParallelVector(v2);
+	}(this))) < 1e-5) v1 = chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector(v2);
 	if(Math.sqrt((function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -971,7 +971,7 @@ chad.geom.Plane.anyPlaneFromVector3Ds = function(a,b,c) {
 		}($this));
 		$r = v2[0] * prod[0] + v2[1] * prod[1] + v2[2] * prod[2];
 		return $r;
-	}(this))) < 1e-5) v2 = chad.geom._Vector3.Vector3_Impl_.randomNonParallelVector(v1);
+	}(this))) < 1e-5) v2 = chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector(v1);
 	var normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
 	if(Math.sqrt((function($this) {
 		var $r;
@@ -984,7 +984,7 @@ chad.geom.Plane.anyPlaneFromVector3Ds = function(a,b,c) {
 		$r = normal[0] * prod[0] + normal[1] * prod[1] + normal[2] * prod[2];
 		return $r;
 	}(this))) < 1e-5) {
-		v2 = chad.geom._Vector3.Vector3_Impl_.randomNonParallelVector(v1);
+		v2 = chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector(v1);
 		normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
 	}
 	normal = (function($this) {
@@ -1120,7 +1120,7 @@ chad.geom.Plane.prototype = {
 		return mirrored;
 	}
 	,toString: function() {
-		return "Plane [normal: " + ("Vector3 " + Std.string(this.normal)) + ", w: " + this.w + "]";
+		return "Plane [normal: " + ("Vector3D " + Std.string(this.normal)) + ", w: " + this.w + "]";
 	}
 	,signedDistanceToPoint: function(point) {
 		return this.normal[0] * point[0] + this.normal[1] * point[1] + this.normal[2] * point[2] - this.w;
@@ -1144,16 +1144,16 @@ chad.geom.Plane.prototype = {
 		}(this));
 	}
 	,transform: function(matrix) {
-		var ismirror = chad.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix), r = chad.geom._Vector3.Vector3_Impl_.randomNonParallelVector(this.normal), u = [this.normal[1] * r[2] - this.normal[2] * r[1],this.normal[2] * r[0] - this.normal[0] * r[2],this.normal[0] * r[1] - this.normal[1] * r[0]], v = [this.normal[1] * u[2] - this.normal[2] * u[1],this.normal[2] * u[0] - this.normal[0] * u[2],this.normal[0] * u[1] - this.normal[1] * u[0]], point1 = (function($this) {
+		var ismirror = chad.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix), r = chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector(this.normal), u = [this.normal[1] * r[2] - this.normal[2] * r[1],this.normal[2] * r[0] - this.normal[0] * r[2],this.normal[0] * r[1] - this.normal[1] * r[0]], v = [this.normal[1] * u[2] - this.normal[2] * u[1],this.normal[2] * u[0] - this.normal[0] * u[2],this.normal[0] * u[1] - this.normal[1] * u[0]], point1 = (function($this) {
 			var $r;
 			var multiplier = $this.w;
 			$r = [$this.normal[0] * multiplier,$this.normal[1] * multiplier,$this.normal[2] * multiplier];
 			return $r;
 		}(this)), point2 = [point1[0] + u[0],point1[1] + u[1],point1[2] + u[2]], point3 = [point1[0] + v[0],point1[1] + v[1],point1[2] + v[2]];
-		point1 = chad.geom._Vector3.Vector3_Impl_.multiply4x4(point1,matrix);
-		point2 = chad.geom._Vector3.Vector3_Impl_.multiply4x4(point2,matrix);
-		point3 = chad.geom._Vector3.Vector3_Impl_.multiply4x4(point3,matrix);
-		var newplane = chad.geom.Plane.fromVector3Ds(point1,point2,point3);
+		point1 = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(point1,matrix);
+		point2 = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(point2,matrix);
+		point3 = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(point3,matrix);
+		var newplane = chad.geom.Plane.fromVector3DDs(point1,point2,point3);
 		if(ismirror) newplane = newplane.flip();
 		return newplane;
 	}
@@ -1272,11 +1272,11 @@ chad.geom.OrthoNormalBasis = function(plane,rightvector) {
 };
 chad.geom.OrthoNormalBasis.__name__ = true;
 chad.geom.OrthoNormalBasis.fromPlane = function(plane) {
-	return new chad.geom.OrthoNormalBasis(plane,chad.geom._Vector3.Vector3_Impl_.randomNonParallelVector(plane.normal));
+	return new chad.geom.OrthoNormalBasis(plane,chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector(plane.normal));
 }
 chad.geom.OrthoNormalBasis.prototype = {
 	transform: function(matrix4x4) {
-		var newplane = this.plane.transform(matrix4x4), rightpoint_transformed = chad.geom._Vector3.Vector3_Impl_.transform(this.u,matrix4x4), origin_transformed = chad.geom._Vector3.Vector3_Impl_.transform([0,0,0],matrix4x4), newrighthandvector = [rightpoint_transformed[0] - origin_transformed[0],rightpoint_transformed[1] - origin_transformed[1],rightpoint_transformed[2] - origin_transformed[2]], newbasis = new chad.geom.OrthoNormalBasis(newplane,newrighthandvector);
+		var newplane = this.plane.transform(matrix4x4), rightpoint_transformed = chad.geom._Vector3D.Vector3D_Impl_.transform(this.u,matrix4x4), origin_transformed = chad.geom._Vector3D.Vector3D_Impl_.transform([0,0,0],matrix4x4), newrighthandvector = [rightpoint_transformed[0] - origin_transformed[0],rightpoint_transformed[1] - origin_transformed[1],rightpoint_transformed[2] - origin_transformed[2]], newbasis = new chad.geom.OrthoNormalBasis(newplane,newrighthandvector);
 		return newbasis;
 	}
 	,line2Dto3D: function(line) {
@@ -1390,7 +1390,7 @@ chad.geom.Polygon.prototype = {
 		var reverse = this.vertices.slice();
 		reverse.reverse();
 		return new chad.geom.Polygon(reverse.map(function(v) {
-			return new chad.geom.Vertex3(v.position,[-v.normal[0],-v.normal[1],-v.normal[2]]);
+			return new chad.geom.Vertex3D(v.position,[-v.normal[0],-v.normal[1],-v.normal[2]]);
 		}));
 	}
 	,__class__: chad.geom.Polygon
@@ -1401,44 +1401,44 @@ chad.geom.Util.solve2Linear = function(a,b,c,d,u,v) {
 	var det = a * d - b * c, invdet = 1.0 / det, x = u * d - b * v, y = -u * c + a * v;
 	return [x * invdet,y * invdet];
 }
-chad.geom._Vector2 = {}
-chad.geom._Vector2.Vector2_Impl_ = function() { }
-chad.geom._Vector2.Vector2_Impl_.__name__ = true;
-chad.geom._Vector2.Vector2_Impl_._new = function(x,y) {
+chad.geom._Vector2D = {}
+chad.geom._Vector2D.Vector2D_Impl_ = function() { }
+chad.geom._Vector2D.Vector2D_Impl_.__name__ = true;
+chad.geom._Vector2D.Vector2D_Impl_._new = function(x,y) {
 	return [x,y];
 }
-chad.geom._Vector2.Vector2_Impl_.fromFloat = function(v) {
+chad.geom._Vector2D.Vector2D_Impl_.fromFloat = function(v) {
 	return [v,v];
 }
-chad.geom._Vector2.Vector2_Impl_.fromAngle = function(radians) {
-	return chad.geom._Vector2.Vector2_Impl_.fromAngleRadians(radians);
+chad.geom._Vector2D.Vector2D_Impl_.fromAngle = function(radians) {
+	return chad.geom._Vector2D.Vector2D_Impl_.fromAngleRadians(radians);
 }
-chad.geom._Vector2.Vector2_Impl_.fromAngleDegrees = function(degrees) {
+chad.geom._Vector2D.Vector2D_Impl_.fromAngleDegrees = function(degrees) {
 	var radians = Math.PI * degrees / 180;
-	return chad.geom._Vector2.Vector2_Impl_.fromAngleRadians(radians);
+	return chad.geom._Vector2D.Vector2D_Impl_.fromAngleRadians(radians);
 }
-chad.geom._Vector2.Vector2_Impl_.fromAngleRadians = function(radians) {
+chad.geom._Vector2D.Vector2D_Impl_.fromAngleRadians = function(radians) {
 	return [Math.cos(radians),Math.sin(radians)];
 }
-chad.geom._Vector2.Vector2_Impl_.fromArray = function(arr) {
+chad.geom._Vector2D.Vector2D_Impl_.fromArray = function(arr) {
 	return [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1]];
 }
-chad.geom._Vector2.Vector2_Impl_.fromTypedef = function(o) {
+chad.geom._Vector2D.Vector2D_Impl_.fromTypedef = function(o) {
 	return [o.x,o.y];
 }
-chad.geom._Vector2.Vector2_Impl_.toArray = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.toArray = function(this1) {
 	return this1.slice();
 }
-chad.geom._Vector2.Vector2_Impl_.toVector3D = function(this1,z) {
+chad.geom._Vector2D.Vector2D_Impl_.toVector3DD = function(this1,z) {
 	return [this1[0],this1[1],z];
 }
-chad.geom._Vector2.Vector2_Impl_.get_x = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.get_x = function(this1) {
 	return this1[0];
 }
-chad.geom._Vector2.Vector2_Impl_.get_y = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.get_y = function(this1) {
 	return this1[1];
 }
-chad.geom._Vector2.Vector2_Impl_.get_length = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.get_length = function(this1) {
 	return Math.sqrt((function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -1451,25 +1451,25 @@ chad.geom._Vector2.Vector2_Impl_.get_length = function(this1) {
 		return $r;
 	}(this)));
 }
-chad.geom._Vector2.Vector2_Impl_.negate = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.negate = function(this1) {
 	return [-this1[0],-this1[1]];
 }
-chad.geom._Vector2.Vector2_Impl_.add = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.add = function(this1,other) {
 	return [this1[0] + other[0],this1[1] + other[1]];
 }
-chad.geom._Vector2.Vector2_Impl_.subtract = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.subtract = function(this1,other) {
 	return [this1[0] - other[0],this1[1] - other[1]];
 }
-chad.geom._Vector2.Vector2_Impl_.multiply = function(this1,multiplier) {
+chad.geom._Vector2D.Vector2D_Impl_.multiply = function(this1,multiplier) {
 	return [this1[0] * multiplier,this1[1] * multiplier];
 }
-chad.geom._Vector2.Vector2_Impl_.divide = function(this1,divisor) {
+chad.geom._Vector2D.Vector2D_Impl_.divide = function(this1,divisor) {
 	return [this1[0] / divisor,this1[1] / divisor];
 }
-chad.geom._Vector2.Vector2_Impl_.dot = function(this1,prod) {
+chad.geom._Vector2D.Vector2D_Impl_.dot = function(this1,prod) {
 	return this1[0] * prod[0] + this1[1] * prod[1];
 }
-chad.geom._Vector2.Vector2_Impl_.lerp = function(this1,other,multiplier) {
+chad.geom._Vector2D.Vector2D_Impl_.lerp = function(this1,other,multiplier) {
 	return (function($this) {
 		var $r;
 		var other1 = [((function($this) {
@@ -1497,10 +1497,10 @@ chad.geom._Vector2.Vector2_Impl_.lerp = function(this1,other,multiplier) {
 		return $r;
 	}(this));
 }
-chad.geom._Vector2.Vector2_Impl_.normal = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.normal = function(this1) {
 	return [this1[1],-this1[0]];
 }
-chad.geom._Vector2.Vector2_Impl_.normalize = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.normalize = function(this1) {
 	return (function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
@@ -1518,10 +1518,10 @@ chad.geom._Vector2.Vector2_Impl_.normalize = function(this1) {
 		return $r;
 	}(this));
 }
-chad.geom._Vector2.Vector2_Impl_.equals = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.equals = function(this1,other) {
 	return this1[0] == other[0] && this1[1] == other[1];
 }
-chad.geom._Vector2.Vector2_Impl_.distanceTo = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.distanceTo = function(this1,other) {
 	return Math.sqrt((function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -1534,7 +1534,7 @@ chad.geom._Vector2.Vector2_Impl_.distanceTo = function(this1,other) {
 		return $r;
 	}(this)));
 }
-chad.geom._Vector2.Vector2_Impl_.distanceToSquared = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.distanceToSquared = function(this1,other) {
 	return (function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -1547,7 +1547,7 @@ chad.geom._Vector2.Vector2_Impl_.distanceToSquared = function(this1,other) {
 		return $r;
 	}(this));
 }
-chad.geom._Vector2.Vector2_Impl_.lengthSquared = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.lengthSquared = function(this1) {
 	return (function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -1560,62 +1560,62 @@ chad.geom._Vector2.Vector2_Impl_.lengthSquared = function(this1) {
 		return $r;
 	}(this));
 }
-chad.geom._Vector2.Vector2_Impl_.multiply4x4 = function(this1,matrix) {
-	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2(matrix,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1]]);
+chad.geom._Vector2D.Vector2D_Impl_.multiply4x4 = function(this1,matrix) {
+	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2D(matrix,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1]]);
 }
-chad.geom._Vector2.Vector2_Impl_.transform = function(this1,matrix) {
-	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2(matrix,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1]]);
+chad.geom._Vector2D.Vector2D_Impl_.transform = function(this1,matrix) {
+	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector2D(matrix,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1]]);
 }
-chad.geom._Vector2.Vector2_Impl_.angle = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.angle = function(this1) {
 	return Math.atan2(this1[1],this1[0]);
 }
-chad.geom._Vector2.Vector2_Impl_.angleDegrees = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.angleDegrees = function(this1) {
 	var radians = Math.atan2(this1[1],this1[0]);
 	return 180 * radians / Math.PI;
 }
-chad.geom._Vector2.Vector2_Impl_.angleRadians = function(this1) {
+chad.geom._Vector2D.Vector2D_Impl_.angleRadians = function(this1) {
 	return Math.atan2(this1[1],this1[0]);
 }
-chad.geom._Vector2.Vector2_Impl_.cross = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.cross = function(this1,other) {
 	return this1[0] * other[1] - this1[1] * other[0];
 }
-chad.geom._Vector2.Vector2_Impl_.min = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.min = function(this1,other) {
 	return [Math.min(this1[0],other[0]),Math.min(this1[1],other[1])];
 }
-chad.geom._Vector2.Vector2_Impl_.max = function(this1,other) {
+chad.geom._Vector2D.Vector2D_Impl_.max = function(this1,other) {
 	return [Math.max(this1[0],other[0]),Math.max(this1[1],other[1])];
 }
-chad.geom._Vector2.Vector2_Impl_.toString = function(this1) {
-	return "Vector2 " + Std.string(this1);
+chad.geom._Vector2D.Vector2D_Impl_.toString = function(this1) {
+	return "Vector2D " + Std.string(this1);
 }
-chad.geom._Vector3 = {}
-chad.geom._Vector3.Vector3_Impl_ = function() { }
-chad.geom._Vector3.Vector3_Impl_.__name__ = true;
-chad.geom._Vector3.Vector3_Impl_._new = function(x,y,z) {
+chad.geom._Vector3D = {}
+chad.geom._Vector3D.Vector3D_Impl_ = function() { }
+chad.geom._Vector3D.Vector3D_Impl_.__name__ = true;
+chad.geom._Vector3D.Vector3D_Impl_._new = function(x,y,z) {
 	return [x,y,z];
 }
-chad.geom._Vector3.Vector3_Impl_.fromFloat = function(v) {
+chad.geom._Vector3D.Vector3D_Impl_.fromFloat = function(v) {
 	return [v,v,v];
 }
-chad.geom._Vector3.Vector3_Impl_.fromArray = function(arr) {
+chad.geom._Vector3D.Vector3D_Impl_.fromArray = function(arr) {
 	return [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
 }
-chad.geom._Vector3.Vector3_Impl_.fromTypedef = function(o) {
+chad.geom._Vector3D.Vector3D_Impl_.fromTypedef = function(o) {
 	return [o.x,o.y,o.z];
 }
-chad.geom._Vector3.Vector3_Impl_.toArray = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.toArray = function(this1) {
 	return this1.slice();
 }
-chad.geom._Vector3.Vector3_Impl_.get_x = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.get_x = function(this1) {
 	return this1[0];
 }
-chad.geom._Vector3.Vector3_Impl_.get_y = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.get_y = function(this1) {
 	return this1[1];
 }
-chad.geom._Vector3.Vector3_Impl_.get_z = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.get_z = function(this1) {
 	return this1[2];
 }
-chad.geom._Vector3.Vector3_Impl_.get_length = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.get_length = function(this1) {
 	return Math.sqrt((function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -1628,28 +1628,28 @@ chad.geom._Vector3.Vector3_Impl_.get_length = function(this1) {
 		return $r;
 	}(this)));
 }
-chad.geom._Vector3.Vector3_Impl_.negate = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.negate = function(this1) {
 	return [-this1[0],-this1[1],-this1[2]];
 }
-chad.geom._Vector3.Vector3_Impl_.add = function(this1,other) {
+chad.geom._Vector3D.Vector3D_Impl_.add = function(this1,other) {
 	return [this1[0] + other[0],this1[1] + other[1],this1[2] + other[2]];
 }
-chad.geom._Vector3.Vector3_Impl_.subtract = function(this1,other) {
+chad.geom._Vector3D.Vector3D_Impl_.subtract = function(this1,other) {
 	return [this1[0] - other[0],this1[1] - other[1],this1[2] - other[2]];
 }
-chad.geom._Vector3.Vector3_Impl_.multiply = function(this1,multiplier) {
+chad.geom._Vector3D.Vector3D_Impl_.multiply = function(this1,multiplier) {
 	return [this1[0] * multiplier,this1[1] * multiplier,this1[2] * multiplier];
 }
-chad.geom._Vector3.Vector3_Impl_.divide = function(this1,divisor) {
+chad.geom._Vector3D.Vector3D_Impl_.divide = function(this1,divisor) {
 	return [this1[0] / divisor,this1[1] / divisor,this1[2] / divisor];
 }
-chad.geom._Vector3.Vector3_Impl_.equals = function(this1,other) {
+chad.geom._Vector3D.Vector3D_Impl_.equals = function(this1,other) {
 	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2];
 }
-chad.geom._Vector3.Vector3_Impl_.abs = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.abs = function(this1) {
 	return [Math.abs(this1[0]),Math.abs(this1[1]),Math.abs(this1[2])];
 }
-chad.geom._Vector3.Vector3_Impl_.lengthSquared = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.lengthSquared = function(this1) {
 	return (function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -1662,7 +1662,7 @@ chad.geom._Vector3.Vector3_Impl_.lengthSquared = function(this1) {
 		return $r;
 	}(this));
 }
-chad.geom._Vector3.Vector3_Impl_.distanceTo = function(this1,other) {
+chad.geom._Vector3D.Vector3D_Impl_.distanceTo = function(this1,other) {
 	return Math.sqrt((function($this) {
 		var $r;
 		var prod = (function($this) {
@@ -1675,23 +1675,23 @@ chad.geom._Vector3.Vector3_Impl_.distanceTo = function(this1,other) {
 		return $r;
 	}(this)));
 }
-chad.geom._Vector3.Vector3_Impl_.distanceToSquared = function(this1,other) {
-	return chad.geom._Vector3.Vector3_Impl_.lengthSquared([this1[0] - other[0],this1[1] - other[1],this1[2] - other[2]]);
+chad.geom._Vector3D.Vector3D_Impl_.distanceToSquared = function(this1,other) {
+	return chad.geom._Vector3D.Vector3D_Impl_.lengthSquared([this1[0] - other[0],this1[1] - other[1],this1[2] - other[2]]);
 }
-chad.geom._Vector3.Vector3_Impl_.multiply4x4 = function(this1,matrix4x4) {
-	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector3(matrix4x4,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1],null == this1[2]?0:this1[2]]);
+chad.geom._Vector3D.Vector3D_Impl_.multiply4x4 = function(this1,matrix4x4) {
+	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector3D(matrix4x4,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1],null == this1[2]?0:this1[2]]);
 }
-chad.geom._Vector3.Vector3_Impl_.transform = function(this1,matrix4x4) {
-	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector3(matrix4x4,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1],null == this1[2]?0:this1[2]]);
+chad.geom._Vector3D.Vector3D_Impl_.transform = function(this1,matrix4x4) {
+	return chad.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyVector3D(matrix4x4,[null == this1[0]?0:this1[0],null == this1[1]?0:this1[1],null == this1[2]?0:this1[2]]);
 }
-chad.geom._Vector3.Vector3_Impl_.randomNonParallelVector = function(this1) {
-	var a = chad.geom._Vector3.Vector3_Impl_.abs(this1);
+chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector = function(this1) {
+	var a = chad.geom._Vector3D.Vector3D_Impl_.abs(this1);
 	if(a[0] <= a[1] && a[0] <= a[2]) return [1,0,0]; else if(a[1] <= a[0] && a[1] <= a[2]) return [0,1,0]; else return [0,0,1];
 }
-chad.geom._Vector3.Vector3_Impl_.dot = function(this1,prod) {
+chad.geom._Vector3D.Vector3D_Impl_.dot = function(this1,prod) {
 	return this1[0] * prod[0] + this1[1] * prod[1] + this1[2] * prod[2];
 }
-chad.geom._Vector3.Vector3_Impl_.lerp = function(this1,other,multiplier) {
+chad.geom._Vector3D.Vector3D_Impl_.lerp = function(this1,other,multiplier) {
 	return (function($this) {
 		var $r;
 		var other1 = [((function($this) {
@@ -1729,7 +1729,7 @@ chad.geom._Vector3.Vector3_Impl_.lerp = function(this1,other,multiplier) {
 		return $r;
 	}(this));
 }
-chad.geom._Vector3.Vector3_Impl_.normalize = function(this1) {
+chad.geom._Vector3D.Vector3D_Impl_.normalize = function(this1) {
 	return (function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
@@ -1747,29 +1747,29 @@ chad.geom._Vector3.Vector3_Impl_.normalize = function(this1) {
 		return $r;
 	}(this));
 }
-chad.geom._Vector3.Vector3_Impl_.cross = function(this1,other) {
+chad.geom._Vector3D.Vector3D_Impl_.cross = function(this1,other) {
 	return [this1[1] * other[2] - this1[2] * other[1],this1[2] * other[0] - this1[0] * other[2],this1[0] * other[1] - this1[1] * other[0]];
 }
-chad.geom._Vector3.Vector3_Impl_.min = function(this1,other) {
+chad.geom._Vector3D.Vector3D_Impl_.min = function(this1,other) {
 	return [Math.min(this1[0],other[0]),Math.min(this1[1],other[1]),Math.min(this1[2],other[2])];
 }
-chad.geom._Vector3.Vector3_Impl_.max = function(this1,other) {
+chad.geom._Vector3D.Vector3D_Impl_.max = function(this1,other) {
 	return [Math.max(this1[0],other[0]),Math.max(this1[1],other[1]),Math.max(this1[2],other[2])];
 }
-chad.geom._Vector3.Vector3_Impl_.toString = function(this1) {
-	return "Vector3 " + Std.string(this1);
+chad.geom._Vector3D.Vector3D_Impl_.toString = function(this1) {
+	return "Vector3D " + Std.string(this1);
 }
-chad.geom.Vertex3 = function(position,normal) {
+chad.geom.Vertex3D = function(position,normal) {
 	this.position = position;
 	this.normal = normal;
 };
-chad.geom.Vertex3.__name__ = true;
-chad.geom.Vertex3.prototype = {
+chad.geom.Vertex3D.__name__ = true;
+chad.geom.Vertex3D.prototype = {
 	toString: function() {
-		return "Vertex3 $position, $normal";
+		return "Vertex3D $position, $normal";
 	}
 	,interpolate: function(other,t) {
-		return new chad.geom.Vertex3((function($this) {
+		return new chad.geom.Vertex3D((function($this) {
 			var $r;
 			var other1 = other.position;
 			var other2 = [((function($this) {
@@ -1844,9 +1844,9 @@ chad.geom.Vertex3.prototype = {
 		}(this)));
 	}
 	,flip: function() {
-		return new chad.geom.Vertex3(this.position,[-this.normal[0],-this.normal[1],-this.normal[2]]);
+		return new chad.geom.Vertex3D(this.position,[-this.normal[0],-this.normal[1],-this.normal[2]]);
 	}
-	,__class__: chad.geom.Vertex3
+	,__class__: chad.geom.Vertex3D
 }
 var haxe = {}
 haxe.ds = {}

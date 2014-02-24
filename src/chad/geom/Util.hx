@@ -9,6 +9,6 @@ class Util
 			x = u * d - b * v,
 			y = -u * c + a * v;
 
-		return new Vector2(x * invdet, y * invdet);
+		return new Vector2D(x * invdet, y * invdet);
 	}
 }

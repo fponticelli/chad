@@ -1,7 +1,7 @@
 package chad.geom;
 
 class Line3D {
-	public static function fromPoints(p1 : Vector3, p2 : Vector3)
+	public static function fromPoints(p1 : Vector3D, p2 : Vector3D)
 		return new Line3D(p1, p2.subtract(p1).normalize());
 
 	public static function fromPlanes(p1 : Plane, p2 : Plane) {
@@ -20,23 +20,23 @@ class Line3D {
 			// direction vector is mostly pointing towards x
 			// find a point p for which x is zero:
 			var r = Util.solve2Linear(p1.normal.y, p1.normal.z, p2.normal.y, p2.normal.z, p1.w, p2.w);
-			origin = new Vector3(0, r[0], r[1]);
+			origin = new Vector3D(0, r[0], r[1]);
 		} else if((mabsy >= mabsx) && (mabsy >= mabsz)) {
 			// find a point p for which y is zero:
 			var r = Util.solve2Linear(p1.normal.x, p1.normal.z, p2.normal.x, p2.normal.z, p1.w, p2.w);
-			origin = new Vector3(r[0], 0, r[1]);
+			origin = new Vector3D(r[0], 0, r[1]);
 		} else {
 			// find a point p for which z is zero:
 			var r = Util.solve2Linear(p1.normal.x, p1.normal.y, p2.normal.x, p2.normal.y, p1.w, p2.w);
-			origin = new Vector3(r[0], r[1], 0);
+			origin = new Vector3D(r[0], r[1], 0);
 		}
 		return new Line3D(origin, direction);
 	}
 
-	public var point(default, null) : Vector3;
-	public var direction(default, null) : Vector3;
+	public var point(default, null) : Vector3D;
+	public var direction(default, null) : Vector3D;
 
-	public function new(point : Vector3, direction : Vector3)
+	public function new(point : Vector3D, direction : Vector3D)
 	{
 		this.point = point;
 		this.direction = direction.normalize();
@@ -62,13 +62,13 @@ class Line3D {
 		return new Line3D(newpoint, newdirection);
 	}
 
-	public function closestPointOnLine(point : Vector3)
+	public function closestPointOnLine(point : Vector3D)
 	{
 		var t = point.subtract(point).dot(direction) / direction.dot(this.direction);
 		return point.add(direction.multiply(t));
 	}
 
-	public function distanceToPoint(point : Vector3)
+	public function distanceToPoint(point : Vector3D)
 	{
 		var closestpoint = closestPointOnLine(point),
 			distancevector = point.subtract(closestpoint);

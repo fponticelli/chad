@@ -1,10 +1,10 @@
 package chad.export;
 
 import chad.csg.Solid;
-import chad.geom.Vector3;
+import chad.geom.Vector3D;
 
 class ThreeJS {
-	static function getVertices(vertices : Map<String, { index : Int, vertex : Vector3 }>){
+	static function getVertices(vertices : Map<String, { index : Int, vertex : Vector3D }>){
 		var acc = [];
 		for(combo in vertices) {
 			acc = acc.concat(combo.vertex.toArray());
@@ -15,7 +15,7 @@ class ThreeJS {
 	public static function toModel(solid : Solid)
 	{
 		var faces = [],
-			vertices = new Map<String, { index : Int, vertex : Vector3 }>(),
+			vertices = new Map<String, { index : Int, vertex : Vector3D }>(),
 			index = 0;
 
 		for(polygon in solid) {
