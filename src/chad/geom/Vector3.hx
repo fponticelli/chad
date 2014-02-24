@@ -9,7 +9,7 @@ abstract Vector3(Array<Float>) {
 		return new Vector3(v,v,v);
 	}
 
-	@:from static public inline function fromArray(arr : Array<Float>) {
+	@:from static public inline function fromArray(arr : Array<Null<Float>>) {
 		return new Vector3(
 			null == arr[0] ? 0 : arr[0],
 			null == arr[1] ? 0 : arr[1],

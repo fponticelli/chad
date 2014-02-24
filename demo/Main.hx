@@ -4,7 +4,11 @@ import chad.export.ThreeJS;
 
 class Main {
 	static function main() {
+		#if js
 		untyped __js__("(window || {})").Main = Main;
+		#elseif cpp
+		trace(haxe.Json.stringify(geom()));
+		#end
 	}
 
 	public static function geom() {
