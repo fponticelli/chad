@@ -55,6 +55,48 @@ abstract Vector3(Array<Float>) {
 	inline public function divide(divisor : Float)
 		return new Vector3(x/divisor, y/divisor, z/divisor);
 
+	@:op(A == B)
+	inline public function equals(other : Vector3)
+		return (x == other.x) && (y == other.y) && (z == other.z);
+
+	public function abs() {
+		return new Vector3(Math.abs(x), Math.abs(y), Math.abs(z));
+	}
+
+	public function lengthSquared() {
+		return dot(this);
+	}
+
+	public function distanceTo(other : Vector3) {
+		return subtract(other).length;
+	}
+
+	public function distanceToSquared(other : Vector3) {
+		return subtract(other).lengthSquared();
+	}
+
+	// Right multiply by a 4x4 matrix (the vector is interpreted as a row vector)
+	// Returns a new Vector3
+	public function multiply4x4(matrix4x4 : Matrix4x4) {
+		return matrix4x4.leftMultiplyVector3(this);
+	}
+
+	public function transform(matrix4x4 : Matrix4x4) {
+		return matrix4x4.leftMultiplyVector3(this);
+	}
+
+	// find a vector that is somewhat perpendicular to this one
+	public function randomNonParallelVector() {
+		var a = abs();
+		if((a.x <= a.y) && (a.x <= a.z)) {
+			return new Vector3(1, 0, 0);
+		} else if((a.y <= a.x) && (a.y <= a.z)) {
+			return new Vector3(0, 1, 0);
+		} else {
+			return new Vector3(0, 0, 1);
+		}
+	}
+
 	inline public function dot(prod : Vector3) : Float
 		return x * prod.x + y * prod.y + z * prod.z;
 
@@ -70,6 +112,22 @@ abstract Vector3(Array<Float>) {
 			z * other.x - x * other.z,
 			x * other.y - y * other.x
 		);
+
+	inline public function min(other : Vector3) {
+		return new Vector3(
+			Math.min(x, other.x),
+			Math.min(y, other.y),
+			Math.min(z, other.z)
+		);
+	}
+
+	inline public function max(other : Vector3) {
+		return new Vector3(
+			Math.max(x, other.x),
+			Math.max(y, other.y),
+			Math.max(z, other.z)
+		);
+	}
 
 	public inline function toString()
 		return 'Vector3 $this';

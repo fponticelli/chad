@@ -1,9 +1,13 @@
 import chad.csg.*;
+import chad.geom.Matrix4x4;
+import chad.*;
 
 import chad.export.ThreeJS;
 
 class Main {
 	static function main() {
+		var project = new Project();
+
 		#if js
 		untyped __js__("(window || {})").Main = Main;
 		#elseif cpp

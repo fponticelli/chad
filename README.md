@@ -3,9 +3,41 @@ chad
 
 CAD for Haxe
 
+* Scene Graph
+    Project
+        Group
+            add(item : Item)
+            remove(item : Item)
+            has(item : Item)
+
+Item
+    id
+    generateCsg() : Promise<Solid>
+    boundingBox : 2 Vector3
+    boundingSphere : 1 Vector3 1 Radius
+    transform(matrix) : Item
+        translate() : Item
+        translateX() : Item
+        translateY() : Item
+        translateZ() : Item
+        rotate() : Item
+        rotateX() : Item
+        rotateY() : Item
+        rotateZ() : Item
+        scale() : Item
+        scaleX() : Item
+        scaleY() : Item
+        scaleZ() : Item
+    withMaterial : Item
+    withPart : Item
+
+Material
+
 TODO
 ----
 
+* calculate volume
+* calculate area
 * Progressing boolean operations (event based)
 * Transforms:
   - center
@@ -23,11 +55,13 @@ TODO
   - minkowski
 * Exporters:
   - STL
+  - OBJ
   - AMF
   - export to image
 * Importers:
   - SCAD
   - STL
+  - OBJ
   - AMF
   - DXF
   - SVG
