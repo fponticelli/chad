@@ -2,7 +2,7 @@ package chad.csg;
 
 import chad.geom.Polygon;
 import chad.geom.Vector3D;
-import chad.geom.Vertex3D;
+import chad.geom.Vertex;
 
 class Sphere {
 	public static function create(position : Vector3D, radius = 1.0) {
@@ -10,7 +10,7 @@ class Sphere {
 			stacks = Math.ceil(slices/2);
 
 		var polygons = [],
-			vertices : Array<Vertex3D> = [];
+			vertices : Array<Vertex> = [];
 
 		function vertex(theta : Float, phi : Float) {
 			theta *= Math.PI * 2;
@@ -20,7 +20,7 @@ class Sphere {
 				Math.cos(phi),
 				Math.sin(theta) * Math.sin(phi)
 			);
-			vertices.push(new Vertex3D(position.add(dir.multiply(radius)), dir));
+			vertices.push(new Vertex(position.add(dir.multiply(radius))));
 		}
 
 		for (i in 0...slices) {

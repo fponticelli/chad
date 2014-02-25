@@ -124,14 +124,9 @@ chad.csg.Box = function() { }
 chad.csg.Box.__name__ = true;
 chad.csg.Box.create = function(position,size) {
 	return chad.csg.Solid.fromPolygons(chad.csg.Box.baseCube.map(function(info) {
-		return new chad.geom.Polygon(info.p.map(function(i) {
+		return new chad.geom.Polygon(info.map(function(i) {
 			var pos = [position[0] + size[0] * ((i & 1) != 0?1:0),position[1] + size[1] * ((i & 2) != 0?1:0),position[2] + size[2] * ((i & 4) != 0?1:0)];
-			return new chad.geom.Vertex3D(pos,(function($this) {
-				var $r;
-				var arr = info.n;
-				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-				return $r;
-			}(this)));
+			return new chad.geom.Vertex(pos);
 		}));
 	}));
 }
@@ -140,8 +135,7 @@ chad.csg.Cylinder.__name__ = true;
 chad.csg.Cylinder.create = function(start,end,radius) {
 	if(radius == null) radius = 1.0;
 	var slices = Math.ceil(128 * radius);
-	var ray = [end[0] - start[0],end[1] - start[1],end[2] - start[2]];
-	var axisZ = (function($this) {
+	var ray = [end[0] - start[0],end[1] - start[1],end[2] - start[2]], axisZ = (function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
 			var $r;
@@ -156,8 +150,7 @@ chad.csg.Cylinder.create = function(start,end,radius) {
 		}($this)));
 		$r = [ray[0] / divisor,ray[1] / divisor,ray[2] / divisor];
 		return $r;
-	}(this)), isY = Math.abs(axisZ[1]) > 0.5;
-	var axisX = (function($this) {
+	}(this)), isY = Math.abs(axisZ[1]) > 0.5, axisX = (function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
 			var $r;
@@ -172,8 +165,7 @@ chad.csg.Cylinder.create = function(start,end,radius) {
 		}($this)));
 		$r = [[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][0] / divisor,[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][1] / divisor,[[isY?1:0,isY?0:1,0][1] * axisZ[2] - [isY?1:0,isY?0:1,0][2] * axisZ[1],[isY?1:0,isY?0:1,0][2] * axisZ[0] - [isY?1:0,isY?0:1,0][0] * axisZ[2],[isY?1:0,isY?0:1,0][0] * axisZ[1] - [isY?1:0,isY?0:1,0][1] * axisZ[0]][2] / divisor];
 		return $r;
-	}(this));
-	var axisY = (function($this) {
+	}(this)), axisY = (function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
 			var $r;
@@ -188,28 +180,9 @@ chad.csg.Cylinder.create = function(start,end,radius) {
 		}($this)));
 		$r = [[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][0] / divisor,[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][1] / divisor,[axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]][2] / divisor];
 		return $r;
-	}(this));
-	var s = new chad.geom.Vertex3D(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
-	var e = new chad.geom.Vertex3D(end,(function($this) {
-		var $r;
-		var divisor = Math.sqrt((function($this) {
-			var $r;
-			var prod = (function($this) {
-				var $r;
-				var arr = [null == axisZ[0]?0:axisZ[0],null == axisZ[1]?0:axisZ[1],null == axisZ[2]?0:axisZ[2]];
-				$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-				return $r;
-			}($this));
-			$r = axisZ[0] * prod[0] + axisZ[1] * prod[1] + axisZ[2] * prod[2];
-			return $r;
-		}($this)));
-		$r = [axisZ[0] / divisor,axisZ[1] / divisor,axisZ[2] / divisor];
-		return $r;
-	}(this)));
-	var polygons = [];
+	}(this)), s = new chad.geom.Vertex(start), e = new chad.geom.Vertex(end), polygons = [];
 	var point = function(stack,slice,normalBlend) {
-		var angle = slice * Math.PI * 2;
-		var out = (function($this) {
+		var angle = slice * Math.PI * 2, out = (function($this) {
 			var $r;
 			var other = (function($this) {
 				var $r;
@@ -234,8 +207,7 @@ chad.csg.Cylinder.create = function(start,end,radius) {
 				return $r;
 			}($this)))[2] + other[2]];
 			return $r;
-		}(this));
-		var pos = (function($this) {
+		}(this)), pos = (function($this) {
 			var $r;
 			var other = [out[0] * radius,out[1] * radius,out[2] * radius];
 			$r = [((function($this) {
@@ -256,28 +228,7 @@ chad.csg.Cylinder.create = function(start,end,radius) {
 			}($this)))[2] + other[2]];
 			return $r;
 		}(this));
-		var normal = (function($this) {
-			var $r;
-			var other = [axisZ[0] * normalBlend,axisZ[1] * normalBlend,axisZ[2] * normalBlend];
-			$r = [((function($this) {
-				var $r;
-				var multiplier = 1 - Math.abs(normalBlend);
-				$r = [out[0] * multiplier,out[1] * multiplier,out[2] * multiplier];
-				return $r;
-			}($this)))[0] + other[0],((function($this) {
-				var $r;
-				var multiplier = 1 - Math.abs(normalBlend);
-				$r = [out[0] * multiplier,out[1] * multiplier,out[2] * multiplier];
-				return $r;
-			}($this)))[1] + other[1],((function($this) {
-				var $r;
-				var multiplier = 1 - Math.abs(normalBlend);
-				$r = [out[0] * multiplier,out[1] * multiplier,out[2] * multiplier];
-				return $r;
-			}($this)))[2] + other[2]];
-			return $r;
-		}(this));
-		return new chad.geom.Vertex3D(pos,normal);
+		return new chad.geom.Vertex(pos);
 	};
 	var _g = 0;
 	while(_g < slices) {
@@ -419,12 +370,12 @@ chad.csg.Sphere.create = function(position,radius) {
 		theta *= Math.PI * 2;
 		phi *= Math.PI;
 		var dir = [Math.cos(theta) * Math.sin(phi),Math.cos(phi),Math.sin(theta) * Math.sin(phi)];
-		vertices.push(new chad.geom.Vertex3D((function($this) {
+		vertices.push(new chad.geom.Vertex((function($this) {
 			var $r;
 			var other = [dir[0] * radius,dir[1] * radius,dir[2] * radius];
 			$r = [position[0] + other[0],position[1] + other[1],position[2] + other[2]];
 			return $r;
-		}(this)),dir));
+		}(this))));
 	};
 	var _g = 0;
 	while(_g < slices) {
@@ -1390,7 +1341,7 @@ chad.geom.Polygon.prototype = {
 		var reverse = this.vertices.slice();
 		reverse.reverse();
 		return new chad.geom.Polygon(reverse.map(function(v) {
-			return new chad.geom.Vertex3D(v.position,[-v.normal[0],-v.normal[1],-v.normal[2]]);
+			return v;
 		}));
 	}
 	,__class__: chad.geom.Polygon
@@ -1759,17 +1710,16 @@ chad.geom._Vector3D.Vector3D_Impl_.max = function(this1,other) {
 chad.geom._Vector3D.Vector3D_Impl_.toString = function(this1) {
 	return "Vector3D " + Std.string(this1);
 }
-chad.geom.Vertex3D = function(position,normal) {
+chad.geom.Vertex = function(position) {
 	this.position = position;
-	this.normal = normal;
 };
-chad.geom.Vertex3D.__name__ = true;
-chad.geom.Vertex3D.prototype = {
+chad.geom.Vertex.__name__ = true;
+chad.geom.Vertex.prototype = {
 	toString: function() {
-		return "Vertex3D $position, $normal";
+		return "Vertex $position";
 	}
 	,interpolate: function(other,t) {
-		return new chad.geom.Vertex3D((function($this) {
+		return new chad.geom.Vertex((function($this) {
 			var $r;
 			var other1 = other.position;
 			var other2 = [((function($this) {
@@ -1805,48 +1755,12 @@ chad.geom.Vertex3D.prototype = {
 			}($this)))[2] * t];
 			$r = [$this.position[0] + other2[0],$this.position[1] + other2[1],$this.position[2] + other2[2]];
 			return $r;
-		}(this)),(function($this) {
-			var $r;
-			var other1 = other.normal;
-			var other2 = [((function($this) {
-				var $r;
-				var other3 = (function($this) {
-					var $r;
-					var arr = [null == $this.normal[0]?0:$this.normal[0],null == $this.normal[1]?0:$this.normal[1],null == $this.normal[2]?0:$this.normal[2]];
-					$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-					return $r;
-				}($this));
-				$r = [other1[0] - other3[0],other1[1] - other3[1],other1[2] - other3[2]];
-				return $r;
-			}($this)))[0] * t,((function($this) {
-				var $r;
-				var other3 = (function($this) {
-					var $r;
-					var arr = [null == $this.normal[0]?0:$this.normal[0],null == $this.normal[1]?0:$this.normal[1],null == $this.normal[2]?0:$this.normal[2]];
-					$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-					return $r;
-				}($this));
-				$r = [other1[0] - other3[0],other1[1] - other3[1],other1[2] - other3[2]];
-				return $r;
-			}($this)))[1] * t,((function($this) {
-				var $r;
-				var other3 = (function($this) {
-					var $r;
-					var arr = [null == $this.normal[0]?0:$this.normal[0],null == $this.normal[1]?0:$this.normal[1],null == $this.normal[2]?0:$this.normal[2]];
-					$r = [null == arr[0]?0:arr[0],null == arr[1]?0:arr[1],null == arr[2]?0:arr[2]];
-					return $r;
-				}($this));
-				$r = [other1[0] - other3[0],other1[1] - other3[1],other1[2] - other3[2]];
-				return $r;
-			}($this)))[2] * t];
-			$r = [$this.normal[0] + other2[0],$this.normal[1] + other2[1],$this.normal[2] + other2[2]];
-			return $r;
 		}(this)));
 	}
 	,flip: function() {
-		return new chad.geom.Vertex3D(this.position,[-this.normal[0],-this.normal[1],-this.normal[2]]);
+		return this;
 	}
-	,__class__: chad.geom.Vertex3D
+	,__class__: chad.geom.Vertex
 }
 var haxe = {}
 haxe.ds = {}
@@ -2018,7 +1932,7 @@ var Bool = Boolean;
 Bool.__ename__ = ["Bool"];
 var Class = { __name__ : ["Class"]};
 var Enum = { };
-chad.csg.Box.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
+chad.csg.Box.baseCube = [[0,4,6,2],[1,3,7,5],[0,1,5,4],[2,6,7,3],[0,2,3,1],[4,5,7,6]];
 chad.csg.Solid.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 chad.geom._Matrix4x4.Matrix4x4_Impl_.unity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
 chad.geom.Plane.EPSILON = 1e-5;
