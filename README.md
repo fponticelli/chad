@@ -36,6 +36,7 @@ Material
 TODO
 ----
 
+* Surfaces from bitmap (height map)
 * calculate volume
 * calculate area
 * Progressing boolean operations (event based)

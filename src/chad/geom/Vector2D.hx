@@ -1,6 +1,7 @@
 package chad.geom;
 
-abstract Vector2D(Array<Float>) {
+abstract Vector2D(Array<Float>)
+{
 	public inline function new(x : Float, y : Float) {
 		this = [x,y];
 	}
