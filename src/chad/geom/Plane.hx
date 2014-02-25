@@ -6,15 +6,15 @@ import chad.geom.Vector3D;
 class Plane {
 	public inline static var EPSILON = 1e-5;
 
-	public static function fromVector3DDs(a : Vector3D, b : Vector3D, c : Vector3D)
+	public static function fromVector3Ds(a : Vector3D, b : Vector3D, c : Vector3D)
 	{
 		var n = b.subtract(a).cross(c.subtract(a)).normalize();
 		return new Plane(n, n.dot(a));
 	};
 
-	// like fromVector3DDs, but allow the vectors to be on one point or one line
+	// like fromVector3Ds, but allow the vectors to be on one point or one line
 	// in such a case a random plane through the given points is constructed
-	public static function anyPlaneFromVector3DDs(a : Vector3D, b : Vector3D, c : Vector3D)
+	public static function anyPlaneFromVector3Ds(a : Vector3D, b : Vector3D, c : Vector3D)
 	{
 		var v1 = b.subtract(a),
 			v2 = c.subtract(a);
@@ -129,7 +129,7 @@ class Plane {
 		point2 = point2.multiply4x4(matrix);
 		point3 = point3.multiply4x4(matrix);
 		// and create a new plane from the transformed points:
-		var newplane = Plane.fromVector3DDs(point1, point2, point3);
+		var newplane = Plane.fromVector3Ds(point1, point2, point3);
 		if(ismirror) {
 			// the transform is mirroring
 			// We should mirror the plane:
