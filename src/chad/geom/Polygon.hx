@@ -1,6 +1,7 @@
 package chad.geom;
 
-class Polygon {
+class Polygon
+{
 	@:isVar public var plane(get, null) : Plane;
 
 	var vertices : Array<Vertex>;

@@ -1,6 +1,7 @@
 package chad.geom;
 
-class OrthoNormalBasis {
+class OrthoNormalBasis
+{
 	public static inline function fromPlane(plane : Plane)
 		return new OrthoNormalBasis(plane, plane.normal.randomNonParallelVector());
 
@@ -61,12 +62,12 @@ class OrthoNormalBasis {
 		return Line3D.fromPoints(to3D(a), to3D(b));
 	}
 
-	public function transform(matrix4x4)
+	public function transform(matrix : Matrix4x4)
 	{
 		// todo: may not work properly in case of mirroring
-		var newplane = plane.transform(matrix4x4),
-			rightpoint_transformed = u.transform(matrix4x4),
-			origin_transformed = new Vector3D(0, 0, 0).transform(matrix4x4),
+		var newplane = plane.transform(matrix),
+			rightpoint_transformed = u.transform(matrix),
+			origin_transformed = new Vector3D(0, 0, 0).transform(matrix),
 			newrighthandvector = rightpoint_transformed.subtract(origin_transformed),
 			newbasis = new OrthoNormalBasis(newplane, newrighthandvector);
 		return newbasis;

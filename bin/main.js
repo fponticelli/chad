@@ -820,7 +820,7 @@ chad.geom.Plane = function(normal,w) {
 	this.w = w;
 };
 chad.geom.Plane.__name__ = true;
-chad.geom.Plane.fromVector3DDs = function(a,b,c) {
+chad.geom.Plane.fromVector3Ds = function(a,b,c) {
 	var n = (function($this) {
 		var $r;
 		var divisor = Math.sqrt((function($this) {
@@ -899,7 +899,7 @@ chad.geom.Plane.fromVector3DDs = function(a,b,c) {
 	}(this));
 	return new chad.geom.Plane(n,n[0] * a[0] + n[1] * a[1] + n[2] * a[2]);
 }
-chad.geom.Plane.anyPlaneFromVector3DDs = function(a,b,c) {
+chad.geom.Plane.anyPlaneFromVector3Ds = function(a,b,c) {
 	var v1 = [b[0] - a[0],b[1] - a[1],b[2] - a[2]], v2 = [c[0] - a[0],c[1] - a[1],c[2] - a[2]];
 	if(Math.sqrt((function($this) {
 		var $r;
@@ -1104,7 +1104,7 @@ chad.geom.Plane.prototype = {
 		point1 = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(point1,matrix);
 		point2 = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(point2,matrix);
 		point3 = chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(point3,matrix);
-		var newplane = chad.geom.Plane.fromVector3DDs(point1,point2,point3);
+		var newplane = chad.geom.Plane.fromVector3Ds(point1,point2,point3);
 		if(ismirror) newplane = newplane.flip();
 		return newplane;
 	}
@@ -1226,8 +1226,8 @@ chad.geom.OrthoNormalBasis.fromPlane = function(plane) {
 	return new chad.geom.OrthoNormalBasis(plane,chad.geom._Vector3D.Vector3D_Impl_.randomNonParallelVector(plane.normal));
 }
 chad.geom.OrthoNormalBasis.prototype = {
-	transform: function(matrix4x4) {
-		var newplane = this.plane.transform(matrix4x4), rightpoint_transformed = chad.geom._Vector3D.Vector3D_Impl_.transform(this.u,matrix4x4), origin_transformed = chad.geom._Vector3D.Vector3D_Impl_.transform([0,0,0],matrix4x4), newrighthandvector = [rightpoint_transformed[0] - origin_transformed[0],rightpoint_transformed[1] - origin_transformed[1],rightpoint_transformed[2] - origin_transformed[2]], newbasis = new chad.geom.OrthoNormalBasis(newplane,newrighthandvector);
+	transform: function(matrix) {
+		var newplane = this.plane.transform(matrix), rightpoint_transformed = chad.geom._Vector3D.Vector3D_Impl_.transform(this.u,matrix), origin_transformed = chad.geom._Vector3D.Vector3D_Impl_.transform([0,0,0],matrix), newrighthandvector = [rightpoint_transformed[0] - origin_transformed[0],rightpoint_transformed[1] - origin_transformed[1],rightpoint_transformed[2] - origin_transformed[2]], newbasis = new chad.geom.OrthoNormalBasis(newplane,newrighthandvector);
 		return newbasis;
 	}
 	,line2Dto3D: function(line) {
@@ -1351,6 +1351,15 @@ chad.geom.Util.__name__ = true;
 chad.geom.Util.solve2Linear = function(a,b,c,d,u,v) {
 	var det = a * d - b * c, invdet = 1.0 / det, x = u * d - b * v, y = -u * c + a * v;
 	return [x * invdet,y * invdet];
+}
+chad.geom.Util.interpolateBetween2DPointsForY = function(p1,p2,y) {
+	var f1 = y - p1[1], f2 = p2[1] - p1[1], t;
+	if(f2 < 0) {
+		f1 = -f1;
+		f2 = -f2;
+	}
+	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
+	return p1[0] + t * (p2[0] - p1[0]);
 }
 chad.geom._Vector2D = {}
 chad.geom._Vector2D.Vector2D_Impl_ = function() { }
@@ -1717,6 +1726,9 @@ chad.geom.Vertex.__name__ = true;
 chad.geom.Vertex.prototype = {
 	toString: function() {
 		return "Vertex $position";
+	}
+	,transform: function(matrix) {
+		return new chad.geom.Vertex(chad.geom._Vector3D.Vector3D_Impl_.multiply4x4(this.position,matrix));
 	}
 	,interpolate: function(other,t) {
 		return new chad.geom.Vertex((function($this) {

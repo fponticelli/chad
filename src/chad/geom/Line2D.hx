@@ -1,6 +1,7 @@
 package chad.geom;
 
-class Line2D {
+class Line2D
+{
 	public static function fromPoints(p1 : Vector2D, p2 : Vector2D)
 	{
 		var direction = p2.subtract(p1),

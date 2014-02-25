@@ -16,6 +16,9 @@ class Vertex {
 			position.lerp(other.position, t)
 		);
 
+	inline public function transform(matrix : Matrix4x4)
+		return new Vertex(position.multiply4x4(matrix));
+
 	public function toString()
 		return "Vertex $position";
 }

@@ -3,7 +3,8 @@ package chad.geom;
 import chad.geom.Vector3D;
 
 @:access(chad.geom.Polygon)
-class Plane {
+class Plane
+{
 	public inline static var EPSILON = 1e-5;
 
 	public static function fromVector3Ds(a : Vector3D, b : Vector3D, c : Vector3D)
