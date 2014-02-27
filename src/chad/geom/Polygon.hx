@@ -31,10 +31,10 @@ class Polygon
 		);
 	}
 
-	public function iterator()
+	inline public function iterator()
 		return vertices.iterator();
 
-	public function all()
+	inline public function all()
 		return vertices.copy();
 
 	function get_plane()

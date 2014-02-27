@@ -3,15 +3,6 @@ package chad.csg;
 import chad.geom.Polygon;
 
 class Solid {
-	static var baseCube = [
-		{ p : [0, 4, 6, 2], n : [-1.0, 0.0, 0.0] },
-		{ p : [1, 3, 7, 5], n : [ 1.0, 0.0, 0.0] },
-		{ p : [0, 1, 5, 4], n : [0.0, -1.0, 0.0] },
-		{ p : [2, 6, 7, 3], n : [0.0,  1.0, 0.0] },
-		{ p : [0, 2, 3, 1], n : [0.0, 0.0, -1.0] },
-		{ p : [4, 5, 7, 6], n : [0.0, 0.0,  1.0] }
-	];
-
 	var polygons : Array<Polygon>;
 
 	private function new() {}

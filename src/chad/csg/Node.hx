@@ -23,24 +23,25 @@ class Node {
 	public function build(polygons : Array<Polygon>) {
 		if(polygons.length == 0)
 			return;
+		else {
+			if(null == plane)
+				plane = polygons[0].plane;
 
-		if(null == plane)
-			plane = polygons[0].plane;
-
-		var front     = [],
-			back      = [];
-		for(polygon in polygons) {
-			plane.splitPolygon(polygon, this.polygons, this.polygons, front, back);
-		}
-		if(front.length > 0) {
-			if(null == this.front)
-				this.front = new Node();
-			this.front.build(front);
-		}
-		if(back.length > 0) {
-			if(null == this.back)
-				this.back = new Node();
-			this.back.build(back);
+			var front     = [],
+				back      = [];
+			for(polygon in polygons) {
+				plane.splitPolygon(polygon, this.polygons, this.polygons, front, back);
+			}
+			if(front.length > 0) {
+				if(null == this.front)
+					this.front = new Node();
+				this.front.build(front);
+			}
+			if(back.length > 0) {
+				if(null == this.back)
+					this.back = new Node();
+				this.back.build(back);
+			}
 		}
 	}
 
@@ -59,19 +60,20 @@ class Node {
 	public function clipPolygons(polygons : Array<Polygon>) : Array<Polygon> {
 		if (null == this.plane)
 			return polygons.copy();
-
-		var front = [],
-			back  = [];
-		for(polygon in polygons) {
-			plane.splitPolygon(polygon, front, back, front, back);
+		else {
+			var front = [],
+				back  = [];
+			for(polygon in polygons) {
+				plane.splitPolygon(polygon, front, back, front, back);
+			}
+			if(null != this.front)
+				front = this.front.clipPolygons(front);
+			if(null != this.back)
+				back = this.back.clipPolygons(back);
+			else
+				back = [];
+			return front.concat(back);
 		}
-		if(null != this.front)
-			front = this.front.clipPolygons(front);
-		if(null != this.back)
-			back = this.back.clipPolygons(back);
-		else
-			back = [];
-		return front.concat(back);
 	}
 
 	public function clipTo(other : Node) {
@@ -85,7 +87,7 @@ class Node {
 	public function iterator()
 		return polygons.iterator();
 
-	public function all() : Array<Polygon>
+	inline public function all() : Array<Polygon>
 		return polygons
 			.concat(null == front ? [] : front.all())
 			.concat(null == back ? [] : back.all());

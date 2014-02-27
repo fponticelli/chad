@@ -62,7 +62,10 @@ class Plane
 	{
 		var polygonType = 0,
 			types = [],
-			t, type;
+			t, type,
+
+			f, b, len, j, ti, vi, tj, vj, t, v;
+
 		for(vertex in polygon)
 		{
 			t = normal.dot(vertex.position) - w;
@@ -80,10 +83,9 @@ class Plane
 			case BACK:
 				back.push(polygon);
 			case SPANNING:
-				var f = [],
-					b = [],
-					len = polygon.vertices.length,
-					j, ti, vi, tj, vj, t, v;
+				f = [];
+				b = [];
+				len = polygon.vertices.length;
 				for (i in 0...len)
 				{
 					j = (i + 1) % len;
