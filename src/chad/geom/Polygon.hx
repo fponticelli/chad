@@ -15,11 +15,7 @@ class Polygon
 		if(Std.is(vertices, Array)) {
 			return new Polygon(cast(vertices).copy());
 		} else {
-			var nvertices = [];
-			for(v in vertices) {
-				nvertices.push(v);
-			}
-			return new Polygon(nvertices);
+			return new Polygon([for(v in vertices) v]);
 		}
 	}
 

@@ -63,7 +63,6 @@ class Plane
 		var polygonType = 0,
 			types = [],
 			t, type,
-
 			f, b, len, j, ti, vi, tj, vj, t, v;
 
 		for(vertex in polygon)
@@ -149,9 +148,9 @@ class Plane
 			lambda = (w - normal.dot(p1)) / normal.dot(direction);
 		if(Math.isNaN(lambda))
 			lambda = 0;
-		if(lambda > 1)
+		else if(lambda > 1)
 			lambda = 1;
-		if(lambda < 0)
+		else if(lambda < 0)
 			lambda = 0;
 		return p1.add(direction.multiply(lambda));
 	}

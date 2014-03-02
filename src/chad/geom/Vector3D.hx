@@ -96,7 +96,7 @@ abstract Vector3D(Array<Float>) {
 	public function dot(prod : Vector3D) : Float
 		return x * prod.x + y * prod.y + z * prod.z;
 
-	inline public function lerp(other : Vector3D, multiplier : Float) : Vector3D
+	public function lerp(other : Vector3D, multiplier : Float) : Vector3D
 		return add(other.subtract(this).multiply(multiplier));
 
 	inline public function normalize() : Vector3D

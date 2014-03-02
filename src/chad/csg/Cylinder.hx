@@ -6,25 +6,26 @@ import chad.geom.Vertex;
 
 class Cylinder {
 	public static function create(start : Vector3D, end : Vector3D, radius = 1.0) {
-		var slices = Math.ceil(128 * radius);
-
-		var ray = end.subtract(start),
+		var slices = Math.ceil(128 * radius),
+			ray = end.subtract(start),
 			axisZ = ray.normalize(),
 			isY = (Math.abs(axisZ.y) > 0.5),
 			axisX = new Vector3D(isY ? 1 : 0, isY ? 0 : 1, 0).cross(axisZ).normalize(),
 			axisY = axisX.cross(axisZ).normalize(),
-			s = new Vertex(start),
-			e = new Vertex(end),
-			polygons = [];
+			s = new Vertex(start, axisZ.negate()),
+			e = new Vertex(end, axisZ.normalize()),
+			polygons = [],
+			t0, t1;
 		function point(stack, slice : Float, normalBlend) {
 			var angle = slice * Math.PI * 2,
 				out = axisX.multiply(Math.cos(angle)).add(axisY.multiply(Math.sin(angle))),
-				pos = start.add(ray.multiply(stack)).add(out.multiply(radius));
-			return new Vertex(pos);
+				pos = start.add(ray.multiply(stack)).add(out.multiply(radius)),
+				normal = out.multiply(1 - Math.abs(normalBlend)).add(axisZ.multiply(normalBlend));
+			return new Vertex(pos, normal);
 		}
 		for (i in 0...slices) {
-			var t0 = i / slices,
-				t1 = (i + 1) / slices;
+			t0 = i / slices;
+			t1 = (i + 1) / slices;
 			polygons.push(new Polygon([s, point(0, t0, -1), point(0, t1, -1)]));
 			polygons.push(new Polygon([point(0, t1, 0), point(0, t0, 0), point(1, t0, 0), point(1, t1, 0)]));
 			polygons.push(new Polygon([e, point(1, t1, 1), point(1, t0, 1)]));

@@ -3,7 +3,8 @@ package chad.csg;
 import chad.geom.Polygon;
 import chad.geom.Plane;
 
-class Node {
+class Node
+{
 	var polygons : Array<Polygon>;
 	var plane : Plane;
 

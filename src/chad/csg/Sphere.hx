@@ -20,7 +20,7 @@ class Sphere {
 				Math.cos(phi),
 				Math.sin(theta) * Math.sin(phi)
 			);
-			vertices.push(new Vertex(position.add(dir.multiply(radius))));
+			vertices.push(new Vertex(position.add(dir.multiply(radius)), dir));
 		}
 
 		for (i in 0...slices) {
