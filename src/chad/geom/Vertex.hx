@@ -25,5 +25,5 @@ class Vertex {
 
 
 	public function toString()
-		return "Vertex $position, $normal";
+		return 'Vertex $position, $normal';
 }
