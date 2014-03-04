@@ -2,21 +2,21 @@ package chad.export;
 
 import chad.csg.Solid;
 import chad.geom.Vector3D;
-import chad.geom.Vertex;
+import chad.geom.Vertex3D;
 
 class ThreeJS {
-	static function getVertices(vertices : Map<String, { index : Int, vertex : Vertex }>){
+	static function getVertices(vertices : Map<String, { index : Int, Vertex3D : Vertex3D }>){
 		var acc = [];
 		for(combo in vertices) {
-			acc = acc.concat(combo.vertex.position.toArray());
+			acc = acc.concat(combo.Vertex3D.position.toArray());
 		}
 		return acc;
 	}
 
-	static function getNormals(vertices : Map<String, { index : Int, vertex : Vertex }>){
+	static function getNormals(vertices : Map<String, { index : Int, Vertex3D : Vertex3D }>){
 		var acc = [];
 		for(combo in vertices) {
-			acc = acc.concat(combo.vertex.normal.toArray());
+			acc = acc.concat(combo.Vertex3D.normal.toArray());
 		}
 		return acc;
 	}
@@ -24,14 +24,14 @@ class ThreeJS {
 	public static function toModel(solid : Solid)
 	{
 		var faces = [],
-			vertices = new Map<String, { index : Int, vertex : Vertex }>(),
+			vertices = new Map<String, { index : Int, Vertex3D : Vertex3D }>(),
 			index = 0;
 
 		for(polygon in solid) {
-			for(vertex in polygon) {
-				var key = vertex.toString();
+			for(Vertex3D in polygon) {
+				var key = Vertex3D.toString();
 				if(!vertices.exists(key))
-					vertices.set(key, { index : index++, vertex : vertex });
+					vertices.set(key, { index : index++, Vertex3D : Vertex3D });
 			}
 		}
 

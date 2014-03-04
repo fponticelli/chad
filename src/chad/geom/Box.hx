@@ -35,4 +35,7 @@ class Box
 	{
 		return throw "not implemented";
 	}
+
+	public function toString()
+		return "Box [$min, $max]";
 }

@@ -2,7 +2,8 @@ package chad.csg;
 
 import chad.geom.Polygon;
 
-class Solid {
+class Solid
+{
 	var polygons : Array<Polygon>;
 
 	private function new() {}

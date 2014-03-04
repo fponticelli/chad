@@ -12,7 +12,8 @@ class Node
 	public var back(default, null) : Node;
 
 	// please ensure polygons is unmutable and not null
-	public function new(?polygons : Array<Polygon>) {
+	public function new(?polygons : Array<Polygon>)
+	{
 		this.plane = null;
 		this.front = null;
 		this.back = null;
@@ -21,7 +22,8 @@ class Node
 			build(polygons);
 	}
 
-	public function build(polygons : Array<Polygon>) {
+	public function build(polygons : Array<Polygon>)
+	{
 		if(polygons.length == 0)
 			return;
 		else {
@@ -30,15 +32,18 @@ class Node
 
 			var front     = [],
 				back      = [];
-			for(polygon in polygons) {
+			for(polygon in polygons)
+			{
 				plane.splitPolygon(polygon, this.polygons, this.polygons, front, back);
 			}
-			if(front.length > 0) {
+			if(front.length > 0)
+			{
 				if(null == this.front)
 					this.front = new Node();
 				this.front.build(front);
 			}
-			if(back.length > 0) {
+			if(back.length > 0)
+			{
 				if(null == this.back)
 					this.back = new Node();
 				this.back.build(back);
@@ -46,8 +51,10 @@ class Node
 		}
 	}
 
-	public function invert() {
-		for(i in 0...polygons.length) {
+	public function invert()
+	{
+		for(i in 0...polygons.length)
+		{
 			polygons[i] = polygons[i].flip();
 		}
 		plane = plane.flip();
@@ -64,7 +71,8 @@ class Node
 		else {
 			var front = [],
 				back  = [];
-			for(polygon in polygons) {
+			for(polygon in polygons)
+			{
 				plane.splitPolygon(polygon, front, back, front, back);
 			}
 			if(null != this.front)
@@ -77,7 +85,8 @@ class Node
 		}
 	}
 
-	public function clipTo(other : Node) {
+	public function clipTo(other : Node)
+	{
 		polygons = other.clipPolygons(polygons);
 		if(null != front)
 			front.clipTo(other);

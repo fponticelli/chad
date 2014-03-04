@@ -2,7 +2,7 @@ package chad.csg;
 
 import chad.geom.Polygon;
 import chad.geom.Vector3D;
-import chad.geom.Vertex;
+import chad.geom.Vertex3D;
 
 class Box {
 	static var baseCube = [
@@ -23,7 +23,7 @@ class Box {
 						position.y + size.y * ((i & 2 != 0) ? 1 : 0),
 						position.z + size.z * ((i & 4 != 0) ? 1 : 0)
 					);
-					return new Vertex(pos, info.n);
+					return new Vertex3D(pos, info.n);
 				}));
 			})
 		);

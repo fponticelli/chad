@@ -39,7 +39,7 @@ abstract Vector2D(Array<Float>)
 	@:to public inline function toArray() : Array<Float>
 		return this.copy();
 
-	public function toVector3DD(z : Float)
+	inline public function toVector3D(z : Float)
 		return new Vector3D(x, y, z);
 
 	public var x(get, never) : Float;
