@@ -48,10 +48,10 @@ class Line2D
 	{
 		var origin = new Vector2D(0, 0),
 			pointOnPlane = normal.multiply(w),
-			neworigin = origin.multiply4x4(matrix),
-			neworiginPlusNormal = normal.multiply4x4(matrix),
+			neworigin = origin.transform(matrix),
+			neworiginPlusNormal = normal.transform(matrix),
 			newnormal = neworiginPlusNormal.subtract(neworigin),
-			newpointOnPlane = pointOnPlane.multiply4x4(matrix),
+			newpointOnPlane = pointOnPlane.transform(matrix),
 			neww = newnormal.dot(newpointOnPlane);
 		return new Line2D(newnormal, neww);
 	}

@@ -1,0 +1,8 @@
+-cp test
+-cp src
+-main TestAll
+-js bin/test/main.js
+-D js-flatten
+-lib utest
+-D nodejs
+-cmd node bin/test/main.js

@@ -1,6 +1,8 @@
 package chad.geom;
 
 abstract Vector3D(Array<Float>) {
+	public static var zero(default, null) : Vector3D = new Vector3D(0, 0, 0);
+
 	public function new(x : Float, y : Float, z : Float) {
 		this = [x,y,z];
 	}

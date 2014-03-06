@@ -2,6 +2,8 @@ package chad.geom;
 
 abstract Vector2D(Array<Float>)
 {
+	public static var zero(default, null) : Vector2D = new Vector2D(0, 0);
+
 	public inline function new(x : Float, y : Float) {
 		this = [x,y];
 	}
@@ -21,6 +23,9 @@ abstract Vector2D(Array<Float>)
 
 	public static function fromAngleRadians(radians : Float)
 		return new Vector2D(Math.cos(radians), Math.sin(radians));
+
+	public inline function isZero()
+		return x == 0 && y == 0;
 
 
 	@:from static public inline function fromArray(arr : Array<Null<Float>>)
@@ -94,9 +99,6 @@ abstract Vector2D(Array<Float>)
 
 	inline public function lengthSquared()
 		return dot(this);
-
-	inline public function multiply4x4(matrix : Matrix4x4)
-		return matrix.leftMultiplyVector2D(this);
 
 	inline public function transform(matrix : Matrix4x4)
 		return matrix.leftMultiplyVector2D(this);
