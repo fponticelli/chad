@@ -128,7 +128,7 @@ chad.csg.Box = function() { };
 chad.csg.Box.__name__ = true;
 chad.csg.Box.create = function(position,size) {
 	return chad.csg.Solid.fromPolygons(chad.csg.Box.baseCube.map(function(info) {
-		return new chad.geom.Polygon(info.p.map(function(i) {
+		return new thx.geom.Polygon(info.p.map(function(i) {
 			var pos = [position[0] + size[0] * ((i & 1) != 0?1:0),position[1] + size[1] * ((i & 2) != 0?1:0),position[2] + size[2] * ((i & 4) != 0?1:0)];
 			return new thx.geom.Vertex3D(pos,(function($this) {
 				var $r;
@@ -156,18 +156,18 @@ chad.csg.Cylinder.create = function(start,end,radius,resolution) {
 	var isY = Math.abs(axisZ[1]) > 0.5;
 	var axisX;
 	var this1;
-	var this1_0;
-	if(isY) this1_0 = 1; else this1_0 = 0;
-	var this1_1;
-	if(isY) this1_1 = 0; else this1_1 = 1;
-	var this1_2 = 0;
-	this1 = [this1_1 * axisZ[2] - this1_2 * axisZ[1],this1_2 * axisZ[0] - this1_0 * axisZ[2],this1_0 * axisZ[1] - this1_1 * axisZ[0]];
+	var this_0;
+	if(isY) this_0 = 1; else this_0 = 0;
+	var this_1;
+	if(isY) this_1 = 0; else this_1 = 1;
+	var this_2 = 0;
+	this1 = [this_1 * axisZ[2] - this_2 * axisZ[1],this_2 * axisZ[0] - this_0 * axisZ[2],this_0 * axisZ[1] - this_1 * axisZ[0]];
 	var v1 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
 	axisX = [this1[0] / v1,this1[1] / v1,this1[2] / v1];
 	var axisY;
-	var this11 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
-	var v2 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this11,[this11[0],this11[1],this11[2]]));
-	axisY = [this11[0] / v2,this11[1] / v2,this11[2] / v2];
+	var this2 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
+	var v2 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this2,[this2[0],this2[1],this2[2]]));
+	axisY = [this2[0] / v2,this2[1] / v2,this2[2] / v2];
 	var s = new thx.geom.Vertex3D(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
 	var e = new thx.geom.Vertex3D(end,(function($this) {
 		var $r;
@@ -181,31 +181,31 @@ chad.csg.Cylinder.create = function(start,end,radius,resolution) {
 	var point = function(stack,slice,normalBlend) {
 		var angle = slice * Math.PI * 2;
 		var out;
-		var this12;
+		var this3;
 		var v4 = Math.cos(angle);
-		this12 = [axisX[0] * v4,axisX[1] * v4,axisX[2] * v4];
+		this3 = [axisX[0] * v4,axisX[1] * v4,axisX[2] * v4];
 		var p;
 		var v5 = Math.sin(angle);
 		p = [axisY[0] * v5,axisY[1] * v5,axisY[2] * v5];
-		out = [this12[0] + p[0],this12[1] + p[1],this12[2] + p[2]];
+		out = [this3[0] + p[0],this3[1] + p[1],this3[2] + p[2]];
 		var pos;
-		var this13;
+		var this4;
 		var p_01 = ray[0] * stack;
 		var p_11 = ray[1] * stack;
 		var p_21 = ray[2] * stack;
-		this13 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
+		this4 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
 		var p_02 = out[0] * radius;
 		var p_12 = out[1] * radius;
 		var p_22 = out[2] * radius;
-		pos = [this13[0] + p_02,this13[1] + p_12,this13[2] + p_22];
+		pos = [this4[0] + p_02,this4[1] + p_12,this4[2] + p_22];
 		var normal;
-		var this14;
+		var this5;
 		var v6 = 1 - Math.abs(normalBlend);
-		this14 = [out[0] * v6,out[1] * v6,out[2] * v6];
+		this5 = [out[0] * v6,out[1] * v6,out[2] * v6];
 		var p_03 = axisZ[0] * normalBlend;
 		var p_13 = axisZ[1] * normalBlend;
 		var p_23 = axisZ[2] * normalBlend;
-		normal = [this14[0] + p_03,this14[1] + p_13,this14[2] + p_23];
+		normal = [this5[0] + p_03,this5[1] + p_13,this5[2] + p_23];
 		return new thx.geom.Vertex3D(pos,normal);
 	};
 	var _g = 0;
@@ -213,9 +213,9 @@ chad.csg.Cylinder.create = function(start,end,radius,resolution) {
 		var i = _g++;
 		t0 = i / slices;
 		t1 = (i + 1) / slices;
-		polygons.push(new chad.geom.Polygon([s,point(0,t0,-1),point(0,t1,-1)]));
-		polygons.push(new chad.geom.Polygon([point(0,t1,0),point(0,t0,0),point(1,t0,0),point(1,t1,0)]));
-		polygons.push(new chad.geom.Polygon([e,point(1,t1,1),point(1,t0,1)]));
+		polygons.push(new thx.geom.Polygon([s,point(0,t0,-1),point(0,t1,-1)]));
+		polygons.push(new thx.geom.Polygon([point(0,t1,0),point(0,t0,0),point(1,t0,0),point(1,t1,0)]));
+		polygons.push(new thx.geom.Polygon([e,point(1,t1,1),point(1,t0,1)]));
 	}
 	return chad.csg.Solid.fromPolygons(polygons);
 };
@@ -385,7 +385,7 @@ chad.csg.Sphere.create = function(position,radius,resolution) {
 			if(j > 0) Vertex3D((i + 1) / slices,j / stacks);
 			if(j < stacks - 1) Vertex3D((i + 1) / slices,(j + 1) / stacks);
 			Vertex3D(i / slices,(j + 1) / stacks);
-			polygons.push(new chad.geom.Polygon(vertices));
+			polygons.push(new thx.geom.Polygon(vertices));
 		}
 	}
 	return chad.csg.Solid.fromPolygons(polygons);
@@ -471,391 +471,6 @@ chad.export.ThreeJS.toModel = function(solid) {
 		}
 	}
 	return { metadata : { formatVersion : 3}, vertices : chad.export.ThreeJS.getVertices(vertices), normals : chad.export.ThreeJS.getNormals(vertices), faces : faces};
-};
-chad.geom = {};
-chad.geom.Line3D = function(point,direction) {
-	this.point = point;
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
-	this.direction = [direction[0] / v,direction[1] / v,direction[2] / v];
-};
-chad.geom.Line3D.__name__ = true;
-chad.geom.Line3D.fromPoints = function(p1,p2) {
-	return new chad.geom.Line3D(p1,(function($this) {
-		var $r;
-		var this1;
-		{
-			var p_0 = -p1[0];
-			var p_1 = -p1[1];
-			var p_2 = -p1[2];
-			this1 = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
-		}
-		$r = (function($this) {
-			var $r;
-			var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-			$r = [this1[0] / v,this1[1] / v,this1[2] / v];
-			return $r;
-		}($this));
-		return $r;
-	}(this)));
-};
-chad.geom.Line3D.fromPlanes = function(p1,p2) {
-	var direction;
-	var this1 = p1.normal;
-	var p = p2.normal;
-	direction = [this1[1] * p[2] - this1[2] * p[1],this1[2] * p[0] - this1[0] * p[2],this1[0] * p[1] - this1[1] * p[0]];
-	var l = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
-	if(l < 1e-10) throw "Parallel planes";
-	var v = 1.0 / l;
-	direction = [direction[0] * v,direction[1] * v,direction[2] * v];
-	var mabsx = Math.abs(direction[0]);
-	var mabsy = Math.abs(direction[1]);
-	var mabsz = Math.abs(direction[2]);
-	var origin;
-	if(mabsx >= mabsy && mabsx >= mabsz) {
-		var r = chad.geom.Util.solve2Linear(p1.normal[1],p1.normal[2],p2.normal[1],p2.normal[2],p1.w,p2.w);
-		origin = [0,r[0],r[1]];
-	} else if(mabsy >= mabsx && mabsy >= mabsz) {
-		var r1 = chad.geom.Util.solve2Linear(p1.normal[0],p1.normal[2],p2.normal[0],p2.normal[2],p1.w,p2.w);
-		origin = [r1[0],0,r1[1]];
-	} else {
-		var r2 = chad.geom.Util.solve2Linear(p1.normal[0],p1.normal[1],p2.normal[0],p2.normal[1],p1.w,p2.w);
-		origin = [r2[0],r2[1],0];
-	}
-	return new chad.geom.Line3D(origin,direction);
-};
-chad.geom.Line3D.prototype = {
-	intersectWithPlane: function(plane) {
-		var lambda = (plane.w - thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.point)) / thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.direction);
-		var this1 = this.point;
-		var p;
-		var this11 = this.direction;
-		p = [this11[0] * lambda,this11[1] * lambda,this11[2] * lambda];
-		return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
-	}
-	,reverse: function() {
-		return new chad.geom.Line3D(this.point,(function($this) {
-			var $r;
-			var this1 = $this.direction;
-			$r = [-this1[0],-this1[1],-this1[2]];
-			return $r;
-		}(this)));
-	}
-	,transform: function(matrix4x4) {
-		var newpoint;
-		var this1 = this.point;
-		newpoint = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
-		var pointaddDirection;
-		var this11 = this.point;
-		var p = this.direction;
-		pointaddDirection = [this11[0] + p[0],this11[1] + p[1],this11[2] + p[2]];
-		var newPointaddDirection = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[pointaddDirection[0],pointaddDirection[1],pointaddDirection[2]]);
-		var newdirection;
-		var p_0 = -newpoint[0];
-		var p_1 = -newpoint[1];
-		var p_2 = -newpoint[2];
-		newdirection = [newPointaddDirection[0] + p_0,newPointaddDirection[1] + p_1,newPointaddDirection[2] + p_2];
-		return new chad.geom.Line3D(newpoint,newdirection);
-	}
-	,closestPointOnLine: function(point) {
-		var t = thx.geom._Point3D.Point3D_Impl_.dot((function($this) {
-			var $r;
-			var p_0 = -point[0];
-			var p_1 = -point[1];
-			var p_2 = -point[2];
-			$r = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
-			return $r;
-		}(this)),this.direction) / thx.geom._Point3D.Point3D_Impl_.dot(this.direction,this.direction);
-		var p;
-		var this1 = this.direction;
-		p = [this1[0] * t,this1[1] * t,this1[2] * t];
-		return [point[0] + p[0],point[1] + p[1],point[2] + p[2]];
-	}
-	,distanceToPoint: function(point) {
-		var closestpoint = this.closestPointOnLine(point);
-		var distancevector;
-		var p_0 = -closestpoint[0];
-		var p_1 = -closestpoint[1];
-		var p_2 = -closestpoint[2];
-		distancevector = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
-		return Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(distancevector,[distancevector[0],distancevector[1],distancevector[2]]));
-	}
-	,equals: function(line) {
-		if(!thx.geom._Point3D.Point3D_Impl_.equals(this.direction,line.direction)) return false;
-		return this.distanceToPoint(line.point) <= 1e-8;
-	}
-};
-chad.geom.Plane = function(normal,w) {
-	this.normal = normal;
-	this.w = w;
-};
-chad.geom.Plane.__name__ = true;
-chad.geom.Plane.fromPoint3Ds = function(a,b,c) {
-	var n;
-	var this1;
-	var this11;
-	var p_0 = -a[0];
-	var p_1 = -a[1];
-	var p_2 = -a[2];
-	this11 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var p;
-	var p_01 = -a[0];
-	var p_11 = -a[1];
-	var p_21 = -a[2];
-	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this11[1] * p[2] - this11[2] * p[1],this11[2] * p[0] - this11[0] * p[2],this11[0] * p[1] - this11[1] * p[0]];
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	n = [this1[0] / v,this1[1] / v,this1[2] / v];
-	return new chad.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
-};
-chad.geom.Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
-	var v1;
-	var p_0 = -a[0];
-	var p_1 = -a[1];
-	var p_2 = -a[2];
-	v1 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var v2;
-	var p_01 = -a[0];
-	var p_11 = -a[1];
-	var p_21 = -a[2];
-	v2 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v1,[v1[0],v1[1],v1[2]])) < 1e-5) v1 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v2);
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v2,[v2[0],v2[1],v2[2]])) < 1e-5) v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
-	var normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]])) < 1e-5) {
-		v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
-		normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
-	}
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]]));
-	normal = [normal[0] / v,normal[1] / v,normal[2] / v];
-	return new chad.geom.Plane(normal,thx.geom._Point3D.Point3D_Impl_.dot(normal,a));
-};
-chad.geom.Plane.fromPoints = function(a,b,c) {
-	var n;
-	var this1;
-	var this11;
-	var p_0 = -a[0];
-	var p_1 = -a[1];
-	var p_2 = -a[2];
-	this11 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var p;
-	var p_01 = -a[0];
-	var p_11 = -a[1];
-	var p_21 = -a[2];
-	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this11[1] * p[2] - this11[2] * p[1],this11[2] * p[0] - this11[0] * p[2],this11[0] * p[1] - this11[1] * p[0]];
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	n = [this1[0] / v,this1[1] / v,this1[2] / v];
-	return new chad.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
-};
-chad.geom.Plane.fromNormalAndPoint = function(normal,point) {
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]]));
-	normal = [normal[0] / v,normal[1] / v,normal[2] / v];
-	return new chad.geom.Plane(normal,thx.geom._Point3D.Point3D_Impl_.dot(point,normal));
-};
-chad.geom.Plane.prototype = {
-	flip: function() {
-		return new chad.geom.Plane((function($this) {
-			var $r;
-			var this1 = $this.normal;
-			$r = [-this1[0],-this1[1],-this1[2]];
-			return $r;
-		}(this)),-this.w);
-	}
-	,splitPolygon: function(polygon,coplanarFront,coplanarBack,front,back) {
-		var polygonType = 0;
-		var types = [];
-		var t;
-		var type;
-		var f;
-		var b;
-		var len;
-		var j;
-		var ti;
-		var vi;
-		var tj;
-		var vj;
-		var t1;
-		var v;
-		var $it0 = HxOverrides.iter(polygon.vertices);
-		while( $it0.hasNext() ) {
-			var vertex = $it0.next();
-			t1 = thx.geom._Point3D.Point3D_Impl_.dot(this.normal,vertex.position) - this.w;
-			if(t1 < -1e-05) type = 2; else if(t1 > 1e-5) type = 1; else type = 0;
-			polygonType |= type;
-			types.push(type);
-		}
-		switch(polygonType) {
-		case 0:
-			(thx.geom._Point3D.Point3D_Impl_.dot(this.normal,polygon.get_plane().normal) > 0?coplanarFront:coplanarBack).push(polygon);
-			break;
-		case 1:
-			front.push(polygon);
-			break;
-		case 2:
-			back.push(polygon);
-			break;
-		case 3:
-			f = [];
-			b = [];
-			len = polygon.vertices.length;
-			var _g = 0;
-			while(_g < len) {
-				var i = _g++;
-				j = (i + 1) % len;
-				ti = types[i];
-				tj = types[j];
-				vi = polygon.vertices[i];
-				vj = polygon.vertices[j];
-				if(ti != 2) f.push(vi);
-				if(ti != 1) b.push(vi);
-				if((ti | tj) == 3) {
-					t1 = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,vi.position)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,(function($this) {
-						var $r;
-						var this1 = vj.position;
-						var p = vi.position;
-						$r = (function($this) {
-							var $r;
-							var p_0 = -p[0];
-							var p_1 = -p[1];
-							var p_2 = -p[2];
-							$r = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-							return $r;
-						}($this));
-						return $r;
-					}(this)));
-					v = new thx.geom.Vertex3D(thx.geom._Point3D.Point3D_Impl_.interpolate(vi.position,vj.position,t1),thx.geom._Point3D.Point3D_Impl_.interpolate(vi.normal,vj.normal,t1));
-					f.push(v);
-					b.push(v);
-				}
-			}
-			if(f.length >= 3) front.push(new chad.geom.Polygon(f));
-			if(b.length >= 3) back.push(new chad.geom.Polygon(b));
-			break;
-		}
-	}
-	,equals: function(other) {
-		return thx.geom._Point3D.Point3D_Impl_.equals(this.normal,other.normal) && this.w == other.w;
-	}
-	,transform: function(matrix) {
-		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
-		var r = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(this.normal);
-		var u;
-		var this1 = this.normal;
-		u = [this1[1] * r[2] - this1[2] * r[1],this1[2] * r[0] - this1[0] * r[2],this1[0] * r[1] - this1[1] * r[0]];
-		var v;
-		var this11 = this.normal;
-		v = [this11[1] * u[2] - this11[2] * u[1],this11[2] * u[0] - this11[0] * u[2],this11[0] * u[1] - this11[1] * u[0]];
-		var point1;
-		var this12 = this.normal;
-		var v1 = this.w;
-		point1 = [this12[0] * v1,this12[1] * v1,this12[2] * v1];
-		var point2 = [point1[0] + u[0],point1[1] + u[1],point1[2] + u[2]];
-		var point3 = [point1[0] + v[0],point1[1] + v[1],point1[2] + v[2]];
-		point1 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point1[0],point1[1],point1[2]]);
-		point2 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point2[0],point2[1],point2[2]]);
-		point3 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point3[0],point3[1],point3[2]]);
-		var newplane = chad.geom.Plane.fromPoint3Ds(point1,point2,point3);
-		if(ismirror) newplane = newplane.flip();
-		return newplane;
-	}
-	,splitLineBetweenPoints: function(p1,p2) {
-		var direction;
-		var p_0 = -p1[0];
-		var p_1 = -p1[1];
-		var p_2 = -p1[2];
-		direction = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
-		var lambda = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,p1)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,direction);
-		if(isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
-		var p_01 = direction[0] * lambda;
-		var p_11 = direction[1] * lambda;
-		var p_21 = direction[2] * lambda;
-		return [p1[0] + p_01,p1[1] + p_11,p1[2] + p_21];
-	}
-	,intersectWithLine: function(line) {
-		return line.intersectWithPlane(this);
-	}
-	,intersectWithPlane: function(plane) {
-		return chad.geom.Line3D.fromPlanes(this,plane);
-	}
-	,signedDistanceToPoint: function(point) {
-		return thx.geom._Point3D.Point3D_Impl_.dot(this.normal,point) - this.w;
-	}
-	,toString: function() {
-		return "Plane [normal: " + (function($this) {
-			var $r;
-			var this1 = $this.normal;
-			$r = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
-			return $r;
-		}(this)) + ", w: " + this.w + "]";
-	}
-	,mirrorPoint: function(point3d) {
-		var distance = this.signedDistanceToPoint(point3d);
-		var mirrored;
-		var p;
-		var this1 = this.normal;
-		var v = distance * 2.0;
-		p = [this1[0] * v,this1[1] * v,this1[2] * v];
-		var p_0 = -p[0];
-		var p_1 = -p[1];
-		var p_2 = -p[2];
-		mirrored = [point3d[0] + p_0,point3d[1] + p_1,point3d[2] + p_2];
-		return mirrored;
-	}
-};
-chad.geom.Polygon = function(vertices) {
-	this.vertices = vertices;
-};
-chad.geom.Polygon.__name__ = true;
-chad.geom.Polygon.fromVertices = function(vertices) {
-	if((vertices instanceof Array) && vertices.__enum__ == null) return new chad.geom.Polygon(vertices.copy()); else return new chad.geom.Polygon((function($this) {
-		var $r;
-		var _g = [];
-		var $it0 = $iterator(vertices)();
-		while( $it0.hasNext() ) {
-			var v = $it0.next();
-			_g.push(v);
-		}
-		$r = _g;
-		return $r;
-	}(this)));
-};
-chad.geom.Polygon.prototype = {
-	flip: function() {
-		var reverse = this.vertices.slice();
-		reverse.reverse();
-		return new chad.geom.Polygon(reverse.map(function(v) {
-			return v.flip();
-		}));
-	}
-	,iterator: function() {
-		return HxOverrides.iter(this.vertices);
-	}
-	,all: function() {
-		return this.vertices.slice();
-	}
-	,get_plane: function() {
-		if(null == this.plane) return this.plane = chad.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position); else return this.plane;
-	}
-};
-chad.geom.Util = function() { };
-chad.geom.Util.__name__ = true;
-chad.geom.Util.solve2Linear = function(a,b,c,d,u,v) {
-	var det = a * d - b * c;
-	var invdet = 1.0 / det;
-	var x = u * d - b * v;
-	var y = -u * c + a * v;
-	return [x * invdet,y * invdet];
-};
-chad.geom.Util.interpolateBetween2DPointsForY = function(p1,p2,y) {
-	var f1 = y - p1[1];
-	var f2 = p2[1] - p1[1];
-	var t;
-	if(f2 < 0) {
-		f1 = -f1;
-		f2 = -f2;
-	}
-	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
-	return p1[0] + t * (p2[0] - p1[0]);
 };
 var haxe = {};
 haxe.ds = {};
@@ -964,6 +579,113 @@ var thx = {};
 thx.geom = {};
 thx.geom.Const = function() { };
 thx.geom.Const.__name__ = true;
+thx.geom.Line3D = function(point,direction) {
+	this.point = point;
+	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
+	this.direction = [direction[0] / v,direction[1] / v,direction[2] / v];
+};
+thx.geom.Line3D.__name__ = true;
+thx.geom.Line3D.fromPoints = function(p1,p2) {
+	return new thx.geom.Line3D(p1,(function($this) {
+		var $r;
+		var this1;
+		{
+			var p_0 = -p1[0];
+			var p_1 = -p1[1];
+			var p_2 = -p1[2];
+			this1 = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
+		}
+		var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+		$r = [this1[0] / v,this1[1] / v,this1[2] / v];
+		return $r;
+	}(this)));
+};
+thx.geom.Line3D.fromPlanes = function(p1,p2) {
+	var direction;
+	var this1 = p1.normal;
+	var p = p2.normal;
+	direction = [this1[1] * p[2] - this1[2] * p[1],this1[2] * p[0] - this1[0] * p[2],this1[0] * p[1] - this1[1] * p[0]];
+	var l = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
+	if(l < 1e-10) throw "Parallel planes";
+	var v = 1.0 / l;
+	direction = [direction[0] * v,direction[1] * v,direction[2] * v];
+	var mabsx = Math.abs(direction[0]);
+	var mabsy = Math.abs(direction[1]);
+	var mabsz = Math.abs(direction[2]);
+	var origin;
+	if(mabsx >= mabsy && mabsx >= mabsz) {
+		var r = thx.geom._Point.Point_Impl_.solve2Linear(p1.normal[1],p1.normal[2],p2.normal[1],p2.normal[2],p1.w,p2.w);
+		origin = [0,r[0],r[1]];
+	} else if(mabsy >= mabsx && mabsy >= mabsz) {
+		var r1 = thx.geom._Point.Point_Impl_.solve2Linear(p1.normal[0],p1.normal[2],p2.normal[0],p2.normal[2],p1.w,p2.w);
+		origin = [r1[0],0,r1[1]];
+	} else {
+		var r2 = thx.geom._Point.Point_Impl_.solve2Linear(p1.normal[0],p1.normal[1],p2.normal[0],p2.normal[1],p1.w,p2.w);
+		origin = [r2[0],r2[1],0];
+	}
+	return new thx.geom.Line3D(origin,direction);
+};
+thx.geom.Line3D.prototype = {
+	intersectWithPlane: function(plane) {
+		var lambda = (plane.w - thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.point)) / thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.direction);
+		var this1 = this.point;
+		var p;
+		var this2 = this.direction;
+		p = [this2[0] * lambda,this2[1] * lambda,this2[2] * lambda];
+		return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
+	}
+	,reverse: function() {
+		return new thx.geom.Line3D(this.point,(function($this) {
+			var $r;
+			var this1 = $this.direction;
+			$r = [-this1[0],-this1[1],-this1[2]];
+			return $r;
+		}(this)));
+	}
+	,transform: function(matrix4x4) {
+		var newpoint;
+		var this1 = this.point;
+		newpoint = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
+		var pointaddDirection;
+		var this2 = this.point;
+		var p = this.direction;
+		pointaddDirection = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
+		var newPointaddDirection = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[pointaddDirection[0],pointaddDirection[1],pointaddDirection[2]]);
+		var newdirection;
+		var p_0 = -newpoint[0];
+		var p_1 = -newpoint[1];
+		var p_2 = -newpoint[2];
+		newdirection = [newPointaddDirection[0] + p_0,newPointaddDirection[1] + p_1,newPointaddDirection[2] + p_2];
+		return new thx.geom.Line3D(newpoint,newdirection);
+	}
+	,closestPointOnLine: function(point) {
+		var t = thx.geom._Point3D.Point3D_Impl_.dot((function($this) {
+			var $r;
+			var p_0 = -point[0];
+			var p_1 = -point[1];
+			var p_2 = -point[2];
+			$r = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
+			return $r;
+		}(this)),this.direction) / thx.geom._Point3D.Point3D_Impl_.dot(this.direction,this.direction);
+		var p;
+		var this1 = this.direction;
+		p = [this1[0] * t,this1[1] * t,this1[2] * t];
+		return [point[0] + p[0],point[1] + p[1],point[2] + p[2]];
+	}
+	,distanceToPoint: function(point) {
+		var closestpoint = this.closestPointOnLine(point);
+		var distancevector;
+		var p_0 = -closestpoint[0];
+		var p_1 = -closestpoint[1];
+		var p_2 = -closestpoint[2];
+		distancevector = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
+		return Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(distancevector,[distancevector[0],distancevector[1],distancevector[2]]));
+	}
+	,equals: function(line) {
+		if(!thx.geom._Point3D.Point3D_Impl_.equals(this.direction,line.direction)) return false;
+		return this.distanceToPoint(line.point) <= 1e-8;
+	}
+};
 thx.geom._Matrix4x4 = {};
 thx.geom._Matrix4x4.Matrix4x4_Impl_ = function() { };
 thx.geom._Matrix4x4.Matrix4x4_Impl_.__name__ = true;
@@ -1125,6 +847,220 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.at = function(this1,index) {
 thx.geom._Matrix4x4.Matrix4x4_Impl_.toString = function(this1) {
 	return "Matrix(" + this1.join(",") + ")";
 };
+thx.geom.Plane = function(normal,w) {
+	this.normal = normal;
+	this.w = w;
+};
+thx.geom.Plane.__name__ = true;
+thx.geom.Plane.fromPoint3Ds = function(a,b,c) {
+	var n;
+	var this1;
+	var this2;
+	var p_0 = -a[0];
+	var p_1 = -a[1];
+	var p_2 = -a[2];
+	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	var p;
+	var p_01 = -a[0];
+	var p_11 = -a[1];
+	var p_21 = -a[2];
+	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
+	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+	n = [this1[0] / v,this1[1] / v,this1[2] / v];
+	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
+};
+thx.geom.Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
+	var v1;
+	var p_0 = -a[0];
+	var p_1 = -a[1];
+	var p_2 = -a[2];
+	v1 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	var v2;
+	var p_01 = -a[0];
+	var p_11 = -a[1];
+	var p_21 = -a[2];
+	v2 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v1,[v1[0],v1[1],v1[2]])) < 1e-5) v1 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v2);
+	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v2,[v2[0],v2[1],v2[2]])) < 1e-5) v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
+	var normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
+	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]])) < 1e-5) {
+		v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
+		normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
+	}
+	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]]));
+	normal = [normal[0] / v,normal[1] / v,normal[2] / v];
+	return new thx.geom.Plane(normal,thx.geom._Point3D.Point3D_Impl_.dot(normal,a));
+};
+thx.geom.Plane.fromPoints = function(a,b,c) {
+	var n;
+	var this1;
+	var this2;
+	var p_0 = -a[0];
+	var p_1 = -a[1];
+	var p_2 = -a[2];
+	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	var p;
+	var p_01 = -a[0];
+	var p_11 = -a[1];
+	var p_21 = -a[2];
+	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
+	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+	n = [this1[0] / v,this1[1] / v,this1[2] / v];
+	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
+};
+thx.geom.Plane.fromNormalAndPoint = function(normal,point) {
+	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]]));
+	normal = [normal[0] / v,normal[1] / v,normal[2] / v];
+	return new thx.geom.Plane(normal,thx.geom._Point3D.Point3D_Impl_.dot(point,normal));
+};
+thx.geom.Plane.prototype = {
+	flip: function() {
+		return new thx.geom.Plane((function($this) {
+			var $r;
+			var this1 = $this.normal;
+			$r = [-this1[0],-this1[1],-this1[2]];
+			return $r;
+		}(this)),-this.w);
+	}
+	,splitPolygon: function(polygon,coplanarFront,coplanarBack,front,back) {
+		var polygonType = 0;
+		var types = [];
+		var t;
+		var type;
+		var f;
+		var b;
+		var len;
+		var j;
+		var ti;
+		var vi;
+		var tj;
+		var vj;
+		var t1;
+		var v;
+		var $it0 = HxOverrides.iter(polygon.vertices);
+		while( $it0.hasNext() ) {
+			var vertex = $it0.next();
+			t1 = thx.geom._Point3D.Point3D_Impl_.dot(this.normal,vertex.position) - this.w;
+			if(t1 < -1e-05) type = 2; else if(t1 > 1e-5) type = 1; else type = 0;
+			polygonType |= type;
+			types.push(type);
+		}
+		switch(polygonType) {
+		case 0:
+			(thx.geom._Point3D.Point3D_Impl_.dot(this.normal,polygon.get_plane().normal) > 0?coplanarFront:coplanarBack).push(polygon);
+			break;
+		case 1:
+			front.push(polygon);
+			break;
+		case 2:
+			back.push(polygon);
+			break;
+		case 3:
+			f = [];
+			b = [];
+			len = polygon.vertices.length;
+			var _g = 0;
+			while(_g < len) {
+				var i = _g++;
+				j = (i + 1) % len;
+				ti = types[i];
+				tj = types[j];
+				vi = polygon.vertices[i];
+				vj = polygon.vertices[j];
+				if(ti != 2) f.push(vi);
+				if(ti != 1) b.push(vi);
+				if((ti | tj) == 3) {
+					t1 = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,vi.position)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,(function($this) {
+						var $r;
+						var this1 = vj.position;
+						var p = vi.position;
+						var p_0 = -p[0];
+						var p_1 = -p[1];
+						var p_2 = -p[2];
+						$r = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+						return $r;
+					}(this)));
+					v = new thx.geom.Vertex3D(thx.geom._Point3D.Point3D_Impl_.interpolate(vi.position,vj.position,t1),thx.geom._Point3D.Point3D_Impl_.interpolate(vi.normal,vj.normal,t1));
+					f.push(v);
+					b.push(v);
+				}
+			}
+			if(f.length >= 3) front.push(new thx.geom.Polygon(f));
+			if(b.length >= 3) back.push(new thx.geom.Polygon(b));
+			break;
+		}
+	}
+	,equals: function(other) {
+		return thx.geom._Point3D.Point3D_Impl_.equals(this.normal,other.normal) && this.w == other.w;
+	}
+	,transform: function(matrix) {
+		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
+		var r = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(this.normal);
+		var u;
+		var this1 = this.normal;
+		u = [this1[1] * r[2] - this1[2] * r[1],this1[2] * r[0] - this1[0] * r[2],this1[0] * r[1] - this1[1] * r[0]];
+		var v;
+		var this2 = this.normal;
+		v = [this2[1] * u[2] - this2[2] * u[1],this2[2] * u[0] - this2[0] * u[2],this2[0] * u[1] - this2[1] * u[0]];
+		var point1;
+		var this3 = this.normal;
+		var v1 = this.w;
+		point1 = [this3[0] * v1,this3[1] * v1,this3[2] * v1];
+		var point2 = [point1[0] + u[0],point1[1] + u[1],point1[2] + u[2]];
+		var point3 = [point1[0] + v[0],point1[1] + v[1],point1[2] + v[2]];
+		point1 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point1[0],point1[1],point1[2]]);
+		point2 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point2[0],point2[1],point2[2]]);
+		point3 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point3[0],point3[1],point3[2]]);
+		var newplane = thx.geom.Plane.fromPoint3Ds(point1,point2,point3);
+		if(ismirror) newplane = newplane.flip();
+		return newplane;
+	}
+	,splitLineBetweenPoints: function(p1,p2) {
+		var direction;
+		var p_0 = -p1[0];
+		var p_1 = -p1[1];
+		var p_2 = -p1[2];
+		direction = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
+		var lambda = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,p1)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,direction);
+		if(isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
+		var p_01 = direction[0] * lambda;
+		var p_11 = direction[1] * lambda;
+		var p_21 = direction[2] * lambda;
+		return [p1[0] + p_01,p1[1] + p_11,p1[2] + p_21];
+	}
+	,intersectWithLine: function(line) {
+		return line.intersectWithPlane(this);
+	}
+	,intersectWithPlane: function(plane) {
+		return thx.geom.Line3D.fromPlanes(this,plane);
+	}
+	,signedDistanceToPoint: function(point) {
+		return thx.geom._Point3D.Point3D_Impl_.dot(this.normal,point) - this.w;
+	}
+	,toString: function() {
+		return "Plane [normal: " + (function($this) {
+			var $r;
+			var this1 = $this.normal;
+			$r = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+			return $r;
+		}(this)) + ", w: " + this.w + "]";
+	}
+	,mirrorPoint: function(point3d) {
+		var distance = this.signedDistanceToPoint(point3d);
+		var mirrored;
+		var p;
+		var this1 = this.normal;
+		var v = distance * 2.0;
+		p = [this1[0] * v,this1[1] * v,this1[2] * v];
+		var p_0 = -p[0];
+		var p_1 = -p[1];
+		var p_2 = -p[2];
+		mirrored = [point3d[0] + p_0,point3d[1] + p_1,point3d[2] + p_2];
+		return mirrored;
+	}
+};
 thx.geom._Point = {};
 thx.geom._Point.Point_Impl_ = function() { };
 thx.geom._Point.Point_Impl_.__name__ = true;
@@ -1271,6 +1207,24 @@ thx.geom._Point.Point_Impl_.toObject = function(this1) {
 };
 thx.geom._Point.Point_Impl_.toString = function(this1) {
 	return "Point(" + this1[0] + "," + this1[1] + ")";
+};
+thx.geom._Point.Point_Impl_.solve2Linear = function(a,b,c,d,u,v) {
+	var det = a * d - b * c;
+	var invdet = 1.0 / det;
+	var x = u * d - b * v;
+	var y = -u * c + a * v;
+	return [x * invdet,y * invdet];
+};
+thx.geom._Point.Point_Impl_.interpolateBetween2DPointsForY = function(p1,p2,y) {
+	var f1 = y - p1[1];
+	var f2 = p2[1] - p1[1];
+	var t;
+	if(f2 < 0) {
+		f1 = -f1;
+		f2 = -f2;
+	}
+	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
+	return p1[0] + t * (p2[0] - p1[0]);
 };
 thx.geom._Point3D = {};
 thx.geom._Point3D.Point3D_Impl_ = function() { };
@@ -1424,6 +1378,41 @@ thx.geom._Point3D.Point3D_Impl_.toObject = function(this1) {
 thx.geom._Point3D.Point3D_Impl_.toString = function(this1) {
 	return "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
 };
+thx.geom.Polygon = function(vertices) {
+	this.vertices = vertices;
+};
+thx.geom.Polygon.__name__ = true;
+thx.geom.Polygon.fromVertices = function(vertices) {
+	if((vertices instanceof Array) && vertices.__enum__ == null) return new thx.geom.Polygon(vertices.copy()); else return new thx.geom.Polygon((function($this) {
+		var $r;
+		var _g = [];
+		var $it0 = $iterator(vertices)();
+		while( $it0.hasNext() ) {
+			var v = $it0.next();
+			_g.push(v);
+		}
+		$r = _g;
+		return $r;
+	}(this)));
+};
+thx.geom.Polygon.prototype = {
+	flip: function() {
+		var reverse = this.vertices.slice();
+		reverse.reverse();
+		return new thx.geom.Polygon(reverse.map(function(v) {
+			return v.flip();
+		}));
+	}
+	,iterator: function() {
+		return HxOverrides.iter(this.vertices);
+	}
+	,all: function() {
+		return this.vertices.slice();
+	}
+	,get_plane: function() {
+		if(null == this.plane) return this.plane = thx.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position); else return this.plane;
+	}
+};
 thx.geom.Vertex3D = function(position,normal) {
 	this.position = position;
 	this.normal = normal;
@@ -1449,8 +1438,8 @@ thx.geom.Vertex3D.prototype = {
 			return $r;
 		}(this)),(function($this) {
 			var $r;
-			var this11 = $this.normal;
-			$r = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this11[0],this11[1],this11[2]]);
+			var this2 = $this.normal;
+			$r = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this2[0],this2[1],this2[2]]);
 			return $r;
 		}(this)));
 	}
@@ -1462,8 +1451,8 @@ thx.geom.Vertex3D.prototype = {
 			return $r;
 		}(this)) + ", " + (function($this) {
 			var $r;
-			var this11 = $this.normal;
-			$r = "Point3D(" + this11[0] + "," + this11[1] + "," + this11[2] + ")";
+			var this2 = $this.normal;
+			$r = "Point3D(" + this2[0] + "," + this2[1] + "," + this2[2] + ")";
 			return $r;
 		}(this));
 	}
@@ -1576,13 +1565,13 @@ if(Array.prototype.map == null) Array.prototype.map = function(f) {
 	return a;
 };
 chad.csg.Box.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
-chad.geom.Plane.EPSILON = 1e-5;
-chad.geom.Plane.COPLANAR = 0;
-chad.geom.Plane.FRONT = 1;
-chad.geom.Plane.BACK = 2;
-chad.geom.Plane.SPANNING = 3;
 thx.geom.Const.EPSILON = 1e-5;
 thx.geom._Matrix4x4.Matrix4x4_Impl_.unity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
+thx.geom.Plane.EPSILON = 1e-5;
+thx.geom.Plane.COPLANAR = 0;
+thx.geom.Plane.FRONT = 1;
+thx.geom.Plane.BACK = 2;
+thx.geom.Plane.SPANNING = 3;
 thx.geom._Point.Point_Impl_.zero = [0,0];
 thx.geom._Point3D.Point3D_Impl_.zero = [0,0,0];
 thx.unit.angle.Const.TO_DEGREE = 180 / Math.PI;

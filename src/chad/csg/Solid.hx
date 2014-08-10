@@ -1,6 +1,6 @@
 package chad.csg;
 
-import chad.geom.Polygon;
+import thx.geom.Polygon;
 
 class Solid
 {

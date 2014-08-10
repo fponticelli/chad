@@ -1,6 +1,6 @@
 package chad.csg;
 
-import chad.geom.Polygon;
+import thx.geom.Polygon;
 import thx.geom.Vertex3D;
 import thx.geom.Point3D;
 

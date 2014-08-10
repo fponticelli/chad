@@ -1,7 +1,7 @@
 package chad.csg;
 
-import chad.geom.Polygon;
-import chad.geom.Plane;
+import thx.geom.Polygon;
+import thx.geom.Plane;
 
 class Node
 {
