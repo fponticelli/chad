@@ -1,20 +1,20 @@
 package chad.csg;
 
 import chad.geom.Polygon;
-import chad.geom.Vector3D;
 import chad.geom.Vertex3D;
+import thx.geom.Point3D;
 
 class Cylinder
 {
-	public static function create(start : Vector3D, end : Vector3D, radius = 1.0, ?resolution : Float -> Int)
+	public static function create(start : Point3D, end : Point3D, radius = 1.0, ?resolution : Float -> Int)
 	{
 		if(null == resolution)
 			resolution = Sphere.getResolution;
 		var slices   = resolution(radius),
-			ray      = end.subtract(start),
+			ray      = end.subtractPoint3D(start),
 			axisZ    = ray.normalize(),
 			isY      = (Math.abs(axisZ.y) > 0.5),
-			axisX    = new Vector3D(isY ? 1 : 0, isY ? 0 : 1, 0).cross(axisZ).normalize(),
+			axisX    = new Point3D(isY ? 1 : 0, isY ? 0 : 1, 0).cross(axisZ).normalize(),
 			axisY    = axisX.cross(axisZ).normalize(),
 			s        = new Vertex3D(start, axisZ.negate()),
 			e        = new Vertex3D(end, axisZ.normalize()),
@@ -23,9 +23,9 @@ class Cylinder
 		function point(stack, slice : Float, normalBlend)
 		{
 			var angle = slice * Math.PI * 2,
-				out = axisX.multiply(Math.cos(angle)).add(axisY.multiply(Math.sin(angle))),
-				pos = start.add(ray.multiply(stack)).add(out.multiply(radius)),
-				normal = out.multiply(1 - Math.abs(normalBlend)).add(axisZ.multiply(normalBlend));
+				out = axisX.multiply(Math.cos(angle)).addPoint3D(axisY.multiply(Math.sin(angle))),
+				pos = start.addPoint3D(ray.multiply(stack)).addPoint3D(out.multiply(radius)),
+				normal = out.multiply(1 - Math.abs(normalBlend)).addPoint3D(axisZ.multiply(normalBlend));
 			return new Vertex3D(pos, normal);
 		}
 		for (i in 0...slices)

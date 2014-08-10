@@ -1,5 +1,7 @@
 package chad.geom;
 
+import thx.geom.Point;
+
 class Util
 {
 	public static function solve2Linear(a : Float, b : Float, c : Float, d : Float, u : Float, v : Float)
@@ -9,10 +11,10 @@ class Util
 			x = u * d - b * v,
 			y = -u * c + a * v;
 
-		return new Vector2D(x * invdet, y * invdet);
+		return new Point(x * invdet, y * invdet);
 	}
 
-	public static function interpolateBetween2DPointsForY(p1 : Vector2D, p2 : Vector2D, y : Float)
+	public static function interpolateBetween2DPointsForY(p1 : Point, p2 : Point, y : Float)
 	{
 		var f1 = y - p1.y,
 			f2 = p2.y - p1.y,

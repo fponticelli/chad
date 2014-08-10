@@ -1,24 +1,25 @@
 package chad.geom;
 
-import chad.geom.Vector3D;
+import thx.geom.Point3D;
+import thx.geom.Matrix4x4;
 
 @:access(chad.geom.Polygon)
 class Plane
 {
 	public inline static var EPSILON = 1e-5;
 
-	public static function fromVector3Ds(a : Vector3D, b : Vector3D, c : Vector3D)
+	public static function fromPoint3Ds(a : Point3D, b : Point3D, c : Point3D)
 	{
-		var n = b.subtract(a).cross(c.subtract(a)).normalize();
+		var n = b.subtractPoint3D(a).cross(c.subtractPoint3D(a)).normalize();
 		return new Plane(n, n.dot(a));
 	};
 
-	// like fromVector3Ds, but allow the vectors to be on one point or one line
+	// like fromPoint3Ds, but allow the vectors to be on one point or one line
 	// in such a case a random plane through the given points is constructed
-	public static function anyPlaneFromVector3Ds(a : Vector3D, b : Vector3D, c : Vector3D)
+	public static function anyPlaneFromPoint3Ds(a : Point3D, b : Point3D, c : Point3D)
 	{
-		var v1 = b.subtract(a),
-			v2 = c.subtract(a);
+		var v1 = b.subtractPoint3D(a),
+			v2 = c.subtractPoint3D(a);
 		if(v1.length < EPSILON)
 			v1 = v2.randomNonParallelVector();
 		if(v2.length < EPSILON)
@@ -34,22 +35,22 @@ class Plane
 		return new Plane(normal, normal.dot(a));
 	}
 
-	public static function fromPoints(a : Vector3D, b : Vector3D, c : Vector3D)
+	public static function fromPoints(a : Point3D, b : Point3D, c : Point3D)
 	{
-		var n = b.subtract(a).cross(c.subtract(a)).normalize();
+		var n = b.subtractPoint3D(a).cross(c.subtractPoint3D(a)).normalize();
 		return new Plane(n, n.dot(a));
 	}
 
-	public static function fromNormalAndPoint(normal : Vector3D, point : Vector3D)
+	public static function fromNormalAndPoint(normal : Point3D, point : Point3D)
 	{
 		normal = normal.normalize();
 		return new Plane(normal, point.dot(normal));
 	}
 
-	@:isVar public var normal(default, null) : Vector3D;
+	@:isVar public var normal(default, null) : Point3D;
 	@:isVar public var w(default, null) : Float;
 
-	public function new(normal : Vector3D, w : Float)
+	public function new(normal : Point3D, w : Float)
 	{
 		this.normal = normal;
 		this.w = w;
@@ -99,7 +100,7 @@ class Plane
 					if ((ti | tj) == SPANNING)
 					{
 						t = (w - normal.dot(vi.position)) /
-							normal.dot(vj.position.subtract(vi.position));
+							normal.dot(vj.position.subtractPoint3D(vi.position));
 						v = vi.interpolate(vj, t);
 						f.push(v);
 						b.push(v); // was: v.clone()
@@ -124,14 +125,14 @@ class Plane
 			v = normal.cross(u),
 			// get 3 points in the plane:
 			point1 = normal.multiply(w),
-			point2 = point1.add(u),
-			point3 = point1.add(v);
+			point2 = point1.addPoint3D(u),
+			point3 = point1.addPoint3D(v);
 		// transform the points:
 		point1 = point1.multiply4x4(matrix);
 		point2 = point2.multiply4x4(matrix);
 		point3 = point3.multiply4x4(matrix);
 		// and create a new plane from the transformed points:
-		var newplane = Plane.fromVector3Ds(point1, point2, point3);
+		var newplane = Plane.fromPoint3Ds(point1, point2, point3);
 		if(ismirror) {
 			// the transform is mirroring
 			// We should mirror the plane:
@@ -142,9 +143,9 @@ class Plane
 
 	// robust splitting of a line by a plane
 	// will work even if the line is parallel to the plane
-	public function splitLineBetweenPoints(p1 : Vector3D, p2 : Vector3D)
+	public function splitLineBetweenPoints(p1 : Point3D, p2 : Point3D)
 	{
-		var direction = p2.subtract(p1),
+		var direction = p2.subtractPoint3D(p1),
 			lambda = (w - normal.dot(p1)) / normal.dot(direction);
 		if(Math.isNaN(lambda))
 			lambda = 0;
@@ -152,10 +153,10 @@ class Plane
 			lambda = 1;
 		else if(lambda < 0)
 			lambda = 0;
-		return p1.add(direction.multiply(lambda));
+		return p1.addPoint3D(direction.multiply(lambda));
 	}
 
-	public function intersectWithLine(line : Line3D) : Vector3D
+	public function intersectWithLine(line : Line3D) : Point3D
 		return line.intersectWithPlane(this);
 
 	// intersection of two planes
@@ -171,7 +172,7 @@ class Plane
 	public function mirrorPoint(point3d)
 	{
 		var distance = this.signedDistanceToPoint(point3d);
-		var mirrored = point3d.subtract(this.normal.multiply(distance * 2.0));
+		var mirrored = point3d.subtractPoint3D(this.normal.multiply(distance * 2.0));
 		return mirrored;
 	}
 

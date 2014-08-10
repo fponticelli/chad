@@ -1,15 +1,15 @@
 package chad.csg;
 
 import chad.geom.Polygon;
-import chad.geom.Vector3D;
 import chad.geom.Vertex3D;
+import thx.geom.Point3D;
 
 class Sphere
 {
 	public static dynamic function getResolution(r : Float)
 		return 36;
 
-	public static function create(position : Vector3D, radius = 1.0, ?resolution : Float -> Int)
+	public static function create(position : Point3D, radius = 1.0, ?resolution : Float -> Int)
 	{
 		if(null == resolution)
 			resolution = getResolution;
@@ -22,12 +22,12 @@ class Sphere
 		{
 			theta *= Math.PI * 2;
 			phi *= Math.PI;
-			var dir = new Vector3D(
+			var dir = new Point3D(
 				Math.cos(theta) * Math.sin(phi),
 				Math.cos(phi),
 				Math.sin(theta) * Math.sin(phi)
 			);
-			vertices.push(new Vertex3D(position.add(dir.multiply(radius)), dir));
+			vertices.push(new Vertex3D(position.addPoint3D(dir.multiply(radius)), dir));
 		}
 
 		for (i in 0...slices)

@@ -1,23 +1,24 @@
 package chad.geom;
 
-import chad.geom.Vector3D;
+import thx.geom.Point3D;
+import thx.geom.Matrix4x4;
 
 class Vertex3D {
-	inline public function new(position : Vector3D, normal : Vector3D) {
+	inline public function new(position : Point3D, normal : Point3D) {
 		this.position = position;
 		this.normal = normal;
 	}
 
-	@:isVar public var position(default, null) : Vector3D;
-	@:isVar public var normal(default, null) : Vector3D;
+	@:isVar public var position(default, null) : Point3D;
+	@:isVar public var normal(default, null) : Point3D;
 
 	inline public function flip()
 		return new Vertex3D(position, normal.negate());
 
 	inline public function interpolate(other : Vertex3D, t : Float)
 		return new Vertex3D(
-			position.lerp(other.position, t),
-			normal.lerp(other.normal, t)
+			position.interpolate(other.position, t),
+			normal.interpolate(other.normal, t)
 		);
 
 	inline public function transform(matrix : Matrix4x4)

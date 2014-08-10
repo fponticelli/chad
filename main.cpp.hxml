@@ -1,5 +1,0 @@
--cp demo
--cp src
--main Main
--cpp bin/cpp/main
-#-cmd node bin/main.js

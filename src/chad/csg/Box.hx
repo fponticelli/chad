@@ -1,8 +1,8 @@
 package chad.csg;
 
 import chad.geom.Polygon;
-import chad.geom.Vector3D;
 import chad.geom.Vertex3D;
+import thx.geom.Point3D;
 
 class Box {
 	static var baseCube = [
@@ -14,11 +14,11 @@ class Box {
 		{ p : [4, 5, 7, 6], n : [0.0, 0.0,  1.0] }
 	];
 
-	public static function create(position : Vector3D, size : Vector3D) {
+	public static function create(position : Point3D, size : Point3D) {
 		return Solid.fromPolygons(
 			baseCube.map(function(info) {
 				return new Polygon(info.p.map(function(i) {
-					var pos = new Vector3D(
+					var pos = new Point3D(
 						position.x + size.x * ((i & 1 != 0) ? 1 : 0),
 						position.y + size.y * ((i & 2 != 0) ? 1 : 0),
 						position.z + size.z * ((i & 4 != 0) ? 1 : 0)

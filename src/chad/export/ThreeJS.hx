@@ -1,7 +1,7 @@
 package chad.export;
 
 import chad.csg.Solid;
-import chad.geom.Vector3D;
+import thx.geom.Point3D;
 import chad.geom.Vertex3D;
 
 class ThreeJS {
