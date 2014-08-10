@@ -1,5 +1,7 @@
 package chad.geom;
 
+import thx.geom.Vertex3D;
+
 class Polygon
 {
 	@:isVar public var plane(get, null) : Plane;

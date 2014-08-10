@@ -1,7 +1,7 @@
 package chad.csg;
 
 import chad.geom.Polygon;
-import chad.geom.Vertex3D;
+import thx.geom.Vertex3D;
 import thx.geom.Point3D;
 
 class Cylinder

@@ -2,7 +2,7 @@ package chad.export;
 
 import chad.csg.Solid;
 import thx.geom.Point3D;
-import chad.geom.Vertex3D;
+import thx.geom.Vertex3D;
 
 class ThreeJS {
 	static function getVertices(vertices : Map<String, { index : Int, Vertex3D : Vertex3D }>){
