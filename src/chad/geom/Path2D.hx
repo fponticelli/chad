@@ -11,7 +11,7 @@ class Path2D
 		this.closed = closed;
 	}
 
-	public static function fromArray(points : : Array<Vector2D>, closed : Bool)
+	public static function fromArray(points : Array<Vector2D>, closed : Bool)
 	{
 		points = null == points ? [] : points;
 		var prevpoint = null;

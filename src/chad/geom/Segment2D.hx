@@ -84,4 +84,7 @@ class Path2D
 			next : function() return node = null == node.next || node.next.isLast() ? null : node.next
 		};
 	}
+
+	public function toString()
+		return 'Path2D (closed: $closed)';
 }
