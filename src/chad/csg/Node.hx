@@ -3,8 +3,7 @@ package chad.csg;
 import thx.geom.Polygon;
 import thx.geom.Plane;
 
-class Node
-{
+class Node {
 	var polygons : Array<Polygon>;
 	var plane : Plane;
 
@@ -12,8 +11,7 @@ class Node
 	public var back(default, null) : Node;
 
 	// please ensure polygons is unmutable and not null
-	public function new(?polygons : Array<Polygon>)
-	{
+	public function new(?polygons : Array<Polygon>) {
 		this.plane = null;
 		this.front = null;
 		this.back = null;
@@ -22,8 +20,7 @@ class Node
 			build(polygons);
 	}
 
-	public function build(polygons : Array<Polygon>)
-	{
+	public function build(polygons : Array<Polygon>) {
 		if(polygons.length == 0)
 			return;
 		else {
@@ -51,8 +48,7 @@ class Node
 		}
 	}
 
-	public function invert()
-	{
+	public function invert() {
 		for(i in 0...polygons.length)
 		{
 			polygons[i] = polygons[i].flip();
@@ -85,8 +81,7 @@ class Node
 		}
 	}
 
-	public function clipTo(other : Node)
-	{
+	public function clipTo(other : Node) {
 		polygons = other.clipPolygons(polygons);
 		if(null != front)
 			front.clipTo(other);

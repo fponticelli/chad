@@ -2,23 +2,16 @@ package chad.csg;
 
 import thx.geom.Polygon;
 
-class Solid
-{
-	var polygons : Array<Polygon>;
+abstract Solid(Array<Polygon>) {
+	function new(polygons : Array<Polygon>)
+		this = polygons;
 
-	private function new() {}
+	@:from public static function fromPolygons(polygons : Array<Polygon>)
+		return new Solid(polygons);
 
-	public static function fromPolygons(polygons : Array<Polygon>)
-	{
-		var solid = new Solid();
-		solid.polygons = polygons;
-		return solid;
-	}
-
-	public function union(other : Solid)
-	{
-		var a = new Node(polygons.copy()),
-			b = new Node(other.polygons.copy());
+	@:op(A+B) public function union(other : Solid) {
+		var a = new Node(toArray()),
+			b = new Node(other.toArray());
 
 		a.clipTo(b);
 		b.clipTo(a);
@@ -30,10 +23,9 @@ class Solid
 		return fromPolygons(a.all());
 	}
 
-	public function subtract(other : Solid)
-	{
-		var a = new Node(polygons.copy()),
-			b = new Node(other.polygons.copy());
+	@:op(A-B) public function subtract(other : Solid) {
+		var a = new Node(toArray()),
+			b = new Node(other.toArray());
 
 		a.invert();
 		a.clipTo(b);
@@ -47,10 +39,9 @@ class Solid
 		return fromPolygons(a.all());
 	}
 
-	public function intersect(other : Solid)
-	{
-		var a = new Node(polygons.copy()),
-			b = new Node(other.polygons.copy());
+	@:op(A^B)public function intersect(other : Solid) {
+		var a = new Node(toArray()),
+			b = new Node(other.toArray());
 
 		a.invert();
 		b.clipTo(a);
@@ -63,9 +54,12 @@ class Solid
 		return fromPolygons(a.all());
 	}
 
-	public function iterator()
-		return polygons.iterator();
+	inline public function toArray()
+		return this.copy();
 
-	public function toString()
-		return 'Solid [${polygons.length}]';
+	inline public function iterator()
+		return this.iterator();
+
+	@:to inline public function toString()
+		return 'Solid(${this.length})';
 }

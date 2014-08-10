@@ -14,7 +14,7 @@ Main.main = function() {
 	(window || {}).Main = Main;
 };
 Main.geom = function() {
-	return chad.export.ThreeJS.toModel(chad.csg.Box.create((function($this) {
+	return chad.export.ThreeJS.toModel(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.intersect(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.union(chad.csg.Solids.box((function($this) {
 		var $r;
 		var arr_0 = -0.5;
 		var arr_1 = -0.5;
@@ -28,7 +28,7 @@ Main.geom = function() {
 		var arr_21 = 1.0;
 		$r = [arr_01,arr_11,arr_21];
 		return $r;
-	}(this))).union(chad.csg.Box.create((function($this) {
+	}(this))),chad.csg.Solids.box((function($this) {
 		var $r;
 		var arr_02 = 0.1;
 		var arr_12 = 0.1;
@@ -42,7 +42,7 @@ Main.geom = function() {
 		var arr_23 = 1.0;
 		$r = [arr_03,arr_13,arr_23];
 		return $r;
-	}(this)))).subtract(chad.csg.Box.create((function($this) {
+	}(this)))),chad.csg.Solids.box((function($this) {
 		var $r;
 		var arr_04 = -1.1;
 		var arr_14 = -1.1;
@@ -56,21 +56,21 @@ Main.geom = function() {
 		var arr_25 = 1.0;
 		$r = [arr_05,arr_15,arr_25];
 		return $r;
-	}(this)))).intersect(chad.csg.Sphere.create((function($this) {
+	}(this)))),chad.csg.Solids.sphere((function($this) {
 		var $r;
 		var arr_06 = 0.0;
 		var arr_16 = 0.0;
 		var arr_26 = 0.0;
 		$r = [arr_06,arr_16,arr_26];
 		return $r;
-	}(this)),0.7)).subtract(chad.csg.Sphere.create((function($this) {
+	}(this)),0.7)),chad.csg.Solids.sphere((function($this) {
 		var $r;
 		var arr_07 = 0.5;
 		var arr_17 = 0.5;
 		var arr_27 = 0.5;
 		$r = [arr_07,arr_17,arr_27];
 		return $r;
-	}(this)),0.35)).subtract(chad.csg.Cylinder.create((function($this) {
+	}(this)),0.35)),chad.csg.Solids.cylinder((function($this) {
 		var $r;
 		var arr_08 = 0.0;
 		var arr_18 = 0.0;
@@ -84,7 +84,7 @@ Main.geom = function() {
 		var arr_29 = 0.95;
 		$r = [arr_09,arr_19,arr_29];
 		return $r;
-	}(this)),0.25)).subtract(chad.csg.Cylinder.create((function($this) {
+	}(this)),0.25)),chad.csg.Solids.cylinder((function($this) {
 		var $r;
 		var arr_010 = 0.0;
 		var arr_110 = -0.95;
@@ -98,7 +98,7 @@ Main.geom = function() {
 		var arr_211 = 0.0;
 		$r = [arr_011,arr_111,arr_211];
 		return $r;
-	}(this)),0.35)).subtract(chad.csg.Cylinder.create((function($this) {
+	}(this)),0.35)),chad.csg.Solids.cylinder((function($this) {
 		var $r;
 		var arr_012 = -0.95;
 		var arr_112 = 0.0;
@@ -124,101 +124,6 @@ Std.string = function(s) {
 };
 var chad = {};
 chad.csg = {};
-chad.csg.Box = function() { };
-chad.csg.Box.__name__ = true;
-chad.csg.Box.create = function(position,size) {
-	return chad.csg.Solid.fromPolygons(chad.csg.Box.baseCube.map(function(info) {
-		return new thx.geom.Polygon(info.p.map(function(i) {
-			var pos = [position[0] + size[0] * ((i & 1) != 0?1:0),position[1] + size[1] * ((i & 2) != 0?1:0),position[2] + size[2] * ((i & 4) != 0?1:0)];
-			return new thx.geom.Vertex3D(pos,(function($this) {
-				var $r;
-				var arr = info.n;
-				$r = [arr[0],arr[1],arr[2]];
-				return $r;
-			}(this)));
-		}));
-	}));
-};
-chad.csg.Cylinder = function() { };
-chad.csg.Cylinder.__name__ = true;
-chad.csg.Cylinder.create = function(start,end,radius,resolution) {
-	if(radius == null) radius = 1.0;
-	if(null == resolution) resolution = chad.csg.Sphere.getResolution;
-	var slices = resolution(radius);
-	var ray;
-	var p_0 = -start[0];
-	var p_1 = -start[1];
-	var p_2 = -start[2];
-	ray = [end[0] + p_0,end[1] + p_1,end[2] + p_2];
-	var axisZ;
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(ray,[ray[0],ray[1],ray[2]]));
-	axisZ = [ray[0] / v,ray[1] / v,ray[2] / v];
-	var isY = Math.abs(axisZ[1]) > 0.5;
-	var axisX;
-	var this1;
-	var this_0;
-	if(isY) this_0 = 1; else this_0 = 0;
-	var this_1;
-	if(isY) this_1 = 0; else this_1 = 1;
-	var this_2 = 0;
-	this1 = [this_1 * axisZ[2] - this_2 * axisZ[1],this_2 * axisZ[0] - this_0 * axisZ[2],this_0 * axisZ[1] - this_1 * axisZ[0]];
-	var v1 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	axisX = [this1[0] / v1,this1[1] / v1,this1[2] / v1];
-	var axisY;
-	var this2 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
-	var v2 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this2,[this2[0],this2[1],this2[2]]));
-	axisY = [this2[0] / v2,this2[1] / v2,this2[2] / v2];
-	var s = new thx.geom.Vertex3D(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
-	var e = new thx.geom.Vertex3D(end,(function($this) {
-		var $r;
-		var v3 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(axisZ,[axisZ[0],axisZ[1],axisZ[2]]));
-		$r = [axisZ[0] / v3,axisZ[1] / v3,axisZ[2] / v3];
-		return $r;
-	}(this)));
-	var polygons = [];
-	var t0;
-	var t1;
-	var point = function(stack,slice,normalBlend) {
-		var angle = slice * Math.PI * 2;
-		var out;
-		var this3;
-		var v4 = Math.cos(angle);
-		this3 = [axisX[0] * v4,axisX[1] * v4,axisX[2] * v4];
-		var p;
-		var v5 = Math.sin(angle);
-		p = [axisY[0] * v5,axisY[1] * v5,axisY[2] * v5];
-		out = [this3[0] + p[0],this3[1] + p[1],this3[2] + p[2]];
-		var pos;
-		var this4;
-		var p_01 = ray[0] * stack;
-		var p_11 = ray[1] * stack;
-		var p_21 = ray[2] * stack;
-		this4 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
-		var p_02 = out[0] * radius;
-		var p_12 = out[1] * radius;
-		var p_22 = out[2] * radius;
-		pos = [this4[0] + p_02,this4[1] + p_12,this4[2] + p_22];
-		var normal;
-		var this5;
-		var v6 = 1 - Math.abs(normalBlend);
-		this5 = [out[0] * v6,out[1] * v6,out[2] * v6];
-		var p_03 = axisZ[0] * normalBlend;
-		var p_13 = axisZ[1] * normalBlend;
-		var p_23 = axisZ[2] * normalBlend;
-		normal = [this5[0] + p_03,this5[1] + p_13,this5[2] + p_23];
-		return new thx.geom.Vertex3D(pos,normal);
-	};
-	var _g = 0;
-	while(_g < slices) {
-		var i = _g++;
-		t0 = i / slices;
-		t1 = (i + 1) / slices;
-		polygons.push(new thx.geom.Polygon([s,point(0,t0,-1),point(0,t1,-1)]));
-		polygons.push(new thx.geom.Polygon([point(0,t1,0),point(0,t0,0),point(1,t0,0),point(1,t1,0)]));
-		polygons.push(new thx.geom.Polygon([e,point(1,t1,1),point(1,t0,1)]));
-	}
-	return chad.csg.Solid.fromPolygons(polygons);
-};
 chad.csg.Node = function(polygons) {
 	this.plane = null;
 	this.front = null;
@@ -293,71 +198,165 @@ chad.csg.Node.prototype = {
 		return "Node [length: " + this.polygons.concat(null == this.front?[]:this.front.all()).concat(null == this.back?[]:this.back.all()).length + ", front: " + Std.string(null == this.front) + ", back: " + Std.string(null == this.back) + "]";
 	}
 };
-chad.csg.Solid = function() {
+chad.csg._Solid = {};
+chad.csg._Solid.Solid_Impl_ = function() { };
+chad.csg._Solid.Solid_Impl_.__name__ = true;
+chad.csg._Solid.Solid_Impl_._new = function(polygons) {
+	return polygons;
 };
-chad.csg.Solid.__name__ = true;
-chad.csg.Solid.fromPolygons = function(polygons) {
-	var solid = new chad.csg.Solid();
-	solid.polygons = polygons;
-	return solid;
+chad.csg._Solid.Solid_Impl_.fromPolygons = function(polygons) {
+	return chad.csg._Solid.Solid_Impl_._new(polygons);
 };
-chad.csg.Solid.prototype = {
-	union: function(other) {
-		var a = new chad.csg.Node(this.polygons.slice());
-		var b = new chad.csg.Node(other.polygons.slice());
-		a.clipTo(b);
-		b.clipTo(a);
-		b.invert();
-		b.clipTo(a);
-		b.invert();
-		a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
-		return chad.csg.Solid.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
-	}
-	,subtract: function(other) {
-		var a = new chad.csg.Node(this.polygons.slice());
-		var b = new chad.csg.Node(other.polygons.slice());
-		a.invert();
-		a.clipTo(b);
-		b.clipTo(a);
-		b.invert();
-		b.clipTo(a);
-		b.invert();
-		a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
-		a.invert();
-		return chad.csg.Solid.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
-	}
-	,intersect: function(other) {
-		var a = new chad.csg.Node(this.polygons.slice());
-		var b = new chad.csg.Node(other.polygons.slice());
-		a.invert();
-		b.clipTo(a);
-		b.invert();
-		a.clipTo(b);
-		b.clipTo(a);
-		a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
-		a.invert();
-		return chad.csg.Solid.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
-	}
-	,iterator: function() {
-		return HxOverrides.iter(this.polygons);
-	}
-	,toString: function() {
-		return "Solid [" + this.polygons.length + "]";
-	}
+chad.csg._Solid.Solid_Impl_.union = function(this1,other) {
+	var a = new chad.csg.Node(this1.slice());
+	var b = new chad.csg.Node(other.slice());
+	a.clipTo(b);
+	b.clipTo(a);
+	b.invert();
+	b.clipTo(a);
+	b.invert();
+	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
+	return chad.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
 };
-chad.csg.Sphere = function() { };
-chad.csg.Sphere.__name__ = true;
-chad.csg.Sphere.getResolution = function(r) {
+chad.csg._Solid.Solid_Impl_.subtract = function(this1,other) {
+	var a = new chad.csg.Node(this1.slice());
+	var b = new chad.csg.Node(other.slice());
+	a.invert();
+	a.clipTo(b);
+	b.clipTo(a);
+	b.invert();
+	b.clipTo(a);
+	b.invert();
+	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
+	a.invert();
+	return chad.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
+};
+chad.csg._Solid.Solid_Impl_.intersect = function(this1,other) {
+	var a = new chad.csg.Node(this1.slice());
+	var b = new chad.csg.Node(other.slice());
+	a.invert();
+	b.clipTo(a);
+	b.invert();
+	a.clipTo(b);
+	b.clipTo(a);
+	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
+	a.invert();
+	return chad.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
+};
+chad.csg._Solid.Solid_Impl_.toArray = function(this1) {
+	return this1.slice();
+};
+chad.csg._Solid.Solid_Impl_.iterator = function(this1) {
+	return HxOverrides.iter(this1);
+};
+chad.csg._Solid.Solid_Impl_.toString = function(this1) {
+	return "Solid(" + this1.length + ")";
+};
+chad.csg.Solids = function() { };
+chad.csg.Solids.__name__ = true;
+chad.csg.Solids.box = function(position,size) {
+	if(null == position) position = thx.geom._Point3D.Point3D_Impl_.zero;
+	return chad.csg._Solid.Solid_Impl_.fromPolygons(chad.csg.Solids.baseCube.map(function(info) {
+		return new thx.geom.Polygon(info.p.map(function(i) {
+			var pos = [position[0] + size[0] * ((i & 1) != 0?1:0),position[1] + size[1] * ((i & 2) != 0?1:0),position[2] + size[2] * ((i & 4) != 0?1:0)];
+			return new thx.geom.Vertex3D(pos,(function($this) {
+				var $r;
+				var arr = info.n;
+				$r = [arr[0],arr[1],arr[2]];
+				return $r;
+			}(this)));
+		}));
+	}));
+};
+chad.csg.Solids.cylinder = function(start,end,radius,resolution) {
+	if(radius == null) radius = 1.0;
+	if(null == resolution) resolution = chad.csg.Solids.getResolution;
+	var slices = resolution(radius);
+	var ray;
+	var p_0 = -start[0];
+	var p_1 = -start[1];
+	var p_2 = -start[2];
+	ray = [end[0] + p_0,end[1] + p_1,end[2] + p_2];
+	var axisZ;
+	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(ray,[ray[0],ray[1],ray[2]]));
+	axisZ = [ray[0] / v,ray[1] / v,ray[2] / v];
+	var isY = Math.abs(axisZ[1]) > 0.5;
+	var axisX;
+	var this1;
+	var this1_0;
+	if(isY) this1_0 = 1; else this1_0 = 0;
+	var this1_1;
+	if(isY) this1_1 = 0; else this1_1 = 1;
+	var this1_2 = 0;
+	this1 = [this1_1 * axisZ[2] - this1_2 * axisZ[1],this1_2 * axisZ[0] - this1_0 * axisZ[2],this1_0 * axisZ[1] - this1_1 * axisZ[0]];
+	var v1 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+	axisX = [this1[0] / v1,this1[1] / v1,this1[2] / v1];
+	var axisY;
+	var this11 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
+	var v2 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this11,[this11[0],this11[1],this11[2]]));
+	axisY = [this11[0] / v2,this11[1] / v2,this11[2] / v2];
+	var s = new thx.geom.Vertex3D(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
+	var e = new thx.geom.Vertex3D(end,(function($this) {
+		var $r;
+		var v3 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(axisZ,[axisZ[0],axisZ[1],axisZ[2]]));
+		$r = [axisZ[0] / v3,axisZ[1] / v3,axisZ[2] / v3];
+		return $r;
+	}(this)));
+	var polygons = [];
+	var t0;
+	var t1;
+	var point = function(stack,slice,normalBlend) {
+		var angle = slice * Math.PI * 2;
+		var out;
+		var this12;
+		var v4 = Math.cos(angle);
+		this12 = [axisX[0] * v4,axisX[1] * v4,axisX[2] * v4];
+		var p;
+		var v5 = Math.sin(angle);
+		p = [axisY[0] * v5,axisY[1] * v5,axisY[2] * v5];
+		out = [this12[0] + p[0],this12[1] + p[1],this12[2] + p[2]];
+		var pos;
+		var this13;
+		var p_01 = ray[0] * stack;
+		var p_11 = ray[1] * stack;
+		var p_21 = ray[2] * stack;
+		this13 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
+		var p_02 = out[0] * radius;
+		var p_12 = out[1] * radius;
+		var p_22 = out[2] * radius;
+		pos = [this13[0] + p_02,this13[1] + p_12,this13[2] + p_22];
+		var normal;
+		var this14;
+		var v6 = 1 - Math.abs(normalBlend);
+		this14 = [out[0] * v6,out[1] * v6,out[2] * v6];
+		var p_03 = axisZ[0] * normalBlend;
+		var p_13 = axisZ[1] * normalBlend;
+		var p_23 = axisZ[2] * normalBlend;
+		normal = [this14[0] + p_03,this14[1] + p_13,this14[2] + p_23];
+		return new thx.geom.Vertex3D(pos,normal);
+	};
+	var _g = 0;
+	while(_g < slices) {
+		var i = _g++;
+		t0 = i / slices;
+		t1 = (i + 1) / slices;
+		polygons.push(new thx.geom.Polygon([s,point(0,t0,-1),point(0,t1,-1)]));
+		polygons.push(new thx.geom.Polygon([point(0,t1,0),point(0,t0,0),point(1,t0,0),point(1,t1,0)]));
+		polygons.push(new thx.geom.Polygon([e,point(1,t1,1),point(1,t0,1)]));
+	}
+	return chad.csg._Solid.Solid_Impl_.fromPolygons(polygons);
+};
+chad.csg.Solids.getResolution = function(r) {
 	return 36;
 };
-chad.csg.Sphere.create = function(position,radius,resolution) {
+chad.csg.Solids.sphere = function(position,radius,resolution) {
 	if(radius == null) radius = 1.0;
-	if(null == resolution) resolution = chad.csg.Sphere.getResolution;
+	if(null == resolution) resolution = chad.csg.Solids.getResolution;
 	var slices = resolution(radius);
 	var stacks = Math.ceil(slices / 2);
 	var polygons = [];
 	var vertices = [];
-	var Vertex3D = function(theta,phi) {
+	var vertex = function(theta,phi) {
 		theta *= Math.PI * 2;
 		phi *= Math.PI;
 		var dir;
@@ -381,14 +380,14 @@ chad.csg.Sphere.create = function(position,radius,resolution) {
 		while(_g1 < stacks) {
 			var j = _g1++;
 			vertices = [];
-			Vertex3D(i / slices,j / stacks);
-			if(j > 0) Vertex3D((i + 1) / slices,j / stacks);
-			if(j < stacks - 1) Vertex3D((i + 1) / slices,(j + 1) / stacks);
-			Vertex3D(i / slices,(j + 1) / stacks);
+			vertex(i / slices,j / stacks);
+			if(j > 0) vertex((i + 1) / slices,j / stacks);
+			if(j < stacks - 1) vertex((i + 1) / slices,(j + 1) / stacks);
+			vertex(i / slices,(j + 1) / stacks);
 			polygons.push(new thx.geom.Polygon(vertices));
 		}
 	}
-	return chad.csg.Solid.fromPolygons(polygons);
+	return chad.csg._Solid.Solid_Impl_.fromPolygons(polygons);
 };
 chad["export"] = {};
 chad.export.ThreeJS = function() { };
@@ -415,7 +414,7 @@ chad.export.ThreeJS.toModel = function(solid) {
 	var faces = [];
 	var vertices = new haxe.ds.StringMap();
 	var index = 0;
-	var $it0 = solid.iterator();
+	var $it0 = HxOverrides.iter(solid);
 	while( $it0.hasNext() ) {
 		var polygon = $it0.next();
 		var $it1 = HxOverrides.iter(polygon.vertices);
@@ -428,7 +427,7 @@ chad.export.ThreeJS.toModel = function(solid) {
 			}
 		}
 	}
-	var $it2 = solid.iterator();
+	var $it2 = HxOverrides.iter(solid);
 	while( $it2.hasNext() ) {
 		var polygon1 = $it2.next();
 		index = 0;
@@ -595,8 +594,12 @@ thx.geom.Line3D.fromPoints = function(p1,p2) {
 			var p_2 = -p1[2];
 			this1 = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
 		}
-		var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-		$r = [this1[0] / v,this1[1] / v,this1[2] / v];
+		$r = (function($this) {
+			var $r;
+			var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+			$r = [this1[0] / v,this1[1] / v,this1[2] / v];
+			return $r;
+		}($this));
 		return $r;
 	}(this)));
 };
@@ -630,8 +633,8 @@ thx.geom.Line3D.prototype = {
 		var lambda = (plane.w - thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.point)) / thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.direction);
 		var this1 = this.point;
 		var p;
-		var this2 = this.direction;
-		p = [this2[0] * lambda,this2[1] * lambda,this2[2] * lambda];
+		var this11 = this.direction;
+		p = [this11[0] * lambda,this11[1] * lambda,this11[2] * lambda];
 		return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
 	}
 	,reverse: function() {
@@ -647,9 +650,9 @@ thx.geom.Line3D.prototype = {
 		var this1 = this.point;
 		newpoint = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
 		var pointaddDirection;
-		var this2 = this.point;
+		var this11 = this.point;
 		var p = this.direction;
-		pointaddDirection = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
+		pointaddDirection = [this11[0] + p[0],this11[1] + p[1],this11[2] + p[2]];
 		var newPointaddDirection = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[pointaddDirection[0],pointaddDirection[1],pointaddDirection[2]]);
 		var newdirection;
 		var p_0 = -newpoint[0];
@@ -855,17 +858,17 @@ thx.geom.Plane.__name__ = true;
 thx.geom.Plane.fromPoint3Ds = function(a,b,c) {
 	var n;
 	var this1;
-	var this2;
+	var this11;
 	var p_0 = -a[0];
 	var p_1 = -a[1];
 	var p_2 = -a[2];
-	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	this11 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
 	var p;
 	var p_01 = -a[0];
 	var p_11 = -a[1];
 	var p_21 = -a[2];
 	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
+	this1 = [this11[1] * p[2] - this11[2] * p[1],this11[2] * p[0] - this11[0] * p[2],this11[0] * p[1] - this11[1] * p[0]];
 	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
 	n = [this1[0] / v,this1[1] / v,this1[2] / v];
 	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
@@ -895,17 +898,17 @@ thx.geom.Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
 thx.geom.Plane.fromPoints = function(a,b,c) {
 	var n;
 	var this1;
-	var this2;
+	var this11;
 	var p_0 = -a[0];
 	var p_1 = -a[1];
 	var p_2 = -a[2];
-	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	this11 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
 	var p;
 	var p_01 = -a[0];
 	var p_11 = -a[1];
 	var p_21 = -a[2];
 	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
+	this1 = [this11[1] * p[2] - this11[2] * p[1],this11[2] * p[0] - this11[0] * p[2],this11[0] * p[1] - this11[1] * p[0]];
 	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
 	n = [this1[0] / v,this1[1] / v,this1[2] / v];
 	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
@@ -976,10 +979,14 @@ thx.geom.Plane.prototype = {
 						var $r;
 						var this1 = vj.position;
 						var p = vi.position;
-						var p_0 = -p[0];
-						var p_1 = -p[1];
-						var p_2 = -p[2];
-						$r = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+						$r = (function($this) {
+							var $r;
+							var p_0 = -p[0];
+							var p_1 = -p[1];
+							var p_2 = -p[2];
+							$r = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+							return $r;
+						}($this));
 						return $r;
 					}(this)));
 					v = new thx.geom.Vertex3D(thx.geom._Point3D.Point3D_Impl_.interpolate(vi.position,vj.position,t1),thx.geom._Point3D.Point3D_Impl_.interpolate(vi.normal,vj.normal,t1));
@@ -1002,12 +1009,12 @@ thx.geom.Plane.prototype = {
 		var this1 = this.normal;
 		u = [this1[1] * r[2] - this1[2] * r[1],this1[2] * r[0] - this1[0] * r[2],this1[0] * r[1] - this1[1] * r[0]];
 		var v;
-		var this2 = this.normal;
-		v = [this2[1] * u[2] - this2[2] * u[1],this2[2] * u[0] - this2[0] * u[2],this2[0] * u[1] - this2[1] * u[0]];
+		var this11 = this.normal;
+		v = [this11[1] * u[2] - this11[2] * u[1],this11[2] * u[0] - this11[0] * u[2],this11[0] * u[1] - this11[1] * u[0]];
 		var point1;
-		var this3 = this.normal;
+		var this12 = this.normal;
 		var v1 = this.w;
-		point1 = [this3[0] * v1,this3[1] * v1,this3[2] * v1];
+		point1 = [this12[0] * v1,this12[1] * v1,this12[2] * v1];
 		var point2 = [point1[0] + u[0],point1[1] + u[1],point1[2] + u[2]];
 		var point3 = [point1[0] + v[0],point1[1] + v[1],point1[2] + v[2]];
 		point1 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point1[0],point1[1],point1[2]]);
@@ -1564,10 +1571,9 @@ if(Array.prototype.map == null) Array.prototype.map = function(f) {
 	}
 	return a;
 };
-chad.csg.Box.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
+chad.csg.Solids.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 thx.geom.Const.EPSILON = 1e-5;
 thx.geom._Matrix4x4.Matrix4x4_Impl_.unity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
-thx.geom.Plane.EPSILON = 1e-5;
 thx.geom.Plane.COPLANAR = 0;
 thx.geom.Plane.FRONT = 1;
 thx.geom.Plane.BACK = 2;
