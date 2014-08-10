@@ -5,7 +5,7 @@ class Number
 	public static inline var TOLERANCE : Float = 10e-5;
 	public static inline var EPSILON : Float = 10e-10;
 
-	inline public static function isZero(n : Float)
+	inline public static function isNearZero(n : Float)
 		return Math.abs(n) <= EPSILON;
 
 	public static function integrate(f : Float -> Float, a : Float, b : Float, n : Int) {
