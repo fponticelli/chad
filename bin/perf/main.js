@@ -40,6 +40,13 @@ HxOverrides.indexOf = function(a,obj,i) {
 	}
 	return -1;
 };
+HxOverrides.iter = function(a) {
+	return { cur : 0, arr : a, hasNext : function() {
+		return this.cur < this.arr.length;
+	}, next : function() {
+		return this.arr[this.cur++];
+	}};
+};
 Math.__name__ = true;
 var Perf = function() { };
 Perf.__name__ = true;
@@ -47,69 +54,10 @@ Perf.r = function() {
 	return Math.random();
 };
 Perf.main = function() {
-	var p1;
-	var arr_0 = 10;
-	var arr_1 = 20;
-	p1 = [arr_0,arr_1];
-	var p2;
-	var arr_01 = 20;
-	var arr_11 = 50;
-	p2 = [arr_01,arr_11];
-	var p3_0 = p1[0] + p2[0];
-	var p3_1 = p1[1] + p2[1];
-	console.log((function($this) {
-		var $r;
-		var this1;
-		{
-			var this2;
-			var this3;
-			var this_0 = -p3_0;
-			var this_1 = -p3_1;
-			var p_0 = 2;
-			var p_1 = 2;
-			this3 = [this_0 * p_0,this_1 * p_1];
-			this2 = [this3[0] * p1[0],this3[1] * p1[1]];
-			this1 = [this2[0] / p2[0],this2[1] / p2[1]];
-		}
-		$r = "Point(" + this1[0] + "," + this1[1] + ")";
-		return $r;
-	}(this)));
-	var rect = [p1,p2];
-	console.log(chad_g__$Rect_Rect_$Impl_$.toString(rect));
-	console.log((function($this) {
-		var $r;
-		var this_01 = rect[0][0] + (rect[1][0] - rect[0][0]) / 2;
-		var this_11 = rect[0][1] + (rect[1][1] - rect[0][1]) / 2;
-		$r = "Point(" + this_01 + "," + this_11 + ")";
-		return $r;
-	}(this)));
-	var deg = 30.0;
-	var rad = deg / chad_g_Const.TO_DEGREE;
-	console.log(deg + "̊");
-	console.log(rad + "rad");
-	var p4;
-	var x = Math.cos(deg / chad_g_Const.TO_DEGREE);
-	var y = Math.sin(deg / chad_g_Const.TO_DEGREE);
-	p4 = [x,y];
-	console.log("Point(" + p4[0] + "," + p4[1] + ")");
 	var test = new thx_benchmark_SpeedTest(1000000);
-	var a = 0.0;
-	test.add("Point Array",function() {
-		var p;
-		var x1 = Math.random();
-		var y1 = Math.random();
-		p = [x1,y1];
-		a = p[0] + p[1];
-	});
-	test.add("Point Object",function() {
-		var p3;
-		var x2 = Math.random();
-		var y2 = Math.random();
-		p3 = { x : x2, y : y2};
-		a = p3.x + p3.y;
+	test.add("description",function() {
 	});
 	test.execute();
-	console.log(a);
 };
 var Std = function() { };
 Std.__name__ = true;
@@ -149,251 +97,23 @@ StringTools.rpad = function(s,c,l) {
 	while(s.length < l) s = s + c;
 	return s;
 };
-var chad_g__$Angle_Radian_$Impl_$ = function() { };
-chad_g__$Angle_Radian_$Impl_$.__name__ = true;
-chad_g__$Angle_Radian_$Impl_$.fromFloat = function(angle) {
-	return angle;
-};
-chad_g__$Angle_Radian_$Impl_$._new = function(radians) {
-	return radians;
-};
-chad_g__$Angle_Radian_$Impl_$.cos = function(this1) {
-	return Math.cos(this1);
-};
-chad_g__$Angle_Radian_$Impl_$.sin = function(this1) {
-	return Math.sin(this1);
-};
-chad_g__$Angle_Radian_$Impl_$.toString = function(this1) {
-	return this1 + "rad";
-};
-chad_g__$Angle_Radian_$Impl_$.toDegree = function(this1) {
-	return this1 * chad_g_Const.TO_DEGREE;
-};
-var chad_g__$Angle_Degree_$Impl_$ = function() { };
-chad_g__$Angle_Degree_$Impl_$.__name__ = true;
-chad_g__$Angle_Degree_$Impl_$.fromFloat = function(angle) {
-	return angle;
-};
-chad_g__$Angle_Degree_$Impl_$._new = function(degrees) {
-	return degrees;
-};
-chad_g__$Angle_Degree_$Impl_$.cos = function(this1) {
-	return Math.cos(this1 / chad_g_Const.TO_DEGREE);
-};
-chad_g__$Angle_Degree_$Impl_$.sin = function(this1) {
-	return Math.sin(this1 / chad_g_Const.TO_DEGREE);
-};
-chad_g__$Angle_Degree_$Impl_$.toString = function(this1) {
-	return this1 + "̊";
-};
-chad_g__$Angle_Degree_$Impl_$.toRadians = function(this1) {
-	return this1 / chad_g_Const.TO_DEGREE;
-};
-var chad_g_Const = function() { };
-chad_g_Const.__name__ = true;
-var chad_g__$Point_Point_$Impl_$ = function() { };
-chad_g__$Point_Point_$Impl_$.__name__ = true;
-chad_g__$Point_Point_$Impl_$.fromFloat = function(v) {
-	return [v,v];
-};
-chad_g__$Point_Point_$Impl_$.fromObject = function(o) {
-	return [o.x,o.y];
-};
-chad_g__$Point_Point_$Impl_$.fromArray = function(arr) {
-	return [arr[0],arr[1]];
-};
-chad_g__$Point_Point_$Impl_$.fromRadians = function(rad) {
-	var x = Math.cos(rad);
-	var y = Math.sin(rad);
-	return [x,y];
-};
-chad_g__$Point_Point_$Impl_$.fromDegrees = function(deg) {
-	var x = Math.cos(deg / chad_g_Const.TO_DEGREE);
-	var y = Math.sin(deg / chad_g_Const.TO_DEGREE);
-	return [x,y];
-};
-chad_g__$Point_Point_$Impl_$._new = function(x,y) {
-	return [x,y];
-};
-chad_g__$Point_Point_$Impl_$.get_x = function(this1) {
-	return this1[0];
-};
-chad_g__$Point_Point_$Impl_$.get_y = function(this1) {
-	return this1[1];
-};
-chad_g__$Point_Point_$Impl_$.get_length = function(this1) {
-	return Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-};
-chad_g__$Point_Point_$Impl_$.get_lengthSquared = function(this1) {
-	return this1[0] * this1[0] + this1[1] * this1[1];
-};
-chad_g__$Point_Point_$Impl_$.interpolate = function(this1,p,f) {
-	var p1;
-	var this2;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	this2 = [this1[0] + p_0,this1[1] + p_1];
-	p1 = [this2[0] / f,this2[1] / f];
-	return [this1[0] + p1[0],this1[1] + p1[1]];
-};
-chad_g__$Point_Point_$Impl_$.middle = function(this1,p) {
-	var p1;
-	var this2;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	this2 = [this1[0] + p_0,this1[1] + p_1];
-	p1 = [this2[0] / 0.5,this2[1] / 0.5];
-	return [this1[0] + p1[0],this1[1] + p1[1]];
-};
-chad_g__$Point_Point_$Impl_$.isZero = function(this1) {
-	return this1[0] == 0 && this1[1] == 0;
-};
-chad_g__$Point_Point_$Impl_$.isNearZero = function(this1) {
-	return 1e-5 >= Math.abs(this1[0]) && 1e-5 >= Math.abs(this1[1]);
-};
-chad_g__$Point_Point_$Impl_$.toString = function(this1) {
-	return "Point(" + this1[0] + "," + this1[1] + ")";
-};
-chad_g__$Point_Point_$Impl_$.toArray = function(this1) {
-	return this1.slice();
-};
-chad_g__$Point_Point_$Impl_$.toObject = function(this1) {
-	return { x : this1[0], y : this1[1]};
-};
-chad_g__$Point_Point_$Impl_$.add = function(this1,p) {
-	return [this1[0] + p[0],this1[1] + p[1]];
-};
-chad_g__$Point_Point_$Impl_$.addNumber = function(this1,v) {
-	return [this1[0] + v,this1[1] + v];
-};
-chad_g__$Point_Point_$Impl_$.negate = function(this1) {
-	return [-this1[0],-this1[1]];
-};
-chad_g__$Point_Point_$Impl_$.subtract = function(this1,p) {
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	return [this1[0] + p_0,this1[1] + p_1];
-};
-chad_g__$Point_Point_$Impl_$.subtractNumber = function(this1,v) {
-	var v1 = -v;
-	return [this1[0] + v1,this1[1] + v1];
-};
-chad_g__$Point_Point_$Impl_$.multiply = function(this1,p) {
-	return [this1[0] * p[0],this1[1] * p[1]];
-};
-chad_g__$Point_Point_$Impl_$.multiplyNumber = function(this1,v) {
-	return [this1[0] * v,this1[1] * v];
-};
-chad_g__$Point_Point_$Impl_$.divide = function(this1,p) {
-	return [this1[0] / p[0],this1[1] / p[1]];
-};
-chad_g__$Point_Point_$Impl_$.divideNumber = function(this1,v) {
-	return [this1[0] / v,this1[1] / v];
-};
-chad_g__$Point_Point_$Impl_$.dot = function(this1,p) {
-	return this1[0] * p[0] + this1[1] * p[1];
-};
-chad_g__$Point_Point_$Impl_$.normal = function(this1) {
-	return [this1[1],-this1[0]];
-};
-chad_g__$Point_Point_$Impl_$.normalize = function(this1) {
-	var p;
-	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-	p = [v,v];
-	return [this1[0] / p[0],this1[1] / p[1]];
-};
-chad_g__$Point_Point_$Impl_$.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1];
-};
-chad_g__$Point_Point_$Impl_$.distanceTo = function(this1,other) {
-	var this2;
-	var p_0 = -other[0];
-	var p_1 = -other[1];
-	this2 = [this1[0] + p_0,this1[1] + p_1];
-	return Math.sqrt(this2[0] * this2[0] + this2[1] * this2[1]);
-};
-chad_g__$Point_Point_$Impl_$.distanceToSquared = function(this1,other) {
-	var this2;
-	var p_0 = -other[0];
-	var p_1 = -other[1];
-	this2 = [this1[0] + p_0,this1[1] + p_1];
-	return this2[0] * this2[0] + this2[1] * this2[1];
-};
-chad_g__$Point_Point_$Impl_$.toDegrees = function(this1) {
-	var this2;
-	var radians = Math.atan2(this1[1],this1[0]);
-	this2 = radians;
-	return this2 * chad_g_Const.TO_DEGREE;
-};
-chad_g__$Point_Point_$Impl_$.toRadians = function(this1) {
-	var radians = Math.atan2(this1[1],this1[0]);
-	return radians;
-};
-chad_g__$Point_Point_$Impl_$.cross = function(this1,other) {
-	return this1[0] * other[1] - this1[1] * other[0];
-};
-chad_g__$Point_Point_$Impl_$.min = function(this1,other) {
-	var x = Math.min(this1[0],other[0]);
-	var y = Math.min(this1[1],other[1]);
-	return [x,y];
-};
-chad_g__$Point_Point_$Impl_$.max = function(this1,other) {
-	var x = Math.max(this1[0],other[0]);
-	var y = Math.max(this1[1],other[1]);
-	return [x,y];
-};
-var chad_g__$Point_Point2_$Impl_$ = function() { };
-chad_g__$Point_Point2_$Impl_$.__name__ = true;
-chad_g__$Point_Point2_$Impl_$._new = function(x,y) {
-	return { x : x, y : y};
-};
-chad_g__$Point_Point2_$Impl_$.get_x = function(this1) {
-	return this1.x;
-};
-chad_g__$Point_Point2_$Impl_$.get_y = function(this1) {
-	return this1.y;
-};
-var chad_g__$Rect_Rect_$Impl_$ = function() { };
-chad_g__$Rect_Rect_$Impl_$.__name__ = true;
-chad_g__$Rect_Rect_$Impl_$._new = function(topLeft,bottomRight) {
-	return [topLeft,bottomRight];
-};
-chad_g__$Rect_Rect_$Impl_$.get_topLeft = function(this1) {
-	return this1[0];
-};
-chad_g__$Rect_Rect_$Impl_$.get_topRight = function(this1) {
-	return [this1[1][0],this1[0][1]];
-};
-chad_g__$Rect_Rect_$Impl_$.get_bottomLeft = function(this1) {
-	return [this1[0][0],this1[1][1]];
-};
-chad_g__$Rect_Rect_$Impl_$.get_bottomRight = function(this1) {
-	return this1[1];
-};
-chad_g__$Rect_Rect_$Impl_$.get_center = function(this1) {
-	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[0][1] + (this1[1][1] - this1[0][1]) / 2];
-};
-chad_g__$Rect_Rect_$Impl_$.get_left = function(this1) {
-	return this1[0][0];
-};
-chad_g__$Rect_Rect_$Impl_$.get_right = function(this1) {
-	return this1[1][0];
-};
-chad_g__$Rect_Rect_$Impl_$.get_top = function(this1) {
-	return this1[0][1];
-};
-chad_g__$Rect_Rect_$Impl_$.get_bottom = function(this1) {
-	return this1[1][1];
-};
-chad_g__$Rect_Rect_$Impl_$.get_width = function(this1) {
-	return this1[1][0] - this1[0][0];
-};
-chad_g__$Rect_Rect_$Impl_$.get_height = function(this1) {
-	return this1[1][1] - this1[0][1];
-};
-chad_g__$Rect_Rect_$Impl_$.toString = function(this1) {
-	return "Rect(" + this1[0][0] + "," + this1[0][1] + "," + (this1[1][0] - this1[0][0]) + "," + (this1[1][1] - this1[0][1]) + ")";
-};
+var ValueType = { __ename__ : true, __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
+ValueType.TNull = ["TNull",0];
+ValueType.TNull.__enum__ = ValueType;
+ValueType.TInt = ["TInt",1];
+ValueType.TInt.__enum__ = ValueType;
+ValueType.TFloat = ["TFloat",2];
+ValueType.TFloat.__enum__ = ValueType;
+ValueType.TBool = ["TBool",3];
+ValueType.TBool.__enum__ = ValueType;
+ValueType.TObject = ["TObject",4];
+ValueType.TObject.__enum__ = ValueType;
+ValueType.TFunction = ["TFunction",5];
+ValueType.TFunction.__enum__ = ValueType;
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; return $x; };
+ValueType.TUnknown = ["TUnknown",8];
+ValueType.TUnknown.__enum__ = ValueType;
 var haxe_Timer = function(time_ms) {
 	var me = this;
 	this.id = setInterval(function() {
@@ -834,8 +554,6 @@ if(Array.prototype.map == null) Array.prototype.map = function(f) {
 	}
 	return a;
 };
-chad_g_Const.TO_DEGREE = 180 / Math.PI;
-chad_g_Const.EPSILON = 1e-5;
 thx_core_Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
 thx_core_Ints.pattern_parse = new EReg("^[+-]?(\\d+|0x[0-9A-F]+)$","i");
 Perf.main();
