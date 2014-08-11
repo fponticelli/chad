@@ -4,6 +4,8 @@ import thx.geom.Matrix4x4;
 import thx.geom.Point;
 import thx.geom.Line;
 import thx.geom.Point3D;
+import thx.geom.shape.Rect;
+import thx.geom.shape.Circle;
 
 class Canvas {
 	public static function main() {
@@ -22,5 +24,17 @@ class Canvas {
 			if(i != 0)
 				render.drawLine(line.offset(-i * 10), StrokeDot(3));
 		}
+
+		var rect = new Rect(new Point(30, 30), new Point(300, 300));
+		render.drawPath(rect);
+
+		var circle = new Circle(new Point(300, 250), 100);
+		render.drawPath(circle, StrokeDot(4));
+
+		var circle = new Circle(new Point(200, 200), 80);
+		render.drawPath(circle, StrokeDash([3, 4, 5, 6]), FillColor("rgba(0,255,155,0.1)"));
+
+		var circle = new Circle(new Point(240, 280), 60);
+		render.drawPath(circle, FillColor("rgba(100,255,155,0.5)"));
 	}
 }

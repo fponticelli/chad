@@ -6,6 +6,7 @@ function $extend(from, fields) {
 	return proto;
 }
 var Canvas = function() { };
+Canvas.__name__ = true;
 Canvas.main = function() {
 	var canvas = window.document.querySelector("canvas");
 	var render = chad.render.CanvasRender.scaled(canvas,2);
@@ -21,8 +22,17 @@ Canvas.main = function() {
 		render.drawLine(line.offset(i * 10),chad.render.StrokeStyle.StrokeDash([3,4]));
 		if(i != 0) render.drawLine(line.offset(-i * 10),chad.render.StrokeStyle.StrokeDot(3));
 	}
+	var rect = [[30,30],[300,300]];
+	render.drawPath(thx.geom.shape._Rect.Rect_Impl_.toPath(rect));
+	var circle = { center : [300,250], radius : 100};
+	render.drawPath(thx.geom.shape._Circle.Circle_Impl_.toPath(circle),chad.render.StrokeStyle.StrokeDot(4));
+	var circle1 = { center : [200,200], radius : 80};
+	render.drawPath(thx.geom.shape._Circle.Circle_Impl_.toPath(circle1),chad.render.StrokeStyle.StrokeDash([3,4,5,6]),chad.render.FillStyle.FillColor("rgba(0,255,155,0.1)"));
+	var circle2 = { center : [240,280], radius : 60};
+	render.drawPath(thx.geom.shape._Circle.Circle_Impl_.toPath(circle2),null,chad.render.FillStyle.FillColor("rgba(100,255,155,0.5)"));
 };
 var HxOverrides = function() { };
+HxOverrides.__name__ = true;
 HxOverrides.iter = function(a) {
 	return { cur : 0, arr : a, hasNext : function() {
 		return this.cur < this.arr.length;
@@ -30,15 +40,24 @@ HxOverrides.iter = function(a) {
 		return this.arr[this.cur++];
 	}};
 };
+Math.__name__ = true;
+var Std = function() { };
+Std.__name__ = true;
+Std.string = function(s) {
+	return js.Boot.__string_rec(s,"");
+};
 var chad = {};
 chad.render = {};
 chad.render.IRender = function() { };
+chad.render.IRender.__name__ = true;
 chad.render.BaseRender = function() { };
+chad.render.BaseRender.__name__ = true;
 chad.render.BaseRender.__interfaces__ = [chad.render.IRender];
 var thx = {};
 thx.geom = {};
 thx.geom._Matrix4x4 = {};
 thx.geom._Matrix4x4.Matrix4x4_Impl_ = function() { };
+thx.geom._Matrix4x4.Matrix4x4_Impl_.__name__ = true;
 thx.geom._Matrix4x4.Matrix4x4_Impl_.fromArray = function(e) {
 	if(e.length != 16) throw "Invalid array length (" + e.length + ") for Matrix4x4, should be 16";
 	return [e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7],e[8],e[9],e[10],e[11],e[12],e[13],e[14],e[15]];
@@ -233,8 +252,9 @@ chad.render.CanvasRender = function(canvas,matrix,weightScale) {
 	matrix = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(matrix,chad.render.CanvasRender.correctionMatrix);
 	this.ctx.transform(matrix[0],matrix[1],matrix[4],matrix[5],matrix[12],matrix[13]);
 	this.applyStrokeStyle(chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle()));
-	this.applyFillStyle(chad.render.FillStyle.FillColor("#0000FF"));
+	this.applyFillStyle(chad.render.FillStyle.FillColor("#000000"));
 };
+chad.render.CanvasRender.__name__ = true;
 chad.render.CanvasRender.scaled = function(canvas,scale) {
 	return new chad.render.CanvasRender(canvas,thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling([scale,scale,1]),function(v) {
 		return v / scale;
@@ -242,16 +262,19 @@ chad.render.CanvasRender.scaled = function(canvas,scale) {
 };
 chad.render.CanvasRender.__super__ = chad.render.BaseRender;
 chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
-	wrap: function(fill,stroke,f) {
+	wrap: function(stroke,fill,f) {
 		var hasStyle = null != fill || null != stroke;
 		if(hasStyle) this.ctx.save();
-		if(null != fill) this.applyFillStyle(fill);
+		this.ctx.beginPath();
 		if(null != stroke) this.applyStrokeStyle(stroke);
+		if(null != fill) this.applyFillStyle(fill);
 		f();
+		if(null != fill) this.ctx.fill();
+		if(null != stroke || null == fill) this.ctx.stroke();
 		if(hasStyle) this.ctx.restore();
 	}
 	,drawDot: function(point,style) {
-		this.wrap(style,null,(function(f,x,y,a1,a2) {
+		this.wrap(null,style,(function(f,x,y,a1,a2) {
 			return function() {
 				return f(x,y,a1,a2);
 			};
@@ -259,11 +282,9 @@ chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
 	}
 	,drawSegment: function(a,b,style) {
 		var _g = this;
-		this.wrap(null,style,function() {
-			_g.ctx.beginPath();
+		this.wrap(style,null,function() {
 			_g.ctx.moveTo(a[0],a[1]);
 			_g.ctx.lineTo(b[0],b[1]);
-			_g.ctx.stroke();
 		});
 	}
 	,drawLine: function(line,style) {
@@ -275,8 +296,24 @@ chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
 		} else b = line.intersectWithLine(this.bottom);
 		this.drawSegment(a,b,style);
 	}
+	,drawPath: function(path,stroke,fill) {
+		var _g = this;
+		this.wrap(stroke,fill,function() {
+			path.iterate(function(init) {
+				_g.ctx.moveTo(init[0],init[1]);
+			},function(a,b,nout,nin) {
+				if(null == nout && null == nin) _g.ctx.lineTo(b[0],b[1]); else {
+					if(null == nout) nout = a; else if(null == nin) nin = b;
+					_g.ctx.bezierCurveTo(nout[0],nout[1],nin[0],nin[1],b[0],b[1]);
+				}
+			});
+		});
+	}
 	,lineTo: function(point) {
 		this.ctx.lineTo(point[0],point[1]);
+	}
+	,curveTo: function(point,cout,cin) {
+		this.ctx.bezierCurveTo(cout[0],cout[1],cin[0],cin[1],point[0],point[1]);
 	}
 	,moveTo: function(point) {
 		this.ctx.moveTo(point[0],point[1]);
@@ -316,9 +353,9 @@ chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
 		}
 	}
 });
-chad.render.FillStyle = { __constructs__ : ["FillColor"] };
+chad.render.FillStyle = { __ename__ : true, __constructs__ : ["FillColor"] };
 chad.render.FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad.render.FillStyle; return $x; };
-chad.render.StrokeStyle = { __constructs__ : ["StrokeLine","StrokeDash","StrokeDot"] };
+chad.render.StrokeStyle = { __ename__ : true, __constructs__ : ["StrokeLine","StrokeDash","StrokeDot"] };
 chad.render.StrokeStyle.StrokeLine = function(style) { var $x = ["StrokeLine",0,style]; $x.__enum__ = chad.render.StrokeStyle; return $x; };
 chad.render.StrokeStyle.StrokeDash = function(pattern,style) { var $x = ["StrokeDash",1,pattern,style]; $x.__enum__ = chad.render.StrokeStyle; return $x; };
 chad.render.StrokeStyle.StrokeDot = function(spacing,style) { var $x = ["StrokeDot",2,spacing,style]; $x.__enum__ = chad.render.StrokeStyle; return $x; };
@@ -332,15 +369,90 @@ chad.render.LineStyle = function(width,color,join,cap) {
 	this.join = join;
 	this.cap = cap;
 };
+chad.render.LineStyle.__name__ = true;
 chad.render._CanvasRender = {};
 chad.render._CanvasRender.Join_Impl_ = function() { };
+chad.render._CanvasRender.Join_Impl_.__name__ = true;
 chad.render._CanvasRender.Cap_Impl_ = function() { };
+chad.render._CanvasRender.Cap_Impl_.__name__ = true;
+var js = {};
+js.Boot = function() { };
+js.Boot.__name__ = true;
+js.Boot.__string_rec = function(o,s) {
+	if(o == null) return "null";
+	if(s.length >= 5) return "<...>";
+	var t = typeof(o);
+	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
+	switch(t) {
+	case "object":
+		if(o instanceof Array) {
+			if(o.__enum__) {
+				if(o.length == 2) return o[0];
+				var str = o[0] + "(";
+				s += "\t";
+				var _g1 = 2;
+				var _g = o.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					if(i != 2) str += "," + js.Boot.__string_rec(o[i],s); else str += js.Boot.__string_rec(o[i],s);
+				}
+				return str + ")";
+			}
+			var l = o.length;
+			var i1;
+			var str1 = "[";
+			s += "\t";
+			var _g2 = 0;
+			while(_g2 < l) {
+				var i2 = _g2++;
+				str1 += (i2 > 0?",":"") + js.Boot.__string_rec(o[i2],s);
+			}
+			str1 += "]";
+			return str1;
+		}
+		var tostr;
+		try {
+			tostr = o.toString;
+		} catch( e ) {
+			return "???";
+		}
+		if(tostr != null && tostr != Object.toString) {
+			var s2 = o.toString();
+			if(s2 != "[object Object]") return s2;
+		}
+		var k = null;
+		var str2 = "{\n";
+		s += "\t";
+		var hasp = o.hasOwnProperty != null;
+		for( var k in o ) {
+		if(hasp && !o.hasOwnProperty(k)) {
+			continue;
+		}
+		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+			continue;
+		}
+		if(str2.length != 2) str2 += ", \n";
+		str2 += s + k + " : " + js.Boot.__string_rec(o[k],s);
+		}
+		s = s.substring(1);
+		str2 += "\n" + s + "}";
+		return str2;
+	case "function":
+		return "<function>";
+	case "string":
+		return o;
+	default:
+		return String(o);
+	}
+};
 thx.geom.Const = function() { };
+thx.geom.Const.__name__ = true;
 thx.geom.Line = function(normal,w) {
 	var l = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
 	this.w = w * l;
 	this.normal = [normal[0] / l,normal[1] / l];
 };
+thx.geom.Line.__name__ = true;
 thx.geom.Line.fromPoints = function(p1,p2) {
 	var direction;
 	var p_0 = -p1[0];
@@ -422,6 +534,7 @@ thx.geom.Line3D = function(point,direction) {
 	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
 	this.direction = [direction[0] / v,direction[1] / v,direction[2] / v];
 };
+thx.geom.Line3D.__name__ = true;
 thx.geom.Line3D.fromPoints = function(p1,p2) {
 	return new thx.geom.Line3D(p1,(function($this) {
 		var $r;
@@ -527,6 +640,7 @@ thx.geom.Plane = function(normal,w) {
 	this.normal = normal;
 	this.w = w;
 };
+thx.geom.Plane.__name__ = true;
 thx.geom.Plane.fromPoint3Ds = function(a,b,c) {
 	var n;
 	var this1;
@@ -738,6 +852,7 @@ thx.geom.Plane.prototype = {
 };
 thx.geom._Point3D = {};
 thx.geom._Point3D.Point3D_Impl_ = function() { };
+thx.geom._Point3D.Point3D_Impl_.__name__ = true;
 thx.geom._Point3D.Point3D_Impl_.fromObject = function(o) {
 	return [o.x,o.y,o.z];
 };
@@ -901,6 +1016,7 @@ thx.geom.OrthoNormalBasis = function(plane,rightvector) {
 	var v1 = plane.w;
 	this.planeOrigin = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
 };
+thx.geom.OrthoNormalBasis.__name__ = true;
 thx.geom.OrthoNormalBasis.fromPlane = function(plane) {
 	return new thx.geom.OrthoNormalBasis(plane,thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(plane.normal));
 };
@@ -969,8 +1085,84 @@ thx.geom.OrthoNormalBasis.prototype = {
 		return newbasis;
 	}
 };
+thx.geom.Path = function(nodes,closed) {
+	if(closed == null) closed = true;
+	this.nodes = nodes;
+	this.closed = closed;
+};
+thx.geom.Path.__name__ = true;
+thx.geom.Path.fromPoints = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		return new thx.geom.PathNode(c[0],c[1],c[2]);
+	});
+	return new thx.geom.Path(nodes,closed);
+};
+thx.geom.Path.fromArray = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		return new thx.geom.PathNode(c,null,null);
+	});
+	return new thx.geom.Path(nodes,closed);
+};
+thx.geom.Path.fromCoords = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		var p = [c[0],c[1]];
+		var nout;
+		if(null == c[2]) nout = null; else nout = [c[2],c[3]];
+		var nin;
+		if(null == c[4]) nin = null; else nin = [c[4],c[5]];
+		return new thx.geom.PathNode(p,nout,nin);
+	});
+	return new thx.geom.Path(nodes,closed);
+};
+thx.geom.Path.prototype = {
+	iterator: function() {
+		return HxOverrides.iter(this.nodes);
+	}
+	,iterate: function(fstart,fit) {
+		var a;
+		var b;
+		if(null != fstart) fstart(this.nodes[0].point);
+		var _g1 = 0;
+		var _g = this.nodes.length - 1;
+		while(_g1 < _g) {
+			var i = _g1++;
+			a = this.nodes[i];
+			b = this.nodes[i + 1];
+			fit(a.point,b.point,a.normalOut,b.normalIn);
+		}
+		if(this.closed) {
+			a = this.nodes[this.nodes.length - 1];
+			b = this.nodes[0];
+			fit(a.point,b.point,a.normalOut,b.normalIn);
+		}
+	}
+	,toString: function() {
+		return "Path(" + this.nodes.map(function(n) {
+			return "[" + n.toStringValues() + "]";
+		}).join(", ") + "," + Std.string(this.closed) + ")";
+	}
+};
+thx.geom.PathNode = function(point,normalout,normalin) {
+	this.point = point;
+	this.normalOut = normalout;
+	this.normalIn = normalin;
+};
+thx.geom.PathNode.__name__ = true;
+thx.geom.PathNode.prototype = {
+	toStringValues: function() {
+		var nout;
+		if(null == this.normalOut) nout = "null"; else nout = "" + this.normalOut[1] + "," + this.normalOut[1];
+		var nin;
+		if(null == this.normalIn) nin = "null"; else nin = "" + this.normalIn[1] + "," + this.normalIn[1];
+		return "" + this.point[0] + "," + this.point[1] + "," + nout + "," + nin;
+	}
+	,toString: function() {
+		return "PathNode(" + this.toStringValues() + ")";
+	}
+};
 thx.geom._Point = {};
 thx.geom._Point.Point_Impl_ = function() { };
+thx.geom._Point.Point_Impl_.__name__ = true;
 thx.geom._Point.Point_Impl_.fromObject = function(o) {
 	return [o.x,o.y];
 };
@@ -1102,6 +1294,16 @@ thx.geom._Point.Point_Impl_.max = function(this1,p) {
 	var y = Math.max(this1[1],p[1]);
 	return [x,y];
 };
+thx.geom._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
+	var this2 = this1;
+	var p;
+	var this3;
+	var x = Math.cos(angle);
+	var y = Math.sin(angle);
+	this3 = [x,y];
+	p = [this3[0] * distance,this3[1] * distance];
+	return [this2[0] + p[0],this2[1] + p[1]];
+};
 thx.geom._Point.Point_Impl_.toAngle = function(this1) {
 	var angle = Math.atan2(this1[1],this1[0]);
 	return angle;
@@ -1137,6 +1339,7 @@ thx.geom._Point.Point_Impl_.interpolateBetween2DPointsForY = function(p1,p2,y) {
 thx.geom.Polygon = function(vertices) {
 	this.vertices = vertices;
 };
+thx.geom.Polygon.__name__ = true;
 thx.geom.Polygon.fromVertices = function(vertices) {
 	if((vertices instanceof Array) && vertices.__enum__ == null) return new thx.geom.Polygon(vertices.copy()); else return new thx.geom.Polygon((function($this) {
 		var $r;
@@ -1172,6 +1375,7 @@ thx.geom.Vertex3D = function(position,normal) {
 	this.position = position;
 	this.normal = normal;
 };
+thx.geom.Vertex3D.__name__ = true;
 thx.geom.Vertex3D.prototype = {
 	flip: function() {
 		return new thx.geom.Vertex3D(this.position,(function($this) {
@@ -1211,11 +1415,97 @@ thx.geom.Vertex3D.prototype = {
 		}(this));
 	}
 };
+thx.geom.shape = {};
+thx.geom.shape._Circle = {};
+thx.geom.shape._Circle.Circle_Impl_ = function() { };
+thx.geom.shape._Circle.Circle_Impl_.__name__ = true;
+thx.geom.shape._Circle.Circle_Impl_._new = function(center,radius) {
+	return { center : center, radius : radius};
+};
+thx.geom.shape._Circle.Circle_Impl_.get_center = function(this1) {
+	return this1.center;
+};
+thx.geom.shape._Circle.Circle_Impl_.get_radius = function(this1) {
+	return this1.radius;
+};
+thx.geom.shape._Circle.Circle_Impl_.toString = function(this1) {
+	return "Circle(" + this1.center[0] + "," + this1.center[1] + "," + this1.radius + ")";
+};
+thx.geom.shape._Circle.Circle_Impl_.toPath = function(this1) {
+	var segments = 32;
+	var angle = Math.PI / segments;
+	var points = [];
+	var nodes = [];
+	var j;
+	var _g1 = 0;
+	var _g = segments * 2;
+	while(_g1 < _g) {
+		var i = _g1++;
+		points.push(thx.geom._Point.Point_Impl_.pointAt(this1.center,angle * i,this1.radius));
+	}
+	nodes.push(new thx.geom.PathNode(points[0],points[1],points[points.length - 1]));
+	var _g11 = 1;
+	var _g2 = segments - 1;
+	while(_g11 < _g2) {
+		var i1 = _g11++;
+		j = i1 * 2;
+		nodes.push(new thx.geom.PathNode(points[j],points[j + 1],points[j - 1]));
+	}
+	nodes.push(new thx.geom.PathNode(points[points.length - 2],points[points.length - 1],points[points.length - 3]));
+	return new thx.geom.Path(nodes,true);
+};
+thx.geom.shape._Rect = {};
+thx.geom.shape._Rect.Rect_Impl_ = function() { };
+thx.geom.shape._Rect.Rect_Impl_.__name__ = true;
+thx.geom.shape._Rect.Rect_Impl_._new = function(topLeft,bottomRight) {
+	return [topLeft,bottomRight];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_topLeft = function(this1) {
+	return this1[0];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_topRight = function(this1) {
+	return [this1[1][0],this1[0][1]];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_bottomLeft = function(this1) {
+	return [this1[0][0],this1[1][1]];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_bottomRight = function(this1) {
+	return this1[1];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_center = function(this1) {
+	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[0][1] + (this1[1][1] - this1[0][1]) / 2];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_left = function(this1) {
+	return this1[0][0];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_right = function(this1) {
+	return this1[1][0];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_top = function(this1) {
+	return this1[0][1];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_bottom = function(this1) {
+	return this1[1][1];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_width = function(this1) {
+	return this1[1][0] - this1[0][0];
+};
+thx.geom.shape._Rect.Rect_Impl_.get_height = function(this1) {
+	return this1[1][1] - this1[0][1];
+};
+thx.geom.shape._Rect.Rect_Impl_.toString = function(this1) {
+	return "Rect(" + this1[0][0] + "," + this1[0][1] + "," + (this1[1][0] - this1[0][0]) + "," + (this1[1][1] - this1[0][1]) + ")";
+};
+thx.geom.shape._Rect.Rect_Impl_.toPath = function(this1) {
+	return thx.geom.Path.fromArray([this1[0],[this1[1][0],this1[0][1]],this1[1],[this1[0][0],this1[1][1]]],true);
+};
 thx.unit = {};
 thx.unit.angle = {};
 thx.unit.angle.Const = function() { };
+thx.unit.angle.Const.__name__ = true;
 thx.unit.angle._Degree = {};
 thx.unit.angle._Degree.Degree_Impl_ = function() { };
+thx.unit.angle._Degree.Degree_Impl_.__name__ = true;
 thx.unit.angle._Degree.Degree_Impl_.fromFloat = function(angle) {
 	return angle;
 };
@@ -1259,11 +1549,13 @@ thx.unit.angle._Degree.Degree_Impl_.subtractFloat = function(this1,v) {
 	return this1 + -v;
 };
 thx.unit.angle.FloatDegree = function() { };
+thx.unit.angle.FloatDegree.__name__ = true;
 thx.unit.angle.FloatDegree.toDegrees = function(v) {
 	return v;
 };
 thx.unit.angle._Radian = {};
 thx.unit.angle._Radian.Radian_Impl_ = function() { };
+thx.unit.angle._Radian.Radian_Impl_.__name__ = true;
 thx.unit.angle._Radian.Radian_Impl_.fromFloat = function(angle) {
 	return angle;
 };
@@ -1307,12 +1599,15 @@ thx.unit.angle._Radian.Radian_Impl_.subtractFloat = function(this1,v) {
 	return this1 + -v;
 };
 thx.unit.angle.FloatRadian = function() { };
+thx.unit.angle.FloatRadian.__name__ = true;
 thx.unit.angle.FloatRadian.toRadians = function(v) {
 	return v;
 };
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
+String.__name__ = true;
+Array.__name__ = true;
 if(Array.prototype.map == null) Array.prototype.map = function(f) {
 	var a = [];
 	var _g1 = 0;

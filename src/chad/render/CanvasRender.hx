@@ -7,6 +7,7 @@ import thx.geom.Line;
 import thx.geom.Matrix4x4;
 import thx.geom.Point;
 import thx.geom.Point3D;
+import thx.geom.Path;
 
 class CanvasRender extends BaseRender {
 	public static function scaled(canvas : CanvasElement, scale : Float) {
@@ -58,18 +59,23 @@ class CanvasRender extends BaseRender {
 
 		// default styles
 		applyStrokeStyle(StrokeLine(new LineStyle()));
-		applyFillStyle(FillColor("#0000FF"));
+		applyFillStyle(FillColor("#000000"));
 	}
 
-	function wrap(?fill : FillStyle, ?stroke : StrokeStyle, f : Void -> Void) {
+	function wrap(?stroke : StrokeStyle, ?fill : FillStyle, f : Void -> Void) {
 		var hasStyle = null != fill || null != stroke;
 		if(hasStyle)
 			ctx.save();
-		if(null != fill)
-			applyFillStyle(fill);
+		ctx.beginPath();
 		if(null != stroke)
 			applyStrokeStyle(stroke);
+		if(null != fill)
+			applyFillStyle(fill);
 		f();
+		if(null != fill)
+		ctx.fill();
+		if(null != stroke || null == fill)
+			ctx.stroke();
 		if(hasStyle)
 			ctx.restore();
 	}
@@ -80,10 +86,8 @@ class CanvasRender extends BaseRender {
 
 	public function drawSegment(a : Point, b : Point, ?style : StrokeStyle) {
 		wrap(style, function() {
-			ctx.beginPath();
 			moveTo(a);
 			lineTo(b);
-			ctx.stroke();
 		});
 	}
 
@@ -101,8 +105,32 @@ class CanvasRender extends BaseRender {
 		drawSegment(a, b, style);
 	}
 
+	public function drawPath(path : Path, ?stroke : StrokeStyle, ?fill : FillStyle) {
+		wrap(stroke, fill, function() {
+			path.iterate(
+				function(init : Point) {
+					moveTo(init);
+				},
+				function(a : Point, b : Point, nout : Null<Point>, nin : Null<Point>) {
+					if(null == nout && null == nin)
+						lineTo(b);
+					else {
+						if(null == nout)
+							nout = a;
+						else if(null == nin)
+							nin = b;
+						curveTo(b, nout, nin);
+					}
+				});
+		});
+	}
+
 	public inline function lineTo(point : Point) {
 		ctx.lineTo(point.x, point.y);
+	}
+
+	public inline function curveTo(point : Point, cout : Null<Point>, cin : Null<Point>) {
+		ctx.bezierCurveTo(cout.x, cout.y, cin.x, cin.y, point.x, point.y);
 	}
 
 	public inline function moveTo(point : Point) {
