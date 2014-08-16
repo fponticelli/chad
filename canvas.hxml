@@ -1,7 +1,7 @@
 -cp demo
 -cp src
--main Main
--js bin/main.js
+-main Canvas
+-js bin/canvas.js
 -lib thx.core
 -lib thx.geom
 -lib thx.unit
