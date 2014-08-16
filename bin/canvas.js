@@ -23,13 +23,13 @@ Canvas.main = function() {
 		if(i != 0) render.drawLine(line.offset(-i * 10),chad.render.StrokeStyle.StrokeDot(3));
 	}
 	var rect = [[30,30],[300,300]];
-	render.drawPath(thx.geom.shape._Box.Box_Impl_.toPath(rect));
+	render.drawSpline(thx.geom.shape._Box.Box_Impl_.toSpline(rect));
 	var circle = { center : [300,250], radius : 100};
-	render.drawPath(thx.geom.shape._Circle.Circle_Impl_.toPath(circle),chad.render.StrokeStyle.StrokeDot(4));
+	render.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle),chad.render.StrokeStyle.StrokeDot(4));
 	var circle1 = { center : [200,200], radius : 80};
-	render.drawPath(thx.geom.shape._Circle.Circle_Impl_.toPath(circle1),chad.render.StrokeStyle.StrokeDash([3,4,5,6]),chad.render.FillStyle.FillColor("rgba(0,255,155,0.1)"));
+	render.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle1),chad.render.StrokeStyle.StrokeDash([3,4,5,6]),chad.render.FillStyle.FillColor("rgba(0,255,155,0.1)"));
 	var circle2 = { center : [240,280], radius : 60};
-	render.drawPath(thx.geom.shape._Circle.Circle_Impl_.toPath(circle2),null,chad.render.FillStyle.FillColor("rgba(100,255,155,0.5)"));
+	render.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2),null,chad.render.FillStyle.FillColor("rgba(100,255,155,0.5)"));
 };
 var HxOverrides = function() { };
 HxOverrides.__name__ = true;
@@ -296,10 +296,10 @@ chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
 		} else b = line.intersectWithLine(this.bottom);
 		this.drawSegment(a,b,style);
 	}
-	,drawPath: function(path,stroke,fill) {
+	,drawSpline: function(spline,stroke,fill) {
 		var _g = this;
 		this.wrap(stroke,fill,function() {
-			path.iterate(function(init) {
+			spline.iterate(function(init) {
 				_g.ctx.moveTo(init[0],init[1]);
 			},function(a,b,nout,nin) {
 				if(null == nout && null == nin) _g.ctx.lineTo(b[0],b[1]); else {
@@ -1225,143 +1225,6 @@ thx.geom.OrthoNormalBasis.prototype = {
 		return newbasis;
 	}
 };
-thx.geom.Path = function(nodes,closed) {
-	if(closed == null) closed = true;
-	this.computed = false;
-	this.nodes = nodes;
-	this.closed = closed;
-};
-thx.geom.Path.__name__ = true;
-thx.geom.Path.fromPoints = function(arr,closed) {
-	var nodes = arr.map(function(c) {
-		return new thx.geom.PathNode(c[0],c[1],c[2]);
-	});
-	return new thx.geom.Path(nodes,closed);
-};
-thx.geom.Path.fromArray = function(arr,closed) {
-	var nodes = arr.map(function(c) {
-		return new thx.geom.PathNode(c,null,null);
-	});
-	return new thx.geom.Path(nodes,closed);
-};
-thx.geom.Path.fromCoords = function(arr,closed) {
-	var nodes = arr.map(function(c) {
-		var p = [c[0],c[1]];
-		var nout;
-		if(null == c[2]) nout = thx.geom._Point.Point_Impl_.zero; else nout = [c[2],c[3]];
-		var nin;
-		if(null == c[4]) nin = thx.geom._Point.Point_Impl_.zero; else nin = [c[4],c[5]];
-		return new thx.geom.PathNode(p,nout,nin);
-	});
-	return new thx.geom.Path(nodes,closed);
-};
-thx.geom.Path.prototype = {
-	iterator: function() {
-		return HxOverrides.iter(this.nodes);
-	}
-	,iterate: function(fstart,fit) {
-		var a;
-		var b;
-		if(null != fstart) fstart(this.nodes[0].point);
-		var _g1 = 0;
-		var _g = this.nodes.length - 1;
-		while(_g1 < _g) {
-			var i = _g1++;
-			a = this.nodes[i];
-			b = this.nodes[i + 1];
-			fit(a.point,b.point,a.normalOut,b.normalIn);
-		}
-		if(this.closed) {
-			a = this.nodes[this.nodes.length - 1];
-			b = this.nodes[0];
-			fit(a.point,b.point,a.normalOut,b.normalIn);
-		}
-	}
-	,iterateSides: function(f) {
-		var _g = this;
-		if(null != this.edges) this.edges.map(f); else {
-			this.edges = [];
-			this.iterate(null,function(a,b,nout,nin) {
-				var side = new thx.geom.Edge(new thx.geom.Vertex(a,nout),new thx.geom.Vertex(b,nin));
-				_g.edges.push(side);
-				f(side);
-			});
-		}
-	}
-	,transform: function(matrix) {
-		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
-		var result = new thx.geom.Path(thx.core.Iterators.map(this.iterator(),function(node) {
-			return node.transform(matrix);
-		}),this.closed);
-		if(ismirror) result = result.flip();
-		return result;
-	}
-	,flip: function() {
-		var arr = thx.core.Iterators.map(this.iterator(),function(node) {
-			return node.flip();
-		});
-		arr.reverse();
-		return new thx.geom.Path(arr,this.closed);
-	}
-	,get_area: function() {
-		this.compute();
-		return this.area;
-	}
-	,get_length: function() {
-		this.compute();
-		return this.length;
-	}
-	,get_isSelfIntersecting: function() {
-		this.compute();
-		return this.isSelfIntersecting;
-	}
-	,get_isPolygon: function() {
-		this.compute();
-		return this.isPolygon;
-	}
-	,compute: function() {
-		var _g = this;
-		if(this.computed) return;
-		this.area = 0;
-		this.length = 0;
-		this.isSelfIntersecting = false;
-		this.isPolygon = true;
-		this.iterateSides(function(side) {
-			if(null == side.length) side.length = Math.sqrt(side.get_lengthSquared());
-			_g.length += side.length;
-			if(_g.get_isPolygon() && !side.isLinear()) _g.isPolygon = false;
-		});
-	}
-	,toString: function() {
-		return "Path(" + this.nodes.map(function(n) {
-			return "[" + n.toStringValues() + "]";
-		}).join(", ") + "," + Std.string(this.closed) + ")";
-	}
-};
-thx.geom.PathNode = function(point,normalout,normalin) {
-	this.point = point;
-	this.normalOut = normalout;
-	this.normalIn = normalin;
-};
-thx.geom.PathNode.__name__ = true;
-thx.geom.PathNode.prototype = {
-	transform: function(matrix) {
-		return new thx.geom.PathNode(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.point),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalIn),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalOut));
-	}
-	,flip: function() {
-		return new thx.geom.PathNode(this.point,this.normalIn,this.normalOut);
-	}
-	,toStringValues: function() {
-		var nout;
-		if(null == this.normalOut) nout = "null"; else nout = "" + this.normalOut[1] + "," + this.normalOut[1];
-		var nin;
-		if(null == this.normalIn) nin = "null"; else nin = "" + this.normalIn[1] + "," + this.normalIn[1];
-		return "" + this.point[0] + "," + this.point[1] + "," + nout + "," + nin;
-	}
-	,toString: function() {
-		return "PathNode(" + this.toStringValues() + ")";
-	}
-};
 thx.geom._Point = {};
 thx.geom._Point.Point_Impl_ = function() { };
 thx.geom._Point.Point_Impl_.__name__ = true;
@@ -1571,6 +1434,143 @@ thx.geom.Polygon.prototype = {
 		if(null == this.plane) return this.plane = thx.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position); else return this.plane;
 	}
 };
+thx.geom.Spline = function(nodes,closed) {
+	if(closed == null) closed = true;
+	this.computed = false;
+	this.nodes = nodes;
+	this.closed = closed;
+};
+thx.geom.Spline.__name__ = true;
+thx.geom.Spline.fromPoints = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		return new thx.geom.SplineNode(c[0],c[1],c[2]);
+	});
+	return new thx.geom.Spline(nodes,closed);
+};
+thx.geom.Spline.fromArray = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		return new thx.geom.SplineNode(c,null,null);
+	});
+	return new thx.geom.Spline(nodes,closed);
+};
+thx.geom.Spline.fromCoords = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		var p = [c[0],c[1]];
+		var nout;
+		if(null == c[2]) nout = thx.geom._Point.Point_Impl_.zero; else nout = [c[2],c[3]];
+		var nin;
+		if(null == c[4]) nin = thx.geom._Point.Point_Impl_.zero; else nin = [c[4],c[5]];
+		return new thx.geom.SplineNode(p,nout,nin);
+	});
+	return new thx.geom.Spline(nodes,closed);
+};
+thx.geom.Spline.prototype = {
+	iterator: function() {
+		return HxOverrides.iter(this.nodes);
+	}
+	,iterate: function(fstart,fit) {
+		var a;
+		var b;
+		if(null != fstart) fstart(this.nodes[0].point);
+		var _g1 = 0;
+		var _g = this.nodes.length - 1;
+		while(_g1 < _g) {
+			var i = _g1++;
+			a = this.nodes[i];
+			b = this.nodes[i + 1];
+			fit(a.point,b.point,a.normalOut,b.normalIn);
+		}
+		if(this.closed) {
+			a = this.nodes[this.nodes.length - 1];
+			b = this.nodes[0];
+			fit(a.point,b.point,a.normalOut,b.normalIn);
+		}
+	}
+	,iterateSides: function(f) {
+		var _g = this;
+		if(null != this.edges) this.edges.map(f); else {
+			this.edges = [];
+			this.iterate(null,function(a,b,nout,nin) {
+				var side = new thx.geom.Edge(new thx.geom.Vertex(a,nout),new thx.geom.Vertex(b,nin));
+				_g.edges.push(side);
+				f(side);
+			});
+		}
+	}
+	,transform: function(matrix) {
+		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
+		var result = new thx.geom.Spline(thx.core.Iterators.map(this.iterator(),function(node) {
+			return node.transform(matrix);
+		}),this.closed);
+		if(ismirror) result = result.flip();
+		return result;
+	}
+	,flip: function() {
+		var arr = thx.core.Iterators.map(this.iterator(),function(node) {
+			return node.flip();
+		});
+		arr.reverse();
+		return new thx.geom.Spline(arr,this.closed);
+	}
+	,get_area: function() {
+		this.compute();
+		return this.area;
+	}
+	,get_length: function() {
+		this.compute();
+		return this.length;
+	}
+	,get_isSelfIntersecting: function() {
+		this.compute();
+		return this.isSelfIntersecting;
+	}
+	,get_isPolygon: function() {
+		this.compute();
+		return this.isPolygon;
+	}
+	,compute: function() {
+		var _g = this;
+		if(this.computed) return;
+		this.area = 0;
+		this.length = 0;
+		this.isSelfIntersecting = false;
+		this.isPolygon = true;
+		this.iterateSides(function(side) {
+			if(null == side.length) side.length = Math.sqrt(side.get_lengthSquared());
+			_g.length += side.length;
+			if(_g.get_isPolygon() && !side.isLinear()) _g.isPolygon = false;
+		});
+	}
+	,toString: function() {
+		return "Spline(" + this.nodes.map(function(n) {
+			return "[" + n.toStringValues() + "]";
+		}).join(", ") + "," + Std.string(this.closed) + ")";
+	}
+};
+thx.geom.SplineNode = function(point,normalout,normalin) {
+	this.point = point;
+	this.normalOut = normalout;
+	this.normalIn = normalin;
+};
+thx.geom.SplineNode.__name__ = true;
+thx.geom.SplineNode.prototype = {
+	transform: function(matrix) {
+		return new thx.geom.SplineNode(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.point),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalIn),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalOut));
+	}
+	,flip: function() {
+		return new thx.geom.SplineNode(this.point,this.normalIn,this.normalOut);
+	}
+	,toStringValues: function() {
+		var nout;
+		if(null == this.normalOut) nout = "null"; else nout = "" + this.normalOut[1] + "," + this.normalOut[1];
+		var nin;
+		if(null == this.normalIn) nin = "null"; else nin = "" + this.normalIn[1] + "," + this.normalIn[1];
+		return "" + this.point[0] + "," + this.point[1] + "," + nout + "," + nin;
+	}
+	,toString: function() {
+		return "SplineNode(" + this.toStringValues() + ")";
+	}
+};
 thx.geom.Vertex = function(position,normal) {
 	this.position = position;
 	this.normal = normal;
@@ -1763,8 +1763,8 @@ thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
 thx.geom.shape._Box.Box_Impl_.toString = function(this1) {
 	return "Box(" + [this1[0][0],this1[1][1]][0] + "," + [this1[0][0],this1[1][1]][1] + "," + (this1[1][0] - this1[0][0]) + "," + (this1[0][1] - this1[1][1]) + ")";
 };
-thx.geom.shape._Box.Box_Impl_.toPath = function(this1) {
-	return thx.geom.Path.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
+thx.geom.shape._Box.Box_Impl_.toSpline = function(this1) {
+	return thx.geom.Spline.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
 };
 thx.geom.shape._Circle = {};
 thx.geom.shape._Circle.Circle_Impl_ = function() { };
@@ -1781,7 +1781,7 @@ thx.geom.shape._Circle.Circle_Impl_.get_radius = function(this1) {
 thx.geom.shape._Circle.Circle_Impl_.toString = function(this1) {
 	return "Circle(" + this1.center[0] + "," + this1.center[1] + "," + this1.radius + ")";
 };
-thx.geom.shape._Circle.Circle_Impl_.toPath = function(this1) {
+thx.geom.shape._Circle.Circle_Impl_.toSpline = function(this1) {
 	var segments = 32;
 	var angle = Math.PI / segments;
 	var points = [];
@@ -1793,16 +1793,16 @@ thx.geom.shape._Circle.Circle_Impl_.toPath = function(this1) {
 		var i = _g1++;
 		points.push(thx.geom._Point.Point_Impl_.pointAt(this1.center,angle * i,this1.radius));
 	}
-	nodes.push(new thx.geom.PathNode(points[0],points[1],points[points.length - 1]));
+	nodes.push(new thx.geom.SplineNode(points[0],points[1],points[points.length - 1]));
 	var _g11 = 1;
 	var _g2 = segments - 1;
 	while(_g11 < _g2) {
 		var i1 = _g11++;
 		j = i1 * 2;
-		nodes.push(new thx.geom.PathNode(points[j],points[j + 1],points[j - 1]));
+		nodes.push(new thx.geom.SplineNode(points[j],points[j + 1],points[j - 1]));
 	}
-	nodes.push(new thx.geom.PathNode(points[points.length - 2],points[points.length - 1],points[points.length - 3]));
-	return new thx.geom.Path(nodes,true);
+	nodes.push(new thx.geom.SplineNode(points[points.length - 2],points[points.length - 1],points[points.length - 3]));
+	return new thx.geom.Spline(nodes,true);
 };
 thx.math = {};
 thx.math.Number = function() { };

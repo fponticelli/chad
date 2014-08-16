@@ -7,7 +7,7 @@ import thx.geom.Line;
 import thx.geom.Matrix4x4;
 import thx.geom.Point;
 import thx.geom.Point3D;
-import thx.geom.Path;
+import thx.geom.Spline;
 
 class CanvasRender extends BaseRender {
 	public static function scaled(canvas : CanvasElement, scale : Float) {
@@ -105,9 +105,9 @@ class CanvasRender extends BaseRender {
 		drawSegment(a, b, style);
 	}
 
-	public function drawPath(path : Path, ?stroke : StrokeStyle, ?fill : FillStyle) {
+	public function drawSpline(spline : Spline, ?stroke : StrokeStyle, ?fill : FillStyle) {
 		wrap(stroke, fill, function() {
-			path.iterate(
+			spline.iterate(
 				function(init : Point) {
 					moveTo(init);
 				},

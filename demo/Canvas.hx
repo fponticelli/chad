@@ -26,15 +26,15 @@ class Canvas {
 		}
 
 		var rect = new Box(new Point(30, 30), new Point(300, 300));
-		render.drawPath(rect);
+		render.drawSpline(rect);
 
 		var circle = new Circle(new Point(300, 250), 100);
-		render.drawPath(circle, StrokeDot(4));
+		render.drawSpline(circle, StrokeDot(4));
 
 		var circle = new Circle(new Point(200, 200), 80);
-		render.drawPath(circle, StrokeDash([3, 4, 5, 6]), FillColor("rgba(0,255,155,0.1)"));
+		render.drawSpline(circle, StrokeDash([3, 4, 5, 6]), FillColor("rgba(0,255,155,0.1)"));
 
 		var circle = new Circle(new Point(240, 280), 60);
-		render.drawPath(circle, FillColor("rgba(100,255,155,0.5)"));
+		render.drawSpline(circle, FillColor("rgba(100,255,155,0.5)"));
 	}
 }
