@@ -2,14 +2,16 @@
 -cp src
 -main Canvas
 -js bin/canvas.js
--lib thx-geom
--lib thx-unit
+-lib thx.core
+-lib thx.geom
+-lib thx.unit
 -D thxunit
 --next
 -cp demo
 -cp src
 -main Main
 -js bin/main.js
--lib thx-geom
--lib thx-unit
+-lib thx.core
+-lib thx.geom
+-lib thx.unit
 -D thxunit

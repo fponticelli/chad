@@ -23,7 +23,7 @@ Canvas.main = function() {
 		if(i != 0) render.drawLine(line.offset(-i * 10),chad.render.StrokeStyle.StrokeDot(3));
 	}
 	var rect = [[30,30],[300,300]];
-	render.drawPath(thx.geom.shape._Rect.Rect_Impl_.toPath(rect));
+	render.drawPath(thx.geom.shape._Box.Box_Impl_.toPath(rect));
 	var circle = { center : [300,250], radius : 100};
 	render.drawPath(thx.geom.shape._Circle.Circle_Impl_.toPath(circle),chad.render.StrokeStyle.StrokeDot(4));
 	var circle1 = { center : [200,200], radius : 80};
@@ -445,8 +445,148 @@ js.Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+thx.core = {};
+thx.core.Iterators = function() { };
+thx.core.Iterators.__name__ = true;
+thx.core.Iterators.map = function(it,f) {
+	var acc = [];
+	while( it.hasNext() ) {
+		var v = it.next();
+		acc.push(f(v));
+	}
+	return acc;
+};
+thx.core.Iterators.mapi = function(it,f) {
+	var acc = [];
+	var i = 0;
+	while( it.hasNext() ) {
+		var v = it.next();
+		acc.push(f(v,i++));
+	}
+	return acc;
+};
+thx.core.Iterators.toArray = function(it) {
+	var items = [];
+	while( it.hasNext() ) {
+		var item = it.next();
+		items.push(item);
+	}
+	return items;
+};
+thx.core.Iterators.order = function(it,sort) {
+	var n = thx.core.Iterators.toArray(it);
+	n.sort(sort);
+	return n;
+};
+thx.core.Iterators.reduce = function(it,callback,initial) {
+	thx.core.Iterators.map(it,function(v) {
+		initial = callback(initial,v);
+	});
+	return initial;
+};
+thx.core.Iterators.reducei = function(it,callback,initial) {
+	thx.core.Iterators.mapi(it,function(v,i) {
+		initial = callback(initial,v,i);
+	});
+	return initial;
+};
+thx.core.Iterators.isEmpty = function(it) {
+	return !it.hasNext();
+};
+thx.core.Iterators.filter = function(it,predicate) {
+	return thx.core.Iterators.reduce(it,function(acc,item) {
+		if(predicate(item)) acc.push(item);
+		return acc;
+	},[]);
+};
 thx.geom.Const = function() { };
 thx.geom.Const.__name__ = true;
+thx.geom.Edge = function(vertex0,vertex1) {
+	this.vertex0 = vertex0;
+	this.vertex1 = vertex1;
+};
+thx.geom.Edge.__name__ = true;
+thx.geom.Edge.prototype = {
+	intersects: function(other) {
+		if(this.vertex0.equals(other.vertex1) || this.vertex1.equals(other.vertex0)) {
+			if((function($this) {
+				var $r;
+				var this1;
+				{
+					var this11;
+					var this12;
+					var this13 = other.vertex1.position;
+					var p = other.vertex0.position;
+					var p_0 = -p[0];
+					var p_1 = -p[1];
+					this12 = [this13[0] + p_0,this13[1] + p_1];
+					var v = Math.sqrt(this12[0] * this12[0] + this12[1] * this12[1]);
+					this11 = [this12[0] / v,this12[1] / v];
+					var p1;
+					var this14;
+					var this15 = $this.vertex1.position;
+					var p2 = $this.vertex0.position;
+					var p_01 = -p2[0];
+					var p_11 = -p2[1];
+					this14 = [this15[0] + p_01,this15[1] + p_11];
+					var v1 = Math.sqrt(this14[0] * this14[0] + this14[1] * this14[1]);
+					p1 = [this14[0] / v1,this14[1] / v1];
+					this1 = [this11[0] + p1[0],this11[1] + p1[1]];
+				}
+				$r = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
+				return $r;
+			}(this)) < 1e-5) return true;
+		} else {
+			var d0;
+			var this16 = this.vertex1.position;
+			var p3 = this.vertex0.position;
+			var p_02 = -p3[0];
+			var p_12 = -p3[1];
+			d0 = [this16[0] + p_02,this16[1] + p_12];
+			var d1;
+			var this17 = other.vertex1.position;
+			var p4 = other.vertex0.position;
+			var p_03 = -p4[0];
+			var p_13 = -p4[1];
+			d1 = [this17[0] + p_03,this17[1] + p_13];
+			if(Math.abs(d0[0] * d1[1] - d0[1] * d1[0]) < 1e-9) return false;
+			var alphas = thx.geom._Point.Point_Impl_.solve2Linear(-d0[0],d1[0],-d0[1],d1[1],this.vertex0.position[0] - other.vertex0.position[0],this.vertex0.position[1] - other.vertex0.position[1]);
+			if(alphas[0] > 1e-6 && alphas[0] < 0.999999 && alphas[1] > 1e-5 && alphas[1] < 0.999999) return true;
+		}
+		return false;
+	}
+	,isLinear: function() {
+		return thx.geom._Point.Point_Impl_.isNearZero(this.vertex0.normal) && thx.geom._Point.Point_Impl_.isNearZero(this.vertex1.normal);
+	}
+	,transform: function(matrix) {
+		return new thx.geom.Edge(this.vertex0.transform(matrix),this.vertex1.transform(matrix));
+	}
+	,flip: function() {
+		return new thx.geom.Edge(this.vertex1,this.vertex0);
+	}
+	,direction: function() {
+		var this1 = this.vertex1.position;
+		var p = this.vertex0.position;
+		var p_0 = -p[0];
+		var p_1 = -p[1];
+		return [this1[0] + p_0,this1[1] + p_1];
+	}
+	,get_lengthSquared: function() {
+		if(null == this.lengthSquared) {
+			var w = this.vertex1.position[0] - this.vertex0.position[0];
+			var h = this.vertex1.position[1] - this.vertex0.position[1];
+			this.lengthSquared = w * w + h * h;
+		}
+		return this.lengthSquared;
+	}
+	,get_length: function() {
+		if(null == this.length) this.length = Math.sqrt(this.get_lengthSquared());
+		return this.length;
+	}
+	,toString: function() {
+		return "Edge (" + this.vertex0.toString() + " -> " + this.vertex1.toString() + ")";
+	}
+};
 thx.geom.Line = function(normal,w) {
 	var l = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
 	this.w = w * l;
@@ -1087,6 +1227,7 @@ thx.geom.OrthoNormalBasis.prototype = {
 };
 thx.geom.Path = function(nodes,closed) {
 	if(closed == null) closed = true;
+	this.computed = false;
 	this.nodes = nodes;
 	this.closed = closed;
 };
@@ -1107,9 +1248,9 @@ thx.geom.Path.fromCoords = function(arr,closed) {
 	var nodes = arr.map(function(c) {
 		var p = [c[0],c[1]];
 		var nout;
-		if(null == c[2]) nout = null; else nout = [c[2],c[3]];
+		if(null == c[2]) nout = thx.geom._Point.Point_Impl_.zero; else nout = [c[2],c[3]];
 		var nin;
-		if(null == c[4]) nin = null; else nin = [c[4],c[5]];
+		if(null == c[4]) nin = thx.geom._Point.Point_Impl_.zero; else nin = [c[4],c[5]];
 		return new thx.geom.PathNode(p,nout,nin);
 	});
 	return new thx.geom.Path(nodes,closed);
@@ -1136,6 +1277,61 @@ thx.geom.Path.prototype = {
 			fit(a.point,b.point,a.normalOut,b.normalIn);
 		}
 	}
+	,iterateSides: function(f) {
+		var _g = this;
+		if(null != this.edges) this.edges.map(f); else {
+			this.edges = [];
+			this.iterate(null,function(a,b,nout,nin) {
+				var side = new thx.geom.Edge(new thx.geom.Vertex(a,nout),new thx.geom.Vertex(b,nin));
+				_g.edges.push(side);
+				f(side);
+			});
+		}
+	}
+	,transform: function(matrix) {
+		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
+		var result = new thx.geom.Path(thx.core.Iterators.map(this.iterator(),function(node) {
+			return node.transform(matrix);
+		}),this.closed);
+		if(ismirror) result = result.flip();
+		return result;
+	}
+	,flip: function() {
+		var arr = thx.core.Iterators.map(this.iterator(),function(node) {
+			return node.flip();
+		});
+		arr.reverse();
+		return new thx.geom.Path(arr,this.closed);
+	}
+	,get_area: function() {
+		this.compute();
+		return this.area;
+	}
+	,get_length: function() {
+		this.compute();
+		return this.length;
+	}
+	,get_isSelfIntersecting: function() {
+		this.compute();
+		return this.isSelfIntersecting;
+	}
+	,get_isPolygon: function() {
+		this.compute();
+		return this.isPolygon;
+	}
+	,compute: function() {
+		var _g = this;
+		if(this.computed) return;
+		this.area = 0;
+		this.length = 0;
+		this.isSelfIntersecting = false;
+		this.isPolygon = true;
+		this.iterateSides(function(side) {
+			if(null == side.length) side.length = Math.sqrt(side.get_lengthSquared());
+			_g.length += side.length;
+			if(_g.get_isPolygon() && !side.isLinear()) _g.isPolygon = false;
+		});
+	}
 	,toString: function() {
 		return "Path(" + this.nodes.map(function(n) {
 			return "[" + n.toStringValues() + "]";
@@ -1149,7 +1345,13 @@ thx.geom.PathNode = function(point,normalout,normalin) {
 };
 thx.geom.PathNode.__name__ = true;
 thx.geom.PathNode.prototype = {
-	toStringValues: function() {
+	transform: function(matrix) {
+		return new thx.geom.PathNode(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.point),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalIn),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalOut));
+	}
+	,flip: function() {
+		return new thx.geom.PathNode(this.point,this.normalIn,this.normalOut);
+	}
+	,toStringValues: function() {
 		var nout;
 		if(null == this.normalOut) nout = "null"; else nout = "" + this.normalOut[1] + "," + this.normalOut[1];
 		var nin;
@@ -1251,8 +1453,7 @@ thx.geom._Point.Point_Impl_.isZero = function(this1) {
 	return this1[0] == p[0] && this1[1] == p[1];
 };
 thx.geom._Point.Point_Impl_.isNearZero = function(this1) {
-	var p = thx.geom._Point.Point_Impl_.zero;
-	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5;
+	return thx.geom._Point.Point_Impl_.nearEquals(this1,thx.geom._Point.Point_Impl_.zero);
 };
 thx.geom._Point.Point_Impl_.dot = function(this1,p) {
 	return this1[0] * p[0] + this1[1] * p[1];
@@ -1305,8 +1506,7 @@ thx.geom._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
 	return [this2[0] + p[0],this2[1] + p[1]];
 };
 thx.geom._Point.Point_Impl_.toAngle = function(this1) {
-	var angle = Math.atan2(this1[1],this1[0]);
-	return angle;
+	return Math.atan2(this1[1],this1[0]);
 };
 thx.geom._Point.Point_Impl_.toArray = function(this1) {
 	return this1.slice();
@@ -1371,6 +1571,87 @@ thx.geom.Polygon.prototype = {
 		if(null == this.plane) return this.plane = thx.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position); else return this.plane;
 	}
 };
+thx.geom.Vertex = function(position,normal) {
+	this.position = position;
+	this.normal = normal;
+};
+thx.geom.Vertex.__name__ = true;
+thx.geom.Vertex.linearVertex = function(position) {
+	return new thx.geom.Vertex(position,thx.geom._Point.Point_Impl_.zero);
+};
+thx.geom.Vertex.getLengthSquaredIntegrand = function(v) {
+	var p1x = v[0];
+	var p1y = v[1];
+	var c1x = v[2];
+	var c1y = v[3];
+	var c2x = v[4];
+	var c2y = v[5];
+	var p2x = v[6];
+	var p2y = v[7];
+	var ax = 9 * (c1x - c2x) + 3 * (p2x - p1x);
+	var bx = 6 * (p1x + c2x) - 12 * c1x;
+	var cx = 3 * (c1x - p1x);
+	var ay = 9 * (c1y - c2y) + 3 * (p2y - p1y);
+	var by = 6 * (p1y + c2y) - 12 * c1y;
+	var cy = 3 * (c1y - p1y);
+	return function(t) {
+		var dx = (ax * t + bx) * t + cx;
+		var dy = (ay * t + by) * t + cy;
+		return dx * dx + dy * dy;
+	};
+};
+thx.geom.Vertex.prototype = {
+	flip: function() {
+		return new thx.geom.Vertex(this.position,(function($this) {
+			var $r;
+			var this1 = $this.normal;
+			$r = [-this1[0],-this1[1]];
+			return $r;
+		}(this)));
+	}
+	,interpolate: function(other,t) {
+		return new thx.geom.Vertex(thx.geom._Point.Point_Impl_.interpolate(this.position,other.position,t),thx.geom._Point.Point_Impl_.interpolate(this.normal,other.normal,t));
+	}
+	,getDistanceSquared: function(other) {
+		var v = [this.position[0],this.position[1],this.position[0] + this.normal[0],this.position[1] + this.normal[1],other.position[0] + other.normal[0],other.position[1] + other.normal[1],other.position[0],other.position[1]];
+		if(Math.abs(v[0] - v[2]) <= 10e-10 && Math.abs(v[1] - v[3]) <= 10e-10 && Math.abs(v[6] - v[4]) <= 10e-10 && Math.abs(v[7] - v[5]) <= 10e-10) return thx.geom._Point.Point_Impl_.distanceToSquared(this.position,other.position);
+		return thx.math.Number.integrate(thx.geom.Vertex.getLengthSquaredIntegrand(v),0,1,16);
+	}
+	,getDistance: function(other) {
+		return Math.sqrt(this.getDistanceSquared(other));
+	}
+	,transform: function(matrix) {
+		return new thx.geom.Vertex(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.position),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normal));
+	}
+	,equals: function(other) {
+		return (function($this) {
+			var $r;
+			var this1 = $this.position;
+			var p = other.position;
+			$r = this1[0] == p[0] && this1[1] == p[1];
+			return $r;
+		}(this)) && (function($this) {
+			var $r;
+			var this2 = $this.normal;
+			var p1 = other.normal;
+			$r = this2[0] == p1[0] && this2[1] == p1[1];
+			return $r;
+		}(this));
+	}
+	,toString: function() {
+		return "Vertex " + (function($this) {
+			var $r;
+			var this1 = $this.position;
+			$r = "Point(" + this1[0] + "," + this1[1] + ")";
+			return $r;
+		}(this)) + ", " + (function($this) {
+			var $r;
+			var this2 = $this.normal;
+			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			return $r;
+		}(this));
+	}
+};
 thx.geom.Vertex3D = function(position,normal) {
 	this.position = position;
 	this.normal = normal;
@@ -1416,6 +1697,75 @@ thx.geom.Vertex3D.prototype = {
 	}
 };
 thx.geom.shape = {};
+thx.geom.shape._Box = {};
+thx.geom.shape._Box.Box_Impl_ = function() { };
+thx.geom.shape._Box.Box_Impl_.__name__ = true;
+thx.geom.shape._Box.Box_Impl_.fromPoints = function(a,b) {
+	var bottomLeft;
+	var x = Math.min(a[0],b[0]);
+	var y = Math.min(a[1],b[1]);
+	bottomLeft = [x,y];
+	var topRight;
+	var x1 = Math.max(a[0],b[0]);
+	var y1 = Math.max(a[1],b[1]);
+	topRight = [x1,y1];
+	return [bottomLeft,topRight];
+};
+thx.geom.shape._Box.Box_Impl_._new = function(bottomLeft,topRight) {
+	return [bottomLeft,topRight];
+};
+thx.geom.shape._Box.Box_Impl_.get_topLeft = function(this1) {
+	return [this1[0][0],this1[1][1]];
+};
+thx.geom.shape._Box.Box_Impl_.get_topRight = function(this1) {
+	return this1[1];
+};
+thx.geom.shape._Box.Box_Impl_.get_bottomLeft = function(this1) {
+	return this1[0];
+};
+thx.geom.shape._Box.Box_Impl_.get_bottomRight = function(this1) {
+	return [this1[1][0],this1[0][1]];
+};
+thx.geom.shape._Box.Box_Impl_.get_center = function(this1) {
+	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[1][1] + (this1[0][1] - this1[1][1]) / 2];
+};
+thx.geom.shape._Box.Box_Impl_.get_left = function(this1) {
+	return this1[0][0];
+};
+thx.geom.shape._Box.Box_Impl_.get_right = function(this1) {
+	return this1[1][0];
+};
+thx.geom.shape._Box.Box_Impl_.get_top = function(this1) {
+	return this1[1][1];
+};
+thx.geom.shape._Box.Box_Impl_.get_bottom = function(this1) {
+	return this1[0][1];
+};
+thx.geom.shape._Box.Box_Impl_.get_width = function(this1) {
+	return this1[1][0] - this1[0][0];
+};
+thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
+	return this1[0][1] - this1[1][1];
+};
+thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
+	var bottomLeft;
+	var this11 = this1[0];
+	var x = Math.min(this11[0],point[0]);
+	var y = Math.min(this11[1],point[1]);
+	bottomLeft = [x,y];
+	var topRight;
+	var this12 = this1[1];
+	var x1 = Math.max(this12[0],point[0]);
+	var y1 = Math.max(this12[1],point[1]);
+	topRight = [x1,y1];
+	return [bottomLeft,topRight];
+};
+thx.geom.shape._Box.Box_Impl_.toString = function(this1) {
+	return "Box(" + [this1[0][0],this1[1][1]][0] + "," + [this1[0][0],this1[1][1]][1] + "," + (this1[1][0] - this1[0][0]) + "," + (this1[0][1] - this1[1][1]) + ")";
+};
+thx.geom.shape._Box.Box_Impl_.toPath = function(this1) {
+	return thx.geom.Path.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
+};
 thx.geom.shape._Circle = {};
 thx.geom.shape._Circle.Circle_Impl_ = function() { };
 thx.geom.shape._Circle.Circle_Impl_.__name__ = true;
@@ -1454,154 +1804,27 @@ thx.geom.shape._Circle.Circle_Impl_.toPath = function(this1) {
 	nodes.push(new thx.geom.PathNode(points[points.length - 2],points[points.length - 1],points[points.length - 3]));
 	return new thx.geom.Path(nodes,true);
 };
-thx.geom.shape._Rect = {};
-thx.geom.shape._Rect.Rect_Impl_ = function() { };
-thx.geom.shape._Rect.Rect_Impl_.__name__ = true;
-thx.geom.shape._Rect.Rect_Impl_._new = function(topLeft,bottomRight) {
-	return [topLeft,bottomRight];
+thx.math = {};
+thx.math.Number = function() { };
+thx.math.Number.__name__ = true;
+thx.math.Number.isNearZero = function(n) {
+	return Math.abs(n) <= 10e-10;
 };
-thx.geom.shape._Rect.Rect_Impl_.get_topLeft = function(this1) {
-	return this1[0];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_topRight = function(this1) {
-	return [this1[1][0],this1[0][1]];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_bottomLeft = function(this1) {
-	return [this1[0][0],this1[1][1]];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_bottomRight = function(this1) {
-	return this1[1];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_center = function(this1) {
-	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[0][1] + (this1[1][1] - this1[0][1]) / 2];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_left = function(this1) {
-	return this1[0][0];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_right = function(this1) {
-	return this1[1][0];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_top = function(this1) {
-	return this1[0][1];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_bottom = function(this1) {
-	return this1[1][1];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_width = function(this1) {
-	return this1[1][0] - this1[0][0];
-};
-thx.geom.shape._Rect.Rect_Impl_.get_height = function(this1) {
-	return this1[1][1] - this1[0][1];
-};
-thx.geom.shape._Rect.Rect_Impl_.toString = function(this1) {
-	return "Rect(" + this1[0][0] + "," + this1[0][1] + "," + (this1[1][0] - this1[0][0]) + "," + (this1[1][1] - this1[0][1]) + ")";
-};
-thx.geom.shape._Rect.Rect_Impl_.toPath = function(this1) {
-	return thx.geom.Path.fromArray([this1[0],[this1[1][0],this1[0][1]],this1[1],[this1[0][0],this1[1][1]]],true);
-};
-thx.unit = {};
-thx.unit.angle = {};
-thx.unit.angle.Const = function() { };
-thx.unit.angle.Const.__name__ = true;
-thx.unit.angle._Degree = {};
-thx.unit.angle._Degree.Degree_Impl_ = function() { };
-thx.unit.angle._Degree.Degree_Impl_.__name__ = true;
-thx.unit.angle._Degree.Degree_Impl_.fromFloat = function(angle) {
-	return angle;
-};
-thx.unit.angle._Degree.Degree_Impl_._new = function(degrees) {
-	return degrees;
-};
-thx.unit.angle._Degree.Degree_Impl_.cos = function(this1) {
-	return Math.cos(this1 / thx.unit.angle.Const.TO_DEGREE);
-};
-thx.unit.angle._Degree.Degree_Impl_.sin = function(this1) {
-	return Math.sin(this1 / thx.unit.angle.Const.TO_DEGREE);
-};
-thx.unit.angle._Degree.Degree_Impl_.toString = function(this1) {
-	return "" + this1 + "̊";
-};
-thx.unit.angle._Degree.Degree_Impl_.toRadians = function(this1) {
-	return this1 / thx.unit.angle.Const.TO_DEGREE;
-};
-thx.unit.angle._Degree.Degree_Impl_.toFloat = function(this1) {
-	return this1;
-};
-thx.unit.angle._Degree.Degree_Impl_.negate = function(this1) {
-	return -this1;
-};
-thx.unit.angle._Degree.Degree_Impl_.multiply = function(this1,v) {
-	return this1 * v;
-};
-thx.unit.angle._Degree.Degree_Impl_.divide = function(this1,v) {
-	return this1 / v;
-};
-thx.unit.angle._Degree.Degree_Impl_.add = function(this1,r) {
-	return this1 + r;
-};
-thx.unit.angle._Degree.Degree_Impl_.addFloat = function(this1,v) {
-	return this1 + v;
-};
-thx.unit.angle._Degree.Degree_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
-};
-thx.unit.angle._Degree.Degree_Impl_.subtractFloat = function(this1,v) {
-	return this1 + -v;
-};
-thx.unit.angle.FloatDegree = function() { };
-thx.unit.angle.FloatDegree.__name__ = true;
-thx.unit.angle.FloatDegree.toDegrees = function(v) {
-	return v;
-};
-thx.unit.angle._Radian = {};
-thx.unit.angle._Radian.Radian_Impl_ = function() { };
-thx.unit.angle._Radian.Radian_Impl_.__name__ = true;
-thx.unit.angle._Radian.Radian_Impl_.fromFloat = function(angle) {
-	return angle;
-};
-thx.unit.angle._Radian.Radian_Impl_._new = function(radians) {
-	return radians;
-};
-thx.unit.angle._Radian.Radian_Impl_.cos = function(this1) {
-	return Math.cos(this1);
-};
-thx.unit.angle._Radian.Radian_Impl_.sin = function(this1) {
-	return Math.sin(this1);
-};
-thx.unit.angle._Radian.Radian_Impl_.toString = function(this1) {
-	return "" + this1 + "rad";
-};
-thx.unit.angle._Radian.Radian_Impl_.toDegrees = function(this1) {
-	return this1 * thx.unit.angle.Const.TO_DEGREE;
-};
-thx.unit.angle._Radian.Radian_Impl_.toFloat = function(this1) {
-	return this1;
-};
-thx.unit.angle._Radian.Radian_Impl_.negate = function(this1) {
-	return -this1;
-};
-thx.unit.angle._Radian.Radian_Impl_.multiply = function(this1,v) {
-	return this1 * v;
-};
-thx.unit.angle._Radian.Radian_Impl_.divide = function(this1,v) {
-	return this1 / v;
-};
-thx.unit.angle._Radian.Radian_Impl_.add = function(this1,r) {
-	return this1 + r;
-};
-thx.unit.angle._Radian.Radian_Impl_.addFloat = function(this1,v) {
-	return this1 + v;
-};
-thx.unit.angle._Radian.Radian_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
-};
-thx.unit.angle._Radian.Radian_Impl_.subtractFloat = function(this1,v) {
-	return this1 + -v;
-};
-thx.unit.angle.FloatRadian = function() { };
-thx.unit.angle.FloatRadian.__name__ = true;
-thx.unit.angle.FloatRadian.toRadians = function(v) {
-	return v;
+thx.math.Number.integrate = function(f,a,b,n) {
+	var x = thx.math.Number.abscissas[n - 2];
+	var w = thx.math.Number.weights[n - 2];
+	var A = 0.5 * (b - a);
+	var B = A + a;
+	var i = 0;
+	var m = n + 1 >> 1;
+	var sum;
+	if((n & 1) == 1) sum = w[i++] * f(B); else sum = 0;
+	var Ax;
+	while(i < m) {
+		Ax = A * x[i];
+		sum += w[i++] * (f(B + Ax) + f(B - Ax));
+	}
+	return A * sum;
 };
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;
@@ -1634,6 +1857,9 @@ thx.geom.Plane.SPANNING = 3;
 thx.geom._Point3D.Point3D_Impl_.zero = [0,0,0];
 thx.geom.OrthoNormalBasis.z0Plane = new thx.geom.OrthoNormalBasis(new thx.geom.Plane([0,0,1],0),[1,0,0]);
 thx.geom._Point.Point_Impl_.zero = [0,0];
-thx.unit.angle.Const.TO_DEGREE = 180 / Math.PI;
+thx.math.Number.TOLERANCE = 10e-5;
+thx.math.Number.EPSILON = 10e-10;
+thx.math.Number.abscissas = [[0.5773502691896257645091488],[0,0.7745966692414833770358531],[0.3399810435848562648026658,0.8611363115940525752239465],[0,0.5384693101056830910363144,0.9061798459386639927976269],[0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],[0,0.4058451513773971669066064,0.7415311855993944398638648,0.9491079123427585245261897],[0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],[0,0.3242534234038089290385380,0.6133714327005903973087020,0.8360311073266357942994298,0.9681602395076260898355762],[0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],[0,0.2695431559523449723315320,0.5190961292068118159257257,0.7301520055740493240934163,0.8870625997680952990751578,0.9782286581460569928039380],[0.1252334085114689154724414,0.3678314989981801937526915,0.5873179542866174472967024,0.7699026741943046870368938,0.9041172563704748566784659,0.9815606342467192506905491],[0,0.2304583159551347940655281,0.4484927510364468528779129,0.6423493394403402206439846,0.8015780907333099127942065,0.9175983992229779652065478,0.9841830547185881494728294],[0.1080549487073436620662447,0.3191123689278897604356718,0.5152486363581540919652907,0.6872929048116854701480198,0.8272013150697649931897947,0.9284348836635735173363911,0.9862838086968123388415973],[0,0.2011940939974345223006283,0.3941513470775633698972074,0.5709721726085388475372267,0.7244177313601700474161861,0.8482065834104272162006483,0.9372733924007059043077589,0.9879925180204854284895657],[0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]];
+thx.math.Number.weights = [[1.0],[0.8888888888888888888888889,0.5555555555555555555555556],[0.6521451548625461426269361,0.3478548451374538573730639],[0.5688888888888888888888889,0.4786286704993664680412915,0.2369268850561890875142640],[0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],[0.4179591836734693877551020,0.3818300505051189449503698,0.2797053914892766679014678,0.1294849661688696932706114],[0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],[0.3302393550012597631645251,0.3123470770400028400686304,0.2606106964029354623187429,0.1806481606948574040584720,0.0812743883615744119718922],[0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],[0.2729250867779006307144835,0.2628045445102466621806889,0.2331937645919904799185237,0.1862902109277342514260976,0.1255803694649046246346943,0.0556685671161736664827537],[0.2491470458134027850005624,0.2334925365383548087608499,0.2031674267230659217490645,0.1600783285433462263346525,0.1069393259953184309602547,0.0471753363865118271946160],[0.2325515532308739101945895,0.2262831802628972384120902,0.2078160475368885023125232,0.1781459807619457382800467,0.1388735102197872384636018,0.0921214998377284479144218,0.0404840047653158795200216],[0.2152638534631577901958764,0.2051984637212956039659241,0.1855383974779378137417166,0.1572031671581935345696019,0.1215185706879031846894148,0.0801580871597602098056333,0.0351194603317518630318329],[0.2025782419255612728806202,0.1984314853271115764561183,0.1861610000155622110268006,0.1662692058169939335532009,0.1395706779261543144478048,0.1071592204671719350118695,0.0703660474881081247092674,0.0307532419961172683546284],[0.1894506104550684962853967,0.1826034150449235888667637,0.1691565193950025381893121,0.1495959888165767320815017,0.1246289712555338720524763,0.0951585116824927848099251,0.0622535239386478928628438,0.0271524594117540948517806]];
 Canvas.main();
 })();

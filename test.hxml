@@ -4,5 +4,6 @@
 -js bin/test/main.js
 -D js-flatten
 -lib utest
+-lib thx.core
 -D nodejs
 -cmd node bin/test/main.js
