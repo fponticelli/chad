@@ -283,18 +283,18 @@ chad.csg.Solids.cylinder = function(start,end,radius,resolution) {
 	var isY = Math.abs(axisZ[1]) > 0.5;
 	var axisX;
 	var this1;
-	var this1_0;
-	if(isY) this1_0 = 1; else this1_0 = 0;
-	var this1_1;
-	if(isY) this1_1 = 0; else this1_1 = 1;
-	var this1_2 = 0;
-	this1 = [this1_1 * axisZ[2] - this1_2 * axisZ[1],this1_2 * axisZ[0] - this1_0 * axisZ[2],this1_0 * axisZ[1] - this1_1 * axisZ[0]];
+	var this_0;
+	if(isY) this_0 = 1; else this_0 = 0;
+	var this_1;
+	if(isY) this_1 = 0; else this_1 = 1;
+	var this_2 = 0;
+	this1 = [this_1 * axisZ[2] - this_2 * axisZ[1],this_2 * axisZ[0] - this_0 * axisZ[2],this_0 * axisZ[1] - this_1 * axisZ[0]];
 	var v1 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
 	axisX = [this1[0] / v1,this1[1] / v1,this1[2] / v1];
 	var axisY;
-	var this11 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
-	var v2 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this11,[this11[0],this11[1],this11[2]]));
-	axisY = [this11[0] / v2,this11[1] / v2,this11[2] / v2];
+	var this2 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
+	var v2 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this2,[this2[0],this2[1],this2[2]]));
+	axisY = [this2[0] / v2,this2[1] / v2,this2[2] / v2];
 	var s = new thx.geom.Vertex3D(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
 	var e = new thx.geom.Vertex3D(end,(function($this) {
 		var $r;
@@ -308,31 +308,31 @@ chad.csg.Solids.cylinder = function(start,end,radius,resolution) {
 	var point = function(stack,slice,normalBlend) {
 		var angle = slice * Math.PI * 2;
 		var out;
-		var this12;
+		var this3;
 		var v4 = Math.cos(angle);
-		this12 = [axisX[0] * v4,axisX[1] * v4,axisX[2] * v4];
+		this3 = [axisX[0] * v4,axisX[1] * v4,axisX[2] * v4];
 		var p;
 		var v5 = Math.sin(angle);
 		p = [axisY[0] * v5,axisY[1] * v5,axisY[2] * v5];
-		out = [this12[0] + p[0],this12[1] + p[1],this12[2] + p[2]];
+		out = [this3[0] + p[0],this3[1] + p[1],this3[2] + p[2]];
 		var pos;
-		var this13;
+		var this4;
 		var p_01 = ray[0] * stack;
 		var p_11 = ray[1] * stack;
 		var p_21 = ray[2] * stack;
-		this13 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
+		this4 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
 		var p_02 = out[0] * radius;
 		var p_12 = out[1] * radius;
 		var p_22 = out[2] * radius;
-		pos = [this13[0] + p_02,this13[1] + p_12,this13[2] + p_22];
+		pos = [this4[0] + p_02,this4[1] + p_12,this4[2] + p_22];
 		var normal;
-		var this14;
+		var this5;
 		var v6 = 1 - Math.abs(normalBlend);
-		this14 = [out[0] * v6,out[1] * v6,out[2] * v6];
+		this5 = [out[0] * v6,out[1] * v6,out[2] * v6];
 		var p_03 = axisZ[0] * normalBlend;
 		var p_13 = axisZ[1] * normalBlend;
 		var p_23 = axisZ[2] * normalBlend;
-		normal = [this14[0] + p_03,this14[1] + p_13,this14[2] + p_23];
+		normal = [this5[0] + p_03,this5[1] + p_13,this5[2] + p_23];
 		return new thx.geom.Vertex3D(pos,normal);
 	};
 	var _g = 0;
@@ -578,6 +578,88 @@ var thx = {};
 thx.geom = {};
 thx.geom.Const = function() { };
 thx.geom.Const.__name__ = true;
+thx.geom.Line = function(normal,w) {
+	var l = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
+	this.w = w * l;
+	this.normal = [normal[0] / l,normal[1] / l];
+};
+thx.geom.Line.__name__ = true;
+thx.geom.Line.fromPoints = function(p1,p2) {
+	var direction;
+	var p_0 = -p1[0];
+	var p_1 = -p1[1];
+	direction = [p2[0] + p_0,p2[1] + p_1];
+	var normal;
+	var this1;
+	var this_0 = direction[1];
+	var this_1 = -direction[0];
+	this1 = [-this_0,-this_1];
+	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
+	normal = [this1[0] / v,this1[1] / v];
+	var w = p1[0] * normal[0] + p1[1] * normal[1];
+	return new thx.geom.Line(normal,w);
+};
+thx.geom.Line.prototype = {
+	offset: function(value) {
+		return new thx.geom.Line(this.normal,this.w + value);
+	}
+	,reverse: function() {
+		return new thx.geom.Line((function($this) {
+			var $r;
+			var this1 = $this.normal;
+			$r = [-this1[0],-this1[1]];
+			return $r;
+		}(this)),-this.w);
+	}
+	,equals: function(other) {
+		return (function($this) {
+			var $r;
+			var this1 = $this.normal;
+			var p = other.normal;
+			$r = this1[0] == p[0] && this1[1] == p[1];
+			return $r;
+		}(this)) && this.w == other.w;
+	}
+	,origin: function() {
+		var this1 = this.normal;
+		var v = this.w;
+		return [this1[0] * v,this1[1] * v];
+	}
+	,direction: function() {
+		var this1 = this.normal;
+		return [this1[1],-this1[0]];
+	}
+	,xAtY: function(y) {
+		return (this.w - this.normal[1] * y) / this.normal[0];
+	}
+	,absDistanceToPoint: function(point) {
+		return Math.abs((function($this) {
+			var $r;
+			var p = $this.normal;
+			$r = point[0] * p[0] + point[1] * p[1];
+			return $r;
+		}(this)) - this.w);
+	}
+	,intersectWithLine: function(line) {
+		return thx.geom._Point.Point_Impl_.solve2Linear(this.normal[0],this.normal[1],line.normal[0],line.normal[1],this.w,line.w);
+	}
+	,transform: function(matrix) {
+		var origin = [0,0];
+		var pointOnPlane;
+		var this1 = this.normal;
+		var v = this.w;
+		pointOnPlane = [this1[0] * v,this1[1] * v];
+		var neworigin = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,origin);
+		var neworiginPlusNormal = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normal);
+		var newnormal;
+		var p_0 = -neworigin[0];
+		var p_1 = -neworigin[1];
+		newnormal = [neworiginPlusNormal[0] + p_0,neworiginPlusNormal[1] + p_1];
+		var newpointOnPlane = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,pointOnPlane);
+		var neww = newnormal[0] * newpointOnPlane[0] + newnormal[1] * newpointOnPlane[1];
+		return new thx.geom.Line(newnormal,neww);
+	}
+};
 thx.geom.Line3D = function(point,direction) {
 	this.point = point;
 	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
@@ -594,12 +676,8 @@ thx.geom.Line3D.fromPoints = function(p1,p2) {
 			var p_2 = -p1[2];
 			this1 = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
 		}
-		$r = (function($this) {
-			var $r;
-			var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-			$r = [this1[0] / v,this1[1] / v,this1[2] / v];
-			return $r;
-		}($this));
+		var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+		$r = [this1[0] / v,this1[1] / v,this1[2] / v];
 		return $r;
 	}(this)));
 };
@@ -633,8 +711,8 @@ thx.geom.Line3D.prototype = {
 		var lambda = (plane.w - thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.point)) / thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.direction);
 		var this1 = this.point;
 		var p;
-		var this11 = this.direction;
-		p = [this11[0] * lambda,this11[1] * lambda,this11[2] * lambda];
+		var this2 = this.direction;
+		p = [this2[0] * lambda,this2[1] * lambda,this2[2] * lambda];
 		return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
 	}
 	,reverse: function() {
@@ -650,9 +728,9 @@ thx.geom.Line3D.prototype = {
 		var this1 = this.point;
 		newpoint = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
 		var pointaddDirection;
-		var this11 = this.point;
+		var this2 = this.point;
 		var p = this.direction;
-		pointaddDirection = [this11[0] + p[0],this11[1] + p[1],this11[2] + p[2]];
+		pointaddDirection = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
 		var newPointaddDirection = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[pointaddDirection[0],pointaddDirection[1],pointaddDirection[2]]);
 		var newdirection;
 		var p_0 = -newpoint[0];
@@ -711,8 +789,25 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ = function(radians) {
 	var sin = Math.sin(radians);
 	return [cos,sin,0,0,-sin,cos,0,0,0,0,1,0,0,0,0,1];
 };
+thx.geom._Matrix4x4.Matrix4x4_Impl_.rotation = function(rotationCenter,rotationAxis,radians) {
+	var rotationPlane = thx.geom.Plane.fromNormalAndPoint(rotationAxis,rotationCenter);
+	var orthobasis = new thx.geom.OrthoNormalBasis(rotationPlane,thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(rotationPlane.normal));
+	var transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([-rotationCenter[0],-rotationCenter[1],-rotationCenter[2]]);
+	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getProjectionMatrix());
+	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ(radians));
+	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getInverseProjectionMatrix());
+	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(rotationCenter));
+	return transformation;
+};
 thx.geom._Matrix4x4.Matrix4x4_Impl_.translation = function(vec) {
 	return [1,0,0,0,0,1,0,0,0,0,1,0,vec[0],vec[1],vec[2],1];
+};
+thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring = function(plane) {
+	var nx = plane.normal[0];
+	var ny = plane.normal[1];
+	var nz = plane.normal[2];
+	var w = plane.w;
+	return [1.0 - 2.0 * nx * nx,-2. * ny * nx,-2. * nz * nx,0,-2. * nx * ny,1.0 - 2.0 * ny * ny,-2. * nz * ny,0,-2. * nx * nz,-2. * ny * nz,1.0 - 2.0 * nz * nz,0,-2. * nx * w,-2. * ny * w,-2. * nz * w,1];
 };
 thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling = function(vec) {
 	return [vec[0],0,0,0,0,vec[1],0,0,0,0,vec[2],0,0,0,0,1];
@@ -858,17 +953,17 @@ thx.geom.Plane.__name__ = true;
 thx.geom.Plane.fromPoint3Ds = function(a,b,c) {
 	var n;
 	var this1;
-	var this11;
+	var this2;
 	var p_0 = -a[0];
 	var p_1 = -a[1];
 	var p_2 = -a[2];
-	this11 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
 	var p;
 	var p_01 = -a[0];
 	var p_11 = -a[1];
 	var p_21 = -a[2];
 	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this11[1] * p[2] - this11[2] * p[1],this11[2] * p[0] - this11[0] * p[2],this11[0] * p[1] - this11[1] * p[0]];
+	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
 	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
 	n = [this1[0] / v,this1[1] / v,this1[2] / v];
 	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
@@ -898,17 +993,17 @@ thx.geom.Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
 thx.geom.Plane.fromPoints = function(a,b,c) {
 	var n;
 	var this1;
-	var this11;
+	var this2;
 	var p_0 = -a[0];
 	var p_1 = -a[1];
 	var p_2 = -a[2];
-	this11 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
 	var p;
 	var p_01 = -a[0];
 	var p_11 = -a[1];
 	var p_21 = -a[2];
 	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this11[1] * p[2] - this11[2] * p[1],this11[2] * p[0] - this11[0] * p[2],this11[0] * p[1] - this11[1] * p[0]];
+	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
 	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
 	n = [this1[0] / v,this1[1] / v,this1[2] / v];
 	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
@@ -979,14 +1074,10 @@ thx.geom.Plane.prototype = {
 						var $r;
 						var this1 = vj.position;
 						var p = vi.position;
-						$r = (function($this) {
-							var $r;
-							var p_0 = -p[0];
-							var p_1 = -p[1];
-							var p_2 = -p[2];
-							$r = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-							return $r;
-						}($this));
+						var p_0 = -p[0];
+						var p_1 = -p[1];
+						var p_2 = -p[2];
+						$r = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
 						return $r;
 					}(this)));
 					v = new thx.geom.Vertex3D(thx.geom._Point3D.Point3D_Impl_.interpolate(vi.position,vj.position,t1),thx.geom._Point3D.Point3D_Impl_.interpolate(vi.normal,vj.normal,t1));
@@ -1009,12 +1100,12 @@ thx.geom.Plane.prototype = {
 		var this1 = this.normal;
 		u = [this1[1] * r[2] - this1[2] * r[1],this1[2] * r[0] - this1[0] * r[2],this1[0] * r[1] - this1[1] * r[0]];
 		var v;
-		var this11 = this.normal;
-		v = [this11[1] * u[2] - this11[2] * u[1],this11[2] * u[0] - this11[0] * u[2],this11[0] * u[1] - this11[1] * u[0]];
+		var this2 = this.normal;
+		v = [this2[1] * u[2] - this2[2] * u[1],this2[2] * u[0] - this2[0] * u[2],this2[0] * u[1] - this2[1] * u[0]];
 		var point1;
-		var this12 = this.normal;
+		var this3 = this.normal;
 		var v1 = this.w;
-		point1 = [this12[0] * v1,this12[1] * v1,this12[2] * v1];
+		point1 = [this3[0] * v1,this3[1] * v1,this3[2] * v1];
 		var point2 = [point1[0] + u[0],point1[1] + u[1],point1[2] + u[2]];
 		var point3 = [point1[0] + v[0],point1[1] + v[1],point1[2] + v[2]];
 		point1 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point1[0],point1[1],point1[2]]);
@@ -1067,171 +1158,6 @@ thx.geom.Plane.prototype = {
 		mirrored = [point3d[0] + p_0,point3d[1] + p_1,point3d[2] + p_2];
 		return mirrored;
 	}
-};
-thx.geom._Point = {};
-thx.geom._Point.Point_Impl_ = function() { };
-thx.geom._Point.Point_Impl_.__name__ = true;
-thx.geom._Point.Point_Impl_.fromObject = function(o) {
-	return [o.x,o.y];
-};
-thx.geom._Point.Point_Impl_.fromArray = function(arr) {
-	return [arr[0],arr[1]];
-};
-thx.geom._Point.Point_Impl_.fromAngle = function(angle) {
-	var x = Math.cos(angle);
-	var y = Math.sin(angle);
-	return [x,y];
-};
-thx.geom._Point.Point_Impl_._new = function(x,y) {
-	return [x,y];
-};
-thx.geom._Point.Point_Impl_.get_x = function(this1) {
-	return this1[0];
-};
-thx.geom._Point.Point_Impl_.get_y = function(this1) {
-	return this1[1];
-};
-thx.geom._Point.Point_Impl_.get_length = function(this1) {
-	return Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-};
-thx.geom._Point.Point_Impl_.get_lengthSquared = function(this1) {
-	return this1[0] * this1[0] + this1[1] * this1[1];
-};
-thx.geom._Point.Point_Impl_.get_inst = function(this1) {
-	return this1;
-};
-thx.geom._Point.Point_Impl_.addPoint = function(this1,p) {
-	return [this1[0] + p[0],this1[1] + p[1]];
-};
-thx.geom._Point.Point_Impl_.add = function(this1,v) {
-	return [this1[0] + v,this1[1] + v];
-};
-thx.geom._Point.Point_Impl_.negate = function(this1) {
-	return [-this1[0],-this1[1]];
-};
-thx.geom._Point.Point_Impl_.subtractPoint = function(this1,p) {
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	return [this1[0] + p_0,this1[1] + p_1];
-};
-thx.geom._Point.Point_Impl_.subtract = function(this1,v) {
-	var v1 = -v;
-	return [this1[0] + v1,this1[1] + v1];
-};
-thx.geom._Point.Point_Impl_.multiplyPoint = function(this1,p) {
-	return [this1[0] * p[0],this1[1] * p[1]];
-};
-thx.geom._Point.Point_Impl_.multiply = function(this1,v) {
-	return [this1[0] * v,this1[1] * v];
-};
-thx.geom._Point.Point_Impl_.dividePoint = function(this1,p) {
-	return [this1[0] / p[0],this1[1] / p[1]];
-};
-thx.geom._Point.Point_Impl_.divide = function(this1,v) {
-	return [this1[0] / v,this1[1] / v];
-};
-thx.geom._Point.Point_Impl_.equals = function(this1,p) {
-	return this1[0] == p[0] && this1[1] == p[1];
-};
-thx.geom._Point.Point_Impl_.notEquals = function(this1,p) {
-	return !(this1[0] == p[0] && this1[1] == p[1]);
-};
-thx.geom._Point.Point_Impl_.abs = function(this1) {
-	var x = Math.abs(this1[0]);
-	var y = Math.abs(this1[1]);
-	return [x,y];
-};
-thx.geom._Point.Point_Impl_.nearEquals = function(this1,p) {
-	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5;
-};
-thx.geom._Point.Point_Impl_.interpolate = function(this1,p,f) {
-	var p1;
-	var this2;
-	var p2 = this1;
-	var p_0 = -p2[0];
-	var p_1 = -p2[1];
-	this2 = [p[0] + p_0,p[1] + p_1];
-	p1 = [this2[0] * f,this2[1] * f];
-	return [this1[0] + p1[0],this1[1] + p1[1]];
-};
-thx.geom._Point.Point_Impl_.isZero = function(this1) {
-	var p = thx.geom._Point.Point_Impl_.zero;
-	return this1[0] == p[0] && this1[1] == p[1];
-};
-thx.geom._Point.Point_Impl_.isNearZero = function(this1) {
-	var p = thx.geom._Point.Point_Impl_.zero;
-	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5;
-};
-thx.geom._Point.Point_Impl_.dot = function(this1,p) {
-	return this1[0] * p[0] + this1[1] * p[1];
-};
-thx.geom._Point.Point_Impl_.normal = function(this1) {
-	return [this1[1],-this1[0]];
-};
-thx.geom._Point.Point_Impl_.normalize = function(this1) {
-	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-	return [this1[0] / v,this1[1] / v];
-};
-thx.geom._Point.Point_Impl_.distanceTo = function(this1,p) {
-	var this2;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	this2 = [this1[0] + p_0,this1[1] + p_1];
-	return Math.sqrt(this2[0] * this2[0] + this2[1] * this2[1]);
-};
-thx.geom._Point.Point_Impl_.distanceToSquared = function(this1,p) {
-	var this2;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	this2 = [this1[0] + p_0,this1[1] + p_1];
-	return this2[0] * this2[0] + this2[1] * this2[1];
-};
-thx.geom._Point.Point_Impl_.transform = function(this1,matrix) {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this1);
-};
-thx.geom._Point.Point_Impl_.cross = function(this1,p) {
-	return this1[0] * p[1] - this1[1] * p[0];
-};
-thx.geom._Point.Point_Impl_.min = function(this1,p) {
-	var x = Math.min(this1[0],p[0]);
-	var y = Math.min(this1[1],p[1]);
-	return [x,y];
-};
-thx.geom._Point.Point_Impl_.max = function(this1,p) {
-	var x = Math.max(this1[0],p[0]);
-	var y = Math.max(this1[1],p[1]);
-	return [x,y];
-};
-thx.geom._Point.Point_Impl_.toAngle = function(this1) {
-	var angle = Math.atan2(this1[1],this1[0]);
-	return angle;
-};
-thx.geom._Point.Point_Impl_.toArray = function(this1) {
-	return this1.slice();
-};
-thx.geom._Point.Point_Impl_.toObject = function(this1) {
-	return { x : this1[0], y : this1[1]};
-};
-thx.geom._Point.Point_Impl_.toString = function(this1) {
-	return "Point(" + this1[0] + "," + this1[1] + ")";
-};
-thx.geom._Point.Point_Impl_.solve2Linear = function(a,b,c,d,u,v) {
-	var det = a * d - b * c;
-	var invdet = 1.0 / det;
-	var x = u * d - b * v;
-	var y = -u * c + a * v;
-	return [x * invdet,y * invdet];
-};
-thx.geom._Point.Point_Impl_.interpolateBetween2DPointsForY = function(p1,p2,y) {
-	var f1 = y - p1[1];
-	var f2 = p2[1] - p1[1];
-	var t;
-	if(f2 < 0) {
-		f1 = -f1;
-		f2 = -f2;
-	}
-	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
-	return p1[0] + t * (p2[0] - p1[0]);
 };
 thx.geom._Point3D = {};
 thx.geom._Point3D.Point3D_Impl_ = function() { };
@@ -1385,6 +1311,263 @@ thx.geom._Point3D.Point3D_Impl_.toObject = function(this1) {
 thx.geom._Point3D.Point3D_Impl_.toString = function(this1) {
 	return "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
 };
+thx.geom.OrthoNormalBasis = function(plane,rightvector) {
+	var this1;
+	var this2 = plane.normal;
+	this1 = [this2[1] * rightvector[2] - this2[2] * rightvector[1],this2[2] * rightvector[0] - this2[0] * rightvector[2],this2[0] * rightvector[1] - this2[1] * rightvector[0]];
+	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+	this.v = [this1[0] / v,this1[1] / v,this1[2] / v];
+	var this3 = this.v;
+	var p = plane.normal;
+	this.u = [this3[1] * p[2] - this3[2] * p[1],this3[2] * p[0] - this3[0] * p[2],this3[0] * p[1] - this3[1] * p[0]];
+	this.plane = plane;
+	var this4 = plane.normal;
+	var v1 = plane.w;
+	this.planeOrigin = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
+};
+thx.geom.OrthoNormalBasis.__name__ = true;
+thx.geom.OrthoNormalBasis.fromPlane = function(plane) {
+	return new thx.geom.OrthoNormalBasis(plane,thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(plane.normal));
+};
+thx.geom.OrthoNormalBasis.prototype = {
+	getProjectionMatrix: function() {
+		return [this.u[0],this.v[0],this.plane.normal[0],0,this.u[1],this.v[1],this.plane.normal[1],0,this.u[2],this.v[2],this.plane.normal[2],0,0,0,-this.plane.w,1];
+	}
+	,getInverseProjectionMatrix: function() {
+		var p;
+		var this1 = this.plane.normal;
+		var v = this.plane.w;
+		p = [this1[0] * v,this1[1] * v,this1[2] * v];
+		return [this.u[0],this.u[1],this.u[2],0,this.v[0],this.v[1],this.v[2],0,this.plane.normal[0],this.plane.normal[1],this.plane.normal[2],0,p[0],p[1],p[2],1];
+	}
+	,to2D: function(vec3) {
+		var x = thx.geom._Point3D.Point3D_Impl_.dot(vec3,this.u);
+		var y = thx.geom._Point3D.Point3D_Impl_.dot(vec3,this.v);
+		return [x,y];
+	}
+	,to3D: function(vec2) {
+		var this1;
+		var this2 = this.planeOrigin;
+		var p;
+		var this3 = this.u;
+		var v = vec2[0];
+		p = [this3[0] * v,this3[1] * v,this3[2] * v];
+		this1 = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
+		var p1;
+		var this4 = this.v;
+		var v1 = vec2[1];
+		p1 = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
+		return [this1[0] + p1[0],this1[1] + p1[1],this1[2] + p1[2]];
+	}
+	,line3Dto2D: function(line) {
+		return thx.geom.Line.fromPoints(this.to2D(line.point),this.to2D((function($this) {
+			var $r;
+			var this1 = line.direction;
+			var p = line.point;
+			$r = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
+			return $r;
+		}(this))));
+	}
+	,line2Dto3D: function(line) {
+		var a = line.origin();
+		var b;
+		var this1 = line.direction();
+		b = [this1[0] + a[0],this1[1] + a[1]];
+		return thx.geom.Line3D.fromPoints(this.to3D(a),this.to3D(b));
+	}
+	,transform: function(matrix) {
+		var newplane = this.plane.transform(matrix);
+		var rightpoint_transformed;
+		var this1 = this.u;
+		rightpoint_transformed = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this1[0],this1[1],this1[2]]);
+		var origin_transformed;
+		var this_0 = 0;
+		var this_1 = 0;
+		var this_2 = 0;
+		origin_transformed = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this_0,this_1,this_2]);
+		var newrighthandvector;
+		var p_0 = -origin_transformed[0];
+		var p_1 = -origin_transformed[1];
+		var p_2 = -origin_transformed[2];
+		newrighthandvector = [rightpoint_transformed[0] + p_0,rightpoint_transformed[1] + p_1,rightpoint_transformed[2] + p_2];
+		var newbasis = new thx.geom.OrthoNormalBasis(newplane,newrighthandvector);
+		return newbasis;
+	}
+};
+thx.geom._Point = {};
+thx.geom._Point.Point_Impl_ = function() { };
+thx.geom._Point.Point_Impl_.__name__ = true;
+thx.geom._Point.Point_Impl_.fromObject = function(o) {
+	return [o.x,o.y];
+};
+thx.geom._Point.Point_Impl_.fromArray = function(arr) {
+	return [arr[0],arr[1]];
+};
+thx.geom._Point.Point_Impl_.fromAngle = function(angle) {
+	var x = Math.cos(angle);
+	var y = Math.sin(angle);
+	return [x,y];
+};
+thx.geom._Point.Point_Impl_._new = function(x,y) {
+	return [x,y];
+};
+thx.geom._Point.Point_Impl_.get_x = function(this1) {
+	return this1[0];
+};
+thx.geom._Point.Point_Impl_.get_y = function(this1) {
+	return this1[1];
+};
+thx.geom._Point.Point_Impl_.get_length = function(this1) {
+	return Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
+};
+thx.geom._Point.Point_Impl_.get_lengthSquared = function(this1) {
+	return this1[0] * this1[0] + this1[1] * this1[1];
+};
+thx.geom._Point.Point_Impl_.get_inst = function(this1) {
+	return this1;
+};
+thx.geom._Point.Point_Impl_.addPoint = function(this1,p) {
+	return [this1[0] + p[0],this1[1] + p[1]];
+};
+thx.geom._Point.Point_Impl_.add = function(this1,v) {
+	return [this1[0] + v,this1[1] + v];
+};
+thx.geom._Point.Point_Impl_.negate = function(this1) {
+	return [-this1[0],-this1[1]];
+};
+thx.geom._Point.Point_Impl_.subtractPoint = function(this1,p) {
+	var p_0 = -p[0];
+	var p_1 = -p[1];
+	return [this1[0] + p_0,this1[1] + p_1];
+};
+thx.geom._Point.Point_Impl_.subtract = function(this1,v) {
+	var v1 = -v;
+	return [this1[0] + v1,this1[1] + v1];
+};
+thx.geom._Point.Point_Impl_.multiplyPoint = function(this1,p) {
+	return [this1[0] * p[0],this1[1] * p[1]];
+};
+thx.geom._Point.Point_Impl_.multiply = function(this1,v) {
+	return [this1[0] * v,this1[1] * v];
+};
+thx.geom._Point.Point_Impl_.dividePoint = function(this1,p) {
+	return [this1[0] / p[0],this1[1] / p[1]];
+};
+thx.geom._Point.Point_Impl_.divide = function(this1,v) {
+	return [this1[0] / v,this1[1] / v];
+};
+thx.geom._Point.Point_Impl_.equals = function(this1,p) {
+	return this1[0] == p[0] && this1[1] == p[1];
+};
+thx.geom._Point.Point_Impl_.notEquals = function(this1,p) {
+	return !(this1[0] == p[0] && this1[1] == p[1]);
+};
+thx.geom._Point.Point_Impl_.abs = function(this1) {
+	var x = Math.abs(this1[0]);
+	var y = Math.abs(this1[1]);
+	return [x,y];
+};
+thx.geom._Point.Point_Impl_.nearEquals = function(this1,p) {
+	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5;
+};
+thx.geom._Point.Point_Impl_.interpolate = function(this1,p,f) {
+	var p1;
+	var this2;
+	var p2 = this1;
+	var p_0 = -p2[0];
+	var p_1 = -p2[1];
+	this2 = [p[0] + p_0,p[1] + p_1];
+	p1 = [this2[0] * f,this2[1] * f];
+	return [this1[0] + p1[0],this1[1] + p1[1]];
+};
+thx.geom._Point.Point_Impl_.isZero = function(this1) {
+	var p = thx.geom._Point.Point_Impl_.zero;
+	return this1[0] == p[0] && this1[1] == p[1];
+};
+thx.geom._Point.Point_Impl_.isNearZero = function(this1) {
+	return thx.geom._Point.Point_Impl_.nearEquals(this1,thx.geom._Point.Point_Impl_.zero);
+};
+thx.geom._Point.Point_Impl_.dot = function(this1,p) {
+	return this1[0] * p[0] + this1[1] * p[1];
+};
+thx.geom._Point.Point_Impl_.normal = function(this1) {
+	return [this1[1],-this1[0]];
+};
+thx.geom._Point.Point_Impl_.normalize = function(this1) {
+	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
+	return [this1[0] / v,this1[1] / v];
+};
+thx.geom._Point.Point_Impl_.distanceTo = function(this1,p) {
+	var this2;
+	var p_0 = -p[0];
+	var p_1 = -p[1];
+	this2 = [this1[0] + p_0,this1[1] + p_1];
+	return Math.sqrt(this2[0] * this2[0] + this2[1] * this2[1]);
+};
+thx.geom._Point.Point_Impl_.distanceToSquared = function(this1,p) {
+	var this2;
+	var p_0 = -p[0];
+	var p_1 = -p[1];
+	this2 = [this1[0] + p_0,this1[1] + p_1];
+	return this2[0] * this2[0] + this2[1] * this2[1];
+};
+thx.geom._Point.Point_Impl_.transform = function(this1,matrix) {
+	return thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this1);
+};
+thx.geom._Point.Point_Impl_.cross = function(this1,p) {
+	return this1[0] * p[1] - this1[1] * p[0];
+};
+thx.geom._Point.Point_Impl_.min = function(this1,p) {
+	var x = Math.min(this1[0],p[0]);
+	var y = Math.min(this1[1],p[1]);
+	return [x,y];
+};
+thx.geom._Point.Point_Impl_.max = function(this1,p) {
+	var x = Math.max(this1[0],p[0]);
+	var y = Math.max(this1[1],p[1]);
+	return [x,y];
+};
+thx.geom._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
+	var this2 = this1;
+	var p;
+	var this3;
+	var x = Math.cos(angle);
+	var y = Math.sin(angle);
+	this3 = [x,y];
+	p = [this3[0] * distance,this3[1] * distance];
+	return [this2[0] + p[0],this2[1] + p[1]];
+};
+thx.geom._Point.Point_Impl_.toAngle = function(this1) {
+	return Math.atan2(this1[1],this1[0]);
+};
+thx.geom._Point.Point_Impl_.toArray = function(this1) {
+	return this1.slice();
+};
+thx.geom._Point.Point_Impl_.toObject = function(this1) {
+	return { x : this1[0], y : this1[1]};
+};
+thx.geom._Point.Point_Impl_.toString = function(this1) {
+	return "Point(" + this1[0] + "," + this1[1] + ")";
+};
+thx.geom._Point.Point_Impl_.solve2Linear = function(a,b,c,d,u,v) {
+	var det = a * d - b * c;
+	if(det == 0) return null;
+	var invdet = 1.0 / det;
+	var x = u * d - b * v;
+	var y = -u * c + a * v;
+	return [x * invdet,y * invdet];
+};
+thx.geom._Point.Point_Impl_.interpolateBetween2DPointsForY = function(p1,p2,y) {
+	var f1 = y - p1[1];
+	var f2 = p2[1] - p1[1];
+	var t;
+	if(f2 < 0) {
+		f1 = -f1;
+		f2 = -f2;
+	}
+	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
+	return p1[0] + t * (p2[0] - p1[0]);
+};
 thx.geom.Polygon = function(vertices) {
 	this.vertices = vertices;
 };
@@ -1464,98 +1647,6 @@ thx.geom.Vertex3D.prototype = {
 		}(this));
 	}
 };
-thx.unit = {};
-thx.unit.angle = {};
-thx.unit.angle.Const = function() { };
-thx.unit.angle.Const.__name__ = true;
-thx.unit.angle._Degree = {};
-thx.unit.angle._Degree.Degree_Impl_ = function() { };
-thx.unit.angle._Degree.Degree_Impl_.__name__ = true;
-thx.unit.angle._Degree.Degree_Impl_.fromFloat = function(angle) {
-	return angle;
-};
-thx.unit.angle._Degree.Degree_Impl_._new = function(degrees) {
-	return degrees;
-};
-thx.unit.angle._Degree.Degree_Impl_.cos = function(this1) {
-	return Math.cos(this1 / thx.unit.angle.Const.TO_DEGREE);
-};
-thx.unit.angle._Degree.Degree_Impl_.sin = function(this1) {
-	return Math.sin(this1 / thx.unit.angle.Const.TO_DEGREE);
-};
-thx.unit.angle._Degree.Degree_Impl_.toString = function(this1) {
-	return "" + this1 + "̊";
-};
-thx.unit.angle._Degree.Degree_Impl_.toRadians = function(this1) {
-	return this1 / thx.unit.angle.Const.TO_DEGREE;
-};
-thx.unit.angle._Degree.Degree_Impl_.toFloat = function(this1) {
-	return this1;
-};
-thx.unit.angle._Degree.Degree_Impl_.negate = function(this1) {
-	return -this1;
-};
-thx.unit.angle._Degree.Degree_Impl_.multiply = function(this1,v) {
-	return this1 * v;
-};
-thx.unit.angle._Degree.Degree_Impl_.divide = function(this1,v) {
-	return this1 / v;
-};
-thx.unit.angle._Degree.Degree_Impl_.add = function(this1,r) {
-	return this1 + r;
-};
-thx.unit.angle._Degree.Degree_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
-};
-thx.unit.angle.FloatDegree = function() { };
-thx.unit.angle.FloatDegree.__name__ = true;
-thx.unit.angle.FloatDegree.toDegrees = function(v) {
-	return v;
-};
-thx.unit.angle._Radian = {};
-thx.unit.angle._Radian.Radian_Impl_ = function() { };
-thx.unit.angle._Radian.Radian_Impl_.__name__ = true;
-thx.unit.angle._Radian.Radian_Impl_.fromFloat = function(angle) {
-	return angle;
-};
-thx.unit.angle._Radian.Radian_Impl_._new = function(radians) {
-	return radians;
-};
-thx.unit.angle._Radian.Radian_Impl_.cos = function(this1) {
-	return Math.cos(this1);
-};
-thx.unit.angle._Radian.Radian_Impl_.sin = function(this1) {
-	return Math.sin(this1);
-};
-thx.unit.angle._Radian.Radian_Impl_.toString = function(this1) {
-	return "" + this1 + "rad";
-};
-thx.unit.angle._Radian.Radian_Impl_.toDegrees = function(this1) {
-	return this1 * thx.unit.angle.Const.TO_DEGREE;
-};
-thx.unit.angle._Radian.Radian_Impl_.toFloat = function(this1) {
-	return this1;
-};
-thx.unit.angle._Radian.Radian_Impl_.negate = function(this1) {
-	return -this1;
-};
-thx.unit.angle._Radian.Radian_Impl_.multiply = function(this1,v) {
-	return this1 * v;
-};
-thx.unit.angle._Radian.Radian_Impl_.divide = function(this1,v) {
-	return this1 / v;
-};
-thx.unit.angle._Radian.Radian_Impl_.add = function(this1,r) {
-	return this1 + r;
-};
-thx.unit.angle._Radian.Radian_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
-};
-thx.unit.angle.FloatRadian = function() { };
-thx.unit.angle.FloatRadian.__name__ = true;
-thx.unit.angle.FloatRadian.toRadians = function(v) {
-	return v;
-};
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
@@ -1578,8 +1669,8 @@ thx.geom.Plane.COPLANAR = 0;
 thx.geom.Plane.FRONT = 1;
 thx.geom.Plane.BACK = 2;
 thx.geom.Plane.SPANNING = 3;
-thx.geom._Point.Point_Impl_.zero = [0,0];
 thx.geom._Point3D.Point3D_Impl_.zero = [0,0,0];
-thx.unit.angle.Const.TO_DEGREE = 180 / Math.PI;
+thx.geom.OrthoNormalBasis.z0Plane = new thx.geom.OrthoNormalBasis(new thx.geom.Plane([0,0,1],0),[1,0,0]);
+thx.geom._Point.Point_Impl_.zero = [0,0];
 Main.main();
 })();

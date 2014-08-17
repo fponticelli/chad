@@ -288,12 +288,12 @@ chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
 		});
 	}
 	,drawLine: function(line,style) {
-		var a = line.intersectWithLine(this.top);
+		var a = line.intersectionWithLine(this.top);
 		var b;
 		if(null == a) {
-			a = line.intersectWithLine(this.left);
-			b = line.intersectWithLine(this.right);
-		} else b = line.intersectWithLine(this.bottom);
+			a = line.intersectionWithLine(this.left);
+			b = line.intersectionWithLine(this.right);
+		} else b = line.intersectionWithLine(this.bottom);
 		this.drawSegment(a,b,style);
 	}
 	,drawSpline: function(spline,stroke,fill) {
@@ -352,6 +352,7 @@ chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
 			this.ctx.fillStyle = c;
 		}
 	}
+	,__class__: chad.render.CanvasRender
 });
 chad.render.FillStyle = { __ename__ : true, __constructs__ : ["FillColor"] };
 chad.render.FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad.render.FillStyle; return $x; };
@@ -370,6 +371,9 @@ chad.render.LineStyle = function(width,color,join,cap) {
 	this.cap = cap;
 };
 chad.render.LineStyle.__name__ = true;
+chad.render.LineStyle.prototype = {
+	__class__: chad.render.LineStyle
+};
 chad.render._CanvasRender = {};
 chad.render._CanvasRender.Join_Impl_ = function() { };
 chad.render._CanvasRender.Join_Impl_.__name__ = true;
@@ -378,6 +382,9 @@ chad.render._CanvasRender.Cap_Impl_.__name__ = true;
 var js = {};
 js.Boot = function() { };
 js.Boot.__name__ = true;
+js.Boot.getClass = function(o) {
+	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
+};
 js.Boot.__string_rec = function(o,s) {
 	if(o == null) return "null";
 	if(s.length >= 5) return "<...>";
@@ -445,6 +452,48 @@ js.Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+js.Boot.__interfLoop = function(cc,cl) {
+	if(cc == null) return false;
+	if(cc == cl) return true;
+	var intf = cc.__interfaces__;
+	if(intf != null) {
+		var _g1 = 0;
+		var _g = intf.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var i1 = intf[i];
+			if(i1 == cl || js.Boot.__interfLoop(i1,cl)) return true;
+		}
+	}
+	return js.Boot.__interfLoop(cc.__super__,cl);
+};
+js.Boot.__instanceof = function(o,cl) {
+	if(cl == null) return false;
+	switch(cl) {
+	case Int:
+		return (o|0) === o;
+	case Float:
+		return typeof(o) == "number";
+	case Bool:
+		return typeof(o) == "boolean";
+	case String:
+		return typeof(o) == "string";
+	case Array:
+		return (o instanceof Array) && o.__enum__ == null;
+	case Dynamic:
+		return true;
+	default:
+		if(o != null) {
+			if(typeof(cl) == "function") {
+				if(o instanceof cl) return true;
+				if(js.Boot.__interfLoop(js.Boot.getClass(o),cl)) return true;
+			}
+		} else return false;
+		if(cl == Class && o.__name__ != null) return true;
+		if(cl == Enum && o.__ename__ != null) return true;
+		return o.__enum__ == cl;
+	}
+};
 thx.core = {};
 thx.core.Iterators = function() { };
 thx.core.Iterators.__name__ = true;
@@ -501,91 +550,237 @@ thx.core.Iterators.filter = function(it,predicate) {
 };
 thx.geom.Const = function() { };
 thx.geom.Const.__name__ = true;
-thx.geom.Edge = function(vertex0,vertex1) {
-	this.vertex0 = vertex0;
-	this.vertex1 = vertex1;
-};
+thx.geom.Edge = function() { };
 thx.geom.Edge.__name__ = true;
 thx.geom.Edge.prototype = {
-	intersects: function(other) {
-		if(this.vertex0.equals(other.vertex1) || this.vertex1.equals(other.vertex0)) {
-			if((function($this) {
-				var $r;
-				var this1;
-				{
-					var this11;
-					var this12;
-					var this13 = other.vertex1.position;
-					var p = other.vertex0.position;
-					var p_0 = -p[0];
-					var p_1 = -p[1];
-					this12 = [this13[0] + p_0,this13[1] + p_1];
-					var v = Math.sqrt(this12[0] * this12[0] + this12[1] * this12[1]);
-					this11 = [this12[0] / v,this12[1] / v];
-					var p1;
-					var this14;
-					var this15 = $this.vertex1.position;
-					var p2 = $this.vertex0.position;
-					var p_01 = -p2[0];
-					var p_11 = -p2[1];
-					this14 = [this15[0] + p_01,this15[1] + p_11];
-					var v1 = Math.sqrt(this14[0] * this14[0] + this14[1] * this14[1]);
-					p1 = [this14[0] / v1,this14[1] / v1];
-					this1 = [this11[0] + p1[0],this11[1] + p1[1]];
-				}
-				$r = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-				return $r;
-			}(this)) < 1e-5) return true;
-		} else {
-			var d0;
-			var this16 = this.vertex1.position;
-			var p3 = this.vertex0.position;
-			var p_02 = -p3[0];
-			var p_12 = -p3[1];
-			d0 = [this16[0] + p_02,this16[1] + p_12];
-			var d1;
-			var this17 = other.vertex1.position;
-			var p4 = other.vertex0.position;
-			var p_03 = -p4[0];
-			var p_13 = -p4[1];
-			d1 = [this17[0] + p_03,this17[1] + p_13];
-			if(Math.abs(d0[0] * d1[1] - d0[1] * d1[0]) < 1e-9) return false;
-			var alphas = thx.geom._Point.Point_Impl_.solve2Linear(-d0[0],d1[0],-d0[1],d1[1],this.vertex0.position[0] - other.vertex0.position[0],this.vertex0.position[1] - other.vertex0.position[1]);
-			if(alphas[0] > 1e-6 && alphas[0] < 0.999999 && alphas[1] > 1e-5 && alphas[1] < 0.999999) return true;
-		}
-		return false;
+	__class__: thx.geom.Edge
+};
+thx.geom.EdgeCubic = function(p0,p1,p2,p3) {
+	this.isLinear = false;
+	this.first = this.p0 = p0;
+	this.p1 = p1;
+	this.p2 = p2;
+	this.last = this.p3 = p3;
+};
+thx.geom.EdgeCubic.__name__ = true;
+thx.geom.EdgeCubic.__interfaces__ = [thx.geom.Edge];
+thx.geom.EdgeCubic.prototype = {
+	equals: function(other) {
+		if(!js.Boot.__instanceof(other,thx.geom.EdgeCubic)) return false;
+		var t = other;
+		return thx.geom._Point.Point_Impl_.nearEquals(this.p0,t.p0) && thx.geom._Point.Point_Impl_.nearEquals(this.p1,t.p1) && thx.geom._Point.Point_Impl_.nearEquals(this.p2,t.p2) && thx.geom._Point.Point_Impl_.nearEquals(this.p3,t.p3);
 	}
-	,isLinear: function() {
-		return thx.geom._Point.Point_Impl_.isNearZero(this.vertex0.normal) && thx.geom._Point.Point_Impl_.isNearZero(this.vertex1.normal);
+	,matches: function(other) {
+		return thx.geom._Point.Point_Impl_.nearEquals(this.first,other.first) && thx.geom._Point.Point_Impl_.nearEquals(this.last,other.last);
 	}
 	,transform: function(matrix) {
-		return new thx.geom.Edge(this.vertex0.transform(matrix),this.vertex1.transform(matrix));
+		return new thx.geom.EdgeCubic(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p0),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p1),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p2),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p3));
 	}
 	,flip: function() {
-		return new thx.geom.Edge(this.vertex1,this.vertex0);
+		return new thx.geom.EdgeCubic(this.p3,this.p2,this.p1,this.p0);
 	}
 	,direction: function() {
-		var this1 = this.vertex1.position;
-		var p = this.vertex0.position;
+		var this1 = this.last;
+		var p = this.first;
 		var p_0 = -p[0];
 		var p_1 = -p[1];
 		return [this1[0] + p_0,this1[1] + p_1];
 	}
+	,intersects: function(other) {
+		return this.intersections(other).length > 0;
+	}
+	,intersections: function(other) {
+		throw "not implemented";
+	}
+	,intersectsWithLine: function(line) {
+		return this.intersectionsWithLine(line).length > 0;
+	}
+	,intersectionsWithLine: function(line) {
+		throw "not implemented";
+	}
+	,split: function(v) {
+		throw "not implemented";
+	}
+	,interpolate: function(v) {
+		throw "not implemented";
+	}
+	,tangent: function(v) {
+		throw "not implemented";
+	}
+	,toString: function() {
+		return "Edge(" + (function($this) {
+			var $r;
+			var this1 = $this.p0;
+			$r = "Point(" + this1[0] + "," + this1[1] + ")";
+			return $r;
+		}(this)) + "," + (function($this) {
+			var $r;
+			var this2 = $this.p1;
+			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			return $r;
+		}(this)) + "," + (function($this) {
+			var $r;
+			var this3 = $this.p2;
+			$r = "Point(" + this3[0] + "," + this3[1] + ")";
+			return $r;
+		}(this)) + "," + (function($this) {
+			var $r;
+			var this4 = $this.p3;
+			$r = "Point(" + this4[0] + "," + this4[1] + ")";
+			return $r;
+		}(this)) + ")";
+	}
+	,get_area: function() {
+		throw "not implemented";
+	}
+	,get_box: function() {
+		if(null == this.box) this.box = thx.geom.shape._Box.Box_Impl_.expandByPoints(thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p1),[this.p2,this.p3]);
+		return this.box;
+	}
+	,get_length: function() {
+		throw "not implemented";
+	}
 	,get_lengthSquared: function() {
-		if(null == this.lengthSquared) {
-			var w = this.vertex1.position[0] - this.vertex0.position[0];
-			var h = this.vertex1.position[1] - this.vertex0.position[1];
-			this.lengthSquared = w * w + h * h;
+		throw "not implemented";
+	}
+	,__class__: thx.geom.EdgeCubic
+};
+thx.geom.EdgeLinear = function(p0,p1) {
+	this.isLinear = true;
+	this.first = this.p0 = p0;
+	this.last = this.p1 = p1;
+};
+thx.geom.EdgeLinear.__name__ = true;
+thx.geom.EdgeLinear.__interfaces__ = [thx.geom.Edge];
+thx.geom.EdgeLinear.prototype = {
+	equals: function(other) {
+		if(!js.Boot.__instanceof(other,thx.geom.EdgeLinear)) return false;
+		var t = other;
+		return thx.geom._Point.Point_Impl_.nearEquals(this.p0,t.p0) && thx.geom._Point.Point_Impl_.nearEquals(this.p1,t.p1);
+	}
+	,matches: function(other) {
+		return thx.geom._Point.Point_Impl_.nearEquals(this.first,other.first) && thx.geom._Point.Point_Impl_.nearEquals(this.last,other.last);
+	}
+	,transform: function(matrix) {
+		return new thx.geom.EdgeLinear(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p0),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p1));
+	}
+	,flip: function() {
+		return new thx.geom.EdgeLinear(this.p1,this.p0);
+	}
+	,direction: function() {
+		var this1 = this.last;
+		var p = this.first;
+		var p_0 = -p[0];
+		var p_1 = -p[1];
+		return [this1[0] + p_0,this1[1] + p_1];
+	}
+	,intersects: function(other) {
+		return this.intersections(other).length > 0;
+	}
+	,intersections: function(other) {
+		if(!thx.geom.shape._Box.Box_Impl_.intersects(this.get_box(),other.get_box())) return [];
+		if(js.Boot.__instanceof(other,thx.geom.EdgeLinear)) {
+			var other1 = other;
+			var ps = this.intersectionsWithLine(other1.get_line());
+			if(ps.length == 0 || other1.intersectsWithLine(this.get_line())) return ps; else return [];
+		} else {
+			var other2 = other;
+			throw "not implemented";
 		}
-		return this.lengthSquared;
+	}
+	,intersectsWithLine: function(line) {
+		return this.intersectionsWithLine(line).length > 0;
+	}
+	,intersectionsWithLine: function(line) {
+		var l = thx.geom.Line.fromPoints(this.p0,this.p1);
+		var p = l.intersectionWithLine(line);
+		if(null == p || p[0] < (function($this) {
+			var $r;
+			var this1;
+			{
+				var this2 = $this.p0;
+				var p1 = $this.p1;
+				var x = Math.min(this2[0],p1[0]);
+				var y = Math.min(this2[1],p1[1]);
+				this1 = [x,y];
+			}
+			$r = this1[0];
+			return $r;
+		}(this)) || p[0] > (function($this) {
+			var $r;
+			var this3;
+			{
+				var this4 = $this.p0;
+				var p2 = $this.p1;
+				var x1 = Math.max(this4[0],p2[0]);
+				var y1 = Math.max(this4[1],p2[1]);
+				this3 = [x1,y1];
+			}
+			$r = this3[0];
+			return $r;
+		}(this))) return [];
+		return [p];
+	}
+	,split: function(v) {
+		var mid = this.interpolate(v);
+		return [new thx.geom.EdgeLinear(this.p0,mid),new thx.geom.EdgeLinear(mid,this.p1)];
+	}
+	,interpolate: function(v) {
+		return thx.geom._Point.Point_Impl_.interpolate(this.p0,this.p1,v);
+	}
+	,tangent: function(v) {
+		throw "not implemented";
+	}
+	,toString: function() {
+		return "Edge(" + (function($this) {
+			var $r;
+			var this1 = $this.p0;
+			$r = "Point(" + this1[0] + "," + this1[1] + ")";
+			return $r;
+		}(this)) + "," + (function($this) {
+			var $r;
+			var this2 = $this.p1;
+			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			return $r;
+		}(this)) + ")";
+	}
+	,get_area: function() {
+		if(null == this.area) {
+			var p;
+			var this1 = this.p1;
+			var p1 = this.p0;
+			var p_0 = -p1[0];
+			var p_1 = -p1[1];
+			p = [this1[0] + p_0,this1[1] + p_1];
+			this.area = p[0] * p[1] / 2;
+		}
+		return this.area;
+	}
+	,get_box: function() {
+		if(null == this.box) this.box = thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p1);
+		return this.box;
 	}
 	,get_length: function() {
 		if(null == this.length) this.length = Math.sqrt(this.get_lengthSquared());
 		return this.length;
 	}
-	,toString: function() {
-		return "Edge (" + this.vertex0.toString() + " -> " + this.vertex1.toString() + ")";
+	,get_lengthSquared: function() {
+		if(null == this.lengthSquared) {
+			var this1;
+			var this2 = this.p1;
+			var p = this.p0;
+			var p_0 = -p[0];
+			var p_1 = -p[1];
+			this1 = [this2[0] + p_0,this2[1] + p_1];
+			this.lengthSquared = this1[0] * this1[0] + this1[1] * this1[1];
+		}
+		return this.lengthSquared;
 	}
+	,get_line: function() {
+		if(null == this.line) this.line = thx.geom.Line.fromPoints(this.p0,this.p1);
+		return this.line;
+	}
+	,__class__: thx.geom.EdgeLinear
 };
 thx.geom.Line = function(normal,w) {
 	var l = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
@@ -649,8 +844,8 @@ thx.geom.Line.prototype = {
 			return $r;
 		}(this)) - this.w);
 	}
-	,intersectWithLine: function(line2d) {
-		return thx.geom._Point.Point_Impl_.solve2Linear(this.normal[0],this.normal[1],line2d.normal[0],line2d.normal[1],this.w,line2d.w);
+	,intersectionWithLine: function(line) {
+		return thx.geom._Point.Point_Impl_.solve2Linear(this.normal[0],this.normal[1],line.normal[0],line.normal[1],this.w,line.w);
 	}
 	,transform: function(matrix) {
 		var origin = [0,0];
@@ -668,6 +863,10 @@ thx.geom.Line.prototype = {
 		var neww = newnormal[0] * newpointOnPlane[0] + newnormal[1] * newpointOnPlane[1];
 		return new thx.geom.Line(newnormal,neww);
 	}
+	,toString: function() {
+		return "Line(" + this.normal[0] + "," + this.normal[1] + ",w:" + this.w + ")";
+	}
+	,__class__: thx.geom.Line
 };
 thx.geom.Line3D = function(point,direction) {
 	this.point = point;
@@ -775,6 +974,7 @@ thx.geom.Line3D.prototype = {
 		if(!thx.geom._Point3D.Point3D_Impl_.equals(this.direction,line.direction)) return false;
 		return this.distanceToPoint(line.point) <= 1e-8;
 	}
+	,__class__: thx.geom.Line3D
 };
 thx.geom.Plane = function(normal,w) {
 	this.normal = normal;
@@ -989,6 +1189,7 @@ thx.geom.Plane.prototype = {
 		mirrored = [point3d[0] + p_0,point3d[1] + p_1,point3d[2] + p_2];
 		return mirrored;
 	}
+	,__class__: thx.geom.Plane
 };
 thx.geom._Point3D = {};
 thx.geom._Point3D.Point3D_Impl_ = function() { };
@@ -1224,6 +1425,7 @@ thx.geom.OrthoNormalBasis.prototype = {
 		var newbasis = new thx.geom.OrthoNormalBasis(newplane,newrighthandvector);
 		return newbasis;
 	}
+	,__class__: thx.geom.OrthoNormalBasis
 };
 thx.geom._Point = {};
 thx.geom._Point.Point_Impl_ = function() { };
@@ -1433,10 +1635,10 @@ thx.geom.Polygon.prototype = {
 	,get_plane: function() {
 		if(null == this.plane) return this.plane = thx.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position); else return this.plane;
 	}
+	,__class__: thx.geom.Polygon
 };
 thx.geom.Spline = function(nodes,closed) {
 	if(closed == null) closed = true;
-	this.computed = false;
 	this.nodes = nodes;
 	this.closed = closed;
 };
@@ -1464,6 +1666,9 @@ thx.geom.Spline.fromCoords = function(arr,closed) {
 	});
 	return new thx.geom.Spline(nodes,closed);
 };
+thx.geom.Spline.createEdge = function(a,b,nout,nin) {
+	if(null == nout && null == nin) return new thx.geom.EdgeLinear(a,b); else if(null != nout) return new thx.geom.EdgeCubic(a,nout,b,b); else if(null != nin) return new thx.geom.EdgeCubic(a,a,nin,b); else return new thx.geom.EdgeCubic(a,nout,nin,b);
+};
 thx.geom.Spline.prototype = {
 	iterator: function() {
 		return HxOverrides.iter(this.nodes);
@@ -1486,14 +1691,14 @@ thx.geom.Spline.prototype = {
 			fit(a.point,b.point,a.normalOut,b.normalIn);
 		}
 	}
-	,iterateSides: function(f) {
+	,iterateEdges: function(f) {
 		var _g = this;
 		if(null != this.edges) this.edges.map(f); else {
 			this.edges = [];
 			this.iterate(null,function(a,b,nout,nin) {
-				var side = new thx.geom.Edge(new thx.geom.Vertex(a,nout),new thx.geom.Vertex(b,nin));
-				_g.edges.push(side);
-				f(side);
+				var edge = thx.geom.Spline.createEdge(a,b,nout,nin);
+				_g.edges.push(edge);
+				f(edge);
 			});
 		}
 	}
@@ -1513,49 +1718,95 @@ thx.geom.Spline.prototype = {
 		return new thx.geom.Spline(arr,this.closed);
 	}
 	,get_area: function() {
-		this.compute();
+		var _g = this;
+		if(null == this.area) {
+			this.area = 0;
+			this.iterateEdges(function(edge) {
+				_g.area += edge.get_area();
+			});
+		}
 		return this.area;
 	}
 	,get_length: function() {
-		this.compute();
+		var _g = this;
+		if(null == this.length) {
+			this.length = 0;
+			this.iterateEdges(function(edge) {
+				_g.length += edge.get_length();
+			});
+		}
 		return this.length;
 	}
 	,get_isSelfIntersecting: function() {
-		this.compute();
-		return this.isSelfIntersecting;
+		return false;
 	}
 	,get_isPolygon: function() {
-		this.compute();
-		return this.isPolygon;
+		return false;
 	}
-	,compute: function() {
+	,get_box: function() {
 		var _g = this;
-		if(this.computed) return;
-		this.area = 0;
-		this.length = 0;
-		this.isSelfIntersecting = false;
-		this.isPolygon = true;
-		this.iterateSides(function(side) {
-			if(null == side.length) side.length = Math.sqrt(side.get_lengthSquared());
-			_g.length += side.length;
-			if(_g.get_isPolygon() && !side.isLinear()) _g.isPolygon = false;
-		});
+		if(null == this.box) {
+			if(this.nodes.length > 0) {
+				this.box = [this.nodes[0].point,this.nodes[0].point];
+				this.iterate(null,function(a,b,nout,nin) {
+					_g.box = thx.geom.shape._Box.Box_Impl_.expandByPoints(_g.get_box(),[a,b,nout,nin]);
+				});
+			}
+		}
+		return this.box;
+	}
+	,contains: function(p) {
+		throw "not implemented";
+	}
+	,intersectionsWithSpline: function(other) {
+		throw "not implemented";
+	}
+	,intersectionsWithLine: function(line) {
+		throw "not implemented";
+	}
+	,at: function(distance) {
+		throw "not implemented";
+	}
+	,interpolate: function(distance) {
+		throw "not implemented";
+	}
+	,tangent: function(distance) {
+		throw "not implemented";
+	}
+	,interpolateTangent: function(distance) {
+		throw "not implemented";
+	}
+	,union: function(other) {
+		throw "not implemented";
+	}
+	,difference: function(other) {
+		throw "not implemented";
+	}
+	,intersection: function(other) {
+		throw "not implemented";
+	}
+	,hull: function(other) {
+		throw "not implemented";
+	}
+	,minkowsky: function(other) {
+		throw "not implemented";
 	}
 	,toString: function() {
 		return "Spline(" + this.nodes.map(function(n) {
 			return "[" + n.toStringValues() + "]";
 		}).join(", ") + "," + Std.string(this.closed) + ")";
 	}
+	,__class__: thx.geom.Spline
 };
 thx.geom.SplineNode = function(point,normalout,normalin) {
 	this.point = point;
-	this.normalOut = normalout;
-	this.normalIn = normalin;
+	if(null == normalout || thx.geom._Point.Point_Impl_.nearEquals(normalout,point)) this.normalOut = null; else this.normalOut = normalout;
+	if(null == normalin || thx.geom._Point.Point_Impl_.nearEquals(normalin,point)) this.normalIn = null; else this.normalIn = normalin;
 };
 thx.geom.SplineNode.__name__ = true;
 thx.geom.SplineNode.prototype = {
 	transform: function(matrix) {
-		return new thx.geom.SplineNode(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.point),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalIn),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalOut));
+		return new thx.geom.SplineNode(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.point),null != this.normalIn?thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalIn):null,null != this.normalOut?thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalOut):null);
 	}
 	,flip: function() {
 		return new thx.geom.SplineNode(this.point,this.normalIn,this.normalOut);
@@ -1570,6 +1821,7 @@ thx.geom.SplineNode.prototype = {
 	,toString: function() {
 		return "SplineNode(" + this.toStringValues() + ")";
 	}
+	,__class__: thx.geom.SplineNode
 };
 thx.geom.Vertex = function(position,normal) {
 	this.position = position;
@@ -1639,18 +1891,19 @@ thx.geom.Vertex.prototype = {
 		}(this));
 	}
 	,toString: function() {
-		return "Vertex " + (function($this) {
+		return "Vertex(" + (function($this) {
 			var $r;
 			var this1 = $this.position;
 			$r = "Point(" + this1[0] + "," + this1[1] + ")";
 			return $r;
-		}(this)) + ", " + (function($this) {
+		}(this)) + "," + (function($this) {
 			var $r;
 			var this2 = $this.normal;
 			$r = "Point(" + this2[0] + "," + this2[1] + ")";
 			return $r;
-		}(this));
+		}(this)) + ")";
 	}
+	,__class__: thx.geom.Vertex
 };
 thx.geom.Vertex3D = function(position,normal) {
 	this.position = position;
@@ -1695,6 +1948,7 @@ thx.geom.Vertex3D.prototype = {
 			return $r;
 		}(this));
 	}
+	,__class__: thx.geom.Vertex3D
 };
 thx.geom.shape = {};
 thx.geom.shape._Box = {};
@@ -1727,7 +1981,7 @@ thx.geom.shape._Box.Box_Impl_.get_bottomRight = function(this1) {
 	return [this1[1][0],this1[0][1]];
 };
 thx.geom.shape._Box.Box_Impl_.get_center = function(this1) {
-	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[1][1] + (this1[0][1] - this1[1][1]) / 2];
+	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[1][1] + (this1[1][1] - this1[0][1]) / 2];
 };
 thx.geom.shape._Box.Box_Impl_.get_left = function(this1) {
 	return this1[0][0];
@@ -1745,23 +1999,56 @@ thx.geom.shape._Box.Box_Impl_.get_width = function(this1) {
 	return this1[1][0] - this1[0][0];
 };
 thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
-	return this1[0][1] - this1[1][1];
+	return this1[1][1] - this1[0][1];
 };
 thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
 	var bottomLeft;
-	var this11 = this1[0];
-	var x = Math.min(this11[0],point[0]);
-	var y = Math.min(this11[1],point[1]);
+	var this2 = this1[0];
+	var x = Math.min(this2[0],point[0]);
+	var y = Math.min(this2[1],point[1]);
 	bottomLeft = [x,y];
 	var topRight;
-	var this12 = this1[1];
-	var x1 = Math.max(this12[0],point[0]);
-	var y1 = Math.max(this12[1],point[1]);
+	var this3 = this1[1];
+	var x1 = Math.max(this3[0],point[0]);
+	var y1 = Math.max(this3[1],point[1]);
 	topRight = [x1,y1];
 	return [bottomLeft,topRight];
 };
+thx.geom.shape._Box.Box_Impl_.expandByPoints = function(this1,points) {
+	var min = this1[0];
+	var max = this1[1];
+	var $it0 = $iterator(points)();
+	while( $it0.hasNext() ) {
+		var point = $it0.next();
+		var x = Math.min(min[0],point[0]);
+		var y = Math.min(min[1],point[1]);
+		min = [x,y];
+		var x1 = Math.max(max[0],point[0]);
+		var y1 = Math.max(max[1],point[1]);
+		max = [x1,y1];
+	}
+	return [min,max];
+};
+thx.geom.shape._Box.Box_Impl_.intersects = function(this1,other) {
+	return this1[1][0] >= other[0][0] && this1[1][0] <= other[1][0] || this1[0][1] >= other[1][1] && this1[0][1] <= other[0][1];
+};
+thx.geom.shape._Box.Box_Impl_.equals = function(this1,other) {
+	return (function($this) {
+		var $r;
+		var this2 = this1[0];
+		var p = other[0];
+		$r = this2[0] == p[0] && this2[1] == p[1];
+		return $r;
+	}(this)) && (function($this) {
+		var $r;
+		var this3 = this1[1];
+		var p1 = other[1];
+		$r = this3[0] == p1[0] && this3[1] == p1[1];
+		return $r;
+	}(this));
+};
 thx.geom.shape._Box.Box_Impl_.toString = function(this1) {
-	return "Box(" + [this1[0][0],this1[1][1]][0] + "," + [this1[0][0],this1[1][1]][1] + "," + (this1[1][0] - this1[0][0]) + "," + (this1[0][1] - this1[1][1]) + ")";
+	return "Box(x:" + this1[0][0] + ",y:" + this1[1][1] + ",w:" + (this1[1][0] - this1[0][0]) + ",h:" + (this1[1][1] - this1[0][1]) + ")";
 };
 thx.geom.shape._Box.Box_Impl_.toSpline = function(this1) {
 	return thx.geom.Spline.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
@@ -1782,27 +2069,7 @@ thx.geom.shape._Circle.Circle_Impl_.toString = function(this1) {
 	return "Circle(" + this1.center[0] + "," + this1.center[1] + "," + this1.radius + ")";
 };
 thx.geom.shape._Circle.Circle_Impl_.toSpline = function(this1) {
-	var segments = 32;
-	var angle = Math.PI / segments;
-	var points = [];
-	var nodes = [];
-	var j;
-	var _g1 = 0;
-	var _g = segments * 2;
-	while(_g1 < _g) {
-		var i = _g1++;
-		points.push(thx.geom._Point.Point_Impl_.pointAt(this1.center,angle * i,this1.radius));
-	}
-	nodes.push(new thx.geom.SplineNode(points[0],points[1],points[points.length - 1]));
-	var _g11 = 1;
-	var _g2 = segments - 1;
-	while(_g11 < _g2) {
-		var i1 = _g11++;
-		j = i1 * 2;
-		nodes.push(new thx.geom.SplineNode(points[j],points[j + 1],points[j - 1]));
-	}
-	nodes.push(new thx.geom.SplineNode(points[points.length - 2],points[points.length - 1],points[points.length - 3]));
-	return new thx.geom.Spline(nodes,true);
+	return thx.geom.shape._Circle.Circle_Impl_.unitaryCircle.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling([this1.radius,this1.radius,1]),thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([this1.center[0],this1.center[1],0])));
 };
 thx.math = {};
 thx.math.Number = function() { };
@@ -1829,8 +2096,17 @@ thx.math.Number.integrate = function(f,a,b,n) {
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
+String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
+var Int = { __name__ : ["Int"]};
+var Dynamic = { __name__ : ["Dynamic"]};
+var Float = Number;
+Float.__name__ = ["Float"];
+var Bool = Boolean;
+Bool.__ename__ = ["Bool"];
+var Class = { __name__ : ["Class"]};
+var Enum = { };
 if(Array.prototype.map == null) Array.prototype.map = function(f) {
 	var a = [];
 	var _g1 = 0;
@@ -1850,6 +2126,7 @@ chad.render._CanvasRender.Cap_Impl_.butt = "butt";
 chad.render._CanvasRender.Cap_Impl_.round = "round";
 chad.render._CanvasRender.Cap_Impl_.square = "square";
 thx.geom.Const.EPSILON = 1e-5;
+thx.geom.Const.KAPPA = 4 * (Math.sqrt(2) - 1) / 3;
 thx.geom.Plane.COPLANAR = 0;
 thx.geom.Plane.FRONT = 1;
 thx.geom.Plane.BACK = 2;
@@ -1857,6 +2134,7 @@ thx.geom.Plane.SPANNING = 3;
 thx.geom._Point3D.Point3D_Impl_.zero = [0,0,0];
 thx.geom.OrthoNormalBasis.z0Plane = new thx.geom.OrthoNormalBasis(new thx.geom.Plane([0,0,1],0),[1,0,0]);
 thx.geom._Point.Point_Impl_.zero = [0,0];
+thx.geom.shape._Circle.Circle_Impl_.unitaryCircle = new thx.geom.Spline([new thx.geom.SplineNode([1,0],[1,-thx.geom.Const.KAPPA],[1,thx.geom.Const.KAPPA]),new thx.geom.SplineNode([0,1],[thx.geom.Const.KAPPA,1],[-thx.geom.Const.KAPPA,1]),new thx.geom.SplineNode([-1,0],[-1,thx.geom.Const.KAPPA],[-1,-thx.geom.Const.KAPPA]),new thx.geom.SplineNode([0,-1],[-thx.geom.Const.KAPPA,-1],[thx.geom.Const.KAPPA,-1])],true);
 thx.math.Number.TOLERANCE = 10e-5;
 thx.math.Number.EPSILON = 10e-10;
 thx.math.Number.abscissas = [[0.5773502691896257645091488],[0,0.7745966692414833770358531],[0.3399810435848562648026658,0.8611363115940525752239465],[0,0.5384693101056830910363144,0.9061798459386639927976269],[0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],[0,0.4058451513773971669066064,0.7415311855993944398638648,0.9491079123427585245261897],[0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],[0,0.3242534234038089290385380,0.6133714327005903973087020,0.8360311073266357942994298,0.9681602395076260898355762],[0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],[0,0.2695431559523449723315320,0.5190961292068118159257257,0.7301520055740493240934163,0.8870625997680952990751578,0.9782286581460569928039380],[0.1252334085114689154724414,0.3678314989981801937526915,0.5873179542866174472967024,0.7699026741943046870368938,0.9041172563704748566784659,0.9815606342467192506905491],[0,0.2304583159551347940655281,0.4484927510364468528779129,0.6423493394403402206439846,0.8015780907333099127942065,0.9175983992229779652065478,0.9841830547185881494728294],[0.1080549487073436620662447,0.3191123689278897604356718,0.5152486363581540919652907,0.6872929048116854701480198,0.8272013150697649931897947,0.9284348836635735173363911,0.9862838086968123388415973],[0,0.2011940939974345223006283,0.3941513470775633698972074,0.5709721726085388475372267,0.7244177313601700474161861,0.8482065834104272162006483,0.9372733924007059043077589,0.9879925180204854284895657],[0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]];
