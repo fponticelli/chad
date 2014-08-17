@@ -31,8 +31,48 @@ Canvas.main = function() {
 	var circle2 = { center : [240,280], radius : 60};
 	render.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2),null,chad.render.FillStyle.FillColor("rgba(100,255,155,0.5)"));
 };
+var EReg = function(r,opt) {
+	opt = opt.split("u").join("");
+	this.r = new RegExp(r,opt);
+};
+EReg.__name__ = true;
+EReg.prototype = {
+	match: function(s) {
+		if(this.r.global) this.r.lastIndex = 0;
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+	,__class__: EReg
+};
 var HxOverrides = function() { };
 HxOverrides.__name__ = true;
+HxOverrides.cca = function(s,index) {
+	var x = s.charCodeAt(index);
+	if(x != x) return undefined;
+	return x;
+};
+HxOverrides.substr = function(s,pos,len) {
+	if(pos != null && pos != 0 && len != null && len < 0) return "";
+	if(len == null) len = s.length;
+	if(pos < 0) {
+		pos = s.length + pos;
+		if(pos < 0) pos = 0;
+	} else if(len < 0) len = s.length + len - pos;
+	return s.substr(pos,len);
+};
+HxOverrides.indexOf = function(a,obj,i) {
+	var len = a.length;
+	if(i < 0) {
+		i += len;
+		if(i < 0) i = 0;
+	}
+	while(i < len) {
+		if(a[i] === obj) return i;
+		i++;
+	}
+	return -1;
+};
 HxOverrides.iter = function(a) {
 	return { cur : 0, arr : a, hasNext : function() {
 		return this.cur < this.arr.length;
@@ -45,6 +85,15 @@ var Std = function() { };
 Std.__name__ = true;
 Std.string = function(s) {
 	return js.Boot.__string_rec(s,"");
+};
+Std.parseInt = function(x) {
+	var v = parseInt(x,10);
+	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
+	if(isNaN(v)) return null;
+	return v;
+};
+Std.random = function(x) {
+	if(x <= 0) return 0; else return Math.floor(Math.random() * x);
 };
 var chad = {};
 chad.render = {};
@@ -288,12 +337,12 @@ chad.render.CanvasRender.prototype = $extend(chad.render.BaseRender.prototype,{
 		});
 	}
 	,drawLine: function(line,style) {
-		var a = line.intersectionWithLine(this.top);
+		var a = line.intersectionLine(this.top);
 		var b;
 		if(null == a) {
-			a = line.intersectionWithLine(this.left);
-			b = line.intersectionWithLine(this.right);
-		} else b = line.intersectionWithLine(this.bottom);
+			a = line.intersectionLine(this.left);
+			b = line.intersectionLine(this.right);
+		} else b = line.intersectionLine(this.bottom);
 		this.drawSegment(a,b,style);
 	}
 	,drawSpline: function(spline,stroke,fill) {
@@ -495,6 +544,188 @@ js.Boot.__instanceof = function(o,cl) {
 	}
 };
 thx.core = {};
+thx.core.Arrays = function() { };
+thx.core.Arrays.__name__ = true;
+thx.core.Arrays.same = function(a,b,eq) {
+	if(a == null || b == null || a.length != b.length) return false;
+	if(null == eq) eq = thx.core.Function.equality;
+	var _g1 = 0;
+	var _g = a.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		if(!eq(a[i],b[i])) return false;
+	}
+	return true;
+};
+thx.core.Arrays.cross = function(a,b) {
+	var r = [];
+	var _g = 0;
+	while(_g < a.length) {
+		var va = a[_g];
+		++_g;
+		var _g1 = 0;
+		while(_g1 < b.length) {
+			var vb = b[_g1];
+			++_g1;
+			r.push([va,vb]);
+		}
+	}
+	return r;
+};
+thx.core.Arrays.crossMulti = function(a) {
+	var acopy = a.slice();
+	var result = acopy.shift().map(function(v) {
+		return [v];
+	});
+	while(acopy.length > 0) {
+		var arr = acopy.shift();
+		var tresult = result;
+		result = [];
+		var _g = 0;
+		while(_g < arr.length) {
+			var v1 = arr[_g];
+			++_g;
+			var _g1 = 0;
+			while(_g1 < tresult.length) {
+				var ar = tresult[_g1];
+				++_g1;
+				var t = ar.slice();
+				t.push(v1);
+				result.push(t);
+			}
+		}
+	}
+	return result;
+};
+thx.core.Arrays.pushIf = function(arr,cond,value) {
+	if(cond) arr.push(value);
+	return arr;
+};
+thx.core.Arrays.eachPair = function(arr,handler) {
+	var _g1 = 0;
+	var _g = arr.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		var _g3 = i;
+		var _g2 = arr.length;
+		while(_g3 < _g2) {
+			var j = _g3++;
+			if(!handler(arr[i],arr[j])) return;
+		}
+	}
+};
+thx.core.Arrays.mapi = function(arr,handler) {
+	return arr.map(handler);
+};
+thx.core.Arrays.flatMap = function(arr,callback) {
+	return thx.core.Arrays.flatten(arr.map(callback));
+};
+thx.core.Arrays.flatten = function(arr) {
+	return Array.prototype.concat.apply([],arr);
+};
+thx.core.Arrays.reduce = function(arr,callback,initial) {
+	return arr.reduce(callback,initial);
+};
+thx.core.Arrays.reducei = function(arr,callback,initial) {
+	return arr.reduce(callback,initial);
+};
+thx.core.Arrays.order = function(arr,sort) {
+	var n = arr.slice();
+	n.sort(sort);
+	return n;
+};
+thx.core.Arrays.isEmpty = function(arr) {
+	return arr.length == 0;
+};
+thx.core.Arrays.contains = function(arr,element,eq) {
+	if(null == eq) return HxOverrides.indexOf(arr,element,0) >= 0; else {
+		var _g1 = 0;
+		var _g = arr.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(eq(arr[i],element)) return true;
+		}
+		return false;
+	}
+};
+thx.core.Arrays.shuffle = function(a) {
+	var t = thx.core.Ints.range(a.length);
+	var arr = [];
+	while(t.length > 0) {
+		var pos = Std.random(t.length);
+		var index = t[pos];
+		t.splice(pos,1);
+		arr.push(a[index]);
+	}
+	return arr;
+};
+thx.core.F0 = function() { };
+thx.core.F0.__name__ = true;
+thx.core.F0.join = function(fa,fb) {
+	return function() {
+		fa();
+		fb();
+	};
+};
+thx.core.F0.once = function(f) {
+	return function() {
+		f();
+		f = function() {
+		};
+	};
+};
+thx.core.F1 = function() { };
+thx.core.F1.__name__ = true;
+thx.core.F1.compose = function(fa,fb) {
+	return function(v) {
+		return fa(fb(v));
+	};
+};
+thx.core.F1.join = function(fa,fb) {
+	return function(v) {
+		fa(v);
+		fb(v);
+	};
+};
+thx.core.Function = function() { };
+thx.core.Function.__name__ = true;
+thx.core.Function.equality = function(a,b) {
+	return a == b;
+};
+thx.core.Ints = function() { };
+thx.core.Ints.__name__ = true;
+thx.core.Ints.clamp = function(v,min,max) {
+	if(v < min) return min; else if(v > max) return max; else return v;
+};
+thx.core.Ints.canParse = function(s) {
+	return thx.core.Ints.pattern_parse.match(s);
+};
+thx.core.Ints.min = function(a,b) {
+	if(a < b) return a; else return b;
+};
+thx.core.Ints.max = function(a,b) {
+	if(a > b) return a; else return b;
+};
+thx.core.Ints.parse = function(s) {
+	if(HxOverrides.substr(s,0,1) == "+") s = HxOverrides.substr(s,1,null);
+	return Std.parseInt(s);
+};
+thx.core.Ints.compare = function(a,b) {
+	return a - b;
+};
+thx.core.Ints.range = function(start,stop,step) {
+	if(step == null) step = 1;
+	if(null == stop) {
+		stop = start;
+		start = 0;
+	}
+	if((stop - start) / step == Infinity) throw "infinite range";
+	var range = [];
+	var i = -1;
+	var j;
+	if(step < 0) while((j = start + step * ++i) > stop) range.push(j); else while((j = start + step * ++i) < stop) range.push(j);
+	return range;
+};
 thx.core.Iterators = function() { };
 thx.core.Iterators.__name__ = true;
 thx.core.Iterators.map = function(it,f) {
@@ -513,6 +744,9 @@ thx.core.Iterators.mapi = function(it,f) {
 		acc.push(f(v,i++));
 	}
 	return acc;
+};
+thx.core.Iterators.eachPair = function(it,handler) {
+	thx.core.Arrays.eachPair(thx.core.Iterators.toArray(it),handler);
 };
 thx.core.Iterators.toArray = function(it) {
 	var items = [];
@@ -590,12 +824,18 @@ thx.geom.EdgeCubic.prototype = {
 		return this.intersections(other).length > 0;
 	}
 	,intersections: function(other) {
+		if(js.Boot.__instanceof(other,thx.geom.EdgeLinear)) return this.intersectionsEdgeLinear(other); else return this.intersectionsEdgeCubic(other);
+	}
+	,intersectionsEdgeLinear: function(other) {
 		throw "not implemented";
 	}
-	,intersectsWithLine: function(line) {
-		return this.intersectionsWithLine(line).length > 0;
+	,intersectionsEdgeCubic: function(other) {
+		throw "not implemented";
 	}
-	,intersectionsWithLine: function(line) {
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsLine: function(line) {
 		throw "not implemented";
 	}
 	,split: function(v) {
@@ -604,8 +844,8 @@ thx.geom.EdgeCubic.prototype = {
 	,interpolate: function(v) {
 		throw "not implemented";
 	}
-	,tangent: function(v) {
-		throw "not implemented";
+	,toArray: function() {
+		return [this.p0,this.p1,this.p2,this.p3];
 	}
 	,toString: function() {
 		return "Edge(" + (function($this) {
@@ -615,18 +855,18 @@ thx.geom.EdgeCubic.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			var this11 = $this.p1;
+			$r = "Point(" + this11[0] + "," + this11[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this3 = $this.p2;
-			$r = "Point(" + this3[0] + "," + this3[1] + ")";
+			var this12 = $this.p2;
+			$r = "Point(" + this12[0] + "," + this12[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this4 = $this.p3;
-			$r = "Point(" + this4[0] + "," + this4[1] + ")";
+			var this13 = $this.p3;
+			$r = "Point(" + this13[0] + "," + this13[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -638,7 +878,8 @@ thx.geom.EdgeCubic.prototype = {
 		return this.box;
 	}
 	,get_length: function() {
-		throw "not implemented";
+		if(null == this.length) this.length = Math.sqrt(this.get_lengthSquared());
+		return this.length;
 	}
 	,get_lengthSquared: function() {
 		throw "not implemented";
@@ -679,44 +920,44 @@ thx.geom.EdgeLinear.prototype = {
 	}
 	,intersections: function(other) {
 		if(!thx.geom.shape._Box.Box_Impl_.intersects(this.get_box(),other.get_box())) return [];
-		if(js.Boot.__instanceof(other,thx.geom.EdgeLinear)) {
-			var other1 = other;
-			var ps = this.intersectionsWithLine(other1.get_line());
-			if(ps.length == 0 || other1.intersectsWithLine(this.get_line())) return ps; else return [];
-		} else {
-			var other2 = other;
-			throw "not implemented";
-		}
+		if(js.Boot.__instanceof(other,thx.geom.EdgeLinear)) return this.intersectionsEdgeLinear(other); else return this.intersectionsEdgeCubic(other);
 	}
-	,intersectsWithLine: function(line) {
-		return this.intersectionsWithLine(line).length > 0;
+	,intersectionsEdgeLinear: function(other) {
+		var ps = this.intersectionsLine(other.get_line());
+		if(ps.length == 0 || other.intersectsLine(this.get_line())) return ps; else return [];
 	}
-	,intersectionsWithLine: function(line) {
+	,intersectionsEdgeCubic: function(other) {
+		return other.intersectionsEdgeLinear(this);
+	}
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsLine: function(line) {
 		var l = thx.geom.Line.fromPoints(this.p0,this.p1);
-		var p = l.intersectionWithLine(line);
+		var p = l.intersectionLine(line);
 		if(null == p || p[0] < (function($this) {
 			var $r;
 			var this1;
 			{
-				var this2 = $this.p0;
+				var this11 = $this.p0;
 				var p1 = $this.p1;
-				var x = Math.min(this2[0],p1[0]);
-				var y = Math.min(this2[1],p1[1]);
+				var x = Math.min(this11[0],p1[0]);
+				var y = Math.min(this11[1],p1[1]);
 				this1 = [x,y];
 			}
 			$r = this1[0];
 			return $r;
 		}(this)) || p[0] > (function($this) {
 			var $r;
-			var this3;
+			var this12;
 			{
-				var this4 = $this.p0;
+				var this13 = $this.p0;
 				var p2 = $this.p1;
-				var x1 = Math.max(this4[0],p2[0]);
-				var y1 = Math.max(this4[1],p2[1]);
-				this3 = [x1,y1];
+				var x1 = Math.max(this13[0],p2[0]);
+				var y1 = Math.max(this13[1],p2[1]);
+				this12 = [x1,y1];
 			}
-			$r = this3[0];
+			$r = this12[0];
 			return $r;
 		}(this))) return [];
 		return [p];
@@ -728,8 +969,8 @@ thx.geom.EdgeLinear.prototype = {
 	,interpolate: function(v) {
 		return thx.geom._Point.Point_Impl_.interpolate(this.p0,this.p1,v);
 	}
-	,tangent: function(v) {
-		throw "not implemented";
+	,toArray: function() {
+		return [this.p0,this.p1];
 	}
 	,toString: function() {
 		return "Edge(" + (function($this) {
@@ -739,8 +980,8 @@ thx.geom.EdgeLinear.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			var this11 = $this.p1;
+			$r = "Point(" + this11[0] + "," + this11[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -767,11 +1008,11 @@ thx.geom.EdgeLinear.prototype = {
 	,get_lengthSquared: function() {
 		if(null == this.lengthSquared) {
 			var this1;
-			var this2 = this.p1;
+			var this11 = this.p1;
 			var p = this.p0;
 			var p_0 = -p[0];
 			var p_1 = -p[1];
-			this1 = [this2[0] + p_0,this2[1] + p_1];
+			this1 = [this11[0] + p_0,this11[1] + p_1];
 			this.lengthSquared = this1[0] * this1[0] + this1[1] * this1[1];
 		}
 		return this.lengthSquared;
@@ -844,7 +1085,7 @@ thx.geom.Line.prototype = {
 			return $r;
 		}(this)) - this.w);
 	}
-	,intersectionWithLine: function(line) {
+	,intersectionLine: function(line) {
 		return thx.geom._Point.Point_Impl_.solve2Linear(this.normal[0],this.normal[1],line.normal[0],line.normal[1],this.w,line.w);
 	}
 	,transform: function(matrix) {
@@ -1427,6 +1668,105 @@ thx.geom.OrthoNormalBasis.prototype = {
 	}
 	,__class__: thx.geom.OrthoNormalBasis
 };
+thx.geom.Path = function(splines) {
+	this.splines = splines;
+};
+thx.geom.Path.__name__ = true;
+thx.geom.Path.prototype = {
+	contains: function(p) {
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			if(spline.contains(p)) return true;
+		}
+		return false;
+	}
+	,union: function(other) {
+		throw "not implemented";
+	}
+	,difference: function(other) {
+		throw "not implemented";
+	}
+	,intersection: function(other) {
+		throw "not implemented";
+	}
+	,transform: function(matrix) {
+		return new thx.geom.Path(this.splines.map(function(spline) {
+			return spline.transform(matrix);
+		}));
+	}
+	,flip: function() {
+		var s = this.splines.map(function(spline) {
+			return spline.flip();
+		});
+		s.reverse();
+		return new thx.geom.Path(s);
+	}
+	,intersectsPath: function(other) {
+		return this.intersectionsPath(other).length > 0;
+	}
+	,intersectsSpline: function(other) {
+		return this.intersectionsSpline(other).length > 0;
+	}
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsPath: function(other) {
+		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
+			return spline.intersectionsPath(other);
+		}));
+	}
+	,intersectionsSpline: function(other) {
+		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
+			return spline.intersectionsSpline(other);
+		}));
+	}
+	,intersectionsLine: function(line) {
+		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
+			return spline.intersectionsLine(line);
+		}));
+	}
+	,split: function(value) {
+		throw "not implemented";
+	}
+	,interpolate: function(value) {
+		throw "not implemented";
+	}
+	,hull: function(other) {
+		throw "not implemented";
+	}
+	,minkowsky: function(other) {
+		throw "not implemented";
+	}
+	,toString: function() {
+		return "Path(" + this.splines.map(function(s) {
+			return "[" + s.toString() + "]";
+		}).join(", ") + "," + Std.string(this.get_isClosed()) + ")";
+	}
+	,get_isClosed: function() {
+		if(null == this.isClosed) throw "not implemented";
+		return this.isClosed;
+	}
+	,get_area: function() {
+		if(null == this.area) throw "not implemented";
+		return this.area;
+	}
+	,get_length: function() {
+		if(null == this.length) throw "not implemented";
+		return this.length;
+	}
+	,get_isSelfIntersecting: function() {
+		if(null == this.isSelfIntersecting) throw "not implemented";
+		return this.isSelfIntersecting;
+	}
+	,get_box: function() {
+		if(null == this.box) throw "not implemented";
+		return this.box;
+	}
+	,__class__: thx.geom.Path
+};
 thx.geom._Point = {};
 thx.geom._Point.Point_Impl_ = function() { };
 thx.geom._Point.Point_Impl_.__name__ = true;
@@ -1640,9 +1980,24 @@ thx.geom.Polygon.prototype = {
 thx.geom.Spline = function(nodes,closed) {
 	if(closed == null) closed = true;
 	this.nodes = nodes;
-	this.closed = closed;
+	this.isClosed = closed;
 };
 thx.geom.Spline.__name__ = true;
+thx.geom.Spline.fromEdges = function(arr,closed) {
+	var nodes = [];
+	var points;
+	if(arr.length > 0) {
+		var prev = arr[arr.length - 1].toArray();
+		arr.map(function(edge) {
+			points = edge.toArray();
+			nodes.push(new thx.geom.SplineNode(points[0],points.length == 4?points[1]:null,prev[2]));
+			prev = points;
+		});
+	}
+	var spline = new thx.geom.Spline(nodes,closed);
+	spline.edges = arr;
+	return spline;
+};
 thx.geom.Spline.fromPoints = function(arr,closed) {
 	var nodes = arr.map(function(c) {
 		return new thx.geom.SplineNode(c[0],c[1],c[2]);
@@ -1685,28 +2040,30 @@ thx.geom.Spline.prototype = {
 			b = this.nodes[i + 1];
 			fit(a.point,b.point,a.normalOut,b.normalIn);
 		}
-		if(this.closed) {
+		if(this.isClosed) {
 			a = this.nodes[this.nodes.length - 1];
 			b = this.nodes[0];
 			fit(a.point,b.point,a.normalOut,b.normalIn);
 		}
 	}
 	,iterateEdges: function(f) {
+		this.get_edges().map(f);
+	}
+	,get_edges: function() {
 		var _g = this;
-		if(null != this.edges) this.edges.map(f); else {
+		if(null == this.edges) {
 			this.edges = [];
 			this.iterate(null,function(a,b,nout,nin) {
-				var edge = thx.geom.Spline.createEdge(a,b,nout,nin);
-				_g.edges.push(edge);
-				f(edge);
+				_g.get_edges().push(thx.geom.Spline.createEdge(a,b,nout,nin));
 			});
 		}
+		return this.edges;
 	}
 	,transform: function(matrix) {
 		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
 		var result = new thx.geom.Spline(thx.core.Iterators.map(this.iterator(),function(node) {
 			return node.transform(matrix);
-		}),this.closed);
+		}),this.isClosed);
 		if(ismirror) result = result.flip();
 		return result;
 	}
@@ -1715,7 +2072,84 @@ thx.geom.Spline.prototype = {
 			return node.flip();
 		});
 		arr.reverse();
-		return new thx.geom.Spline(arr,this.closed);
+		return new thx.geom.Spline(arr,this.isClosed);
+	}
+	,contains: function(p) {
+		throw "not implemented";
+	}
+	,selfIntersections: function() {
+		var intersections = [];
+		thx.core.Arrays.eachPair(this.get_edges(),function(a,b) {
+			intersections = intersections.concat(a.intersections(b));
+			return true;
+		});
+		return intersections;
+	}
+	,intersectsPath: function(other) {
+		return this.intersectionsPath(other).length > 0;
+	}
+	,intersectsSpline: function(other) {
+		return this.intersectionsSpline(other).length > 0;
+	}
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsPath: function(other) {
+		return other.intersectionsSpline(this);
+	}
+	,intersectionsSpline: function(other) {
+		return thx.core.Arrays.flatten(this.get_edges().map(function(a) {
+			return thx.core.Arrays.flatten(other.get_edges().map(function(b) {
+				return a.intersections(b);
+			}));
+		}));
+	}
+	,intersectionsLine: function(line) {
+		return thx.core.Arrays.flatten(this.get_edges().map(function(edge) {
+			return edge.intersectionsLine(line);
+		}));
+	}
+	,split: function(value) {
+		if(value < 0 || value > 1) return null;
+		var len = this.get_length();
+		var nor;
+		var i = 0;
+		var edge;
+		var before = [];
+		var after = [];
+		var edges = this.get_edges();
+		while(i < edges.length) {
+			edge = edges[i];
+			nor = edge.get_length() / len;
+			if(value <= nor) {
+				var n = edge.split(value);
+				before.push(n[0]);
+				after = [n[1]].concat(edges.slice(i + 1));
+				break;
+			}
+			before.push(edge);
+		}
+		return [thx.geom.Spline.fromEdges(before,this.isClosed),thx.geom.Spline.fromEdges(after,this.isClosed)];
+	}
+	,interpolate: function(value) {
+		if(value < 0 || value > 1) return null;
+		var len = this.get_length();
+		var nor;
+		var _g = 0;
+		var _g1 = this.get_edges();
+		while(_g < _g1.length) {
+			var edge = _g1[_g];
+			++_g;
+			nor = edge.get_length() / len;
+			if(value <= nor) return edge.interpolate(value);
+			value -= nor;
+		}
+		return null;
+	}
+	,toString: function() {
+		return "Spline(" + this.nodes.map(function(n) {
+			return "[" + n.toStringValues() + "]";
+		}).join(", ") + "," + Std.string(this.isClosed) + ")";
 	}
 	,get_area: function() {
 		var _g = this;
@@ -1738,7 +2172,15 @@ thx.geom.Spline.prototype = {
 		return this.length;
 	}
 	,get_isSelfIntersecting: function() {
-		return false;
+		var _g = this;
+		if(null == this.isSelfIntersecting) {
+			var edges = this.get_edges();
+			this.isSelfIntersecting = false;
+			thx.core.Arrays.eachPair(edges,function(a,b) {
+				return !(_g.isSelfIntersecting = a.intersects(b));
+			});
+		}
+		return this.isSelfIntersecting;
 	}
 	,get_isPolygon: function() {
 		return false;
@@ -1754,47 +2196,6 @@ thx.geom.Spline.prototype = {
 			}
 		}
 		return this.box;
-	}
-	,contains: function(p) {
-		throw "not implemented";
-	}
-	,intersectionsWithSpline: function(other) {
-		throw "not implemented";
-	}
-	,intersectionsWithLine: function(line) {
-		throw "not implemented";
-	}
-	,at: function(distance) {
-		throw "not implemented";
-	}
-	,interpolate: function(distance) {
-		throw "not implemented";
-	}
-	,tangent: function(distance) {
-		throw "not implemented";
-	}
-	,interpolateTangent: function(distance) {
-		throw "not implemented";
-	}
-	,union: function(other) {
-		throw "not implemented";
-	}
-	,difference: function(other) {
-		throw "not implemented";
-	}
-	,intersection: function(other) {
-		throw "not implemented";
-	}
-	,hull: function(other) {
-		throw "not implemented";
-	}
-	,minkowsky: function(other) {
-		throw "not implemented";
-	}
-	,toString: function() {
-		return "Spline(" + this.nodes.map(function(n) {
-			return "[" + n.toStringValues() + "]";
-		}).join(", ") + "," + Std.string(this.closed) + ")";
 	}
 	,__class__: thx.geom.Spline
 };
@@ -1822,88 +2223,6 @@ thx.geom.SplineNode.prototype = {
 		return "SplineNode(" + this.toStringValues() + ")";
 	}
 	,__class__: thx.geom.SplineNode
-};
-thx.geom.Vertex = function(position,normal) {
-	this.position = position;
-	this.normal = normal;
-};
-thx.geom.Vertex.__name__ = true;
-thx.geom.Vertex.linearVertex = function(position) {
-	return new thx.geom.Vertex(position,thx.geom._Point.Point_Impl_.zero);
-};
-thx.geom.Vertex.getLengthSquaredIntegrand = function(v) {
-	var p1x = v[0];
-	var p1y = v[1];
-	var c1x = v[2];
-	var c1y = v[3];
-	var c2x = v[4];
-	var c2y = v[5];
-	var p2x = v[6];
-	var p2y = v[7];
-	var ax = 9 * (c1x - c2x) + 3 * (p2x - p1x);
-	var bx = 6 * (p1x + c2x) - 12 * c1x;
-	var cx = 3 * (c1x - p1x);
-	var ay = 9 * (c1y - c2y) + 3 * (p2y - p1y);
-	var by = 6 * (p1y + c2y) - 12 * c1y;
-	var cy = 3 * (c1y - p1y);
-	return function(t) {
-		var dx = (ax * t + bx) * t + cx;
-		var dy = (ay * t + by) * t + cy;
-		return dx * dx + dy * dy;
-	};
-};
-thx.geom.Vertex.prototype = {
-	flip: function() {
-		return new thx.geom.Vertex(this.position,(function($this) {
-			var $r;
-			var this1 = $this.normal;
-			$r = [-this1[0],-this1[1]];
-			return $r;
-		}(this)));
-	}
-	,interpolate: function(other,t) {
-		return new thx.geom.Vertex(thx.geom._Point.Point_Impl_.interpolate(this.position,other.position,t),thx.geom._Point.Point_Impl_.interpolate(this.normal,other.normal,t));
-	}
-	,getDistanceSquared: function(other) {
-		var v = [this.position[0],this.position[1],this.position[0] + this.normal[0],this.position[1] + this.normal[1],other.position[0] + other.normal[0],other.position[1] + other.normal[1],other.position[0],other.position[1]];
-		if(Math.abs(v[0] - v[2]) <= 10e-10 && Math.abs(v[1] - v[3]) <= 10e-10 && Math.abs(v[6] - v[4]) <= 10e-10 && Math.abs(v[7] - v[5]) <= 10e-10) return thx.geom._Point.Point_Impl_.distanceToSquared(this.position,other.position);
-		return thx.math.Number.integrate(thx.geom.Vertex.getLengthSquaredIntegrand(v),0,1,16);
-	}
-	,getDistance: function(other) {
-		return Math.sqrt(this.getDistanceSquared(other));
-	}
-	,transform: function(matrix) {
-		return new thx.geom.Vertex(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.position),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normal));
-	}
-	,equals: function(other) {
-		return (function($this) {
-			var $r;
-			var this1 = $this.position;
-			var p = other.position;
-			$r = this1[0] == p[0] && this1[1] == p[1];
-			return $r;
-		}(this)) && (function($this) {
-			var $r;
-			var this2 = $this.normal;
-			var p1 = other.normal;
-			$r = this2[0] == p1[0] && this2[1] == p1[1];
-			return $r;
-		}(this));
-	}
-	,toString: function() {
-		return "Vertex(" + (function($this) {
-			var $r;
-			var this1 = $this.position;
-			$r = "Point(" + this1[0] + "," + this1[1] + ")";
-			return $r;
-		}(this)) + "," + (function($this) {
-			var $r;
-			var this2 = $this.normal;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
-			return $r;
-		}(this)) + ")";
-	}
-	,__class__: thx.geom.Vertex
 };
 thx.geom.Vertex3D = function(position,normal) {
 	this.position = position;
@@ -2003,14 +2322,14 @@ thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
 };
 thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
 	var bottomLeft;
-	var this2 = this1[0];
-	var x = Math.min(this2[0],point[0]);
-	var y = Math.min(this2[1],point[1]);
+	var this11 = this1[0];
+	var x = Math.min(this11[0],point[0]);
+	var y = Math.min(this11[1],point[1]);
 	bottomLeft = [x,y];
 	var topRight;
-	var this3 = this1[1];
-	var x1 = Math.max(this3[0],point[0]);
-	var y1 = Math.max(this3[1],point[1]);
+	var this12 = this1[1];
+	var x1 = Math.max(this12[0],point[0]);
+	var y1 = Math.max(this12[1],point[1]);
 	topRight = [x1,y1];
 	return [bottomLeft,topRight];
 };
@@ -2035,15 +2354,15 @@ thx.geom.shape._Box.Box_Impl_.intersects = function(this1,other) {
 thx.geom.shape._Box.Box_Impl_.equals = function(this1,other) {
 	return (function($this) {
 		var $r;
-		var this2 = this1[0];
+		var this11 = this1[0];
 		var p = other[0];
-		$r = this2[0] == p[0] && this2[1] == p[1];
+		$r = this11[0] == p[0] && this11[1] == p[1];
 		return $r;
 	}(this)) && (function($this) {
 		var $r;
-		var this3 = this1[1];
+		var this12 = this1[1];
 		var p1 = other[1];
-		$r = this3[0] == p1[0] && this3[1] == p1[1];
+		$r = this12[0] == p1[0] && this12[1] == p1[1];
 		return $r;
 	}(this));
 };
@@ -2071,31 +2390,12 @@ thx.geom.shape._Circle.Circle_Impl_.toString = function(this1) {
 thx.geom.shape._Circle.Circle_Impl_.toSpline = function(this1) {
 	return thx.geom.shape._Circle.Circle_Impl_.unitaryCircle.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling([this1.radius,this1.radius,1]),thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([this1.center[0],this1.center[1],0])));
 };
-thx.math = {};
-thx.math.Number = function() { };
-thx.math.Number.__name__ = true;
-thx.math.Number.isNearZero = function(n) {
-	return Math.abs(n) <= 10e-10;
-};
-thx.math.Number.integrate = function(f,a,b,n) {
-	var x = thx.math.Number.abscissas[n - 2];
-	var w = thx.math.Number.weights[n - 2];
-	var A = 0.5 * (b - a);
-	var B = A + a;
-	var i = 0;
-	var m = n + 1 >> 1;
-	var sum;
-	if((n & 1) == 1) sum = w[i++] * f(B); else sum = 0;
-	var Ax;
-	while(i < m) {
-		Ax = A * x[i];
-		sum += w[i++] * (f(B + Ax) + f(B - Ax));
-	}
-	return A * sum;
-};
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
+if(Array.prototype.indexOf) HxOverrides.indexOf = function(a,o,i) {
+	return Array.prototype.indexOf.call(a,o,i);
+};
 String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
@@ -2125,6 +2425,7 @@ chad.render._CanvasRender.Join_Impl_.bevel = "bevel";
 chad.render._CanvasRender.Cap_Impl_.butt = "butt";
 chad.render._CanvasRender.Cap_Impl_.round = "round";
 chad.render._CanvasRender.Cap_Impl_.square = "square";
+thx.core.Ints.pattern_parse = new EReg("^[+-]?(\\d+|0x[0-9A-F]+)$","i");
 thx.geom.Const.EPSILON = 1e-5;
 thx.geom.Const.KAPPA = 4 * (Math.sqrt(2) - 1) / 3;
 thx.geom.Plane.COPLANAR = 0;
@@ -2135,9 +2436,5 @@ thx.geom._Point3D.Point3D_Impl_.zero = [0,0,0];
 thx.geom.OrthoNormalBasis.z0Plane = new thx.geom.OrthoNormalBasis(new thx.geom.Plane([0,0,1],0),[1,0,0]);
 thx.geom._Point.Point_Impl_.zero = [0,0];
 thx.geom.shape._Circle.Circle_Impl_.unitaryCircle = new thx.geom.Spline([new thx.geom.SplineNode([1,0],[1,-thx.geom.Const.KAPPA],[1,thx.geom.Const.KAPPA]),new thx.geom.SplineNode([0,1],[thx.geom.Const.KAPPA,1],[-thx.geom.Const.KAPPA,1]),new thx.geom.SplineNode([-1,0],[-1,thx.geom.Const.KAPPA],[-1,-thx.geom.Const.KAPPA]),new thx.geom.SplineNode([0,-1],[-thx.geom.Const.KAPPA,-1],[thx.geom.Const.KAPPA,-1])],true);
-thx.math.Number.TOLERANCE = 10e-5;
-thx.math.Number.EPSILON = 10e-10;
-thx.math.Number.abscissas = [[0.5773502691896257645091488],[0,0.7745966692414833770358531],[0.3399810435848562648026658,0.8611363115940525752239465],[0,0.5384693101056830910363144,0.9061798459386639927976269],[0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],[0,0.4058451513773971669066064,0.7415311855993944398638648,0.9491079123427585245261897],[0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],[0,0.3242534234038089290385380,0.6133714327005903973087020,0.8360311073266357942994298,0.9681602395076260898355762],[0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],[0,0.2695431559523449723315320,0.5190961292068118159257257,0.7301520055740493240934163,0.8870625997680952990751578,0.9782286581460569928039380],[0.1252334085114689154724414,0.3678314989981801937526915,0.5873179542866174472967024,0.7699026741943046870368938,0.9041172563704748566784659,0.9815606342467192506905491],[0,0.2304583159551347940655281,0.4484927510364468528779129,0.6423493394403402206439846,0.8015780907333099127942065,0.9175983992229779652065478,0.9841830547185881494728294],[0.1080549487073436620662447,0.3191123689278897604356718,0.5152486363581540919652907,0.6872929048116854701480198,0.8272013150697649931897947,0.9284348836635735173363911,0.9862838086968123388415973],[0,0.2011940939974345223006283,0.3941513470775633698972074,0.5709721726085388475372267,0.7244177313601700474161861,0.8482065834104272162006483,0.9372733924007059043077589,0.9879925180204854284895657],[0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]];
-thx.math.Number.weights = [[1.0],[0.8888888888888888888888889,0.5555555555555555555555556],[0.6521451548625461426269361,0.3478548451374538573730639],[0.5688888888888888888888889,0.4786286704993664680412915,0.2369268850561890875142640],[0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],[0.4179591836734693877551020,0.3818300505051189449503698,0.2797053914892766679014678,0.1294849661688696932706114],[0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],[0.3302393550012597631645251,0.3123470770400028400686304,0.2606106964029354623187429,0.1806481606948574040584720,0.0812743883615744119718922],[0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],[0.2729250867779006307144835,0.2628045445102466621806889,0.2331937645919904799185237,0.1862902109277342514260976,0.1255803694649046246346943,0.0556685671161736664827537],[0.2491470458134027850005624,0.2334925365383548087608499,0.2031674267230659217490645,0.1600783285433462263346525,0.1069393259953184309602547,0.0471753363865118271946160],[0.2325515532308739101945895,0.2262831802628972384120902,0.2078160475368885023125232,0.1781459807619457382800467,0.1388735102197872384636018,0.0921214998377284479144218,0.0404840047653158795200216],[0.2152638534631577901958764,0.2051984637212956039659241,0.1855383974779378137417166,0.1572031671581935345696019,0.1215185706879031846894148,0.0801580871597602098056333,0.0351194603317518630318329],[0.2025782419255612728806202,0.1984314853271115764561183,0.1861610000155622110268006,0.1662692058169939335532009,0.1395706779261543144478048,0.1071592204671719350118695,0.0703660474881081247092674,0.0307532419961172683546284],[0.1894506104550684962853967,0.1826034150449235888667637,0.1691565193950025381893121,0.1495959888165767320815017,0.1246289712555338720524763,0.0951585116824927848099251,0.0622535239386478928628438,0.0271524594117540948517806]];
 Canvas.main();
 })();

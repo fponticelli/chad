@@ -93,14 +93,14 @@ class CanvasRender extends BaseRender {
 
 	public function drawLine(line : Line, ?style : StrokeStyle) {
 		// TODO check angle instead of attempting interaction
-		var a = line.intersectionWithLine(top),
+		var a = line.intersectionLine(top),
 			b;
 
 		if(null == a) {
-			a = line.intersectionWithLine(left);
-			b = line.intersectionWithLine(right);
+			a = line.intersectionLine(left);
+			b = line.intersectionLine(right);
 		} else {
-			b = line.intersectionWithLine(bottom);
+			b = line.intersectionLine(bottom);
 		}
 		drawSegment(a, b, style);
 	}

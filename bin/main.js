@@ -640,7 +640,7 @@ thx.geom.Line.prototype = {
 			return $r;
 		}(this)) - this.w);
 	}
-	,intersectWithLine: function(line) {
+	,intersectionLine: function(line) {
 		return thx.geom._Point.Point_Impl_.solve2Linear(this.normal[0],this.normal[1],line.normal[0],line.normal[1],this.w,line.w);
 	}
 	,transform: function(matrix) {
@@ -658,6 +658,9 @@ thx.geom.Line.prototype = {
 		var newpointOnPlane = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,pointOnPlane);
 		var neww = newnormal[0] * newpointOnPlane[0] + newnormal[1] * newpointOnPlane[1];
 		return new thx.geom.Line(newnormal,neww);
+	}
+	,toString: function() {
+		return "Line(" + this.normal[0] + "," + this.normal[1] + ",w:" + this.w + ")";
 	}
 };
 thx.geom.Line3D = function(point,direction) {
@@ -1664,6 +1667,7 @@ if(Array.prototype.map == null) Array.prototype.map = function(f) {
 };
 chad.csg.Solids.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 thx.geom.Const.EPSILON = 1e-5;
+thx.geom.Const.KAPPA = 4 * (Math.sqrt(2) - 1) / 3;
 thx.geom._Matrix4x4.Matrix4x4_Impl_.unity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
 thx.geom.Plane.COPLANAR = 0;
 thx.geom.Plane.FRONT = 1;
