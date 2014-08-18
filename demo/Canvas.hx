@@ -21,12 +21,12 @@ class Canvas {
 			yp = Spline.fromArray([new Point(0, 0), new Point(0, len)], false),
 			yn = Spline.fromArray([new Point(0, 0), new Point(0, -len)], false);
 
-		var g = new LineStyle(2, "green"),
-			r = new LineStyle(2, "red");
-		render.drawSpline(xp, StrokeLine(g));
+		var r = new LineStyle(2, "red"),
+			g = new LineStyle(2, "green");
+		render.drawSpline(xp, StrokeLine(r));
 		render.drawSpline(xn, StrokeDash([8, 8], g));
 
-		render.drawSpline(yp, StrokeLine(r));
+		render.drawSpline(yp, StrokeLine(g));
 		render.drawSpline(yn, StrokeDash([8, 8], r));
 
 		var line = Line.fromPoints(new Point(0, 500), new Point(500, 0));

@@ -805,6 +805,15 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.rotation = function(rotationCenter,rotationA
 thx.geom._Matrix4x4.Matrix4x4_Impl_.translation = function(vec) {
 	return [1,0,0,0,0,1,0,0,0,0,1,0,vec[0],vec[1],vec[2],1];
 };
+thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorX = function() {
+	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MX);
+};
+thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorY = function() {
+	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MY);
+};
+thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorZ = function() {
+	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MZ);
+};
 thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring = function(plane) {
 	var nx = plane.normal[0];
 	var ny = plane.normal[1];
@@ -1606,6 +1615,47 @@ thx.geom.Polygon.prototype = {
 		if(null == this.plane) return this.plane = thx.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position); else return this.plane;
 	}
 };
+thx.geom.Transformables = function() { };
+thx.geom.Transformables.__name__ = true;
+thx.geom.Transformables.mirror = function(t,plane) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(plane));
+};
+thx.geom.Transformables.mirrorX = function(t) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MX));
+};
+thx.geom.Transformables.mirrorY = function(t) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MY));
+};
+thx.geom.Transformables.mirrorZ = function(t) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MZ));
+};
+thx.geom.Transformables.translate = function(t,v) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(v));
+};
+thx.geom.Transformables.translateX = function(t,x) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([x,0,0]));
+};
+thx.geom.Transformables.translateY = function(t,y) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([0,y,0]));
+};
+thx.geom.Transformables.translateZ = function(t,z) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([0,0,z]));
+};
+thx.geom.Transformables.scale = function(t,f) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling(f));
+};
+thx.geom.Transformables.rotateX = function(t,angle) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationX(angle));
+};
+thx.geom.Transformables.rotateY = function(t,angle) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationY(angle));
+};
+thx.geom.Transformables.rotateZ = function(t,angle) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ(angle));
+};
+thx.geom.Transformables.rotateOnAxis = function(t,center,axis,angle) {
+	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotation(center,axis,angle));
+};
 thx.geom.Vertex3D = function(position,normal) {
 	this.position = position;
 	this.normal = normal;
@@ -1667,8 +1717,8 @@ if(Array.prototype.map == null) Array.prototype.map = function(f) {
 };
 chad.csg.Solids.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 thx.geom.Const.EPSILON = 1e-5;
-thx.geom.Const.KAPPA = 4 * (Math.sqrt(2) - 1) / 3;
-thx.geom._Matrix4x4.Matrix4x4_Impl_.unity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
+thx.geom.Const.KAPPA = 0.5522847498307936;
+thx.geom._Matrix4x4.Matrix4x4_Impl_.identity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
 thx.geom.Plane.COPLANAR = 0;
 thx.geom.Plane.FRONT = 1;
 thx.geom.Plane.BACK = 2;
@@ -1676,5 +1726,8 @@ thx.geom.Plane.SPANNING = 3;
 thx.geom._Point3D.Point3D_Impl_.zero = [0,0,0];
 thx.geom.OrthoNormalBasis.z0Plane = new thx.geom.OrthoNormalBasis(new thx.geom.Plane([0,0,1],0),[1,0,0]);
 thx.geom._Point.Point_Impl_.zero = [0,0];
+thx.geom.Transformables.MX = new thx.geom.Plane([1,0,0],0);
+thx.geom.Transformables.MY = new thx.geom.Plane([0,1,0],0);
+thx.geom.Transformables.MZ = new thx.geom.Plane([0,0,1],0);
 Main.main();
 })();
