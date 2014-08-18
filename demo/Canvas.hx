@@ -1,5 +1,7 @@
 import chad.render.CanvasRender;
 
+import thx.geom.Const;
+import thx.geom.EdgeCubic;
 import thx.geom.Matrix4x4;
 import thx.geom.Point;
 import thx.geom.Line;
@@ -9,6 +11,7 @@ import thx.geom.shape.Circle;
 import thx.geom.Spline;
 using thx.geom.Transformable;
 import thx.unit.angle.Degree;
+import thx.geom.Path;
 
 class Canvas {
 	public static function main() {
@@ -49,14 +52,57 @@ class Canvas {
 		var intersection = rect.toSpline().intersectionsSpline(rect2);
 		intersection.map(function(p) render.drawDot(p, 4));
 
+		var arc = new EdgeCubic(
+			new Point(0, 0),
+			new Point(0, Const.KAPPA),
+			new Point(1-Const.KAPPA, 1),
+			new Point(1, 1)
+		).scale(new Point3D(200, 200, 1)).translateX(50).translateY(50);
+		//render.drawSpline(Spline.fromEdges([arc], false), StrokeLine(new LineStyle(3)));
+		var s = arc.subdivide();
+		s[1] = s[1].translateX(2);
+		render.drawSpline(Spline.fromEdges([s[0]], false), StrokeLine(new LineStyle(3)));
+		render.drawSpline(Spline.fromEdges([s[1]], false), StrokeLine(new LineStyle(3)));
 
-		var circle = new Circle(new Point(300, 250), 100);
-		render.drawSpline(circle, StrokeDot(4));
+		render.drawSpline(arc.translateX(20).translateY(-20).toSpline(), StrokeLine(new LineStyle(10)));
 
-		var circle = new Circle(new Point(200, 200), 80);
-		render.drawSpline(circle, StrokeDash([4, 4, 8, 4]), FillColor("rgba(0,255,155,0.1)"));
+		render.drawSpline(arc.toSpline().toLinear().translateX(20).translateY(-20), StrokeLine(new LineStyle(2, "#fff")));
 
-		var circle = new Circle(new Point(240, 280), 60);
-		render.drawSpline(circle, FillColor("rgba(100,255,155,0.5)"));
+		var e = [
+				new EdgeCubic(
+					new Point(0, 0),
+					new Point(0, Const.KAPPA),
+					new Point(1-Const.KAPPA, 1),
+					new Point(1, 1)
+				).scale(new Point3D(200, 200, 1)).translate(new Point3D(40, 40, 0)),
+				new EdgeCubic(
+					new Point(1, 1),
+					new Point(1+Const.KAPPA, 1),
+					new Point(2, Const.KAPPA),
+					new Point(2, 0)
+				).scale(new Point3D(200, 200, 1)).translate(new Point3D(40, 40, 0))
+			],
+			c = Spline.fromEdges(cast e, false).scale(new Point3D(0.4,0.4,1));
+
+		render.drawSpline(c, StrokeLine(new LineStyle(8, "red")));
+		render.drawSpline(c.toLinear(), StrokeDash([5,5], new LineStyle(4, "lime")));
+		render.drawSpline(e[0].toSpline().toLinear(), StrokeDash([8,4], new LineStyle(4, "orange")));
+
+		var circle1 = new Circle(new Point(300, 250), 100);
+		render.drawSpline(circle1.toSpline().toLinear());
+
+		var circle2 = new Circle(new Point(200, 200), 80);
+		render.drawSpline(circle2, StrokeDash([4, 4, 8, 4]), FillColor("rgba(0,255,155,0.1)"));
+
+		var circle3 = new Circle(new Point(240, 280), 60);
+		render.drawSpline(circle3, StrokeDot(4), FillColor("rgba(100,255,155,0.5)"));
+
+		var path = new Path([circle1.toSpline(), circle2.toSpline(), circle3.toSpline()]);
+		circle2.toSpline()
+			.intersectionsSpline(rect.toSpline())
+			.map(function(point) render.drawDot(point, FillColor("#aa3300"), 6));
+
+//		path.selfIntersections()
+//			.map(function(point) render.drawDot(point, FillColor("#aa3300")));
 	}
 }
