@@ -14,8 +14,6 @@ class CanvasRender extends BaseRender {
 		return new CanvasRender(canvas, Matrix4x4.scaling(new Point3D(scale, scale, 1)), function(v) return v / scale);
 	}
 
-	static var correctionMatrix = Matrix4x4.translation(new Point3D(0.5, 0.5, 1));
-
 	var ctx : CanvasRenderingContext2D;
 	var width : Float;
 	var height : Float;
@@ -44,8 +42,16 @@ class CanvasRender extends BaseRender {
 		this.weightScale = null == weightScale ? function(v) return v : weightScale;
 
 		if(null == matrix) {
-			matrix = Matrix4x4.unity;
+			matrix = Matrix4x4.identity;
 		}
+		var halfPixel  = Matrix4x4.translation(new Point3D(0.5, 0.5, 1)),
+			mirror     = Matrix4x4.mirrorY(),
+			translateY = Matrix4x4.translation(new Point3D(0, height, 0)),
+			correctionMatrix = Matrix4x4.identity
+				.multiply(halfPixel)
+				.multiply(mirror)
+				.multiply(translateY)
+				;
 		matrix = matrix.multiply(correctionMatrix);
 
 		ctx.transform(
@@ -80,8 +86,10 @@ class CanvasRender extends BaseRender {
 			ctx.restore();
 	}
 
-	public function drawDot(point : Point, ?style : FillStyle) {
-		wrap(style, ctx.fillRect.bind(point.x, point.y, 1, 1));
+	public function drawDot(point : Point, ?fill : FillStyle, ?stroke : StrokeStyle, ?size : Float = 2) {
+		var s = weightScale(size * 2),
+			s2 = s / 2;
+		wrap(stroke, fill, ctx.fillRect.bind(point.x-s2, point.y-s2, s, s));
 	}
 
 	public function drawSegment(a : Point, b : Point, ?style : StrokeStyle) {
@@ -156,7 +164,7 @@ class CanvasRender extends BaseRender {
 				ctx.setLineDash(pattern.map(weightScale));
 			case StrokeDot(spacing, style):
 				applyLineStyle(style);
-				ctx.setLineDash([1, spacing].map(weightScale));
+				ctx.setLineDash([ctx.lineWidth, weightScale(spacing)]);
 		}
 	}
 
