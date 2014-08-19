@@ -764,18 +764,18 @@ thx.geom.EdgeCubic.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			var this11 = $this.p1;
+			$r = "Point(" + this11[0] + "," + this11[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this3 = $this.p2;
-			$r = "Point(" + this3[0] + "," + this3[1] + ")";
+			var this12 = $this.p2;
+			$r = "Point(" + this12[0] + "," + this12[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this4 = $this.p3;
-			$r = "Point(" + this4[0] + "," + this4[1] + ")";
+			var this13 = $this.p3;
+			$r = "Point(" + this13[0] + "," + this13[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -792,64 +792,64 @@ thx.geom.EdgeCubic.prototype = {
 		var l1;
 		var this1 = this.p0;
 		var p;
-		var this2;
-		var this3 = this.p1;
+		var this11;
+		var this12 = this.p1;
 		var p1 = this.p0;
 		var p_0 = -p1[0];
 		var p_1 = -p1[1];
-		this2 = [this3[0] + p_0,this3[1] + p_1];
-		p = [this2[0] * v,this2[1] * v];
+		this11 = [this12[0] + p_0,this12[1] + p_1];
+		p = [this11[0] * v,this11[1] * v];
 		l1 = [this1[0] + p[0],this1[1] + p[1]];
 		var m;
-		var this4 = this.p1;
+		var this13 = this.p1;
 		var p2;
-		var this5;
-		var this6 = this.p2;
+		var this14;
+		var this15 = this.p2;
 		var p3 = this.p1;
 		var p_01 = -p3[0];
 		var p_11 = -p3[1];
-		this5 = [this6[0] + p_01,this6[1] + p_11];
-		p2 = [this5[0] * v,this5[1] * v];
-		m = [this4[0] + p2[0],this4[1] + p2[1]];
+		this14 = [this15[0] + p_01,this15[1] + p_11];
+		p2 = [this14[0] * v,this14[1] * v];
+		m = [this13[0] + p2[0],this13[1] + p2[1]];
 		var r2;
-		var this7 = this.p2;
+		var this16 = this.p2;
 		var p4;
-		var this8;
-		var this9 = this.p3;
+		var this17;
+		var this18 = this.p3;
 		var p5 = this.p2;
 		var p_02 = -p5[0];
 		var p_12 = -p5[1];
-		this8 = [this9[0] + p_02,this9[1] + p_12];
-		p4 = [this8[0] * v,this8[1] * v];
-		r2 = [this7[0] + p4[0],this7[1] + p4[1]];
+		this17 = [this18[0] + p_02,this18[1] + p_12];
+		p4 = [this17[0] * v,this17[1] * v];
+		r2 = [this16[0] + p4[0],this16[1] + p4[1]];
 		var l2;
 		var p6;
-		var this10;
+		var this19;
 		var p_03 = -l1[0];
 		var p_13 = -l1[1];
-		this10 = [m[0] + p_03,m[1] + p_13];
-		p6 = [this10[0] * v,this10[1] * v];
+		this19 = [m[0] + p_03,m[1] + p_13];
+		p6 = [this19[0] * v,this19[1] * v];
 		l2 = [l1[0] + p6[0],l1[1] + p6[1]];
 		var r1;
 		var p7;
-		var this11;
+		var this110;
 		var p_04 = -m[0];
 		var p_14 = -m[1];
-		this11 = [r2[0] + p_04,r2[1] + p_14];
-		p7 = [this11[0] * v,this11[1] * v];
+		this110 = [r2[0] + p_04,r2[1] + p_14];
+		p7 = [this110[0] * v,this110[1] * v];
 		r1 = [m[0] + p7[0],m[1] + p7[1]];
 		var l3;
 		var p8;
-		var this12;
+		var this111;
 		var p_05 = -l2[0];
 		var p_15 = -l2[1];
-		this12 = [r1[0] + p_05,r1[1] + p_15];
-		p8 = [this12[0] * v,this12[1] * v];
+		this111 = [r1[0] + p_05,r1[1] + p_15];
+		p8 = [this111[0] * v,this111[1] * v];
 		l3 = [l2[0] + p8[0],l2[1] + p8[1]];
 		return [new thx.geom.EdgeCubic(this.p0,l1,l2,l3),new thx.geom.EdgeCubic(l3,r1,r2,this.p3)];
 	}
 	,get_area: function() {
-		if(null == this.area) this.area = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+		if(isNaN(this.area)) this.area = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
 			return acc + edge.get_area();
 		},0);
 		return this.area;
@@ -859,11 +859,11 @@ thx.geom.EdgeCubic.prototype = {
 		return this.box;
 	}
 	,get_length: function() {
-		if(null == this.length) this.length = Math.sqrt(this.get_lengthSquared());
+		if(isNaN(this.length)) this.length = Math.sqrt(this.get_lengthSquared());
 		return this.length;
 	}
 	,get_lengthSquared: function() {
-		if(null == this.lengthSquared) this.lengthSquared = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+		if(isNaN(this.lengthSquared)) this.lengthSquared = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
 			return acc + edge.get_lengthSquared();
 		},0);
 		return this.lengthSquared;
@@ -942,50 +942,50 @@ thx.geom.EdgeLinear.prototype = {
 					var $r;
 					var this1;
 					{
-						var this2 = $this.p0;
+						var this11 = $this.p0;
 						var p1 = $this.p1;
-						var x = Math.min(this2[0],p1[0]);
-						var y = Math.min(this2[1],p1[1]);
+						var x = Math.min(this11[0],p1[0]);
+						var y = Math.min(this11[1],p1[1]);
 						this1 = [x,y];
 					}
 					$r = this1[1];
 					return $r;
 				}(this)) && p[1] <= (function($this) {
 					var $r;
-					var this3;
+					var this12;
 					{
-						var this4 = $this.p0;
+						var this13 = $this.p0;
 						var p2 = $this.p1;
-						var x1 = Math.max(this4[0],p2[0]);
-						var y1 = Math.max(this4[1],p2[1]);
-						this3 = [x1,y1];
+						var x1 = Math.max(this13[0],p2[0]);
+						var y1 = Math.max(this13[1],p2[1]);
+						this12 = [x1,y1];
 					}
-					$r = this3[1];
+					$r = this12[1];
 					return $r;
 				}(this))) return [p];
 			} else if(p[0] >= (function($this) {
 				var $r;
-				var this5;
+				var this14;
 				{
-					var this6 = $this.p0;
+					var this15 = $this.p0;
 					var p3 = $this.p1;
-					var x2 = Math.min(this6[0],p3[0]);
-					var y2 = Math.min(this6[1],p3[1]);
-					this5 = [x2,y2];
+					var x2 = Math.min(this15[0],p3[0]);
+					var y2 = Math.min(this15[1],p3[1]);
+					this14 = [x2,y2];
 				}
-				$r = this5[0];
+				$r = this14[0];
 				return $r;
 			}(this)) && p[0] <= (function($this) {
 				var $r;
-				var this7;
+				var this16;
 				{
-					var this8 = $this.p0;
+					var this17 = $this.p0;
 					var p4 = $this.p1;
-					var x3 = Math.max(this8[0],p4[0]);
-					var y3 = Math.max(this8[1],p4[1]);
-					this7 = [x3,y3];
+					var x3 = Math.max(this17[0],p4[0]);
+					var y3 = Math.max(this17[1],p4[1]);
+					this16 = [x3,y3];
 				}
-				$r = this7[0];
+				$r = this16[0];
 				return $r;
 			}(this))) return [p];
 		}
@@ -1000,7 +1000,7 @@ thx.geom.EdgeLinear.prototype = {
 	}
 	,interpolateNode: function(v) {
 		var p = this.interpolate(v);
-		if(null == v) return null;
+		if(isNaN(v)) return null;
 		return new thx.geom.SplineNode(p,null,null);
 	}
 	,toArray: function() {
@@ -1014,8 +1014,8 @@ thx.geom.EdgeLinear.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			var this11 = $this.p1;
+			$r = "Point(" + this11[0] + "," + this11[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -1023,7 +1023,7 @@ thx.geom.EdgeLinear.prototype = {
 		return thx.geom.Spline.fromEdges([this],false);
 	}
 	,get_area: function() {
-		if(null == this.area) {
+		if(isNaN(this.area)) {
 			var p;
 			var this1 = this.p1;
 			var p1 = this.p0;
@@ -1039,17 +1039,17 @@ thx.geom.EdgeLinear.prototype = {
 		return this.box;
 	}
 	,get_length: function() {
-		if(null == this.length) this.length = Math.sqrt(this.get_lengthSquared());
+		if(isNaN(this.length)) this.length = Math.sqrt(this.get_lengthSquared());
 		return this.length;
 	}
 	,get_lengthSquared: function() {
-		if(null == this.lengthSquared) {
+		if(isNaN(this.lengthSquared)) {
 			var this1;
-			var this2 = this.p1;
+			var this11 = this.p1;
 			var p = this.p0;
 			var p_0 = -p[0];
 			var p_1 = -p[1];
-			this1 = [this2[0] + p_0,this2[1] + p_1];
+			this1 = [this11[0] + p_0,this11[1] + p_1];
 			this.lengthSquared = this1[0] * this1[0] + this1[1] * this1[1];
 		}
 		return this.lengthSquared;
@@ -2569,8 +2569,8 @@ thx.geom.Spline.prototype = {
 				return $r;
 			}(this)) || (function($this) {
 				var $r;
-				var this2 = node.normalOut;
-				$r = !(this2[0] == null[0] && this2[1] == null[1]);
+				var this11 = node.normalOut;
+				$r = !(this11[0] == null[0] && this11[1] == null[1]);
 				return $r;
 			}(this))) return false;
 		}
@@ -2760,14 +2760,14 @@ thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
 };
 thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
 	var bottomLeft;
-	var this2 = this1[0];
-	var x = Math.min(this2[0],point[0]);
-	var y = Math.min(this2[1],point[1]);
+	var this11 = this1[0];
+	var x = Math.min(this11[0],point[0]);
+	var y = Math.min(this11[1],point[1]);
 	bottomLeft = [x,y];
 	var topRight;
-	var this3 = this1[1];
-	var x1 = Math.max(this3[0],point[0]);
-	var y1 = Math.max(this3[1],point[1]);
+	var this12 = this1[1];
+	var x1 = Math.max(this12[0],point[0]);
+	var y1 = Math.max(this12[1],point[1]);
 	topRight = [x1,y1];
 	return [bottomLeft,topRight];
 };
@@ -2792,15 +2792,15 @@ thx.geom.shape._Box.Box_Impl_.intersects = function(this1,other) {
 thx.geom.shape._Box.Box_Impl_.equals = function(this1,other) {
 	return (function($this) {
 		var $r;
-		var this2 = this1[0];
+		var this11 = this1[0];
 		var p = other[0];
-		$r = this2[0] == p[0] && this2[1] == p[1];
+		$r = this11[0] == p[0] && this11[1] == p[1];
 		return $r;
 	}(this)) && (function($this) {
 		var $r;
-		var this3 = this1[1];
+		var this12 = this1[1];
 		var p1 = other[1];
-		$r = this3[0] == p1[0] && this3[1] == p1[1];
+		$r = this12[0] == p1[0] && this12[1] == p1[1];
 		return $r;
 	}(this));
 };

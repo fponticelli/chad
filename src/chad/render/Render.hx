@@ -29,7 +29,7 @@ class Render {
 
 	public function drawLine(line : Line, ?style : StrokeStyle) {
 		var box = g.reverseCoords,
-			deg = line.normal.toAngle().toFloat() % Math.PI,
+			deg = (line.normal.toAngle() : Float) % Math.PI,
 			a, b;
 		if(deg < Math.PI / 4) {
 			// vert
