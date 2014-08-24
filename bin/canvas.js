@@ -1,10 +1,7 @@
 (function () { "use strict";
 var Canvas = function() { };
 Canvas.__name__ = true;
-Canvas.main = function() {
-	var canvas = window.document.querySelector("canvas");
-	var graphics = chad.render.canvas.CanvasGraphics.scaled(canvas,2);
-	var r = new chad.render.Render(graphics);
+Canvas.draw = function(r) {
 	var len = 800;
 	var xp = thx.geom.Spline.fromArray([[0,0],[len,0]],false);
 	var xn = thx.geom.Spline.fromArray([[0,0],[-len,0]],false);
@@ -49,22 +46,34 @@ Canvas.main = function() {
 	r.drawSpline(c,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(8,(function($this) {
 		var $r;
 		var this1 = thx.color.Color.red;
-		var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+		$r = (function($this) {
+			var $r;
+			var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+			return $r;
+		}($this));
 		return $r;
 	}(this)))));
 	r.drawSpline(c.toLinear(),chad.render.StrokeStyle.StrokeDash([5,5],new chad.render.LineStyle(4,(function($this) {
 		var $r;
-		var this3 = thx.color.Color.lime;
-		var this4 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this3 >> 16 & 255 & 255) << 16 | (this3 >> 8 & 255 & 255) << 8 | this3 & 255 & 255);
-		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this4[0],this4[1],this4[2],this4[3]);
+		var this11 = thx.color.Color.lime;
+		$r = (function($this) {
+			var $r;
+			var this21 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this11 >> 16 & 255 & 255) << 16 | (this11 >> 8 & 255 & 255) << 8 | this11 & 255 & 255);
+			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this21[0],this21[1],this21[2],this21[3]);
+			return $r;
+		}($this));
 		return $r;
 	}(this)))));
 	r.drawSpline(e[0].toSpline().toLinear(),chad.render.StrokeStyle.StrokeDash([8,4],new chad.render.LineStyle(4,(function($this) {
 		var $r;
-		var this5 = thx.color.Color.orange;
-		var this6 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this5 >> 16 & 255 & 255) << 16 | (this5 >> 8 & 255 & 255) << 8 | this5 & 255 & 255);
-		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this6[0],this6[1],this6[2],this6[3]);
+		var this12 = thx.color.Color.orange;
+		$r = (function($this) {
+			var $r;
+			var this22 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this12 >> 16 & 255 & 255) << 16 | (this12 >> 8 & 255 & 255) << 8 | this12 & 255 & 255);
+			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this22[0],this22[1],this22[2],this22[3]);
+			return $r;
+		}($this));
 		return $r;
 	}(this)))));
 	var circle1 = { center : [300,250], radius : 100};
@@ -80,6 +89,12 @@ Canvas.main = function() {
 	path.selfIntersections().map(function(point1) {
 		r.drawDot(point1,chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("#aa3300")),null,4);
 	});
+};
+Canvas.main = function() {
+	var canvas = window.document.querySelector("canvas");
+	var graphics = chad.render.canvas.CanvasGraphics.scaled(canvas,2);
+	var r = new chad.render.Render(graphics);
+	Canvas.draw(r);
 };
 var EReg = function(r,opt) {
 	opt = opt.split("u").join("");
@@ -220,8 +235,8 @@ chad.render.Render.prototype = {
 			var $r;
 			var this1;
 			{
-				var this2 = line.normal;
-				var angle = Math.atan2(this2[1],this2[0]);
+				var this11 = line.normal;
+				var angle = Math.atan2(this11[1],this11[0]);
 				this1 = angle;
 			}
 			$r = this1;
@@ -242,8 +257,11 @@ chad.render.Render.prototype = {
 		var _g = this;
 		this.g.wrap(stroke,fill,function() {
 			spline.iterate(function(init) {
+				console.log("start spline");
+				console.log("Point(" + init[0] + "," + init[1] + ")");
 				_g.g.moveTo(init);
 			},function(a,b,nout,nin) {
+				console.log("Point(" + b[0] + "," + b[1] + ")");
 				if(null == nout && null == nin) _g.g.lineTo(b); else {
 					if(null == nout) nout = a; else if(null == nin) nin = b;
 					_g.g.curveTo(b,nout,nin);
@@ -606,43 +624,43 @@ thx.color.Color.parse = function(color) {
 		var _g = info.name;
 		switch(_g) {
 		case "cmyk":
-			var this3;
-			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this3 = channels;
-			var this4;
-			var channels1 = [thx.core.Floats.normalize(1 - this3[0] - this3[3]),thx.core.Floats.normalize(1 - this3[1] - this3[3]),thx.core.Floats.normalize(1 - this3[2] - this3[3])];
-			this4 = channels1;
-			var channels2 = this4.concat([1.0]);
-			return channels2;
-		case "grey":case "gray":
-			var this5;
-			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
-			var this6;
-			if(grey < 0) this6 = 0; else if(grey > 1) this6 = 1; else this6 = grey;
-			this5 = this6;
-			var channels3 = [this5,this5,this5].concat([1.0]);
-			return channels3;
-		case "hsl":
-			var this7;
-			var channels4 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this7 = channels4;
-			var this8;
-			var channels5 = [thx.color._HSL.HSL_Impl_._c(this7[0] + 120,this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0],this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0] + -120,this7[1],this7[2])];
-			this8 = channels5;
-			var channels6 = this8.concat([1.0]);
-			return channels6;
-		case "hsla":
-			var this9;
-			var channels7 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this9 = channels7;
-			var channels8 = [thx.color._HSLA.HSLA_Impl_._c(this9[0] + 120,this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0],this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0] + -120,this9[1],this9[2]),this9[3]];
-			return channels8;
-		case "hsv":
-			var this10;
-			var channels9 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this10 = channels9;
 			var this11;
-			if(this10[1] == 0) this11 = [this10[2],this10[2],this10[2]]; else {
+			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this11 = channels;
+			var this21;
+			var channels1 = [thx.core.Floats.normalize(1 - this11[0] - this11[3]),thx.core.Floats.normalize(1 - this11[1] - this11[3]),thx.core.Floats.normalize(1 - this11[2] - this11[3])];
+			this21 = channels1;
+			var channels11 = this21.concat([1.0]);
+			return channels11;
+		case "grey":case "gray":
+			var this12;
+			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
+			var this13;
+			if(grey < 0) this13 = 0; else if(grey > 1) this13 = 1; else this13 = grey;
+			this12 = this13;
+			var channels2 = [this12,this12,this12].concat([1.0]);
+			return channels2;
+		case "hsl":
+			var this14;
+			var channels3 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this14 = channels3;
+			var this22;
+			var channels4 = [thx.color._HSL.HSL_Impl_._c(this14[0] + 120,this14[1],this14[2]),thx.color._HSL.HSL_Impl_._c(this14[0],this14[1],this14[2]),thx.color._HSL.HSL_Impl_._c(this14[0] + -120,this14[1],this14[2])];
+			this22 = channels4;
+			var channels12 = this22.concat([1.0]);
+			return channels12;
+		case "hsla":
+			var this15;
+			var channels5 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this15 = channels5;
+			var channels6 = [thx.color._HSLA.HSLA_Impl_._c(this15[0] + 120,this15[1],this15[2]),thx.color._HSLA.HSLA_Impl_._c(this15[0],this15[1],this15[2]),thx.color._HSLA.HSLA_Impl_._c(this15[0] + -120,this15[1],this15[2]),this15[3]];
+			return channels6;
+		case "hsv":
+			var this16;
+			var channels7 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this16 = channels7;
+			var this23;
+			if(this16[1] == 0) this23 = [this16[2],this16[2],this16[2]]; else {
 				var r;
 				var g;
 				var b;
@@ -651,52 +669,52 @@ thx.color.Color.parse = function(color) {
 				var p;
 				var q;
 				var t;
-				var h = this10[0] / 60;
+				var h = this16[0] / 60;
 				i = Math.floor(h);
 				f = h + -i;
-				p = this10[2] * (1 - this10[1]);
-				q = this10[2] * (1 - f * this10[1]);
-				t = this10[2] * (1 - (1 - f) * this10[1]);
+				p = this16[2] * (1 - this16[1]);
+				q = this16[2] * (1 - f * this16[1]);
+				t = this16[2] * (1 - (1 - f) * this16[1]);
 				switch(i) {
 				case 0:
-					r = this10[2];
+					r = this16[2];
 					g = t;
 					b = p;
 					break;
 				case 1:
 					r = q;
-					g = this10[2];
+					g = this16[2];
 					b = p;
 					break;
 				case 2:
 					r = p;
-					g = this10[2];
+					g = this16[2];
 					b = t;
 					break;
 				case 3:
 					r = p;
 					g = q;
-					b = this10[2];
+					b = this16[2];
 					break;
 				case 4:
 					r = t;
 					g = p;
-					b = this10[2];
+					b = this16[2];
 					break;
 				default:
-					r = this10[2];
+					r = this16[2];
 					g = p;
 					b = q;
 				}
-				this11 = [r,g,b];
+				this23 = [r,g,b];
 			}
-			var channels10 = this11.concat([1.0]);
-			return channels10;
+			var channels8 = this23.concat([1.0]);
+			return channels8;
 		case "hsva":
-			var this12;
-			var channels11 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this12 = channels11;
-			if(this12[1] == 0) return [this12[2],this12[2],this12[2],this12[3]]; else {
+			var this17;
+			var channels9 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this17 = channels9;
+			if(this17[1] == 0) return [this17[2],this17[2],this17[2],this17[3]]; else {
 				var r1;
 				var g1;
 				var b1;
@@ -705,50 +723,50 @@ thx.color.Color.parse = function(color) {
 				var p1;
 				var q1;
 				var t1;
-				var h1 = this12[0] / 60;
+				var h1 = this17[0] / 60;
 				i1 = Math.floor(h1);
 				f1 = h1 + -i1;
-				p1 = this12[2] * (1 - this12[1]);
-				q1 = this12[2] * (1 - f1 * this12[1]);
-				t1 = this12[2] * (1 - (1 - f1) * this12[1]);
+				p1 = this17[2] * (1 - this17[1]);
+				q1 = this17[2] * (1 - f1 * this17[1]);
+				t1 = this17[2] * (1 - (1 - f1) * this17[1]);
 				switch(i1) {
 				case 0:
-					r1 = this12[2];
+					r1 = this17[2];
 					g1 = t1;
 					b1 = p1;
 					break;
 				case 1:
 					r1 = q1;
-					g1 = this12[2];
+					g1 = this17[2];
 					b1 = p1;
 					break;
 				case 2:
 					r1 = p1;
-					g1 = this12[2];
+					g1 = this17[2];
 					b1 = t1;
 					break;
 				case 3:
 					r1 = p1;
 					g1 = q1;
-					b1 = this12[2];
+					b1 = this17[2];
 					break;
 				case 4:
 					r1 = t1;
 					g1 = p1;
-					b1 = this12[2];
+					b1 = this17[2];
 					break;
 				default:
-					r1 = this12[2];
+					r1 = this17[2];
 					g1 = p1;
 					b1 = q1;
 				}
-				return [r1,g1,b1,this12[3]];
+				return [r1,g1,b1,this17[3]];
 			}
 			break;
 		case "rgb":
-			var this13 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
-			var channels12 = this13.concat([1.0]);
-			return channels12;
+			var this18 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
+			var channels10 = this18.concat([1.0]);
+			return channels10;
 		case "rgba":
 			return thx.color._RGBXA.RGBXA_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,4));
 		default:
@@ -2404,7 +2422,7 @@ thx.core.Ints.range = function(start,stop,step) {
 		stop = start;
 		start = 0;
 	}
-	if((stop - start) / step == Math.POSITIVE_INFINITY) throw "infinite range";
+	if((stop - start) / step == Infinity) throw "infinite range";
 	var range = [];
 	var i = -1;
 	var j;
@@ -2529,18 +2547,6 @@ thx.geom.EdgeCubic.prototype = {
 	,intersectionsLine: function(line) {
 		return this.get_linearSpline().intersectionsLine(line);
 	}
-	,intersectionLengths: function(edge) {
-		if(js.Boot.__instanceof(edge,thx.geom.EdgeCubic)) return this.intersectionEdgeCubicLengths(edge); else return this.intersectionEdgeLinearLengths(edge);
-	}
-	,intersectionEdgeCubicLengths: function(edge) {
-		throw "not implemented";
-	}
-	,intersectionEdgeLinearLengths: function(edge) {
-		throw "not implemented";
-	}
-	,intersectionLineLengths: function(line) {
-		throw "not implemented";
-	}
 	,split: function(v) {
 		var node = this.interpolateNode(v);
 		if(null == node) return [];
@@ -2569,18 +2575,18 @@ thx.geom.EdgeCubic.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			var this11 = $this.p1;
+			$r = "Point(" + this11[0] + "," + this11[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this3 = $this.p2;
-			$r = "Point(" + this3[0] + "," + this3[1] + ")";
+			var this12 = $this.p2;
+			$r = "Point(" + this12[0] + "," + this12[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this4 = $this.p3;
-			$r = "Point(" + this4[0] + "," + this4[1] + ")";
+			var this13 = $this.p3;
+			$r = "Point(" + this13[0] + "," + this13[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -2597,59 +2603,59 @@ thx.geom.EdgeCubic.prototype = {
 		var l1;
 		var this1 = this.p0;
 		var p;
-		var this2;
-		var this3 = this.p1;
+		var this11;
+		var this12 = this.p1;
 		var p1 = this.p0;
 		var p_0 = -p1[0];
 		var p_1 = -p1[1];
-		this2 = [this3[0] + p_0,this3[1] + p_1];
-		p = [this2[0] * v,this2[1] * v];
+		this11 = [this12[0] + p_0,this12[1] + p_1];
+		p = [this11[0] * v,this11[1] * v];
 		l1 = [this1[0] + p[0],this1[1] + p[1]];
 		var m;
-		var this4 = this.p1;
+		var this13 = this.p1;
 		var p2;
-		var this5;
-		var this6 = this.p2;
+		var this14;
+		var this15 = this.p2;
 		var p3 = this.p1;
 		var p_01 = -p3[0];
 		var p_11 = -p3[1];
-		this5 = [this6[0] + p_01,this6[1] + p_11];
-		p2 = [this5[0] * v,this5[1] * v];
-		m = [this4[0] + p2[0],this4[1] + p2[1]];
+		this14 = [this15[0] + p_01,this15[1] + p_11];
+		p2 = [this14[0] * v,this14[1] * v];
+		m = [this13[0] + p2[0],this13[1] + p2[1]];
 		var r2;
-		var this7 = this.p2;
+		var this16 = this.p2;
 		var p4;
-		var this8;
-		var this9 = this.p3;
+		var this17;
+		var this18 = this.p3;
 		var p5 = this.p2;
 		var p_02 = -p5[0];
 		var p_12 = -p5[1];
-		this8 = [this9[0] + p_02,this9[1] + p_12];
-		p4 = [this8[0] * v,this8[1] * v];
-		r2 = [this7[0] + p4[0],this7[1] + p4[1]];
+		this17 = [this18[0] + p_02,this18[1] + p_12];
+		p4 = [this17[0] * v,this17[1] * v];
+		r2 = [this16[0] + p4[0],this16[1] + p4[1]];
 		var l2;
 		var p6;
-		var this10;
+		var this19;
 		var p_03 = -l1[0];
 		var p_13 = -l1[1];
-		this10 = [m[0] + p_03,m[1] + p_13];
-		p6 = [this10[0] * v,this10[1] * v];
+		this19 = [m[0] + p_03,m[1] + p_13];
+		p6 = [this19[0] * v,this19[1] * v];
 		l2 = [l1[0] + p6[0],l1[1] + p6[1]];
 		var r1;
 		var p7;
-		var this11;
+		var this110;
 		var p_04 = -m[0];
 		var p_14 = -m[1];
-		this11 = [r2[0] + p_04,r2[1] + p_14];
-		p7 = [this11[0] * v,this11[1] * v];
+		this110 = [r2[0] + p_04,r2[1] + p_14];
+		p7 = [this110[0] * v,this110[1] * v];
 		r1 = [m[0] + p7[0],m[1] + p7[1]];
 		var l3;
 		var p8;
-		var this12;
+		var this111;
 		var p_05 = -l2[0];
 		var p_15 = -l2[1];
-		this12 = [r1[0] + p_05,r1[1] + p_15];
-		p8 = [this12[0] * v,this12[1] * v];
+		this111 = [r1[0] + p_05,r1[1] + p_15];
+		p8 = [this111[0] * v,this111[1] * v];
 		l3 = [l2[0] + p8[0],l2[1] + p8[1]];
 		return [new thx.geom.EdgeCubic(this.p0,l1,l2,l3),new thx.geom.EdgeCubic(l3,r1,r2,this.p3)];
 	}
@@ -2771,82 +2777,54 @@ thx.geom.EdgeLinear.prototype = {
 					var $r;
 					var this1;
 					{
-						var this2 = $this.p0;
+						var this11 = $this.p0;
 						var p1 = $this.p1;
-						var x = Math.min(this2[0],p1[0]);
-						var y = Math.min(this2[1],p1[1]);
+						var x = Math.min(this11[0],p1[0]);
+						var y = Math.min(this11[1],p1[1]);
 						this1 = [x,y];
 					}
 					$r = this1[1];
 					return $r;
 				}(this)) && p[1] <= (function($this) {
 					var $r;
-					var this3;
+					var this12;
 					{
-						var this4 = $this.p0;
+						var this13 = $this.p0;
 						var p2 = $this.p1;
-						var x1 = Math.max(this4[0],p2[0]);
-						var y1 = Math.max(this4[1],p2[1]);
-						this3 = [x1,y1];
+						var x1 = Math.max(this13[0],p2[0]);
+						var y1 = Math.max(this13[1],p2[1]);
+						this12 = [x1,y1];
 					}
-					$r = this3[1];
+					$r = this12[1];
 					return $r;
 				}(this))) return [p];
 			} else if(p[0] >= (function($this) {
 				var $r;
-				var this5;
+				var this14;
 				{
-					var this6 = $this.p0;
+					var this15 = $this.p0;
 					var p3 = $this.p1;
-					var x2 = Math.min(this6[0],p3[0]);
-					var y2 = Math.min(this6[1],p3[1]);
-					this5 = [x2,y2];
+					var x2 = Math.min(this15[0],p3[0]);
+					var y2 = Math.min(this15[1],p3[1]);
+					this14 = [x2,y2];
 				}
-				$r = this5[0];
+				$r = this14[0];
 				return $r;
 			}(this)) && p[0] <= (function($this) {
 				var $r;
-				var this7;
+				var this16;
 				{
-					var this8 = $this.p0;
+					var this17 = $this.p0;
 					var p4 = $this.p1;
-					var x3 = Math.max(this8[0],p4[0]);
-					var y3 = Math.max(this8[1],p4[1]);
-					this7 = [x3,y3];
+					var x3 = Math.max(this17[0],p4[0]);
+					var y3 = Math.max(this17[1],p4[1]);
+					this16 = [x3,y3];
 				}
-				$r = this7[0];
+				$r = this16[0];
 				return $r;
 			}(this))) return [p];
 		}
 		return [];
-	}
-	,intersectionLengths: function(edge) {
-		if(js.Boot.__instanceof(edge,thx.geom.EdgeCubic)) return this.intersectionEdgeCubicLengths(edge); else return this.intersectionEdgeLinearLengths(edge);
-	}
-	,intersectionEdgeCubicLengths: function(edge) {
-		throw "not implemented";
-	}
-	,intersectionEdgeLinearLengths: function(edge) {
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.intersectionsEdgeLinear(edge);
-		while(_g1 < _g2.length) {
-			var p = _g2[_g1];
-			++_g1;
-			_g.push(thx.geom._Point.Point_Impl_.distanceTo(p,this.first));
-		}
-		return _g;
-	}
-	,intersectionLineLengths: function(line) {
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.intersectionsLine(line);
-		while(_g1 < _g2.length) {
-			var p = _g2[_g1];
-			++_g1;
-			_g.push(thx.geom._Point.Point_Impl_.distanceTo(p,this.first));
-		}
-		return _g;
 	}
 	,split: function(v) {
 		var mid = this.interpolate(v);
@@ -2857,7 +2835,7 @@ thx.geom.EdgeLinear.prototype = {
 	}
 	,interpolateNode: function(v) {
 		var p = this.interpolate(v);
-		if(null == v) return null;
+		if(null == p) return null;
 		return new thx.geom.SplineNode(p,null,null);
 	}
 	,toLinear: function() {
@@ -2874,8 +2852,8 @@ thx.geom.EdgeLinear.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
+			var this11 = $this.p1;
+			$r = "Point(" + this11[0] + "," + this11[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -2913,11 +2891,11 @@ thx.geom.EdgeLinear.prototype = {
 		if(!this._lengthSquared) {
 			this._lengthSquared = true;
 			var this1;
-			var this2 = this.p1;
+			var this11 = this.p1;
 			var p = this.p0;
 			var p_0 = -p[0];
 			var p_1 = -p[1];
-			this1 = [this2[0] + p_0,this2[1] + p_1];
+			this1 = [this11[0] + p_0,this11[1] + p_1];
 			this.lengthSquared = this1[0] * this1[0] + this1[1] * this1[1];
 		}
 		return this.lengthSquared;
@@ -3519,7 +3497,7 @@ thx.geom.Plane.prototype = {
 		var p_2 = -p1[2];
 		direction = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
 		var lambda = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,p1)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,direction);
-		if(Math.isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
+		if(isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
 		var p_01 = direction[0] * lambda;
 		var p_11 = direction[1] * lambda;
 		var p_21 = direction[2] * lambda;
@@ -4373,25 +4351,6 @@ thx.geom.Spline.prototype = {
 			return edge.intersectionsLine(line);
 		}));
 	}
-	,intersectionLengths: function(spline) {
-		var _g = this;
-		return thx.core.Arrays.flatten(this.get_edges().map(function(a) {
-			var len = a.get_length();
-			return thx.core.Arrays.flatten(spline.get_edges().map(function(b) {
-				return a.intersectionLengths(b).map(function(d) {
-					return d * len;
-				});
-			}));
-		})).map(function(v) {
-			return v / _g.get_length();
-		});
-	}
-	,splitBy: function(spline) {
-		throw "not implemented";
-	}
-	,intersectionLineLengths: function(line) {
-		throw "not implemented";
-	}
 	,split: function(value) {
 		if(value < 0 || value > 1) return null;
 		var len = this.get_length();
@@ -4525,8 +4484,8 @@ thx.geom.Spline.prototype = {
 				return $r;
 			}(this)) || (function($this) {
 				var $r;
-				var this2 = node.normalOut;
-				$r = !(this2[0] == null[0] && this2[1] == null[1]);
+				var this11 = node.normalOut;
+				$r = !(this11[0] == null[0] && this11[1] == null[1]);
 				return $r;
 			}(this))) return false;
 		}
@@ -4716,14 +4675,14 @@ thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
 };
 thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
 	var bottomLeft;
-	var this2 = this1[0];
-	var x = Math.min(this2[0],point[0]);
-	var y = Math.min(this2[1],point[1]);
+	var this11 = this1[0];
+	var x = Math.min(this11[0],point[0]);
+	var y = Math.min(this11[1],point[1]);
 	bottomLeft = [x,y];
 	var topRight;
-	var this3 = this1[1];
-	var x1 = Math.max(this3[0],point[0]);
-	var y1 = Math.max(this3[1],point[1]);
+	var this12 = this1[1];
+	var x1 = Math.max(this12[0],point[0]);
+	var y1 = Math.max(this12[1],point[1]);
 	topRight = [x1,y1];
 	return [bottomLeft,topRight];
 };
@@ -4751,15 +4710,15 @@ thx.geom.shape._Box.Box_Impl_.contains = function(this1,point) {
 thx.geom.shape._Box.Box_Impl_.equals = function(this1,other) {
 	return (function($this) {
 		var $r;
-		var this2 = this1[0];
+		var this11 = this1[0];
 		var p = other[0];
-		$r = this2[0] == p[0] && this2[1] == p[1];
+		$r = this11[0] == p[0] && this11[1] == p[1];
 		return $r;
 	}(this)) && (function($this) {
 		var $r;
-		var this3 = this1[1];
+		var this12 = this1[1];
 		var p1 = other[1];
-		$r = this3[0] == p1[0] && this3[1] == p1[1];
+		$r = this12[0] == p1[0] && this12[1] == p1[1];
 		return $r;
 	}(this));
 };
@@ -4930,15 +4889,6 @@ var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
 if(Array.prototype.indexOf) HxOverrides.indexOf = function(a,o,i) {
 	return Array.prototype.indexOf.call(a,o,i);
-};
-Math.NaN = Number.NaN;
-Math.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
-Math.POSITIVE_INFINITY = Number.POSITIVE_INFINITY;
-Math.isFinite = function(i) {
-	return isFinite(i);
-};
-Math.isNaN = function(i1) {
-	return isNaN(i1);
 };
 String.prototype.__class__ = String;
 String.__name__ = true;

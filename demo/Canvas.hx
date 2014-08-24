@@ -16,12 +16,7 @@ import thx.geom.Path;
 import thx.color.Color;
 
 class Canvas {
-	public static function main() {
-		var canvas : js.html.CanvasElement = cast js.Browser.document.querySelector('canvas'),
-			graphics = CanvasGraphics.scaled(canvas, 2),
-			r = new Render(graphics);
-		//var r = CanvasRender.scaled(canvas, 2);
-
+	public static function draw(r : Render) {
 		var len = 800,
 			xp = Spline.fromArray([new Point(0, 0), new Point(len, 0)], false),
 			xn = Spline.fromArray([new Point(0, 0), new Point(-len, 0)], false),
@@ -115,5 +110,13 @@ class Canvas {
 
 		path.selfIntersections()
 			.map(function(point) r.drawDot(point, FillColor("#aa3300"), 4));
+	}
+
+	public static function main() {
+		var canvas : js.html.CanvasElement = cast js.Browser.document.querySelector('canvas'),
+			graphics = CanvasGraphics.scaled(canvas, 2),
+			r = new Render(graphics);
+		//var r = CanvasRender.scaled(canvas, 2);
+		draw(r);
 	}
 }

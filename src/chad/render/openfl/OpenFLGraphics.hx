@@ -6,6 +6,7 @@ import thx.geom.Point3D;
 import thx.geom.shape.Box;
 import openfl.display.Graphics;
 import openfl.display.Sprite;
+import thx.color.RGBA;
 
 class OpenFLGraphics implements IGraphics {
 	var ctx : Graphics;
@@ -14,9 +15,13 @@ class OpenFLGraphics implements IGraphics {
 	public var width(default, null) : Float;
 	public var height(default, null) : Float;
 	public var reverseCoords(get, null) : Box;
-	public function new(sprite : Sprite, ?matrix : Matrix4x4, ?weightScale : Float -> Float) {
-		width = sprite.width;
-		height = sprite.height;
+
+	var latest : Point;
+	var defaultStroke : StrokeStyle;
+	var defaultFill : FillStyle;
+	public function new(sprite : Sprite, width : Int, height : Int, ?matrix : Matrix4x4, ?weightScale : Float -> Float) {
+		this.width = width;
+		this.height = height;
 		this.ctx = sprite.graphics;
 
 		this.weightScale = null == weightScale ? function(v) return v : weightScale;
@@ -25,59 +30,63 @@ class OpenFLGraphics implements IGraphics {
 			mirror     = Matrix4x4.mirrorY(),
 			translateY = Matrix4x4.translation(new Point3D(0, height, 0)),
 			correctionMatrix = Matrix4x4.identity
-				//.multiply(halfPixel)
+				.multiply(halfPixel)
 				.multiply(mirror)
 				.multiply(translateY);
 
 		this.matrix = (null == matrix ? Matrix4x4.identity : matrix).multiply(correctionMatrix);
-		/*
-		ctx.transform(
-			this.matrix.at(0),  //m11
-			this.matrix.at(1),  //m12
-			this.matrix.at(4),  //m21
-			this.matrix.at(5),  //m22
-			this.matrix.at(12), //dx
-			this.matrix.at(13)  //dy
-		);
-		*/
+		defaultStroke = StrokeLine(new LineStyle(1, "#000"));
+		defaultFill = FillColor("#0000");
+
+		applyStrokeStyle(defaultStroke);
+		applyFillStyle(defaultFill);
 	}
+
+	function t(p : Point)
+		return p.transform(matrix);
 
 	public function wrap(?stroke : StrokeStyle, ?fill : FillStyle, f : Void -> Void) {
 		var hasStyle = null != fill || null != stroke;
-		//if(hasStyle)
-		//	ctx.save();
-		//ctx.beginPath();
+		applyStrokeStyle(defaultStroke);
+		//applyFillStyle(defaultFill);
 		if(null != stroke)
 			applyStrokeStyle(stroke);
 		if(null != fill)
 			applyFillStyle(fill);
 		f();
-		if(null != fill)
-			ctx.endFill();
-		//if(null != stroke || null == fill)
-		//	ctx.stroke();
-		//if(hasStyle)
-		//	ctx.restore();
+		ctx.endFill();
 	}
 
-	public inline function lineTo(point : Point)
+	public inline function lineTo(point : Point) {
+		point = t(point);
 		ctx.lineTo(point.x, point.y);
+		latest = point;
+	}
 
-	// use edge cubic for this
-	public inline function curveTo(point : Point, cout : Null<Point>, cin : Null<Point>)
-		//ctx.bezierCurveTo(cout.x, cout.y, cin.x, cin.y, point.x, point.y);
-		ctx.curveTo(cout.x, cout.y, point.x, point.y);
+	public inline function curveTo(point : Point, cout : Null<Point>, cin : Null<Point>) {
+		point = t(point);
+		cout  = t(cout);
+		cin   = t(cin);
+		var edge = new thx.geom.EdgeCubic(latest, cout, cin, point);
+		edge.linearSegments.map(function(segment) {
+			ctx.lineTo(segment.last.x, segment.last.y);
+		});
+		latest = point;
+	}
 
-	public inline function moveTo(point : Point)
+	public inline function moveTo(point : Point) {
+		point = t(point);
 		ctx.moveTo(point.x, point.y);
+		latest = point;
+	}
 
 	function applyLineStyle(style : LineStyle) {
 		if(null == style)
 			return;
 		ctx.lineStyle(
-			weightScale(style.width)/*,
-			0x000000, // style.color,
-			null, // alpha
+			weightScale(style.width),
+			style.color.toRGB(),
+			style.color.alpha / 255/*, // alpha
 			null, // pixel hinting bool
 			null, // scaleMode : openfl.display.LineScaleMode
 			null, // openfl.display.CapsStyle
@@ -102,7 +111,7 @@ class OpenFLGraphics implements IGraphics {
 	public function applyFillStyle(style : FillStyle)
 		switch style {
 			case FillColor(c):
-				ctx.beginFill(0xdddddd /*c*/);
+				ctx.beginFill(c.toRGB(), c.alpha / 255);
 		};
 
 	function get_reverseCoords() {
