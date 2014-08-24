@@ -63,6 +63,7 @@ class OpenFLGraphics implements IGraphics {
 	public inline function lineTo(point : Point)
 		ctx.lineTo(point.x, point.y);
 
+	// use edge cubic for this
 	public inline function curveTo(point : Point, cout : Null<Point>, cin : Null<Point>)
 		//ctx.bezierCurveTo(cout.x, cout.y, cin.x, cin.y, point.x, point.y);
 		ctx.curveTo(cout.x, cout.y, point.x, point.y);

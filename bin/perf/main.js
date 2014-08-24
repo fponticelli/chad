@@ -40,13 +40,6 @@ HxOverrides.indexOf = function(a,obj,i) {
 	}
 	return -1;
 };
-HxOverrides.iter = function(a) {
-	return { cur : 0, arr : a, hasNext : function() {
-		return this.cur < this.arr.length;
-	}, next : function() {
-		return this.arr[this.cur++];
-	}};
-};
 Math.__name__ = true;
 var Perf = function() { };
 Perf.__name__ = true;
@@ -55,7 +48,24 @@ Perf.r = function() {
 };
 Perf.main = function() {
 	var test = new thx_benchmark_SpeedTest(1000000);
-	test.add("description",function() {
+	var interpolate = function(a,b,v) {
+		return (b - a) * v + a;
+	};
+	var interpolatef = function(a1,b1) {
+		var diff = b1 - a1;
+		return function(v1) {
+			return diff * v1 + a1;
+		};
+	};
+	test.add("interpolate",function() {
+		interpolate(1,5,Math.random());
+	},true);
+	test.add("interpolatef",function() {
+		(interpolatef(1,5))(Math.random());
+	});
+	var regen = interpolatef(1,5);
+	test.add("interpolatef regen",function() {
+		regen(Math.random());
 	});
 	test.execute();
 };
@@ -97,23 +107,6 @@ StringTools.rpad = function(s,c,l) {
 	while(s.length < l) s = s + c;
 	return s;
 };
-var ValueType = { __ename__ : true, __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
-ValueType.TNull = ["TNull",0];
-ValueType.TNull.__enum__ = ValueType;
-ValueType.TInt = ["TInt",1];
-ValueType.TInt.__enum__ = ValueType;
-ValueType.TFloat = ["TFloat",2];
-ValueType.TFloat.__enum__ = ValueType;
-ValueType.TBool = ["TBool",3];
-ValueType.TBool.__enum__ = ValueType;
-ValueType.TObject = ["TObject",4];
-ValueType.TObject.__enum__ = ValueType;
-ValueType.TFunction = ["TFunction",5];
-ValueType.TFunction.__enum__ = ValueType;
-ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; return $x; };
-ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; return $x; };
-ValueType.TUnknown = ["TUnknown",8];
-ValueType.TUnknown.__enum__ = ValueType;
 var haxe_Timer = function(time_ms) {
 	var me = this;
 	this.id = setInterval(function() {
@@ -395,6 +388,19 @@ thx_core_Arrays.crossMulti = function(a) {
 thx_core_Arrays.pushIf = function(arr,cond,value) {
 	if(cond) arr.push(value);
 	return arr;
+};
+thx_core_Arrays.eachPair = function(arr,handler) {
+	var _g1 = 0;
+	var _g = arr.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		var _g3 = i;
+		var _g2 = arr.length;
+		while(_g3 < _g2) {
+			var j = _g3++;
+			if(!handler(arr[i],arr[j])) return;
+		}
+	}
 };
 thx_core_Arrays.mapi = function(arr,handler) {
 	return arr.map(handler);

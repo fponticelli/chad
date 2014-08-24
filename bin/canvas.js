@@ -10,8 +10,8 @@ Canvas.main = function() {
 	var xn = thx.geom.Spline.fromArray([[0,0],[-len,0]],false);
 	var yp = thx.geom.Spline.fromArray([[0,0],[0,len]],false);
 	var yn = thx.geom.Spline.fromArray([[0,0],[0,-len]],false);
-	var red = new chad.render.LineStyle(2,"red");
-	var green = new chad.render.LineStyle(2,"green");
+	var red = new chad.render.LineStyle(2,thx.color._RGBA.RGBA_Impl_.fromString("#f00"));
+	var green = new chad.render.LineStyle(2,thx.color._RGBA.RGBA_Impl_.fromString("#0f0"));
 	r.drawSpline(xp,chad.render.StrokeStyle.StrokeLine(red));
 	r.drawSpline(xn,chad.render.StrokeStyle.StrokeDash([8,8],green));
 	r.drawSpline(yp,chad.render.StrokeStyle.StrokeLine(green));
@@ -43,24 +43,42 @@ Canvas.main = function() {
 	r.drawSpline(thx.geom.Spline.fromEdges([s[0]],false),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(3)));
 	r.drawSpline(thx.geom.Spline.fromEdges([s[1]],false),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(3)));
 	r.drawSpline(thx.geom.Transformables.translateY(arc.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([20,0,0])),-20).toSpline(),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(10)));
-	r.drawSpline(thx.geom.Transformables.translateY(thx.geom.Transformables.translateX(arc.toSpline().toLinear(),20),-20),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(2,"#fff")));
+	r.drawSpline(thx.geom.Transformables.translateY(thx.geom.Transformables.translateX(arc.toSpline().toLinear(),20),-20),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(2,thx.color._RGBA.RGBA_Impl_.fromString("#fff"))));
 	var e = [thx.geom.Transformables.translate(thx.geom.Transformables.scale(new thx.geom.EdgeCubic([0,0],[0,0.5522847498307936],[0.447715250169206436,1],[1,1]),[200,200,1]),[40,40,0]),thx.geom.Transformables.translate(thx.geom.Transformables.scale(new thx.geom.EdgeCubic([1,1],[1.55228474983079368,1],[2,0.5522847498307936],[2,0]),[200,200,1]),[40,40,0])];
 	var c = thx.geom.Transformables.scale(thx.geom.Spline.fromEdges(e,false),[0.4,0.4,1]);
-	r.drawSpline(c,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(8,"red")));
-	r.drawSpline(c.toLinear(),chad.render.StrokeStyle.StrokeDash([5,5],new chad.render.LineStyle(4,"lime")));
-	r.drawSpline(e[0].toSpline().toLinear(),chad.render.StrokeStyle.StrokeDash([8,4],new chad.render.LineStyle(4,"orange")));
+	r.drawSpline(c,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(8,(function($this) {
+		var $r;
+		var this1 = thx.color.Color.red;
+		var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+		return $r;
+	}(this)))));
+	r.drawSpline(c.toLinear(),chad.render.StrokeStyle.StrokeDash([5,5],new chad.render.LineStyle(4,(function($this) {
+		var $r;
+		var this3 = thx.color.Color.lime;
+		var this4 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this3 >> 16 & 255 & 255) << 16 | (this3 >> 8 & 255 & 255) << 8 | this3 & 255 & 255);
+		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this4[0],this4[1],this4[2],this4[3]);
+		return $r;
+	}(this)))));
+	r.drawSpline(e[0].toSpline().toLinear(),chad.render.StrokeStyle.StrokeDash([8,4],new chad.render.LineStyle(4,(function($this) {
+		var $r;
+		var this5 = thx.color.Color.orange;
+		var this6 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this5 >> 16 & 255 & 255) << 16 | (this5 >> 8 & 255 & 255) << 8 | this5 & 255 & 255);
+		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this6[0],this6[1],this6[2],this6[3]);
+		return $r;
+	}(this)))));
 	var circle1 = { center : [300,250], radius : 100};
 	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle1).toLinear());
 	var circle2 = { center : [200,200], radius : 80};
-	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2),chad.render.StrokeStyle.StrokeDash([4,4,8,4]),chad.render.FillStyle.FillColor("rgba(0,255,155,0.1)"));
+	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2),chad.render.StrokeStyle.StrokeDash([4,4,8,4]),chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("rgba(0,255,155,0.1)")));
 	var circle3 = { center : [240,280], radius : 60};
-	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle3),chad.render.StrokeStyle.StrokeDot(4),chad.render.FillStyle.FillColor("rgba(100,255,155,0.5)"));
+	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle3),chad.render.StrokeStyle.StrokeDot(4),chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("rgba(100,255,155,0.5)")));
 	var path = new thx.geom.Path([thx.geom.shape._Circle.Circle_Impl_.toSpline(circle1),thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2),thx.geom.shape._Circle.Circle_Impl_.toSpline(circle3)]);
 	thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2).intersectionsSpline(thx.geom.shape._Box.Box_Impl_.toSpline(rect)).map(function(point) {
-		r.drawDot(point,chad.render.FillStyle.FillColor("#aa3300"),null,6);
+		r.drawDot(point,chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("#aa3300")),null,6);
 	});
 	path.selfIntersections().map(function(point1) {
-		r.drawDot(point1,chad.render.FillStyle.FillColor("#aa3300"),null,4);
+		r.drawDot(point1,chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("#aa3300")),null,4);
 	});
 };
 var EReg = function(r,opt) {
@@ -74,6 +92,9 @@ EReg.prototype = {
 		this.r.m = this.r.exec(s);
 		this.r.s = s;
 		return this.r.m != null;
+	}
+	,matched: function(n) {
+		if(this.r.m != null && n >= 0 && n < this.r.m.length) return this.r.m[n]; else throw "EReg::matched";
 	}
 	,__class__: EReg
 };
@@ -112,6 +133,8 @@ HxOverrides.iter = function(a) {
 		return this.arr[this.cur++];
 	}};
 };
+var IMap = function() { };
+IMap.__name__ = true;
 Math.__name__ = true;
 var Std = function() { };
 Std.__name__ = true;
@@ -124,8 +147,23 @@ Std.parseInt = function(x) {
 	if(isNaN(v)) return null;
 	return v;
 };
+Std.parseFloat = function(x) {
+	return parseFloat(x);
+};
 Std.random = function(x) {
 	if(x <= 0) return 0; else return Math.floor(Math.random() * x);
+};
+var StringTools = function() { };
+StringTools.__name__ = true;
+StringTools.hex = function(n,digits) {
+	var s = "";
+	var hexChars = "0123456789ABCDEF";
+	do {
+		s = hexChars.charAt(n & 15) + s;
+		n >>>= 4;
+	} while(n > 0);
+	if(digits != null) while(s.length < digits) s = "0" + s;
+	return s;
 };
 var chad = {};
 chad.render = {};
@@ -145,10 +183,9 @@ chad.render._Join.Join_Impl_.__name__ = true;
 chad.render.LineStyle = function(width,color,join,cap) {
 	if(cap == null) cap = "butt";
 	if(join == null) join = "miter";
-	if(color == null) color = "#000000";
 	if(width == null) width = 1.0;
 	this.width = width;
-	this.color = color;
+	if(null == color) this.color = color = chad.render.LineStyle.defaultColor; else this.color = color;
 	this.join = join;
 	this.cap = cap;
 };
@@ -159,7 +196,7 @@ chad.render.LineStyle.prototype = {
 chad.render.Render = function(graphics) {
 	this.g = graphics;
 	this.g.applyStrokeStyle(chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle()));
-	this.g.applyFillStyle(chad.render.FillStyle.FillColor("#000000"));
+	this.g.applyFillStyle(chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("#000000")));
 };
 chad.render.Render.__name__ = true;
 chad.render.Render.prototype = {
@@ -183,8 +220,8 @@ chad.render.Render.prototype = {
 			var $r;
 			var this1;
 			{
-				var this11 = line.normal;
-				var angle = Math.atan2(this11[1],this11[0]);
+				var this2 = line.normal;
+				var angle = Math.atan2(this2[1],this2[0]);
 				this1 = angle;
 			}
 			$r = this1;
@@ -283,7 +320,8 @@ chad.render.canvas.CanvasGraphics.prototype = {
 		this.ctx.lineWidth = this.weightScale(style.width);
 		this.ctx.lineCap = style.cap;
 		this.ctx.lineJoin = style.join;
-		this.ctx.strokeStyle = style.color;
+		var this1 = style.color;
+		this.ctx.strokeStyle = "rgba(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + "," + (this1 >> 24 & 255) / 255 + ")";
 	}
 	,applyStrokeStyle: function(style) {
 		switch(style[1]) {
@@ -309,7 +347,7 @@ chad.render.canvas.CanvasGraphics.prototype = {
 	,applyFillStyle: function(style) {
 		{
 			var c = style[2];
-			this.ctx.fillStyle = c;
+			this.ctx.fillStyle = "rgba(" + (c >> 16 & 255) + "," + (c >> 8 & 255) + "," + (c & 255) + "," + (c >> 24 & 255) / 255 + ")";
 		}
 	}
 	,get_reverseCoords: function() {
@@ -321,6 +359,25 @@ chad.render.canvas.CanvasGraphics.prototype = {
 		return this.reverseCoords;
 	}
 	,__class__: chad.render.canvas.CanvasGraphics
+};
+var haxe = {};
+haxe.ds = {};
+haxe.ds.StringMap = function() {
+	this.h = { };
+};
+haxe.ds.StringMap.__name__ = true;
+haxe.ds.StringMap.__interfaces__ = [IMap];
+haxe.ds.StringMap.prototype = {
+	set: function(key,value) {
+		this.h["$" + key] = value;
+	}
+	,get: function(key) {
+		return this.h["$" + key];
+	}
+	,exists: function(key) {
+		return this.h.hasOwnProperty("$" + key);
+	}
+	,__class__: haxe.ds.StringMap
 };
 var js = {};
 js.Boot = function() { };
@@ -438,6 +495,1702 @@ js.Boot.__instanceof = function(o,cl) {
 	}
 };
 var thx = {};
+thx.color = {};
+thx.color._CMYK = {};
+thx.color._CMYK.CMYK_Impl_ = function() { };
+thx.color._CMYK.CMYK_Impl_.__name__ = true;
+thx.color._CMYK.CMYK_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "cmyk":
+			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			return channels;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._CMYK.CMYK_Impl_.fromFloats = function(cyan,magenta,yellow,black) {
+	return [cyan < 0?0:cyan > 1?1:cyan,magenta < 0?0:magenta > 1?1:magenta,yellow < 0?0:yellow > 1?1:yellow,black < 0?0:black > 1?1:black];
+};
+thx.color._CMYK.CMYK_Impl_._new = function(channels) {
+	return channels;
+};
+thx.color._CMYK.CMYK_Impl_.toGrey = function(this1) {
+	var this2;
+	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
+	this2 = channels;
+	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	var this3;
+	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
+	return this3;
+};
+thx.color._CMYK.CMYK_Impl_.toHSL = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSL((function($this) {
+		var $r;
+		var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
+		$r = channels;
+		return $r;
+	}(this)));
+};
+thx.color._CMYK.CMYK_Impl_.toHSV = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSV((function($this) {
+		var $r;
+		var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
+		$r = channels;
+		return $r;
+	}(this)));
+};
+thx.color._CMYK.CMYK_Impl_.toRGBX = function(this1) {
+	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
+	return channels;
+};
+thx.color._CMYK.CMYK_Impl_.toRGBXA = function(this1) {
+	var this2;
+	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
+	this2 = channels;
+	var channels1 = this2.concat([1.0]);
+	return channels1;
+};
+thx.color._CMYK.CMYK_Impl_.toString = function(this1) {
+	return "cmyk(" + this1[0] + "," + this1[1] + "," + this1[2] + "," + this1[3] + ")";
+};
+thx.color._CMYK.CMYK_Impl_.equals = function(this1,other) {
+	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
+};
+thx.color._CMYK.CMYK_Impl_.darker = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
+	return channels;
+};
+thx.color._CMYK.CMYK_Impl_.lighter = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
+	return channels;
+};
+thx.color._CMYK.CMYK_Impl_.interpolate = function(this1,other,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
+	return channels;
+};
+thx.color._CMYK.CMYK_Impl_.get_black = function(this1) {
+	return this1[3];
+};
+thx.color._CMYK.CMYK_Impl_.get_cyan = function(this1) {
+	return this1[0];
+};
+thx.color._CMYK.CMYK_Impl_.get_magenta = function(this1) {
+	return this1[1];
+};
+thx.color._CMYK.CMYK_Impl_.get_yellow = function(this1) {
+	return this1[2];
+};
+thx.color.Color = function() { };
+thx.color.Color.__name__ = true;
+thx.color.Color.parse = function(color) {
+	if(thx.color.Color.names.exists(color)) {
+		var this1 = thx.color.Color.names.get(color);
+		return thx.color._RGBA.RGBA_Impl_.toRGBXA((function($this) {
+			var $r;
+			var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+			return $r;
+		}(this)));
+	}
+	var info = thx.color.parse.ColorParser.parseHex(color);
+	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "cmyk":
+			var this3;
+			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this3 = channels;
+			var this4;
+			var channels1 = [thx.core.Floats.normalize(1 - this3[0] - this3[3]),thx.core.Floats.normalize(1 - this3[1] - this3[3]),thx.core.Floats.normalize(1 - this3[2] - this3[3])];
+			this4 = channels1;
+			var channels2 = this4.concat([1.0]);
+			return channels2;
+		case "grey":case "gray":
+			var this5;
+			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
+			var this6;
+			if(grey < 0) this6 = 0; else if(grey > 1) this6 = 1; else this6 = grey;
+			this5 = this6;
+			var channels3 = [this5,this5,this5].concat([1.0]);
+			return channels3;
+		case "hsl":
+			var this7;
+			var channels4 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this7 = channels4;
+			var this8;
+			var channels5 = [thx.color._HSL.HSL_Impl_._c(this7[0] + 120,this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0],this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0] + -120,this7[1],this7[2])];
+			this8 = channels5;
+			var channels6 = this8.concat([1.0]);
+			return channels6;
+		case "hsla":
+			var this9;
+			var channels7 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this9 = channels7;
+			var channels8 = [thx.color._HSLA.HSLA_Impl_._c(this9[0] + 120,this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0],this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0] + -120,this9[1],this9[2]),this9[3]];
+			return channels8;
+		case "hsv":
+			var this10;
+			var channels9 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this10 = channels9;
+			var this11;
+			if(this10[1] == 0) this11 = [this10[2],this10[2],this10[2]]; else {
+				var r;
+				var g;
+				var b;
+				var i;
+				var f;
+				var p;
+				var q;
+				var t;
+				var h = this10[0] / 60;
+				i = Math.floor(h);
+				f = h + -i;
+				p = this10[2] * (1 - this10[1]);
+				q = this10[2] * (1 - f * this10[1]);
+				t = this10[2] * (1 - (1 - f) * this10[1]);
+				switch(i) {
+				case 0:
+					r = this10[2];
+					g = t;
+					b = p;
+					break;
+				case 1:
+					r = q;
+					g = this10[2];
+					b = p;
+					break;
+				case 2:
+					r = p;
+					g = this10[2];
+					b = t;
+					break;
+				case 3:
+					r = p;
+					g = q;
+					b = this10[2];
+					break;
+				case 4:
+					r = t;
+					g = p;
+					b = this10[2];
+					break;
+				default:
+					r = this10[2];
+					g = p;
+					b = q;
+				}
+				this11 = [r,g,b];
+			}
+			var channels10 = this11.concat([1.0]);
+			return channels10;
+		case "hsva":
+			var this12;
+			var channels11 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this12 = channels11;
+			if(this12[1] == 0) return [this12[2],this12[2],this12[2],this12[3]]; else {
+				var r1;
+				var g1;
+				var b1;
+				var i1;
+				var f1;
+				var p1;
+				var q1;
+				var t1;
+				var h1 = this12[0] / 60;
+				i1 = Math.floor(h1);
+				f1 = h1 + -i1;
+				p1 = this12[2] * (1 - this12[1]);
+				q1 = this12[2] * (1 - f1 * this12[1]);
+				t1 = this12[2] * (1 - (1 - f1) * this12[1]);
+				switch(i1) {
+				case 0:
+					r1 = this12[2];
+					g1 = t1;
+					b1 = p1;
+					break;
+				case 1:
+					r1 = q1;
+					g1 = this12[2];
+					b1 = p1;
+					break;
+				case 2:
+					r1 = p1;
+					g1 = this12[2];
+					b1 = t1;
+					break;
+				case 3:
+					r1 = p1;
+					g1 = q1;
+					b1 = this12[2];
+					break;
+				case 4:
+					r1 = t1;
+					g1 = p1;
+					b1 = this12[2];
+					break;
+				default:
+					r1 = this12[2];
+					g1 = p1;
+					b1 = q1;
+				}
+				return [r1,g1,b1,this12[3]];
+			}
+			break;
+		case "rgb":
+			var this13 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
+			var channels12 = this13.concat([1.0]);
+			return channels12;
+		case "rgba":
+			return thx.color._RGBXA.RGBXA_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,4));
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._Grey = {};
+thx.color._Grey.Grey_Impl_ = function() { };
+thx.color._Grey.Grey_Impl_.__name__ = true;
+thx.color._Grey.Grey_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "grey":case "gray":
+			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
+			var this1;
+			if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
+			return this1;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._Grey.Grey_Impl_._new = function(grey) {
+	var this1;
+	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
+	return this1;
+};
+thx.color._Grey.Grey_Impl_.toCMYK = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toCMYK([this1,this1,this1]);
+};
+thx.color._Grey.Grey_Impl_.toHSL = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSL([this1,this1,this1]);
+};
+thx.color._Grey.Grey_Impl_.toHSV = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSV([this1,this1,this1]);
+};
+thx.color._Grey.Grey_Impl_.toRGBX = function(this1) {
+	return [this1,this1,this1];
+};
+thx.color._Grey.Grey_Impl_.toRGBXA = function(this1) {
+	var channels = [this1,this1,this1].concat([1.0]);
+	return channels;
+};
+thx.color._Grey.Grey_Impl_.equals = function(this1,other) {
+	return this1 == other;
+};
+thx.color._Grey.Grey_Impl_.darker = function(color,t) {
+	var grey = thx.core.Floats.interpolateBetween(t,color,0);
+	var this1;
+	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
+	return this1;
+};
+thx.color._Grey.Grey_Impl_.lighter = function(color,t) {
+	var grey = thx.core.Floats.interpolateBetween(t,color,1);
+	var this1;
+	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
+	return this1;
+};
+thx.color._Grey.Grey_Impl_.interpolate = function(a,b,t) {
+	var grey = thx.core.Floats.interpolateBetween(t,a,b);
+	var this1;
+	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
+	return this1;
+};
+thx.color._Grey.Grey_Impl_.get_grey = function(this1) {
+	return this1;
+};
+thx.color._Grey.Grey_Impl_.toString = function(this1) {
+	return "grey(" + this1 * 100 + "%)";
+};
+thx.color._HSL = {};
+thx.color._HSL.HSL_Impl_ = function() { };
+thx.color._HSL.HSL_Impl_.__name__ = true;
+thx.color._HSL.HSL_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "hsl":
+			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			return channels;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._HSL.HSL_Impl_.fromFloats = function(hue,saturation,lightness) {
+	return [hue,saturation,lightness];
+};
+thx.color._HSL.HSL_Impl_._new = function(channels) {
+	return channels;
+};
+thx.color._HSL.HSL_Impl_.toCMYK = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toCMYK((function($this) {
+		var $r;
+		var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
+		$r = channels;
+		return $r;
+	}(this)));
+};
+thx.color._HSL.HSL_Impl_.toGrey = function(this1) {
+	var this2;
+	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
+	this2 = channels;
+	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	var this3;
+	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
+	return this3;
+};
+thx.color._HSL.HSL_Impl_.toHSV = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSV((function($this) {
+		var $r;
+		var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
+		$r = channels;
+		return $r;
+	}(this)));
+};
+thx.color._HSL.HSL_Impl_.toRGBX = function(this1) {
+	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
+	return channels;
+};
+thx.color._HSL.HSL_Impl_.toRGBXA = function(this1) {
+	var this2;
+	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
+	this2 = channels;
+	var channels1 = this2.concat([1.0]);
+	return channels1;
+};
+thx.color._HSL.HSL_Impl_.toHSLA = function(this1) {
+	var channels = this1.concat([1.0]);
+	return channels;
+};
+thx.color._HSL.HSL_Impl_.withAlpha = function(this1,alpha) {
+	var channels = this1.concat([alpha]);
+	return channels;
+};
+thx.color._HSL.HSL_Impl_.toCSS3 = function(this1) {
+	return "hsl(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx.color._HSL.HSL_Impl_.toString = function(this1) {
+	return "hsl(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx.color._HSL.HSL_Impl_.equals = function(this1,other) {
+	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2];
+};
+thx.color._HSL.HSL_Impl_.darker = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0)];
+	return channels;
+};
+thx.color._HSL.HSL_Impl_.lighter = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1)];
+	return channels;
+};
+thx.color._HSL.HSL_Impl_.interpolate = function(this1,other,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2])];
+	return channels;
+};
+thx.color._HSL.HSL_Impl_.get_hue = function(this1) {
+	return this1[0];
+};
+thx.color._HSL.HSL_Impl_.get_huef = function(this1) {
+	return this1[0];
+};
+thx.color._HSL.HSL_Impl_.get_saturation = function(this1) {
+	return this1[1];
+};
+thx.color._HSL.HSL_Impl_.get_lightness = function(this1) {
+	return this1[2];
+};
+thx.color._HSL.HSL_Impl_._c = function(d,s,l) {
+	var m2;
+	if(l <= 0.5) m2 = l * (1 + s); else m2 = l + s - l * s;
+	var m1 = 2 * l - m2;
+	d = thx.core.Floats.wrapCircular(d,360);
+	if(d < 60) return m1 + (m2 - m1) * d / 60; else if(d < 180) return m2; else if(d < 240) return m1 + (m2 - m1) * (240 - d) / 60; else return m1;
+};
+thx.color._HSLA = {};
+thx.color._HSLA.HSLA_Impl_ = function() { };
+thx.color._HSLA.HSLA_Impl_.__name__ = true;
+thx.color._HSLA.HSLA_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "hsl":
+			var this1;
+			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this1 = channels;
+			var channels1 = this1.concat([1.0]);
+			return channels1;
+		case "hsla":
+			var channels2 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			return channels2;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._HSLA.HSLA_Impl_.fromFloats = function(hue,saturation,lightness,alpha) {
+	return [hue,saturation,lightness,alpha];
+};
+thx.color._HSLA.HSLA_Impl_._new = function(channels) {
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.toHSL = function(this1) {
+	var channels = this1.slice(0,3);
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.toHSVA = function(this1) {
+	return thx.color._RGBXA.RGBXA_Impl_.toHSVA((function($this) {
+		var $r;
+		var channels = [thx.color._HSLA.HSLA_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0] + -120,this1[1],this1[2]),this1[3]];
+		$r = channels;
+		return $r;
+	}(this)));
+};
+thx.color._HSLA.HSLA_Impl_.toRGBXA = function(this1) {
+	var channels = [thx.color._HSLA.HSLA_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0] + -120,this1[1],this1[2]),this1[3]];
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.toCSS3 = function(this1) {
+	return "hsla(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx.color._HSLA.HSLA_Impl_.toString = function(this1) {
+	return "hsla(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx.color._HSLA.HSLA_Impl_.equals = function(this1,other) {
+	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
+};
+thx.color._HSLA.HSLA_Impl_.darker = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0),this1[3]];
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.lighter = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1),this1[3]];
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.transparent = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.opaque = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.interpolate = function(this1,other,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
+	return channels;
+};
+thx.color._HSLA.HSLA_Impl_.get_hue = function(this1) {
+	return this1[0];
+};
+thx.color._HSLA.HSLA_Impl_.get_huef = function(this1) {
+	return this1[0];
+};
+thx.color._HSLA.HSLA_Impl_.get_saturation = function(this1) {
+	return this1[1];
+};
+thx.color._HSLA.HSLA_Impl_.get_lightness = function(this1) {
+	return this1[2];
+};
+thx.color._HSLA.HSLA_Impl_.get_alpha = function(this1) {
+	return this1[3];
+};
+thx.color._HSLA.HSLA_Impl_._c = function(d,s,l) {
+	var m2;
+	if(l <= 0.5) m2 = l * (1 + s); else m2 = l + s - l * s;
+	var m1 = 2 * l - m2;
+	d = thx.core.Floats.wrapCircular(d,360);
+	if(d < 60) return m1 + (m2 - m1) * d / 60; else if(d < 180) return m2; else if(d < 240) return m1 + (m2 - m1) * (240 - d) / 60; else return m1;
+};
+thx.color._HSV = {};
+thx.color._HSV.HSV_Impl_ = function() { };
+thx.color._HSV.HSV_Impl_.__name__ = true;
+thx.color._HSV.HSV_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "hsv":
+			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			return channels;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._HSV.HSV_Impl_.fromFloats = function(hue,saturation,value) {
+	return [hue,saturation,value];
+};
+thx.color._HSV.HSV_Impl_._new = function(channels) {
+	return channels;
+};
+thx.color._HSV.HSV_Impl_.toCMYK = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toCMYK(this1[1] == 0?[this1[2],this1[2],this1[2]]:(function($this) {
+		var $r;
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h + -i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		$r = [r,g,b];
+		return $r;
+	}(this)));
+};
+thx.color._HSV.HSV_Impl_.toGrey = function(this1) {
+	var this2;
+	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h + -i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		this2 = [r,g,b];
+	}
+	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	var this3;
+	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
+	return this3;
+};
+thx.color._HSV.HSV_Impl_.toHSL = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSL(this1[1] == 0?[this1[2],this1[2],this1[2]]:(function($this) {
+		var $r;
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h + -i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		$r = [r,g,b];
+		return $r;
+	}(this)));
+};
+thx.color._HSV.HSV_Impl_.toRGBX = function(this1) {
+	if(this1[1] == 0) return [this1[2],this1[2],this1[2]];
+	var r;
+	var g;
+	var b;
+	var i;
+	var f;
+	var p;
+	var q;
+	var t;
+	var h = this1[0] / 60;
+	i = Math.floor(h);
+	f = h + -i;
+	p = this1[2] * (1 - this1[1]);
+	q = this1[2] * (1 - f * this1[1]);
+	t = this1[2] * (1 - (1 - f) * this1[1]);
+	switch(i) {
+	case 0:
+		r = this1[2];
+		g = t;
+		b = p;
+		break;
+	case 1:
+		r = q;
+		g = this1[2];
+		b = p;
+		break;
+	case 2:
+		r = p;
+		g = this1[2];
+		b = t;
+		break;
+	case 3:
+		r = p;
+		g = q;
+		b = this1[2];
+		break;
+	case 4:
+		r = t;
+		g = p;
+		b = this1[2];
+		break;
+	default:
+		r = this1[2];
+		g = p;
+		b = q;
+	}
+	return [r,g,b];
+};
+thx.color._HSV.HSV_Impl_.toRGBXA = function(this1) {
+	var this2;
+	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h + -i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		this2 = [r,g,b];
+	}
+	var channels = this2.concat([1.0]);
+	return channels;
+};
+thx.color._HSV.HSV_Impl_.toHSVA = function(this1) {
+	var channels = this1.concat([1.0]);
+	return channels;
+};
+thx.color._HSV.HSV_Impl_.withAlpha = function(this1,alpha) {
+	var channels = this1.concat([alpha]);
+	return channels;
+};
+thx.color._HSV.HSV_Impl_.toString = function(this1) {
+	return "hsv(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx.color._HSV.HSV_Impl_.equals = function(this1,other) {
+	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2];
+};
+thx.color._HSV.HSV_Impl_.darker = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0)];
+	return channels;
+};
+thx.color._HSV.HSV_Impl_.lighter = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1)];
+	return channels;
+};
+thx.color._HSV.HSV_Impl_.interpolate = function(this1,other,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2])];
+	return channels;
+};
+thx.color._HSV.HSV_Impl_.get_hue = function(this1) {
+	return this1[0];
+};
+thx.color._HSV.HSV_Impl_.get_huef = function(this1) {
+	return this1[0];
+};
+thx.color._HSV.HSV_Impl_.get_saturation = function(this1) {
+	return this1[1];
+};
+thx.color._HSV.HSV_Impl_.get_value = function(this1) {
+	return this1[2];
+};
+thx.color._HSVA = {};
+thx.color._HSVA.HSVA_Impl_ = function() { };
+thx.color._HSVA.HSVA_Impl_.__name__ = true;
+thx.color._HSVA.HSVA_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "hsv":
+			var this1;
+			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this1 = channels;
+			var channels1 = this1.concat([1.0]);
+			return channels1;
+		case "hsva":
+			var channels2 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			return channels2;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._HSVA.HSVA_Impl_.fromFloats = function(hue,saturation,value,alpha) {
+	return [hue,saturation,value,alpha];
+};
+thx.color._HSVA.HSVA_Impl_._new = function(channels) {
+	return channels;
+};
+thx.color._HSVA.HSVA_Impl_.toHSV = function(this1) {
+	var channels = this1.slice(0,3);
+	return channels;
+};
+thx.color._HSVA.HSVA_Impl_.toHSLA = function(this1) {
+	return thx.color._RGBXA.RGBXA_Impl_.toHSLA(this1[1] == 0?[this1[2],this1[2],this1[2],this1[3]]:(function($this) {
+		var $r;
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h + -i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		$r = [r,g,b,this1[3]];
+		return $r;
+	}(this)));
+};
+thx.color._HSVA.HSVA_Impl_.toRGBXA = function(this1) {
+	if(this1[1] == 0) return [this1[2],this1[2],this1[2],this1[3]];
+	var r;
+	var g;
+	var b;
+	var i;
+	var f;
+	var p;
+	var q;
+	var t;
+	var h = this1[0] / 60;
+	i = Math.floor(h);
+	f = h + -i;
+	p = this1[2] * (1 - this1[1]);
+	q = this1[2] * (1 - f * this1[1]);
+	t = this1[2] * (1 - (1 - f) * this1[1]);
+	switch(i) {
+	case 0:
+		r = this1[2];
+		g = t;
+		b = p;
+		break;
+	case 1:
+		r = q;
+		g = this1[2];
+		b = p;
+		break;
+	case 2:
+		r = p;
+		g = this1[2];
+		b = t;
+		break;
+	case 3:
+		r = p;
+		g = q;
+		b = this1[2];
+		break;
+	case 4:
+		r = t;
+		g = p;
+		b = this1[2];
+		break;
+	default:
+		r = this1[2];
+		g = p;
+		b = q;
+	}
+	return [r,g,b,this1[3]];
+};
+thx.color._HSVA.HSVA_Impl_.toString = function(this1) {
+	return "hsva(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx.color._HSVA.HSVA_Impl_.equals = function(this1,other) {
+	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
+};
+thx.color._HSVA.HSVA_Impl_.darker = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0),this1[3]];
+	return channels;
+};
+thx.color._HSVA.HSVA_Impl_.lighter = function(this1,t) {
+	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1),this1[3]];
+	return channels;
+};
+thx.color._HSVA.HSVA_Impl_.transparent = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
+	return channels;
+};
+thx.color._HSVA.HSVA_Impl_.opaque = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
+	return channels;
+};
+thx.color._HSVA.HSVA_Impl_.interpolate = function(this1,other,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
+	return channels;
+};
+thx.color._HSVA.HSVA_Impl_.get_hue = function(this1) {
+	return this1[0];
+};
+thx.color._HSVA.HSVA_Impl_.get_huef = function(this1) {
+	return this1[0];
+};
+thx.color._HSVA.HSVA_Impl_.get_saturation = function(this1) {
+	return this1[1];
+};
+thx.color._HSVA.HSVA_Impl_.get_value = function(this1) {
+	return this1[2];
+};
+thx.color._HSVA.HSVA_Impl_.get_alpha = function(this1) {
+	return this1[3];
+};
+thx.color._RGB = {};
+thx.color._RGB.RGB_Impl_ = function() { };
+thx.color._RGB.RGB_Impl_.__name__ = true;
+thx.color._RGB.RGB_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseHex(color);
+	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "rgb":
+			var arr = thx.color.parse.ColorParser.getInt8Channels(info.channels,3);
+			return (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._RGB.RGB_Impl_.fromFloats = function(red,green,blue) {
+	var red1 = Math.round((red < 0?0:red > 1?1:red) * 255);
+	var green1 = Math.round((green < 0?0:green > 1?1:green) * 255);
+	var blue1 = Math.round((blue < 0?0:blue > 1?1:blue) * 255);
+	return (red1 & 255) << 16 | (green1 & 255) << 8 | blue1 & 255;
+};
+thx.color._RGB.RGB_Impl_.fromArray = function(arr) {
+	return (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
+};
+thx.color._RGB.RGB_Impl_.fromInts = function(red,green,blue) {
+	return (red & 255) << 16 | (green & 255) << 8 | blue & 255;
+};
+thx.color._RGB.RGB_Impl_.fromInt = function(rgb) {
+	return rgb;
+};
+thx.color._RGB.RGB_Impl_._new = function(rgb) {
+	return rgb;
+};
+thx.color._RGB.RGB_Impl_.toInt = function(this1) {
+	return this1;
+};
+thx.color._RGB.RGB_Impl_.toCMYK = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toCMYK(thx.color._RGB.RGB_Impl_.toRGBX(this1));
+};
+thx.color._RGB.RGB_Impl_.toGrey = function(this1) {
+	var this2 = thx.color._RGB.RGB_Impl_.toRGBX(this1);
+	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	var this3;
+	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
+	return this3;
+};
+thx.color._RGB.RGB_Impl_.toHSL = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSL(thx.color._RGB.RGB_Impl_.toRGBX(this1));
+};
+thx.color._RGB.RGB_Impl_.toHSV = function(this1) {
+	return thx.color._RGBX.RGBX_Impl_.toHSV(thx.color._RGB.RGB_Impl_.toRGBX(this1));
+};
+thx.color._RGB.RGB_Impl_.toRGBX = function(this1) {
+	return [(this1 >> 16 & 255) / 255,(this1 >> 8 & 255) / 255,(this1 & 255) / 255];
+};
+thx.color._RGB.RGB_Impl_.toRGBA = function(this1) {
+	var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+};
+thx.color._RGB.RGB_Impl_.toRGBXA = function(this1) {
+	return thx.color._RGBA.RGBA_Impl_.toRGBXA((function($this) {
+		var $r;
+		var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+		return $r;
+	}(this)));
+};
+thx.color._RGB.RGB_Impl_.withAlpha = function(this1,alpha) {
+	return thx.color._RGBA.RGBA_Impl_.toRGBXA((alpha & 255) << 24 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+};
+thx.color._RGB.RGB_Impl_.toCSS3 = function(this1) {
+	return "rgb(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + ")";
+};
+thx.color._RGB.RGB_Impl_.toString = function(this1) {
+	return "rgb(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + ")";
+};
+thx.color._RGB.RGB_Impl_.toHex = function(this1,prefix) {
+	if(prefix == null) prefix = "#";
+	return "" + prefix + StringTools.hex(this1 >> 16 & 255,2) + StringTools.hex(this1 >> 8 & 255,2) + StringTools.hex(this1 & 255,2);
+};
+thx.color._RGB.RGB_Impl_.equals = function(this1,other) {
+	return (this1 >> 16 & 255) == (other >> 16 & 255) && (this1 >> 8 & 255) == (other >> 8 & 255) && (this1 & 255) == (other & 255);
+};
+thx.color._RGB.RGB_Impl_.darker = function(this1,t) {
+	var this2 = thx.color._RGBX.RGBX_Impl_.darker(thx.color._RGB.RGB_Impl_.toRGBX(this1),t);
+	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+};
+thx.color._RGB.RGB_Impl_.lighter = function(this1,t) {
+	var this2 = thx.color._RGBX.RGBX_Impl_.lighter(thx.color._RGB.RGB_Impl_.toRGBX(this1),t);
+	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+};
+thx.color._RGB.RGB_Impl_.interpolate = function(this1,other,t) {
+	var this2 = thx.color._RGBX.RGBX_Impl_.interpolate(thx.color._RGB.RGB_Impl_.toRGBX(this1),thx.color._RGB.RGB_Impl_.toRGBX(other),t);
+	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+};
+thx.color._RGB.RGB_Impl_.get_red = function(this1) {
+	return this1 >> 16 & 255;
+};
+thx.color._RGB.RGB_Impl_.get_green = function(this1) {
+	return this1 >> 8 & 255;
+};
+thx.color._RGB.RGB_Impl_.get_blue = function(this1) {
+	return this1 & 255;
+};
+thx.color._RGBA = {};
+thx.color._RGBA.RGBA_Impl_ = function() { };
+thx.color._RGBA.RGBA_Impl_.__name__ = true;
+thx.color._RGBA.RGBA_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseHex(color);
+	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "rgb":
+			var this1;
+			var arr = thx.color.parse.ColorParser.getInt8Channels(info.channels,3);
+			this1 = (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
+			var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+			return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+		case "rgba":
+			var arr_0 = thx.color.parse.ColorParser.getInt8Channel(info.channels[0]);
+			var arr_1 = thx.color.parse.ColorParser.getInt8Channel(info.channels[1]);
+			var arr_2 = thx.color.parse.ColorParser.getInt8Channel(info.channels[2]);
+			var arr_3 = Math.round(thx.color.parse.ColorParser.getFloatChannel(info.channels[3]) * 255);
+			return (arr_3 & 255) << 24 | (arr_0 & 255) << 16 | (arr_1 & 255) << 8 | arr_2 & 255;
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._RGBA.RGBA_Impl_.fromArray = function(arr) {
+	return (arr[3] & 255) << 24 | (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
+};
+thx.color._RGBA.RGBA_Impl_.fromFloats = function(red,green,blue,alpha) {
+	var red1 = Math.round((red < 0?0:red > 1?1:red) * 255);
+	var green1 = Math.round((green < 0?0:green > 1?1:green) * 255);
+	var blue1 = Math.round((blue < 0?0:blue > 1?1:blue) * 255);
+	var alpha1 = Math.round((alpha < 0?0:alpha > 1?1:alpha) * 255);
+	return (alpha1 & 255) << 24 | (red1 & 255) << 16 | (green1 & 255) << 8 | blue1 & 255;
+};
+thx.color._RGBA.RGBA_Impl_.fromInts = function(red,green,blue,alpha) {
+	return (alpha & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | blue & 255;
+};
+thx.color._RGBA.RGBA_Impl_.fromInt = function(rgba) {
+	return rgba;
+};
+thx.color._RGBA.RGBA_Impl_._new = function(rgba) {
+	return rgba;
+};
+thx.color._RGBA.RGBA_Impl_.toInt = function(this1) {
+	return this1;
+};
+thx.color._RGBA.RGBA_Impl_.toHSLA = function(this1) {
+	return thx.color._RGBXA.RGBXA_Impl_.toHSLA(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1));
+};
+thx.color._RGBA.RGBA_Impl_.toHSVA = function(this1) {
+	return thx.color._RGBXA.RGBXA_Impl_.toHSVA(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1));
+};
+thx.color._RGBA.RGBA_Impl_.toRGB = function(this1) {
+	return (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255;
+};
+thx.color._RGBA.RGBA_Impl_.toRGBX = function(this1) {
+	return [(this1 >> 16 & 255) / 255,(this1 >> 8 & 255) / 255,(this1 & 255) / 255];
+};
+thx.color._RGBA.RGBA_Impl_.toRGBXA = function(this1) {
+	return [(this1 >> 16 & 255) / 255,(this1 >> 8 & 255) / 255,(this1 & 255) / 255,(this1 >> 24 & 255) / 255];
+};
+thx.color._RGBA.RGBA_Impl_.toCSS3 = function(this1) {
+	return "rgba(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + "," + (this1 >> 24 & 255) / 255 + ")";
+};
+thx.color._RGBA.RGBA_Impl_.toString = function(this1) {
+	return "rgba(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + "," + (this1 >> 24 & 255) / 255 + ")";
+};
+thx.color._RGBA.RGBA_Impl_.toHex = function(this1,prefix) {
+	if(prefix == null) prefix = "#";
+	return "" + prefix + StringTools.hex(this1 >> 24 & 255,2) + StringTools.hex(this1 >> 16 & 255,2) + StringTools.hex(this1 >> 8 & 255,2) + StringTools.hex(this1 & 255,2);
+};
+thx.color._RGBA.RGBA_Impl_.equals = function(this1,other) {
+	return (this1 >> 16 & 255) == (other >> 16 & 255) && (this1 >> 24 & 255) == (other >> 24 & 255) && (this1 >> 8 & 255) == (other >> 8 & 255) && (this1 & 255) == (other & 255);
+};
+thx.color._RGBA.RGBA_Impl_.darker = function(this1,t) {
+	var this2 = thx.color._RGBXA.RGBXA_Impl_.darker(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
+	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+};
+thx.color._RGBA.RGBA_Impl_.lighter = function(this1,t) {
+	var this2 = thx.color._RGBXA.RGBXA_Impl_.lighter(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
+	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+};
+thx.color._RGBA.RGBA_Impl_.transparent = function(this1,t) {
+	var this2 = thx.color._RGBXA.RGBXA_Impl_.transparent(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
+	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+};
+thx.color._RGBA.RGBA_Impl_.opaque = function(this1,t) {
+	var this2 = thx.color._RGBXA.RGBXA_Impl_.opaque(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
+	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+};
+thx.color._RGBA.RGBA_Impl_.interpolate = function(this1,other,t) {
+	var this2 = thx.color._RGBXA.RGBXA_Impl_.interpolate(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),thx.color._RGBA.RGBA_Impl_.toRGBXA(other),t);
+	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+};
+thx.color._RGBA.RGBA_Impl_.get_alpha = function(this1) {
+	return this1 >> 24 & 255;
+};
+thx.color._RGBA.RGBA_Impl_.get_red = function(this1) {
+	return this1 >> 16 & 255;
+};
+thx.color._RGBA.RGBA_Impl_.get_green = function(this1) {
+	return this1 >> 8 & 255;
+};
+thx.color._RGBA.RGBA_Impl_.get_blue = function(this1) {
+	return this1 & 255;
+};
+thx.color._RGBX = {};
+thx.color._RGBX.RGBX_Impl_ = function() { };
+thx.color._RGBX.RGBX_Impl_.__name__ = true;
+thx.color._RGBX.RGBX_Impl_.fromString = function(color) {
+	var info = thx.color.parse.ColorParser.parseHex(color);
+	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "rgb":
+			return thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._RGBX.RGBX_Impl_.fromArray = function(values) {
+	var channels = values.map(function(v) {
+		if(v < 0) return 0; else if(v > 1) return 1; else return v;
+	}).concat([0,0,0]).slice(0,3);
+	return channels;
+};
+thx.color._RGBX.RGBX_Impl_.fromInts = function(red,green,blue) {
+	return [red / 255,green / 255,blue / 255];
+};
+thx.color._RGBX.RGBX_Impl_.fromFloats = function(red,green,blue) {
+	return [red,green,blue];
+};
+thx.color._RGBX.RGBX_Impl_._new = function(channels) {
+	return channels;
+};
+thx.color._RGBX.RGBX_Impl_.toCSS3 = function(this1) {
+	return "rgb(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx.color._RGBX.RGBX_Impl_.toString = function(this1) {
+	return "rgb(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx.color._RGBX.RGBX_Impl_.toHex = function(this1,prefix) {
+	if(prefix == null) prefix = "#";
+	return "" + prefix + StringTools.hex(Math.round(this1[0] * 255),2) + StringTools.hex(Math.round(this1[1] * 255),2) + StringTools.hex(Math.round(this1[2] * 255),2);
+};
+thx.color._RGBX.RGBX_Impl_.toCMYK = function(this1) {
+	var c = 0.0;
+	var y = 0.0;
+	var m = 0.0;
+	var k;
+	if(this1[0] + this1[1] + this1[2] == 0) k = 1.0; else {
+		c = 1 - this1[0];
+		m = 1 - this1[1];
+		y = 1 - this1[2];
+		k = Math.min(Math.min(c,m),y);
+		c = (c - k) / (1 - k);
+		m = (m - k) / (1 - k);
+		y = (y - k) / (1 - k);
+	}
+	return [c,m,y,k];
+};
+thx.color._RGBX.RGBX_Impl_.toGrey = function(this1) {
+	var grey = this1[0] * .2126 + this1[1] * .7152 + this1[2] * .0722;
+	var this2;
+	if(grey < 0) this2 = 0; else if(grey > 1) this2 = 1; else this2 = grey;
+	return this2;
+};
+thx.color._RGBX.RGBX_Impl_.toPerceivedGrey = function(this1) {
+	var grey = this1[0] * .299 + this1[1] * .587 + this1[2] * .114;
+	var this2;
+	if(grey < 0) this2 = 0; else if(grey > 1) this2 = 1; else this2 = grey;
+	return this2;
+};
+thx.color._RGBX.RGBX_Impl_.toPerceivedAccurateGrey = function(this1) {
+	var grey = Math.pow(this1[0],2) * .241 + Math.pow(this1[1],2) * .691 + Math.pow(this1[2],2) * .068;
+	var this2;
+	if(grey < 0) this2 = 0; else if(grey > 1) this2 = 1; else this2 = grey;
+	return this2;
+};
+thx.color._RGBX.RGBX_Impl_.toHSL = function(this1) {
+	var min = Math.min(Math.min(this1[0],this1[1]),this1[2]);
+	var max = Math.max(Math.max(this1[0],this1[1]),this1[2]);
+	var delta = max - min;
+	var h;
+	var s;
+	var l = (max + min) / 2;
+	if(delta == 0.0) s = h = 0.0; else {
+		if(l < 0.5) s = delta / (max + min); else s = delta / (2 - max - min);
+		if(this1[0] == max) h = (this1[1] - this1[2]) / delta + (this1[1] < Math.round(this1[2] * 255)?6:0); else if(this1[1] == max) h = (this1[2] - this1[0]) / delta + 2; else h = (this1[0] - this1[1]) / delta + 4;
+		h *= 60;
+	}
+	return [h,s,l];
+};
+thx.color._RGBX.RGBX_Impl_.toHSV = function(this1) {
+	var min = Math.min(Math.min(this1[0],this1[1]),this1[2]);
+	var max = Math.max(Math.max(this1[0],this1[1]),this1[2]);
+	var delta = max - min;
+	var h;
+	var s;
+	var v = max;
+	if(delta != 0) s = delta / max; else {
+		s = 0;
+		h = -1;
+		return [h,s,v];
+	}
+	if(this1[0] == max) h = (this1[1] - this1[2]) / delta; else if(this1[1] == max) h = 2 + (this1[2] - this1[0]) / delta; else h = 4 + (this1[0] - this1[1]) / delta;
+	h *= 60;
+	if(h < 0) h += 360;
+	return [h,s,v];
+};
+thx.color._RGBX.RGBX_Impl_.toRGBXA = function(this1) {
+	var channels = this1.concat([1.0]);
+	return channels;
+};
+thx.color._RGBX.RGBX_Impl_.withAlpha = function(this1,alpha) {
+	var channels = this1.concat([alpha]);
+	return channels;
+};
+thx.color._RGBX.RGBX_Impl_.toRGB = function(this1) {
+	return thx.color._RGB.RGB_Impl_.fromFloats(this1[0],this1[1],this1[2]);
+};
+thx.color._RGBX.RGBX_Impl_.equals = function(this1,other) {
+	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2];
+};
+thx.color._RGBX.RGBX_Impl_.darker = function(this1,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],0),thx.core.Floats.interpolateBetween(t,this1[1],0),thx.core.Floats.interpolateBetween(t,this1[2],0)];
+	return channels;
+};
+thx.color._RGBX.RGBX_Impl_.lighter = function(this1,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],1),thx.core.Floats.interpolateBetween(t,this1[1],1),thx.core.Floats.interpolateBetween(t,this1[2],1)];
+	return channels;
+};
+thx.color._RGBX.RGBX_Impl_.interpolate = function(this1,other,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2])];
+	return channels;
+};
+thx.color._RGBX.RGBX_Impl_.get_red = function(this1) {
+	return Math.round(this1[0] * 255);
+};
+thx.color._RGBX.RGBX_Impl_.get_green = function(this1) {
+	return Math.round(this1[1] * 255);
+};
+thx.color._RGBX.RGBX_Impl_.get_blue = function(this1) {
+	return Math.round(this1[2] * 255);
+};
+thx.color._RGBX.RGBX_Impl_.get_redf = function(this1) {
+	return this1[0];
+};
+thx.color._RGBX.RGBX_Impl_.get_greenf = function(this1) {
+	return this1[1];
+};
+thx.color._RGBX.RGBX_Impl_.get_bluef = function(this1) {
+	return this1[2];
+};
+thx.color._RGBXA = {};
+thx.color._RGBXA.RGBXA_Impl_ = function() { };
+thx.color._RGBXA.RGBXA_Impl_.__name__ = true;
+thx.color._RGBXA.RGBXA_Impl_.parse = function(color) {
+	var info = thx.color.parse.ColorParser.parseHex(color);
+	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+	if(null == info) return null;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "rgb":
+			var this1 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
+			var channels = this1.concat([1.0]);
+			return channels;
+		case "rgba":
+			return thx.color._RGBXA.RGBXA_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,4));
+		default:
+			return null;
+		}
+	} catch( e ) {
+		return null;
+	}
+};
+thx.color._RGBXA.RGBXA_Impl_.fromArray = function(values) {
+	var channels = values.map(function(v) {
+		if(v < 0) return 0; else if(v > 1) return 1; else return v;
+	}).concat([0,0,0,0]).slice(0,4);
+	return channels;
+};
+thx.color._RGBXA.RGBXA_Impl_.fromInts = function(red,green,blue,alpha) {
+	return [red / 255,green / 255,blue / 255,alpha / 255];
+};
+thx.color._RGBXA.RGBXA_Impl_.fromFloats = function(red,green,blue,alpha) {
+	return [red,green,blue,alpha];
+};
+thx.color._RGBXA.RGBXA_Impl_._new = function(channels) {
+	return channels;
+};
+thx.color._RGBXA.RGBXA_Impl_.toCSS3 = function(this1) {
+	return "rgba(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx.color._RGBXA.RGBXA_Impl_.toString = function(this1) {
+	return "rgba(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx.color._RGBXA.RGBXA_Impl_.toHex = function(this1,prefix) {
+	if(prefix == null) prefix = "#";
+	return "" + prefix + StringTools.hex(Math.round(this1[3] * 255),2) + StringTools.hex(Math.round(this1[0] * 255),2) + StringTools.hex(Math.round(this1[1] * 255),2) + StringTools.hex(Math.round(this1[2] * 255),2);
+};
+thx.color._RGBXA.RGBXA_Impl_.toHSLA = function(this1) {
+	var this2 = thx.color._RGBX.RGBX_Impl_.toHSL((function($this) {
+		var $r;
+		var channels = this1.slice(0,3);
+		$r = channels;
+		return $r;
+	}(this)));
+	var alpha = Math.round(this1[3] * 255);
+	var channels1 = this2.concat([alpha]);
+	return channels1;
+};
+thx.color._RGBXA.RGBXA_Impl_.toHSVA = function(this1) {
+	var this2 = thx.color._RGBX.RGBX_Impl_.toHSV((function($this) {
+		var $r;
+		var channels = this1.slice(0,3);
+		$r = channels;
+		return $r;
+	}(this)));
+	var alpha = Math.round(this1[3] * 255);
+	var channels1 = this2.concat([alpha]);
+	return channels1;
+};
+thx.color._RGBXA.RGBXA_Impl_.toRGBX = function(this1) {
+	var channels = this1.slice(0,3);
+	return channels;
+};
+thx.color._RGBXA.RGBXA_Impl_.toRGBA = function(this1) {
+	return thx.color._RGBA.RGBA_Impl_.fromFloats(this1[0],this1[1],this1[2],this1[3]);
+};
+thx.color._RGBXA.RGBXA_Impl_.equals = function(this1,other) {
+	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
+};
+thx.color._RGBXA.RGBXA_Impl_.darker = function(this1,t) {
+	var this2 = thx.color._RGBX.RGBX_Impl_.darker((function($this) {
+		var $r;
+		var channels = this1.slice(0,3);
+		$r = channels;
+		return $r;
+	}(this)),t);
+	var alpha = Math.round(this1[3] * 255);
+	var channels1 = this2.concat([alpha]);
+	return channels1;
+};
+thx.color._RGBXA.RGBXA_Impl_.lighter = function(this1,t) {
+	var this2 = thx.color._RGBX.RGBX_Impl_.lighter((function($this) {
+		var $r;
+		var channels = this1.slice(0,3);
+		$r = channels;
+		return $r;
+	}(this)),t);
+	var alpha = Math.round(this1[3] * 255);
+	var channels1 = this2.concat([alpha]);
+	return channels1;
+};
+thx.color._RGBXA.RGBXA_Impl_.transparent = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
+	return channels;
+};
+thx.color._RGBXA.RGBXA_Impl_.opaque = function(this1,t) {
+	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
+	return channels;
+};
+thx.color._RGBXA.RGBXA_Impl_.interpolate = function(this1,other,t) {
+	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
+	return channels;
+};
+thx.color._RGBXA.RGBXA_Impl_.get_red = function(this1) {
+	return Math.round(this1[0] * 255);
+};
+thx.color._RGBXA.RGBXA_Impl_.get_green = function(this1) {
+	return Math.round(this1[1] * 255);
+};
+thx.color._RGBXA.RGBXA_Impl_.get_blue = function(this1) {
+	return Math.round(this1[2] * 255);
+};
+thx.color._RGBXA.RGBXA_Impl_.get_alpha = function(this1) {
+	return Math.round(this1[3] * 255);
+};
+thx.color._RGBXA.RGBXA_Impl_.get_redf = function(this1) {
+	return this1[0];
+};
+thx.color._RGBXA.RGBXA_Impl_.get_greenf = function(this1) {
+	return this1[1];
+};
+thx.color._RGBXA.RGBXA_Impl_.get_bluef = function(this1) {
+	return this1[2];
+};
+thx.color._RGBXA.RGBXA_Impl_.get_alphaf = function(this1) {
+	return this1[3];
+};
+thx.color.parse = {};
+thx.color.parse.ColorParser = function() {
+	this.pattern_color = new EReg("^\\s*([^(]+)\\s*\\(([^)]*)\\)\\s*$","i");
+	this.pattern_channel = new EReg("^\\s*(\\d*.\\d+|\\d+)(%|º|deg)?\\s*$","i");
+};
+thx.color.parse.ColorParser.__name__ = true;
+thx.color.parse.ColorParser.parseColor = function(s) {
+	return thx.color.parse.ColorParser.parser.processColor(s);
+};
+thx.color.parse.ColorParser.parseHex = function(s) {
+	return thx.color.parse.ColorParser.parser.processHex(s);
+};
+thx.color.parse.ColorParser.parseChannel = function(s) {
+	return thx.color.parse.ColorParser.parser.processChannel(s);
+};
+thx.color.parse.ColorParser.getFloatChannels = function(channels,length) {
+	if(length != channels.length) throw "invalid number of channels, expected " + length + " but it is " + channels.length;
+	return channels.map(thx.color.parse.ColorParser.getFloatChannel);
+};
+thx.color.parse.ColorParser.getInt8Channels = function(channels,length) {
+	if(length != channels.length) throw "invalid number of channels, expected " + length + " but it is " + channels.length;
+	return channels.map(thx.color.parse.ColorParser.getInt8Channel);
+};
+thx.color.parse.ColorParser.getFloatChannel = function(channel) {
+	switch(channel[1]) {
+	case 5:
+		var v = channel[2];
+		if(v) return 1; else return 0;
+		break;
+	case 1:
+		var v1 = channel[2];
+		return v1;
+	case 4:
+		var v2 = channel[2];
+		return v2;
+	case 2:
+		var v3 = channel[2];
+		return v3;
+	case 3:
+		var v4 = channel[2];
+		return v4 / 255;
+	case 0:
+		var v5 = channel[2];
+		return v5 / 100;
+	}
+};
+thx.color.parse.ColorParser.getInt8Channel = function(channel) {
+	switch(channel[1]) {
+	case 5:
+		var v = channel[2];
+		if(v) return 1; else return 0;
+		break;
+	case 3:
+		var v1 = channel[2];
+		return v1;
+	case 0:
+		var v2 = channel[2];
+		return Math.round(255 * v2 / 100);
+	default:
+		throw "unable to extract a valid int8 value";
+	}
+};
+thx.color.parse.ColorParser.prototype = {
+	processHex: function(s) {
+		if(!thx.color.parse.ColorParser.isPureHex.match(s)) {
+			if(HxOverrides.substr(s,0,1) == "#") {
+				if(s.length == 4) s = s.charAt(1) + s.charAt(1) + s.charAt(2) + s.charAt(2) + s.charAt(3) + s.charAt(3); else if(s.length == 5) s = s.charAt(1) + s.charAt(1) + s.charAt(2) + s.charAt(2) + s.charAt(3) + s.charAt(3) + s.charAt(4) + s.charAt(4); else s = HxOverrides.substr(s,1,null);
+			} else if(HxOverrides.substr(s,0,2) == "0x") s = HxOverrides.substr(s,2,null); else return null;
+		}
+		var channels = [];
+		while(s.length > 0) {
+			channels.push(thx.color.parse.ChannelInfo.CIInt8(Std.parseInt("0x" + HxOverrides.substr(s,0,2))));
+			s = HxOverrides.substr(s,2,null);
+		}
+		if(channels.length == 4) return new thx.color.parse.ColorInfo("rgba",channels.slice(1).concat([channels[0]])); else return new thx.color.parse.ColorInfo("rgb",channels);
+	}
+	,processColor: function(s) {
+		if(!this.pattern_color.match(s)) return null;
+		var name = this.pattern_color.matched(1);
+		if(null == name) return null;
+		name = name.toLowerCase();
+		var m2 = this.pattern_color.matched(2);
+		var s_channels;
+		if(null == m2) s_channels = []; else s_channels = m2.split(",");
+		var channels = [];
+		var channel;
+		var _g = 0;
+		while(_g < s_channels.length) {
+			var s_channel = s_channels[_g];
+			++_g;
+			channel = this.processChannel(s_channel);
+			if(null == channel) return null;
+			channels.push(channel);
+		}
+		return new thx.color.parse.ColorInfo(name,channels);
+	}
+	,processChannel: function(s) {
+		if(!this.pattern_channel.match(s)) return null;
+		var value = this.pattern_channel.matched(1);
+		var unit = this.pattern_channel.matched(2);
+		if(unit == null) unit = "";
+		try {
+			switch(unit) {
+			case "%":
+				if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIPercent(thx.core.Floats.parse(value)); else return null;
+				break;
+			case "deg":
+				if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIDegree(thx.core.Floats.parse(value)); else return null;
+				break;
+			case "DEG":case "º":
+				if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIDegree(thx.core.Floats.parse(value)); else return null;
+				break;
+			case "":
+				if(thx.core.Ints.canParse(value)) {
+					var i = thx.core.Ints.parse(value);
+					if(i == 0) return thx.color.parse.ChannelInfo.CIBool(false); else if(i == 1) return thx.color.parse.ChannelInfo.CIBool(true); else if(i < 256) return thx.color.parse.ChannelInfo.CIInt8(i); else return thx.color.parse.ChannelInfo.CIInt(i);
+				} else if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIFloat(thx.core.Floats.parse(value)); else return null;
+				break;
+			default:
+				return null;
+			}
+		} catch( e ) {
+			return null;
+		}
+	}
+	,__class__: thx.color.parse.ColorParser
+};
+thx.color.parse.ColorInfo = function(name,channels) {
+	this.name = name;
+	this.channels = channels;
+};
+thx.color.parse.ColorInfo.__name__ = true;
+thx.color.parse.ColorInfo.prototype = {
+	toString: function() {
+		return "" + this.name + ", channels: " + Std.string(this.channels);
+	}
+	,__class__: thx.color.parse.ColorInfo
+};
+thx.color.parse.ChannelInfo = { __ename__ : true, __constructs__ : ["CIPercent","CIFloat","CIDegree","CIInt8","CIInt","CIBool"] };
+thx.color.parse.ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
+thx.color.parse.ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
+thx.color.parse.ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
+thx.color.parse.ChannelInfo.CIInt8 = function(value) { var $x = ["CIInt8",3,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
+thx.color.parse.ChannelInfo.CIInt = function(value) { var $x = ["CIInt",4,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
+thx.color.parse.ChannelInfo.CIBool = function(value) { var $x = ["CIBool",5,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
 thx.core = {};
 thx.core.Arrays = function() { };
 thx.core.Arrays.__name__ = true;
@@ -554,29 +2307,66 @@ thx.core.Arrays.shuffle = function(a) {
 	}
 	return arr;
 };
-thx.core.F0 = function() { };
-thx.core.F0.__name__ = true;
-thx.core.F0.join = function(fa,fb) {
+thx.core.Defaults = function() { };
+thx.core.Defaults.__name__ = true;
+thx.core.Floats = function() { };
+thx.core.Floats.__name__ = true;
+thx.core.Floats.interpolateBetween = function(t,a,b) {
+	return (b - a) * t + a;
+};
+thx.core.Floats.normalize = function(v) {
+	if(v < 0) return 0; else if(v > 1) return 1; else return v;
+};
+thx.core.Floats.clamp = function(v,min,max) {
+	if(v < min) return min; else if(v > max) return max; else return v;
+};
+thx.core.Floats.clampSym = function(v,max) {
+	return thx.core.Floats.clamp(v,-max,max);
+};
+thx.core.Floats.wrap = function(v,min,max) {
+	var range = max - min + 1;
+	if(v < min) v += range * ((min - v) / range + 1);
+	return min + (v - min) % range;
+};
+thx.core.Floats.wrapCircular = function(v,max) {
+	v = v % max;
+	if(v < 0) v += max;
+	return v;
+};
+thx.core.Floats.canParse = function(s) {
+	return thx.core.Floats.pattern_parse.match(s);
+};
+thx.core.Floats.parse = function(s) {
+	if(HxOverrides.substr(s,0,1) == "+") s = HxOverrides.substr(s,1,null);
+	return Std.parseFloat(s);
+};
+thx.core.Function0 = function() { };
+thx.core.Function0.__name__ = true;
+thx.core.Function0.noop = function() {
+};
+thx.core.Function0.join = function(fa,fb) {
 	return function() {
 		fa();
 		fb();
 	};
 };
-thx.core.F0.once = function(f) {
+thx.core.Function0.once = function(f) {
 	return function() {
 		f();
 		f = function() {
 		};
 	};
 };
-thx.core.F1 = function() { };
-thx.core.F1.__name__ = true;
-thx.core.F1.compose = function(fa,fb) {
+thx.core.Function1 = function() { };
+thx.core.Function1.__name__ = true;
+thx.core.Function1.noop = function(_) {
+};
+thx.core.Function1.compose = function(fa,fb) {
 	return function(v) {
 		return fa(fb(v));
 	};
 };
-thx.core.F1.join = function(fa,fb) {
+thx.core.Function1.join = function(fa,fb) {
 	return function(v) {
 		fa(v);
 		fb(v);
@@ -614,7 +2404,7 @@ thx.core.Ints.range = function(start,stop,step) {
 		stop = start;
 		start = 0;
 	}
-	if((stop - start) / step == Infinity) throw "infinite range";
+	if((stop - start) / step == Math.POSITIVE_INFINITY) throw "infinite range";
 	var range = [];
 	var i = -1;
 	var j;
@@ -686,7 +2476,10 @@ thx.geom.Edge.prototype = {
 	__class__: thx.geom.Edge
 };
 thx.geom.EdgeCubic = function(p0,p1,p2,p3) {
-	this.isLinear = false;
+	this._lengthSquared = false;
+	this._length = false;
+	this._isLinear = false;
+	this._area = false;
 	this.first = this.p0 = p0;
 	this.normalOut = this.p1 = p1;
 	this.normalIn = this.p2 = p2;
@@ -736,6 +2529,18 @@ thx.geom.EdgeCubic.prototype = {
 	,intersectionsLine: function(line) {
 		return this.get_linearSpline().intersectionsLine(line);
 	}
+	,intersectionLengths: function(edge) {
+		if(js.Boot.__instanceof(edge,thx.geom.EdgeCubic)) return this.intersectionEdgeCubicLengths(edge); else return this.intersectionEdgeLinearLengths(edge);
+	}
+	,intersectionEdgeCubicLengths: function(edge) {
+		throw "not implemented";
+	}
+	,intersectionEdgeLinearLengths: function(edge) {
+		throw "not implemented";
+	}
+	,intersectionLineLengths: function(line) {
+		throw "not implemented";
+	}
 	,split: function(v) {
 		var node = this.interpolateNode(v);
 		if(null == node) return [];
@@ -750,7 +2555,7 @@ thx.geom.EdgeCubic.prototype = {
 		var edges = this.subdivide(v);
 		return new thx.geom.SplineNode(edges[0].last,edges[1].normalOut,edges[0].normalIn);
 	}
-	,toEdgeLinear: function() {
+	,toLinear: function() {
 		return new thx.geom.EdgeLinear(this.first,this.last);
 	}
 	,toArray: function() {
@@ -764,18 +2569,18 @@ thx.geom.EdgeCubic.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this11 = $this.p1;
-			$r = "Point(" + this11[0] + "," + this11[1] + ")";
+			var this2 = $this.p1;
+			$r = "Point(" + this2[0] + "," + this2[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this12 = $this.p2;
-			$r = "Point(" + this12[0] + "," + this12[1] + ")";
+			var this3 = $this.p2;
+			$r = "Point(" + this3[0] + "," + this3[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this13 = $this.p3;
-			$r = "Point(" + this13[0] + "," + this13[1] + ")";
+			var this4 = $this.p3;
+			$r = "Point(" + this4[0] + "," + this4[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -792,80 +2597,102 @@ thx.geom.EdgeCubic.prototype = {
 		var l1;
 		var this1 = this.p0;
 		var p;
-		var this11;
-		var this12 = this.p1;
+		var this2;
+		var this3 = this.p1;
 		var p1 = this.p0;
 		var p_0 = -p1[0];
 		var p_1 = -p1[1];
-		this11 = [this12[0] + p_0,this12[1] + p_1];
-		p = [this11[0] * v,this11[1] * v];
+		this2 = [this3[0] + p_0,this3[1] + p_1];
+		p = [this2[0] * v,this2[1] * v];
 		l1 = [this1[0] + p[0],this1[1] + p[1]];
 		var m;
-		var this13 = this.p1;
+		var this4 = this.p1;
 		var p2;
-		var this14;
-		var this15 = this.p2;
+		var this5;
+		var this6 = this.p2;
 		var p3 = this.p1;
 		var p_01 = -p3[0];
 		var p_11 = -p3[1];
-		this14 = [this15[0] + p_01,this15[1] + p_11];
-		p2 = [this14[0] * v,this14[1] * v];
-		m = [this13[0] + p2[0],this13[1] + p2[1]];
+		this5 = [this6[0] + p_01,this6[1] + p_11];
+		p2 = [this5[0] * v,this5[1] * v];
+		m = [this4[0] + p2[0],this4[1] + p2[1]];
 		var r2;
-		var this16 = this.p2;
+		var this7 = this.p2;
 		var p4;
-		var this17;
-		var this18 = this.p3;
+		var this8;
+		var this9 = this.p3;
 		var p5 = this.p2;
 		var p_02 = -p5[0];
 		var p_12 = -p5[1];
-		this17 = [this18[0] + p_02,this18[1] + p_12];
-		p4 = [this17[0] * v,this17[1] * v];
-		r2 = [this16[0] + p4[0],this16[1] + p4[1]];
+		this8 = [this9[0] + p_02,this9[1] + p_12];
+		p4 = [this8[0] * v,this8[1] * v];
+		r2 = [this7[0] + p4[0],this7[1] + p4[1]];
 		var l2;
 		var p6;
-		var this19;
+		var this10;
 		var p_03 = -l1[0];
 		var p_13 = -l1[1];
-		this19 = [m[0] + p_03,m[1] + p_13];
-		p6 = [this19[0] * v,this19[1] * v];
+		this10 = [m[0] + p_03,m[1] + p_13];
+		p6 = [this10[0] * v,this10[1] * v];
 		l2 = [l1[0] + p6[0],l1[1] + p6[1]];
 		var r1;
 		var p7;
-		var this110;
+		var this11;
 		var p_04 = -m[0];
 		var p_14 = -m[1];
-		this110 = [r2[0] + p_04,r2[1] + p_14];
-		p7 = [this110[0] * v,this110[1] * v];
+		this11 = [r2[0] + p_04,r2[1] + p_14];
+		p7 = [this11[0] * v,this11[1] * v];
 		r1 = [m[0] + p7[0],m[1] + p7[1]];
 		var l3;
 		var p8;
-		var this111;
+		var this12;
 		var p_05 = -l2[0];
 		var p_15 = -l2[1];
-		this111 = [r1[0] + p_05,r1[1] + p_15];
-		p8 = [this111[0] * v,this111[1] * v];
+		this12 = [r1[0] + p_05,r1[1] + p_15];
+		p8 = [this12[0] * v,this12[1] * v];
 		l3 = [l2[0] + p8[0],l2[1] + p8[1]];
 		return [new thx.geom.EdgeCubic(this.p0,l1,l2,l3),new thx.geom.EdgeCubic(l3,r1,r2,this.p3)];
 	}
 	,get_area: function() {
-		if(isNaN(this.area)) this.area = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
-			return acc + edge.get_area();
-		},0);
+		if(!this._area) {
+			this._area = true;
+			this.area = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+				return acc + edge.get_area();
+			},0);
+		}
 		return this.area;
 	}
 	,get_box: function() {
 		if(null == this.box) this.box = thx.geom.shape._Box.Box_Impl_.expandByPoints(thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p1),[this.p2,this.p3]);
 		return this.box;
 	}
+	,get_isLinear: function() {
+		if(!this._isLinear) {
+			this._isLinear = true;
+			var line = thx.geom.Line.fromPoints(this.p0,this.p3);
+			if(!thx.geom._Point.Point_Impl_.isOnLine(this.p1,line) || !thx.geom._Point.Point_Impl_.isOnLine(this.p0,line)) this.isLinear = false; else {
+				var box = thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p3);
+				this.isLinear = thx.geom.shape._Box.Box_Impl_.contains(box,this.p1) && thx.geom.shape._Box.Box_Impl_.contains(box,this.p2);
+			}
+		}
+		return this.isLinear;
+	}
 	,get_length: function() {
-		if(isNaN(this.length)) this.length = Math.sqrt(this.get_lengthSquared());
+		if(!this._length) {
+			this._length = true;
+			this.length = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+				return acc + edge.get_length();
+			},0);
+		}
 		return this.length;
 	}
 	,get_lengthSquared: function() {
-		if(isNaN(this.lengthSquared)) this.lengthSquared = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
-			return acc + edge.get_lengthSquared();
-		},0);
+		if(!this._lengthSquared) {
+			this._lengthSquared = true;
+			this.lengthSquared = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+				return acc + edge.get_lengthSquared();
+			},0);
+		}
 		return this.lengthSquared;
 	}
 	,get_linearSegments: function() {
@@ -875,7 +2702,7 @@ thx.geom.EdgeCubic.prototype = {
 			this.linearSegments = [];
 			while(tosplit.length > 0) {
 				edge = tosplit.shift();
-				if(edge.isNearFlat()) this.linearSegments.push(edge.toEdgeLinear()); else tosplit = edge.subdivide().concat(tosplit);
+				if(edge.isNearFlat()) this.linearSegments.push(edge.toLinear()); else tosplit = edge.subdivide().concat(tosplit);
 			}
 		}
 		return this.linearSegments;
@@ -887,7 +2714,9 @@ thx.geom.EdgeCubic.prototype = {
 	,__class__: thx.geom.EdgeCubic
 };
 thx.geom.EdgeLinear = function(p0,p1) {
-	this.isLinear = true;
+	this._lengthSquared = false;
+	this._length = false;
+	this._area = false;
 	this.first = this.p0 = p0;
 	this.last = this.p1 = p1;
 	this.normalIn = this.normalOut = null;
@@ -942,54 +2771,82 @@ thx.geom.EdgeLinear.prototype = {
 					var $r;
 					var this1;
 					{
-						var this11 = $this.p0;
+						var this2 = $this.p0;
 						var p1 = $this.p1;
-						var x = Math.min(this11[0],p1[0]);
-						var y = Math.min(this11[1],p1[1]);
+						var x = Math.min(this2[0],p1[0]);
+						var y = Math.min(this2[1],p1[1]);
 						this1 = [x,y];
 					}
 					$r = this1[1];
 					return $r;
 				}(this)) && p[1] <= (function($this) {
 					var $r;
-					var this12;
+					var this3;
 					{
-						var this13 = $this.p0;
+						var this4 = $this.p0;
 						var p2 = $this.p1;
-						var x1 = Math.max(this13[0],p2[0]);
-						var y1 = Math.max(this13[1],p2[1]);
-						this12 = [x1,y1];
+						var x1 = Math.max(this4[0],p2[0]);
+						var y1 = Math.max(this4[1],p2[1]);
+						this3 = [x1,y1];
 					}
-					$r = this12[1];
+					$r = this3[1];
 					return $r;
 				}(this))) return [p];
 			} else if(p[0] >= (function($this) {
 				var $r;
-				var this14;
+				var this5;
 				{
-					var this15 = $this.p0;
+					var this6 = $this.p0;
 					var p3 = $this.p1;
-					var x2 = Math.min(this15[0],p3[0]);
-					var y2 = Math.min(this15[1],p3[1]);
-					this14 = [x2,y2];
+					var x2 = Math.min(this6[0],p3[0]);
+					var y2 = Math.min(this6[1],p3[1]);
+					this5 = [x2,y2];
 				}
-				$r = this14[0];
+				$r = this5[0];
 				return $r;
 			}(this)) && p[0] <= (function($this) {
 				var $r;
-				var this16;
+				var this7;
 				{
-					var this17 = $this.p0;
+					var this8 = $this.p0;
 					var p4 = $this.p1;
-					var x3 = Math.max(this17[0],p4[0]);
-					var y3 = Math.max(this17[1],p4[1]);
-					this16 = [x3,y3];
+					var x3 = Math.max(this8[0],p4[0]);
+					var y3 = Math.max(this8[1],p4[1]);
+					this7 = [x3,y3];
 				}
-				$r = this16[0];
+				$r = this7[0];
 				return $r;
 			}(this))) return [p];
 		}
 		return [];
+	}
+	,intersectionLengths: function(edge) {
+		if(js.Boot.__instanceof(edge,thx.geom.EdgeCubic)) return this.intersectionEdgeCubicLengths(edge); else return this.intersectionEdgeLinearLengths(edge);
+	}
+	,intersectionEdgeCubicLengths: function(edge) {
+		throw "not implemented";
+	}
+	,intersectionEdgeLinearLengths: function(edge) {
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.intersectionsEdgeLinear(edge);
+		while(_g1 < _g2.length) {
+			var p = _g2[_g1];
+			++_g1;
+			_g.push(thx.geom._Point.Point_Impl_.distanceTo(p,this.first));
+		}
+		return _g;
+	}
+	,intersectionLineLengths: function(line) {
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.intersectionsLine(line);
+		while(_g1 < _g2.length) {
+			var p = _g2[_g1];
+			++_g1;
+			_g.push(thx.geom._Point.Point_Impl_.distanceTo(p,this.first));
+		}
+		return _g;
 	}
 	,split: function(v) {
 		var mid = this.interpolate(v);
@@ -1000,8 +2857,11 @@ thx.geom.EdgeLinear.prototype = {
 	}
 	,interpolateNode: function(v) {
 		var p = this.interpolate(v);
-		if(isNaN(v)) return null;
+		if(null == v) return null;
 		return new thx.geom.SplineNode(p,null,null);
+	}
+	,toLinear: function() {
+		return this;
 	}
 	,toArray: function() {
 		return [this.p0,this.p1];
@@ -1014,8 +2874,8 @@ thx.geom.EdgeLinear.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this11 = $this.p1;
-			$r = "Point(" + this11[0] + "," + this11[1] + ")";
+			var this2 = $this.p1;
+			$r = "Point(" + this2[0] + "," + this2[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -1023,14 +2883,15 @@ thx.geom.EdgeLinear.prototype = {
 		return thx.geom.Spline.fromEdges([this],false);
 	}
 	,get_area: function() {
-		if(isNaN(this.area)) {
+		if(!this._area) {
+			this._area = true;
 			var p;
 			var this1 = this.p1;
 			var p1 = this.p0;
 			var p_0 = -p1[0];
 			var p_1 = -p1[1];
 			p = [this1[0] + p_0,this1[1] + p_1];
-			this.area = p[0] * p[1] / 2;
+			this.area = this.p0[1] * (this.p1[0] - this.p0[0]) + p[0] * p[1] / 2;
 		}
 		return this.area;
 	}
@@ -1038,18 +2899,25 @@ thx.geom.EdgeLinear.prototype = {
 		if(null == this.box) this.box = thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p1);
 		return this.box;
 	}
+	,get_isLinear: function() {
+		return true;
+	}
 	,get_length: function() {
-		if(isNaN(this.length)) this.length = Math.sqrt(this.get_lengthSquared());
+		if(!this._length) {
+			this._length = true;
+			this.length = Math.sqrt(this.get_lengthSquared());
+		}
 		return this.length;
 	}
 	,get_lengthSquared: function() {
-		if(isNaN(this.lengthSquared)) {
+		if(!this._lengthSquared) {
+			this._lengthSquared = true;
 			var this1;
-			var this11 = this.p1;
+			var this2 = this.p1;
 			var p = this.p0;
 			var p_0 = -p[0];
 			var p_1 = -p[1];
-			this1 = [this11[0] + p_0,this11[1] + p_1];
+			this1 = [this2[0] + p_0,this2[1] + p_1];
 			this.lengthSquared = this1[0] * this1[0] + this1[1] * this1[1];
 		}
 		return this.lengthSquared;
@@ -1651,7 +3519,7 @@ thx.geom.Plane.prototype = {
 		var p_2 = -p1[2];
 		direction = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
 		var lambda = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,p1)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,direction);
-		if(isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
+		if(Math.isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
 		var p_01 = direction[0] * lambda;
 		var p_11 = direction[1] * lambda;
 		var p_21 = direction[2] * lambda;
@@ -1926,6 +3794,10 @@ thx.geom.OrthoNormalBasis.prototype = {
 	,__class__: thx.geom.OrthoNormalBasis
 };
 thx.geom.Path = function(splines) {
+	this._isSelfIntersecting = false;
+	this._length = false;
+	this._area = false;
+	this._isClosed = false;
 	this.splines = splines;
 };
 thx.geom.Path.__name__ = true;
@@ -2036,11 +3908,24 @@ thx.geom.Path.prototype = {
 		}
 		return null;
 	}
+	,asClockwise: function(clockwise) {
+		if(clockwise == null) clockwise = true;
+		return new thx.geom.Path(this.splines.map(function(spline) {
+			return spline.asClockwise(clockwise);
+		}));
+	}
 	,hull: function(other) {
 		throw "not implemented";
 	}
 	,minkowsky: function(other) {
 		throw "not implemented";
+	}
+	,reduce: function() {
+		return new thx.geom.Path(this.splines.map(function(spline) {
+			return spline.reduce();
+		}).filter(function(spline1) {
+			return spline1.get_edges().length > 0;
+		}));
 	}
 	,toPoints: function() {
 		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
@@ -2053,7 +3938,8 @@ thx.geom.Path.prototype = {
 		}).join(", ") + "," + Std.string(this.get_isClosed()) + ")";
 	}
 	,get_isClosed: function() {
-		if(null == this.isClosed) {
+		if(!this._isClosed) {
+			this._isClosed = true;
 			this.isClosed = true;
 			var _g = 0;
 			var _g1 = this.splines;
@@ -2069,19 +3955,26 @@ thx.geom.Path.prototype = {
 		return this.isClosed;
 	}
 	,get_area: function() {
-		if(null == this.area) this.area = this.splines.reduce(function(acc,spline) {
-			return acc + spline.get_area();
-		},0);
+		if(!this._area) {
+			this._area = true;
+			this.area = this.splines.reduce(function(acc,spline) {
+				return acc + spline.get_area();
+			},0);
+		}
 		return this.area;
 	}
 	,get_length: function() {
-		if(null == this.length) this.length = this.splines.reduce(function(acc,spline) {
-			return acc + spline.get_length();
-		},0);
+		if(!this._length) {
+			this._length = true;
+			this.length = this.splines.reduce(function(acc,spline) {
+				return acc + spline.get_length();
+			},0);
+		}
 		return this.length;
 	}
 	,get_isSelfIntersecting: function() {
-		if(null == this.isSelfIntersecting) {
+		if(!this._isSelfIntersecting) {
+			this._isSelfIntersecting = true;
 			this.isSelfIntersecting = false;
 			var _g = 0;
 			var _g1 = this.splines;
@@ -2261,6 +4154,10 @@ thx.geom._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
 	p = [this3[0] * distance,this3[1] * distance];
 	return [this2[0] + p[0],this2[1] + p[1]];
 };
+thx.geom._Point.Point_Impl_.isOnLine = function(this1,line) {
+	if(line.get_isHorizontal()) return thx.math.Number.nearEquals(this1[1],line.w);
+	return thx.math.Number.nearEquals(line.xAtY(this1[1]),this1[0]);
+};
 thx.geom._Point.Point_Impl_.toAngle = function(this1) {
 	var angle = Math.atan2(this1[1],this1[0]);
 	return angle;
@@ -2331,6 +4228,10 @@ thx.geom.Polygon.prototype = {
 };
 thx.geom.Spline = function(nodes,closed) {
 	if(closed == null) closed = true;
+	this._isSelfIntersecting = false;
+	this._length = false;
+	this._area = false;
+	this._isClockwise = false;
 	this.nodes = nodes;
 	this.isClosed = closed;
 };
@@ -2358,6 +4259,7 @@ thx.geom.Spline.fromEdges = function(arr,closed) {
 		}
 	}
 	var spline = new thx.geom.Spline(nodes,closed);
+	spline.edges = arr;
 	return spline;
 };
 thx.geom.Spline.fromPoints = function(arr,closed) {
@@ -2471,6 +4373,25 @@ thx.geom.Spline.prototype = {
 			return edge.intersectionsLine(line);
 		}));
 	}
+	,intersectionLengths: function(spline) {
+		var _g = this;
+		return thx.core.Arrays.flatten(this.get_edges().map(function(a) {
+			var len = a.get_length();
+			return thx.core.Arrays.flatten(spline.get_edges().map(function(b) {
+				return a.intersectionLengths(b).map(function(d) {
+					return d * len;
+				});
+			}));
+		})).map(function(v) {
+			return v / _g.get_length();
+		});
+	}
+	,splitBy: function(spline) {
+		throw "not implemented";
+	}
+	,intersectionLineLengths: function(line) {
+		throw "not implemented";
+	}
 	,split: function(value) {
 		if(value < 0 || value > 1) return null;
 		var len = this.get_length();
@@ -2506,6 +4427,38 @@ thx.geom.Spline.prototype = {
 		}
 		return null;
 	}
+	,reduce: function() {
+		var edges = this.get_edges();
+		var i = edges.length;
+		var result = [];
+		var edge;
+		while(--i >= 0) {
+			edge = edges[i];
+			if(edge.get_length() == 0) continue;
+			if(edge.get_isLinear()) edge = edge.toLinear();
+			result.unshift(edge);
+		}
+		return thx.geom.Spline.fromEdges(result,this.isClosed);
+	}
+	,get_isClockwise: function() {
+		if(!this._isClockwise) {
+			this._isClockwise = true;
+			var sum = 0.0;
+			this.iterateEdges(function(edge) {
+				sum += (edge.last[0] - edge.first[0]) * (edge.last[1] + edge.first[1]);
+			});
+			this.isClockwise = sum > 0;
+		}
+		return this.isClockwise;
+	}
+	,asClockwise: function(clockwise) {
+		if(clockwise == null) clockwise = true;
+		if(this.get_isClockwise() == clockwise) return this; else {
+			var counter = this.flip();
+			counter.isClockwise = !clockwise;
+			return counter;
+		}
+	}
 	,toLinear: function() {
 		var edges = thx.core.Arrays.flatten(this.get_edges().map(function(edge) {
 			return edge.get_linearSegments();
@@ -2527,7 +4480,8 @@ thx.geom.Spline.prototype = {
 	}
 	,get_area: function() {
 		var _g = this;
-		if(null == this.area) {
+		if(!this._area) {
+			this._area = true;
 			this.area = 0;
 			this.iterateEdges(function(edge) {
 				_g.area += edge.get_area();
@@ -2537,7 +4491,8 @@ thx.geom.Spline.prototype = {
 	}
 	,get_length: function() {
 		var _g = this;
-		if(null == this.length) {
+		if(!this._length) {
+			this._length = true;
 			this.length = 0;
 			this.iterateEdges(function(edge) {
 				_g.length += edge.get_length();
@@ -2547,7 +4502,8 @@ thx.geom.Spline.prototype = {
 	}
 	,get_isSelfIntersecting: function() {
 		var _g = this;
-		if(null == this.isSelfIntersecting) {
+		if(!this._isSelfIntersecting) {
+			this._isSelfIntersecting = true;
 			var edges = this.get_edges();
 			this.isSelfIntersecting = false;
 			thx.core.Arrays.eachPair(edges,function(a,b) {
@@ -2569,8 +4525,8 @@ thx.geom.Spline.prototype = {
 				return $r;
 			}(this)) || (function($this) {
 				var $r;
-				var this11 = node.normalOut;
-				$r = !(this11[0] == null[0] && this11[1] == null[1]);
+				var this2 = node.normalOut;
+				$r = !(this2[0] == null[0] && this2[1] == null[1]);
 				return $r;
 			}(this))) return false;
 		}
@@ -2760,14 +4716,14 @@ thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
 };
 thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
 	var bottomLeft;
-	var this11 = this1[0];
-	var x = Math.min(this11[0],point[0]);
-	var y = Math.min(this11[1],point[1]);
+	var this2 = this1[0];
+	var x = Math.min(this2[0],point[0]);
+	var y = Math.min(this2[1],point[1]);
 	bottomLeft = [x,y];
 	var topRight;
-	var this12 = this1[1];
-	var x1 = Math.max(this12[0],point[0]);
-	var y1 = Math.max(this12[1],point[1]);
+	var this3 = this1[1];
+	var x1 = Math.max(this3[0],point[0]);
+	var y1 = Math.max(this3[1],point[1]);
 	topRight = [x1,y1];
 	return [bottomLeft,topRight];
 };
@@ -2789,18 +4745,21 @@ thx.geom.shape._Box.Box_Impl_.expandByPoints = function(this1,points) {
 thx.geom.shape._Box.Box_Impl_.intersects = function(this1,other) {
 	return this1[1][0] >= other[0][0] && this1[0][0] <= other[1][0] || this1[0][1] >= other[1][1] && this1[1][1] <= other[0][1];
 };
+thx.geom.shape._Box.Box_Impl_.contains = function(this1,point) {
+	return this1[0][0] <= point[0] && this1[1][0] >= point[0] && this1[1][1] >= point[1] && this1[0][1] <= point[1];
+};
 thx.geom.shape._Box.Box_Impl_.equals = function(this1,other) {
 	return (function($this) {
 		var $r;
-		var this11 = this1[0];
+		var this2 = this1[0];
 		var p = other[0];
-		$r = this11[0] == p[0] && this11[1] == p[1];
+		$r = this2[0] == p[0] && this2[1] == p[1];
 		return $r;
 	}(this)) && (function($this) {
 		var $r;
-		var this12 = this1[1];
+		var this3 = this1[1];
 		var p1 = other[1];
-		$r = this12[0] == p1[0] && this12[1] == p1[1];
+		$r = this3[0] == p1[0] && this3[1] == p1[1];
 		return $r;
 	}(this));
 };
@@ -2809,6 +4768,9 @@ thx.geom.shape._Box.Box_Impl_.toString = function(this1) {
 };
 thx.geom.shape._Box.Box_Impl_.toSpline = function(this1) {
 	return thx.geom.Spline.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
+};
+thx.geom.shape._Box.Box_Impl_.toPath = function(this1) {
+	return new thx.geom.Path([thx.geom.shape._Box.Box_Impl_.toSpline(this1)]);
 };
 thx.geom.shape._Circle = {};
 thx.geom.shape._Circle.Circle_Impl_ = function() { };
@@ -2827,6 +4789,31 @@ thx.geom.shape._Circle.Circle_Impl_.toString = function(this1) {
 };
 thx.geom.shape._Circle.Circle_Impl_.toSpline = function(this1) {
 	return thx.geom.Transformables.translate(thx.geom.shape._Circle.Circle_Impl_.unitaryCircle.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling([this1.radius,this1.radius,1])),[this1.center[0],this1.center[1],0]);
+};
+thx.math = {};
+thx.math.Number = function() { };
+thx.math.Number.__name__ = true;
+thx.math.Number.isNearZero = function(n) {
+	return Math.abs(n) <= 10e-10;
+};
+thx.math.Number.nearEquals = function(a,b) {
+	return Math.abs(a - b) <= 10e-10;
+};
+thx.math.Number.integrate = function(f,a,b,n) {
+	var x = thx.math.Number.abscissas[n - 2];
+	var w = thx.math.Number.weights[n - 2];
+	var A = 0.5 * (b - a);
+	var B = A + a;
+	var i = 0;
+	var m = n + 1 >> 1;
+	var sum;
+	if((n & 1) == 1) sum = w[i++] * f(B); else sum = 0;
+	var Ax;
+	while(i < m) {
+		Ax = A * x[i];
+		sum += w[i++] * (f(B + Ax) + f(B - Ax));
+	}
+	return A * sum;
 };
 thx.unit = {};
 thx.unit.angle = {};
@@ -2944,6 +4931,15 @@ function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id
 if(Array.prototype.indexOf) HxOverrides.indexOf = function(a,o,i) {
 	return Array.prototype.indexOf.call(a,o,i);
 };
+Math.NaN = Number.NaN;
+Math.NEGATIVE_INFINITY = Number.NEGATIVE_INFINITY;
+Math.POSITIVE_INFINITY = Number.POSITIVE_INFINITY;
+Math.isFinite = function(i) {
+	return isFinite(i);
+};
+Math.isNaN = function(i1) {
+	return isNaN(i1);
+};
 String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
@@ -2965,12 +4961,413 @@ if(Array.prototype.map == null) Array.prototype.map = function(f) {
 	}
 	return a;
 };
+if(Array.prototype.filter == null) Array.prototype.filter = function(f1) {
+	var a1 = [];
+	var _g11 = 0;
+	var _g2 = this.length;
+	while(_g11 < _g2) {
+		var i1 = _g11++;
+		var e = this[i1];
+		if(f1(e)) a1.push(e);
+	}
+	return a1;
+};
+thx.color.Color.names = new haxe.ds.StringMap();
+var value = thx.color.Color.aliceblue = 15792383;
+thx.color.Color.names.set("aliceblue",value);
+thx.color.Color.names.set("alice blue",thx.color.Color.aliceblue);
+var value1 = thx.color.Color.antiquewhite = 16444375;
+thx.color.Color.names.set("antiquewhite",value1);
+thx.color.Color.names.set("antique white",thx.color.Color.antiquewhite);
+var value2 = thx.color.Color.aqua = 65535;
+thx.color.Color.names.set("aqua",value2);
+var value3 = thx.color.Color.aquamarine = 8388564;
+thx.color.Color.names.set("aquamarine",value3);
+var value4 = thx.color.Color.azure = 15794175;
+thx.color.Color.names.set("azure",value4);
+var value5 = thx.color.Color.beige = 16119260;
+thx.color.Color.names.set("beige",value5);
+var value6 = thx.color.Color.bisque = 16770244;
+thx.color.Color.names.set("bisque",value6);
+var value7 = thx.color.Color.black = 0;
+thx.color.Color.names.set("black",value7);
+var value8 = thx.color.Color.blanchedalmond = 16772045;
+thx.color.Color.names.set("blanchedalmond",value8);
+thx.color.Color.names.set("blanched almond",thx.color.Color.blanchedalmond);
+var value9 = thx.color.Color.blue = 255;
+thx.color.Color.names.set("blue",value9);
+var value10 = thx.color.Color.blueviolet = 9055202;
+thx.color.Color.names.set("blueviolet",value10);
+thx.color.Color.names.set("blue violet",thx.color.Color.blueviolet);
+var value11 = thx.color.Color.brown = 10824234;
+thx.color.Color.names.set("brown",value11);
+var value12 = thx.color.Color.burlywood = 14596231;
+thx.color.Color.names.set("burlywood",value12);
+thx.color.Color.names.set("burly wood",thx.color.Color.burlywood);
+var value13 = thx.color.Color.cadetblue = 6266528;
+thx.color.Color.names.set("cadetblue",value13);
+thx.color.Color.names.set("cadet blue",thx.color.Color.cadetblue);
+var value14 = thx.color.Color.chartreuse = 8388352;
+thx.color.Color.names.set("chartreuse",value14);
+thx.color.Color.names.set("chart reuse",thx.color.Color.chartreuse);
+var value15 = thx.color.Color.chocolate = 13789470;
+thx.color.Color.names.set("chocolate",value15);
+var value16 = thx.color.Color.coral = 16744272;
+thx.color.Color.names.set("coral",value16);
+var value17 = thx.color.Color.cornflowerblue = 6591981;
+thx.color.Color.names.set("cornflowerblue",value17);
+thx.color.Color.names.set("corn flower blue",thx.color.Color.cornflowerblue);
+var value18 = thx.color.Color.cornsilk = 16775388;
+thx.color.Color.names.set("cornsilk",value18);
+thx.color.Color.names.set("corn silk",thx.color.Color.cornsilk);
+var value19 = thx.color.Color.crimson = 14423100;
+thx.color.Color.names.set("crimson",value19);
+var value20 = thx.color.Color.cyan = 65535;
+thx.color.Color.names.set("cyan",value20);
+var value21 = thx.color.Color.darkblue = 139;
+thx.color.Color.names.set("darkblue",value21);
+thx.color.Color.names.set("dark blue",thx.color.Color.darkblue);
+var value22 = thx.color.Color.darkcyan = 35723;
+thx.color.Color.names.set("darkcyan",value22);
+thx.color.Color.names.set("dark cyan",thx.color.Color.darkcyan);
+var value23 = thx.color.Color.darkgoldenrod = 12092939;
+thx.color.Color.names.set("darkgoldenrod",value23);
+thx.color.Color.names.set("dark golden rod",thx.color.Color.darkgoldenrod);
+var value24 = thx.color.Color.darkgray = thx.color.Color.darkgrey = 11119017;
+thx.color.Color.names.set("darkgray",value24);
+thx.color.Color.names.set("dark gray",thx.color.Color.darkgray);
+thx.color.Color.names.set("darkgrey",thx.color.Color.darkgrey);
+thx.color.Color.names.set("dark grey",thx.color.Color.darkgrey);
+var value25 = thx.color.Color.darkgreen = 25600;
+thx.color.Color.names.set("darkgreen",value25);
+thx.color.Color.names.set("dark green",thx.color.Color.darkgreen);
+var value26 = thx.color.Color.darkkhaki = 12433259;
+thx.color.Color.names.set("darkkhaki",value26);
+thx.color.Color.names.set("dark khaki",thx.color.Color.darkkhaki);
+var value27 = thx.color.Color.darkmagenta = 9109643;
+thx.color.Color.names.set("darkmagenta",value27);
+thx.color.Color.names.set("dark magenta",thx.color.Color.darkmagenta);
+var value28 = thx.color.Color.darkolivegreen = 5597999;
+thx.color.Color.names.set("darkolivegreen",value28);
+thx.color.Color.names.set("dark olive green",thx.color.Color.darkolivegreen);
+var value29 = thx.color.Color.darkorange = 16747520;
+thx.color.Color.names.set("darkorange",value29);
+thx.color.Color.names.set("dark orange",thx.color.Color.darkorange);
+var value30 = thx.color.Color.darkorchid = 10040012;
+thx.color.Color.names.set("darkorchid",value30);
+thx.color.Color.names.set("dark orchid",thx.color.Color.darkorchid);
+var value31 = thx.color.Color.darkred = 9109504;
+thx.color.Color.names.set("darkred",value31);
+thx.color.Color.names.set("dark red",thx.color.Color.darkred);
+var value32 = thx.color.Color.darksalmon = 15308410;
+thx.color.Color.names.set("darksalmon",value32);
+thx.color.Color.names.set("dark salmon",thx.color.Color.darksalmon);
+var value33 = thx.color.Color.darkseagreen = 9419919;
+thx.color.Color.names.set("darkseagreen",value33);
+thx.color.Color.names.set("dark sea green",thx.color.Color.darkseagreen);
+var value34 = thx.color.Color.darkslateblue = 4734347;
+thx.color.Color.names.set("darkslateblue",value34);
+thx.color.Color.names.set("dark slate blue",thx.color.Color.darkslateblue);
+var value35 = thx.color.Color.darkslategray = thx.color.Color.darkslategrey = 3100495;
+thx.color.Color.names.set("darkslategray",value35);
+thx.color.Color.names.set("dark slate gray",thx.color.Color.darkslategray);
+thx.color.Color.names.set("darkslategrey",thx.color.Color.darkslategrey);
+thx.color.Color.names.set("dark slate grey",thx.color.Color.darkslategrey);
+var value36 = thx.color.Color.darkturquoise = 52945;
+thx.color.Color.names.set("darkturquoise",value36);
+thx.color.Color.names.set("dark turquoise",thx.color.Color.darkturquoise);
+var value37 = thx.color.Color.darkviolet = 9699539;
+thx.color.Color.names.set("darkviolet",value37);
+thx.color.Color.names.set("dark violet",thx.color.Color.darkviolet);
+var value38 = thx.color.Color.deeppink = 16716947;
+thx.color.Color.names.set("deeppink",value38);
+thx.color.Color.names.set("deep pink",thx.color.Color.deeppink);
+var value39 = thx.color.Color.deepskyblue = 49151;
+thx.color.Color.names.set("deepskyblue",value39);
+thx.color.Color.names.set("deep sky blue",thx.color.Color.deepskyblue);
+var value40 = thx.color.Color.dimgray = thx.color.Color.dimgrey = 6908265;
+thx.color.Color.names.set("dimgray",value40);
+thx.color.Color.names.set("dim grey",thx.color.Color.dimgrey);
+thx.color.Color.names.set("dimgrey",thx.color.Color.dimgrey);
+thx.color.Color.names.set("dim grey",thx.color.Color.dimgrey);
+var value41 = thx.color.Color.dodgerblue = 2003199;
+thx.color.Color.names.set("dodgerblue",value41);
+thx.color.Color.names.set("dodger blue",thx.color.Color.dodgerblue);
+var value42 = thx.color.Color.firebrick = 11674146;
+thx.color.Color.names.set("firebrick",value42);
+thx.color.Color.names.set("fire brick",thx.color.Color.firebrick);
+var value43 = thx.color.Color.floralwhite = 16775920;
+thx.color.Color.names.set("floralwhite",value43);
+thx.color.Color.names.set("floral white",thx.color.Color.floralwhite);
+var value44 = thx.color.Color.forestgreen = 2263842;
+thx.color.Color.names.set("forestgreen",value44);
+thx.color.Color.names.set("forest green",thx.color.Color.forestgreen);
+var value45 = thx.color.Color.fuchsia = 16711935;
+thx.color.Color.names.set("fuchsia",value45);
+var value46 = thx.color.Color.gainsboro = 14474460;
+thx.color.Color.names.set("gainsboro",value46);
+var value47 = thx.color.Color.ghostwhite = 16316671;
+thx.color.Color.names.set("ghostwhite",value47);
+thx.color.Color.names.set("ghost white",thx.color.Color.ghostwhite);
+var value48 = thx.color.Color.gold = 16766720;
+thx.color.Color.names.set("gold",value48);
+var value49 = thx.color.Color.goldenrod = 14329120;
+thx.color.Color.names.set("goldenrod",value49);
+thx.color.Color.names.set("golden rod",thx.color.Color.goldenrod);
+var value50 = thx.color.Color.gray = thx.color.Color.grey = 8421504;
+thx.color.Color.names.set("gray",value50);
+thx.color.Color.names.set("grey",thx.color.Color.grey);
+var value51 = thx.color.Color.green = 32768;
+thx.color.Color.names.set("green",value51);
+var value52 = thx.color.Color.greenyellow = 11403055;
+thx.color.Color.names.set("greenyellow",value52);
+thx.color.Color.names.set("green yellow",thx.color.Color.greenyellow);
+var value53 = thx.color.Color.honeydew = 15794160;
+thx.color.Color.names.set("honeydew",value53);
+thx.color.Color.names.set("honey dew",thx.color.Color.honeydew);
+var value54 = thx.color.Color.hotpink = 16738740;
+thx.color.Color.names.set("hotpink",value54);
+thx.color.Color.names.set("hot pink",thx.color.Color.hotpink);
+var value55 = thx.color.Color.indianred = 13458524;
+thx.color.Color.names.set("indianred",value55);
+thx.color.Color.names.set("indian red",thx.color.Color.indianred);
+var value56 = thx.color.Color.indigo = 4915330;
+thx.color.Color.names.set("indigo",value56);
+var value57 = thx.color.Color.ivory = 16777200;
+thx.color.Color.names.set("ivory",value57);
+var value58 = thx.color.Color.khaki = 15787660;
+thx.color.Color.names.set("khaki",value58);
+var value59 = thx.color.Color.lavender = 15132410;
+thx.color.Color.names.set("lavender",value59);
+var value60 = thx.color.Color.lavenderblush = 16773365;
+thx.color.Color.names.set("lavenderblush",value60);
+thx.color.Color.names.set("lavender blush",thx.color.Color.lavenderblush);
+var value61 = thx.color.Color.lawngreen = 8190976;
+thx.color.Color.names.set("lawngreen",value61);
+thx.color.Color.names.set("lawn green",thx.color.Color.lawngreen);
+var value62 = thx.color.Color.lemonchiffon = 16775885;
+thx.color.Color.names.set("lemonchiffon",value62);
+thx.color.Color.names.set("lemon chiffon",thx.color.Color.lemonchiffon);
+var value63 = thx.color.Color.lightblue = 11393254;
+thx.color.Color.names.set("lightblue",value63);
+thx.color.Color.names.set("light blue",thx.color.Color.lightblue);
+var value64 = thx.color.Color.lightcoral = 15761536;
+thx.color.Color.names.set("lightcoral",value64);
+thx.color.Color.names.set("light coral",thx.color.Color.lightcoral);
+var value65 = thx.color.Color.lightcyan = 14745599;
+thx.color.Color.names.set("lightcyan",value65);
+thx.color.Color.names.set("light cyan",thx.color.Color.lightcyan);
+var value66 = thx.color.Color.lightgoldenrodyellow = 16448210;
+thx.color.Color.names.set("lightgoldenrodyellow",value66);
+thx.color.Color.names.set("light golden rod yellow",thx.color.Color.lightgoldenrodyellow);
+var value67 = thx.color.Color.lightgray = thx.color.Color.lightgrey = 13882323;
+thx.color.Color.names.set("lightgray",value67);
+thx.color.Color.names.set("light gray",thx.color.Color.lightgray);
+thx.color.Color.names.set("lightgrey",thx.color.Color.lightgrey);
+thx.color.Color.names.set("light grey",thx.color.Color.lightgrey);
+var value68 = thx.color.Color.lightgreen = 9498256;
+thx.color.Color.names.set("lightgreen",value68);
+thx.color.Color.names.set("light green",thx.color.Color.lightgreen);
+var value69 = thx.color.Color.lightpink = 16758465;
+thx.color.Color.names.set("lightpink",value69);
+thx.color.Color.names.set("light pink",thx.color.Color.lightpink);
+var value70 = thx.color.Color.lightsalmon = 16752762;
+thx.color.Color.names.set("lightsalmon",value70);
+thx.color.Color.names.set("light salmon",thx.color.Color.lightsalmon);
+var value71 = thx.color.Color.lightseagreen = 2142890;
+thx.color.Color.names.set("lightseagreen",value71);
+thx.color.Color.names.set("light sea green",thx.color.Color.lightseagreen);
+var value72 = thx.color.Color.lightskyblue = 8900346;
+thx.color.Color.names.set("lightskyblue",value72);
+thx.color.Color.names.set("light sky blue",thx.color.Color.lightskyblue);
+var value73 = thx.color.Color.lightslategray = thx.color.Color.lightslategrey = 7833753;
+thx.color.Color.names.set("lightslategray",value73);
+thx.color.Color.names.set("light slate gray",thx.color.Color.lightslategray);
+thx.color.Color.names.set("lightslategrey",thx.color.Color.lightslategrey);
+thx.color.Color.names.set("light slate grey",thx.color.Color.lightslategrey);
+var value74 = thx.color.Color.lightsteelblue = 11584734;
+thx.color.Color.names.set("lightsteelblue",value74);
+thx.color.Color.names.set("light steel blue",thx.color.Color.lightsteelblue);
+var value75 = thx.color.Color.lightyellow = 16777184;
+thx.color.Color.names.set("lightyellow",value75);
+thx.color.Color.names.set("light yellow",thx.color.Color.lightyellow);
+var value76 = thx.color.Color.lime = 65280;
+thx.color.Color.names.set("lime",value76);
+var value77 = thx.color.Color.limegreen = 3329330;
+thx.color.Color.names.set("limegreen",value77);
+thx.color.Color.names.set("lime green",thx.color.Color.limegreen);
+var value78 = thx.color.Color.linen = 16445670;
+thx.color.Color.names.set("linen",value78);
+var value79 = thx.color.Color.magenta = 16711935;
+thx.color.Color.names.set("magenta",value79);
+var value80 = thx.color.Color.maroon = 8388608;
+thx.color.Color.names.set("maroon",value80);
+var value81 = thx.color.Color.mediumaquamarine = 6737322;
+thx.color.Color.names.set("mediumaquamarine",value81);
+thx.color.Color.names.set("mediuma quamarine",thx.color.Color.mediumaquamarine);
+var value82 = thx.color.Color.mediumblue = 205;
+thx.color.Color.names.set("mediumblue",value82);
+thx.color.Color.names.set("medium blue",thx.color.Color.mediumblue);
+var value83 = thx.color.Color.mediumorchid = 12211667;
+thx.color.Color.names.set("mediumorchid",value83);
+thx.color.Color.names.set("medium orchid",thx.color.Color.mediumorchid);
+var value84 = thx.color.Color.mediumpurple = 9662683;
+thx.color.Color.names.set("mediumpurple",value84);
+thx.color.Color.names.set("medium purple",thx.color.Color.mediumpurple);
+var value85 = thx.color.Color.mediumseagreen = 3978097;
+thx.color.Color.names.set("mediumseagreen",value85);
+thx.color.Color.names.set("medium sea green",thx.color.Color.mediumseagreen);
+var value86 = thx.color.Color.mediumslateblue = 8087790;
+thx.color.Color.names.set("mediumslateblue",value86);
+thx.color.Color.names.set("medium slate blue",thx.color.Color.mediumslateblue);
+var value87 = thx.color.Color.mediumspringgreen = 64154;
+thx.color.Color.names.set("mediumspringgreen",value87);
+thx.color.Color.names.set("medium spring green",thx.color.Color.mediumspringgreen);
+var value88 = thx.color.Color.mediumturquoise = 4772300;
+thx.color.Color.names.set("mediumturquoise",value88);
+thx.color.Color.names.set("medium turquoise",thx.color.Color.mediumturquoise);
+var value89 = thx.color.Color.mediumvioletred = 13047173;
+thx.color.Color.names.set("mediumvioletred",value89);
+thx.color.Color.names.set("medium violet red",thx.color.Color.mediumvioletred);
+var value90 = thx.color.Color.midnightblue = 1644912;
+thx.color.Color.names.set("midnightblue",value90);
+thx.color.Color.names.set("midnight blue",thx.color.Color.midnightblue);
+var value91 = thx.color.Color.mintcream = 16121850;
+thx.color.Color.names.set("mintcream",value91);
+thx.color.Color.names.set("mint cream",thx.color.Color.mintcream);
+var value92 = thx.color.Color.mistyrose = 16770273;
+thx.color.Color.names.set("mistyrose",value92);
+thx.color.Color.names.set("misty rose",thx.color.Color.mistyrose);
+var value93 = thx.color.Color.moccasin = 16770229;
+thx.color.Color.names.set("moccasin",value93);
+var value94 = thx.color.Color.navajowhite = 16768685;
+thx.color.Color.names.set("navajowhite",value94);
+thx.color.Color.names.set("navajo white",thx.color.Color.navajowhite);
+var value95 = thx.color.Color.navy = 128;
+thx.color.Color.names.set("navy",value95);
+var value96 = thx.color.Color.oldlace = 16643558;
+thx.color.Color.names.set("oldlace",value96);
+thx.color.Color.names.set("old lace",thx.color.Color.oldlace);
+var value97 = thx.color.Color.olive = 8421376;
+thx.color.Color.names.set("olive",value97);
+var value98 = thx.color.Color.olivedrab = 7048739;
+thx.color.Color.names.set("olivedrab",value98);
+thx.color.Color.names.set("olive drab",thx.color.Color.olivedrab);
+var value99 = thx.color.Color.orange = 16753920;
+thx.color.Color.names.set("orange",value99);
+var value100 = thx.color.Color.orangered = 16729344;
+thx.color.Color.names.set("orangered",value100);
+thx.color.Color.names.set("orangered",thx.color.Color.orangered);
+var value101 = thx.color.Color.orchid = 14315734;
+thx.color.Color.names.set("orchid",value101);
+var value102 = thx.color.Color.palegoldenrod = 15657130;
+thx.color.Color.names.set("palegoldenrod",value102);
+thx.color.Color.names.set("pale golden rod",thx.color.Color.palegoldenrod);
+var value103 = thx.color.Color.palegreen = 10025880;
+thx.color.Color.names.set("palegreen",value103);
+thx.color.Color.names.set("pale green",thx.color.Color.palegreen);
+var value104 = thx.color.Color.paleturquoise = 11529966;
+thx.color.Color.names.set("paleturquoise",value104);
+thx.color.Color.names.set("pale turquoise",thx.color.Color.paleturquoise);
+var value105 = thx.color.Color.palevioletred = 14381203;
+thx.color.Color.names.set("palevioletred",value105);
+thx.color.Color.names.set("pale violet red",thx.color.Color.palevioletred);
+var value106 = thx.color.Color.papayawhip = 16773077;
+thx.color.Color.names.set("papayawhip",value106);
+thx.color.Color.names.set("papaya whip",thx.color.Color.papayawhip);
+var value107 = thx.color.Color.peachpuff = 16767673;
+thx.color.Color.names.set("peachpuff",value107);
+thx.color.Color.names.set("peach puff",thx.color.Color.peachpuff);
+var value108 = thx.color.Color.peru = 13468991;
+thx.color.Color.names.set("peru",value108);
+var value109 = thx.color.Color.pink = 16761035;
+thx.color.Color.names.set("pink",value109);
+var value110 = thx.color.Color.plum = 14524637;
+thx.color.Color.names.set("plum",value110);
+var value111 = thx.color.Color.powderblue = 11591910;
+thx.color.Color.names.set("powderblue",value111);
+thx.color.Color.names.set("powder blue",thx.color.Color.powderblue);
+var value112 = thx.color.Color.purple = 8388736;
+thx.color.Color.names.set("purple",value112);
+var value113 = thx.color.Color.red = 16711680;
+thx.color.Color.names.set("red",value113);
+var value114 = thx.color.Color.rosybrown = 12357519;
+thx.color.Color.names.set("rosybrown",value114);
+thx.color.Color.names.set("rosy brown",thx.color.Color.rosybrown);
+var value115 = thx.color.Color.royalblue = 4286945;
+thx.color.Color.names.set("royalblue",value115);
+thx.color.Color.names.set("royal blue",thx.color.Color.royalblue);
+var value116 = thx.color.Color.saddlebrown = 9127187;
+thx.color.Color.names.set("saddlebrown",value116);
+thx.color.Color.names.set("saddle brown",thx.color.Color.saddlebrown);
+var value117 = thx.color.Color.salmon = 16416882;
+thx.color.Color.names.set("salmon",value117);
+var value118 = thx.color.Color.sandybrown = 16032864;
+thx.color.Color.names.set("sandybrown",value118);
+thx.color.Color.names.set("sandy brown",thx.color.Color.sandybrown);
+var value119 = thx.color.Color.seagreen = 3050327;
+thx.color.Color.names.set("seagreen",value119);
+thx.color.Color.names.set("sea green",thx.color.Color.seagreen);
+var value120 = thx.color.Color.seashell = 16774638;
+thx.color.Color.names.set("seashell",value120);
+thx.color.Color.names.set("sea shell",thx.color.Color.seashell);
+var value121 = thx.color.Color.sienna = 10506797;
+thx.color.Color.names.set("sienna",value121);
+var value122 = thx.color.Color.silver = 12632256;
+thx.color.Color.names.set("silver",value122);
+var value123 = thx.color.Color.skyblue = 8900331;
+thx.color.Color.names.set("skyblue",value123);
+thx.color.Color.names.set("sky blue",thx.color.Color.skyblue);
+var value124 = thx.color.Color.slateblue = 6970061;
+thx.color.Color.names.set("slateblue",value124);
+thx.color.Color.names.set("slate blue",thx.color.Color.slateblue);
+var value125 = thx.color.Color.slategray = thx.color.Color.slategrey = 7372944;
+thx.color.Color.names.set("slategray",value125);
+thx.color.Color.names.set("slate gray",thx.color.Color.slategray);
+thx.color.Color.names.set("slategrey",thx.color.Color.slategrey);
+thx.color.Color.names.set("slate grey",thx.color.Color.slategrey);
+var value126 = thx.color.Color.snow = 16775930;
+thx.color.Color.names.set("snow",value126);
+var value127 = thx.color.Color.springgreen = 65407;
+thx.color.Color.names.set("springgreen",value127);
+thx.color.Color.names.set("spring green",thx.color.Color.springgreen);
+var value128 = thx.color.Color.steelblue = 4620980;
+thx.color.Color.names.set("steelblue",value128);
+thx.color.Color.names.set("steel blue",thx.color.Color.steelblue);
+var value129 = thx.color.Color.tan = 13808780;
+thx.color.Color.names.set("tan",value129);
+var value130 = thx.color.Color.teal = 32896;
+thx.color.Color.names.set("teal",value130);
+var value131 = thx.color.Color.thistle = 14204888;
+thx.color.Color.names.set("thistle",value131);
+var value132 = thx.color.Color.tomato = 16737095;
+thx.color.Color.names.set("tomato",value132);
+var value133 = thx.color.Color.turquoise = 4251856;
+thx.color.Color.names.set("turquoise",value133);
+var value134 = thx.color.Color.violet = 15631086;
+thx.color.Color.names.set("violet",value134);
+var value135 = thx.color.Color.wheat = 16113331;
+thx.color.Color.names.set("wheat",value135);
+var value136 = thx.color.Color.white = 16777215;
+thx.color.Color.names.set("white",value136);
+var value137 = thx.color.Color.whitesmoke = 16119285;
+thx.color.Color.names.set("whitesmoke",value137);
+thx.color.Color.names.set("white smoke",thx.color.Color.whitesmoke);
+var value138 = thx.color.Color.yellow = 16776960;
+thx.color.Color.names.set("yellow",value138);
+var value139 = thx.color.Color.yellowgreen = 10145074;
+thx.color.Color.names.set("yellowgreen",value139);
+thx.color.Color.names.set("yellow green",thx.color.Color.yellowgreen);
 chad.render._Cap.Cap_Impl_.butt = "butt";
 chad.render._Cap.Cap_Impl_.round = "round";
 chad.render._Cap.Cap_Impl_.square = "square";
 chad.render._Join.Join_Impl_.miter = "miter";
 chad.render._Join.Join_Impl_.round = "round";
 chad.render._Join.Join_Impl_.bevel = "bevel";
+chad.render.LineStyle.defaultColor = -16777216;
+thx.color.parse.ColorParser.parser = new thx.color.parse.ColorParser();
+thx.color.parse.ColorParser.isPureHex = new EReg("^([0-9a-f]{2}){3,4}$","i");
+thx.core.Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
 thx.core.Ints.pattern_parse = new EReg("^[+-]?(\\d+|0x[0-9A-F]+)$","i");
 thx.geom.Const.EPSILON = 1e-5;
 thx.geom.Const.KAPPA = 0.5522847498307936;
@@ -2987,6 +5384,10 @@ thx.geom.Transformables.MX = new thx.geom.Plane([1,0,0],0);
 thx.geom.Transformables.MY = new thx.geom.Plane([0,1,0],0);
 thx.geom.Transformables.MZ = new thx.geom.Plane([0,0,1],0);
 thx.geom.shape._Circle.Circle_Impl_.unitaryCircle = new thx.geom.Spline([new thx.geom.SplineNode([1,0],[1,-0.552284749830793564],[1,0.5522847498307936]),new thx.geom.SplineNode([0,-1],[-0.552284749830793564,-1],[0.5522847498307936,-1]),new thx.geom.SplineNode([-1,0],[-1,0.5522847498307936],[-1,-0.552284749830793564]),new thx.geom.SplineNode([0,1],[0.5522847498307936,1],[-0.552284749830793564,1])],true);
+thx.math.Number.TOLERANCE = 10e-5;
+thx.math.Number.EPSILON = 10e-10;
+thx.math.Number.abscissas = [[0.5773502691896257645091488],[0,0.7745966692414833770358531],[0.3399810435848562648026658,0.8611363115940525752239465],[0,0.5384693101056830910363144,0.9061798459386639927976269],[0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],[0,0.4058451513773971669066064,0.7415311855993944398638648,0.9491079123427585245261897],[0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],[0,0.3242534234038089290385380,0.6133714327005903973087020,0.8360311073266357942994298,0.9681602395076260898355762],[0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],[0,0.2695431559523449723315320,0.5190961292068118159257257,0.7301520055740493240934163,0.8870625997680952990751578,0.9782286581460569928039380],[0.1252334085114689154724414,0.3678314989981801937526915,0.5873179542866174472967024,0.7699026741943046870368938,0.9041172563704748566784659,0.9815606342467192506905491],[0,0.2304583159551347940655281,0.4484927510364468528779129,0.6423493394403402206439846,0.8015780907333099127942065,0.9175983992229779652065478,0.9841830547185881494728294],[0.1080549487073436620662447,0.3191123689278897604356718,0.5152486363581540919652907,0.6872929048116854701480198,0.8272013150697649931897947,0.9284348836635735173363911,0.9862838086968123388415973],[0,0.2011940939974345223006283,0.3941513470775633698972074,0.5709721726085388475372267,0.7244177313601700474161861,0.8482065834104272162006483,0.9372733924007059043077589,0.9879925180204854284895657],[0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]];
+thx.math.Number.weights = [[1.0],[0.8888888888888888888888889,0.5555555555555555555555556],[0.6521451548625461426269361,0.3478548451374538573730639],[0.5688888888888888888888889,0.4786286704993664680412915,0.2369268850561890875142640],[0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],[0.4179591836734693877551020,0.3818300505051189449503698,0.2797053914892766679014678,0.1294849661688696932706114],[0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],[0.3302393550012597631645251,0.3123470770400028400686304,0.2606106964029354623187429,0.1806481606948574040584720,0.0812743883615744119718922],[0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],[0.2729250867779006307144835,0.2628045445102466621806889,0.2331937645919904799185237,0.1862902109277342514260976,0.1255803694649046246346943,0.0556685671161736664827537],[0.2491470458134027850005624,0.2334925365383548087608499,0.2031674267230659217490645,0.1600783285433462263346525,0.1069393259953184309602547,0.0471753363865118271946160],[0.2325515532308739101945895,0.2262831802628972384120902,0.2078160475368885023125232,0.1781459807619457382800467,0.1388735102197872384636018,0.0921214998377284479144218,0.0404840047653158795200216],[0.2152638534631577901958764,0.2051984637212956039659241,0.1855383974779378137417166,0.1572031671581935345696019,0.1215185706879031846894148,0.0801580871597602098056333,0.0351194603317518630318329],[0.2025782419255612728806202,0.1984314853271115764561183,0.1861610000155622110268006,0.1662692058169939335532009,0.1395706779261543144478048,0.1071592204671719350118695,0.0703660474881081247092674,0.0307532419961172683546284],[0.1894506104550684962853967,0.1826034150449235888667637,0.1691565193950025381893121,0.1495959888165767320815017,0.1246289712555338720524763,0.0951585116824927848099251,0.0622535239386478928628438,0.0271524594117540948517806]];
 thx.unit.angle.Const.TO_DEGREE = 180 / Math.PI;
 Canvas.main();
 })();

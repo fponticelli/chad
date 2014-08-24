@@ -3,6 +3,7 @@
 -main Canvas
 -js bin/canvas.js
 -lib thx.core
+-lib thx.color
 -lib thx.geom
 -lib thx.unit
 -D thx_unit

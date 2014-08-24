@@ -78,7 +78,7 @@ class CanvasGraphics implements IGraphics {
 		ctx.lineWidth = weightScale(style.width);
 		ctx.lineCap = cast style.cap;
 		ctx.lineJoin = cast style.join;
-		ctx.strokeStyle = style.color;
+		ctx.strokeStyle = style.color.toCSS3();
 	}
 
 	public function applyStrokeStyle(style : StrokeStyle)
@@ -97,7 +97,7 @@ class CanvasGraphics implements IGraphics {
 	public function applyFillStyle(style : FillStyle)
 		switch style {
 			case FillColor(c):
-				ctx.fillStyle = c;
+				ctx.fillStyle = c.toCSS3();
 		};
 
 	function get_reverseCoords() {

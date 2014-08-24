@@ -13,6 +13,7 @@ import thx.geom.Spline;
 using thx.geom.Transformable;
 import thx.unit.angle.Degree;
 import thx.geom.Path;
+import thx.color.Color;
 
 class Canvas {
 	public static function main() {
@@ -27,8 +28,8 @@ class Canvas {
 			yp = Spline.fromArray([new Point(0, 0), new Point(0, len)], false),
 			yn = Spline.fromArray([new Point(0, 0), new Point(0, -len)], false);
 
-		var red = new LineStyle(2, "red"),
-			green = new LineStyle(2, "green");
+		var red = new LineStyle(2, "#f00"),
+			green = new LineStyle(2, "#0f0");
 		r.drawSpline(xp, StrokeLine(red));
 		r.drawSpline(xn, StrokeDash([8, 8], green));
 
@@ -94,9 +95,9 @@ class Canvas {
 			],
 			c = Spline.fromEdges(cast e, false).scale(new Point3D(0.4,0.4,1));
 
-		r.drawSpline(c, StrokeLine(new LineStyle(8, "red")));
-		r.drawSpline(c.toLinear(), StrokeDash([5,5], new LineStyle(4, "lime")));
-		r.drawSpline(e[0].toSpline().toLinear(), StrokeDash([8,4], new LineStyle(4, "orange")));
+		r.drawSpline(c, StrokeLine(new LineStyle(8, Color.red)));
+		r.drawSpline(c.toLinear(), StrokeDash([5,5], new LineStyle(4, Color.lime)));
+		r.drawSpline(e[0].toSpline().toLinear(), StrokeDash([8,4], new LineStyle(4, Color.orange)));
 
 		var circle1 = new Circle(new Point(300, 250), 100);
 		r.drawSpline(circle1.toSpline().toLinear());
