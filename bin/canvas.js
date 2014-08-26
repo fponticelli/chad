@@ -257,11 +257,8 @@ chad.render.Render.prototype = {
 		var _g = this;
 		this.g.wrap(stroke,fill,function() {
 			spline.iterate(function(init) {
-				console.log("start spline");
-				console.log("Point(" + init[0] + "," + init[1] + ")");
 				_g.g.moveTo(init);
 			},function(a,b,nout,nin) {
-				console.log("Point(" + b[0] + "," + b[1] + ")");
 				if(null == nout && null == nin) _g.g.lineTo(b); else {
 					if(null == nout) nout = a; else if(null == nin) nin = b;
 					_g.g.curveTo(b,nout,nin);
@@ -5037,7 +5034,7 @@ thx.color.Color.names.set("deepskyblue",value39);
 thx.color.Color.names.set("deep sky blue",thx.color.Color.deepskyblue);
 var value40 = thx.color.Color.dimgray = thx.color.Color.dimgrey = 6908265;
 thx.color.Color.names.set("dimgray",value40);
-thx.color.Color.names.set("dim grey",thx.color.Color.dimgrey);
+thx.color.Color.names.set("dim gray",thx.color.Color.dimgray);
 thx.color.Color.names.set("dimgrey",thx.color.Color.dimgrey);
 thx.color.Color.names.set("dim grey",thx.color.Color.dimgrey);
 var value41 = thx.color.Color.dodgerblue = 2003199;
@@ -5207,7 +5204,7 @@ var value99 = thx.color.Color.orange = 16753920;
 thx.color.Color.names.set("orange",value99);
 var value100 = thx.color.Color.orangered = 16729344;
 thx.color.Color.names.set("orangered",value100);
-thx.color.Color.names.set("orangered",thx.color.Color.orangered);
+thx.color.Color.names.set("orange red",thx.color.Color.orangered);
 var value101 = thx.color.Color.orchid = 14315734;
 thx.color.Color.names.set("orchid",value101);
 var value102 = thx.color.Color.palegoldenrod = 15657130;

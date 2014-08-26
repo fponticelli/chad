@@ -3,6 +3,7 @@ package chad.render;
 import thx.geom.Line;
 import thx.geom.Point;
 import thx.geom.Point3D;
+import thx.geom.shape.Circle;
 import thx.geom.Spline;
 using thx.geom.Transformable;
 
@@ -17,7 +18,9 @@ class Render {
 
 	public function drawDot(point : Point, ?fill : FillStyle, ?stroke : StrokeStyle, ?size : Float = 2) {
 		size = g.weightScale(size);
-		var spline = thx.geom.shape.Circle.unitaryCircle.scale(new Point3D(size, size, 1)).translate(new Point3D(point.x, point.y, 1));
+		var spline = Circle.unitaryCircle
+			.scale(new Point3D(size, size, 1))
+			.translate(new Point3D(point.x, point.y, 1));
 		drawSpline(spline, stroke, fill);
 	}
 
