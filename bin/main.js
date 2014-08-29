@@ -1783,7 +1783,7 @@ thx.unit.angle._Degree.Degree_Impl_.sin = function(this1) {
 	return Math.sin(this1 / thx.unit.angle.Const.TO_DEGREE);
 };
 thx.unit.angle._Degree.Degree_Impl_.toString = function(this1) {
-	return "" + this1 + "̊";
+	return "" + this1 + "º";
 };
 thx.unit.angle._Degree.Degree_Impl_.toRadians = function(this1) {
 	return this1 / thx.unit.angle.Const.TO_DEGREE;

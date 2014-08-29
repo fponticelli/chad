@@ -46,34 +46,22 @@ Canvas.draw = function(r) {
 	r.drawSpline(c,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(8,(function($this) {
 		var $r;
 		var this1 = thx.color.Color.red;
-		$r = (function($this) {
-			var $r;
-			var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-			return $r;
-		}($this));
+		var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
+		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
 		return $r;
 	}(this)))));
 	r.drawSpline(c.toLinear(),chad.render.StrokeStyle.StrokeDash([5,5],new chad.render.LineStyle(4,(function($this) {
 		var $r;
-		var this11 = thx.color.Color.lime;
-		$r = (function($this) {
-			var $r;
-			var this21 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this11 >> 16 & 255 & 255) << 16 | (this11 >> 8 & 255 & 255) << 8 | this11 & 255 & 255);
-			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this21[0],this21[1],this21[2],this21[3]);
-			return $r;
-		}($this));
+		var this3 = thx.color.Color.lime;
+		var this4 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this3 >> 16 & 255 & 255) << 16 | (this3 >> 8 & 255 & 255) << 8 | this3 & 255 & 255);
+		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this4[0],this4[1],this4[2],this4[3]);
 		return $r;
 	}(this)))));
 	r.drawSpline(e[0].toSpline().toLinear(),chad.render.StrokeStyle.StrokeDash([8,4],new chad.render.LineStyle(4,(function($this) {
 		var $r;
-		var this12 = thx.color.Color.orange;
-		$r = (function($this) {
-			var $r;
-			var this22 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this12 >> 16 & 255 & 255) << 16 | (this12 >> 8 & 255 & 255) << 8 | this12 & 255 & 255);
-			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this22[0],this22[1],this22[2],this22[3]);
-			return $r;
-		}($this));
+		var this5 = thx.color.Color.orange;
+		var this6 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this5 >> 16 & 255 & 255) << 16 | (this5 >> 8 & 255 & 255) << 8 | this5 & 255 & 255);
+		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this6[0],this6[1],this6[2],this6[3]);
 		return $r;
 	}(this)))));
 	var circle1 = { center : [300,250], radius : 100};
@@ -235,8 +223,8 @@ chad.render.Render.prototype = {
 			var $r;
 			var this1;
 			{
-				var this11 = line.normal;
-				var angle = Math.atan2(this11[1],this11[0]);
+				var this2 = line.normal;
+				var angle = Math.atan2(this2[1],this2[0]);
 				this1 = angle;
 			}
 			$r = this1;
@@ -561,6 +549,12 @@ thx.color._CMYK.CMYK_Impl_.toHSV = function(this1) {
 		return $r;
 	}(this)));
 };
+thx.color._CMYK.CMYK_Impl_.toRGB = function(this1) {
+	var this2;
+	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
+	this2 = channels;
+	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+};
 thx.color._CMYK.CMYK_Impl_.toRGBX = function(this1) {
 	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
 	return channels;
@@ -621,43 +615,43 @@ thx.color.Color.parse = function(color) {
 		var _g = info.name;
 		switch(_g) {
 		case "cmyk":
-			var this11;
+			var this3;
 			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this11 = channels;
-			var this21;
-			var channels1 = [thx.core.Floats.normalize(1 - this11[0] - this11[3]),thx.core.Floats.normalize(1 - this11[1] - this11[3]),thx.core.Floats.normalize(1 - this11[2] - this11[3])];
-			this21 = channels1;
-			var channels11 = this21.concat([1.0]);
-			return channels11;
-		case "grey":case "gray":
-			var this12;
-			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
-			var this13;
-			if(grey < 0) this13 = 0; else if(grey > 1) this13 = 1; else this13 = grey;
-			this12 = this13;
-			var channels2 = [this12,this12,this12].concat([1.0]);
+			this3 = channels;
+			var this4;
+			var channels1 = [thx.core.Floats.normalize(1 - this3[0] - this3[3]),thx.core.Floats.normalize(1 - this3[1] - this3[3]),thx.core.Floats.normalize(1 - this3[2] - this3[3])];
+			this4 = channels1;
+			var channels2 = this4.concat([1.0]);
 			return channels2;
+		case "grey":case "gray":
+			var this5;
+			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
+			var this6;
+			if(grey < 0) this6 = 0; else if(grey > 1) this6 = 1; else this6 = grey;
+			this5 = this6;
+			var channels3 = [this5,this5,this5].concat([1.0]);
+			return channels3;
 		case "hsl":
-			var this14;
-			var channels3 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this14 = channels3;
-			var this22;
-			var channels4 = [thx.color._HSL.HSL_Impl_._c(this14[0] + 120,this14[1],this14[2]),thx.color._HSL.HSL_Impl_._c(this14[0],this14[1],this14[2]),thx.color._HSL.HSL_Impl_._c(this14[0] + -120,this14[1],this14[2])];
-			this22 = channels4;
-			var channels12 = this22.concat([1.0]);
-			return channels12;
-		case "hsla":
-			var this15;
-			var channels5 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this15 = channels5;
-			var channels6 = [thx.color._HSLA.HSLA_Impl_._c(this15[0] + 120,this15[1],this15[2]),thx.color._HSLA.HSLA_Impl_._c(this15[0],this15[1],this15[2]),thx.color._HSLA.HSLA_Impl_._c(this15[0] + -120,this15[1],this15[2]),this15[3]];
+			var this7;
+			var channels4 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this7 = channels4;
+			var this8;
+			var channels5 = [thx.color._HSL.HSL_Impl_._c(this7[0] + 120,this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0],this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0] + -120,this7[1],this7[2])];
+			this8 = channels5;
+			var channels6 = this8.concat([1.0]);
 			return channels6;
+		case "hsla":
+			var this9;
+			var channels7 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this9 = channels7;
+			var channels8 = [thx.color._HSLA.HSLA_Impl_._c(this9[0] + 120,this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0],this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0] + -120,this9[1],this9[2]),this9[3]];
+			return channels8;
 		case "hsv":
-			var this16;
-			var channels7 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this16 = channels7;
-			var this23;
-			if(this16[1] == 0) this23 = [this16[2],this16[2],this16[2]]; else {
+			var this10;
+			var channels9 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
+			this10 = channels9;
+			var this11;
+			if(this10[1] == 0) this11 = [this10[2],this10[2],this10[2]]; else {
 				var r;
 				var g;
 				var b;
@@ -666,52 +660,52 @@ thx.color.Color.parse = function(color) {
 				var p;
 				var q;
 				var t;
-				var h = this16[0] / 60;
+				var h = this10[0] / 60;
 				i = Math.floor(h);
 				f = h + -i;
-				p = this16[2] * (1 - this16[1]);
-				q = this16[2] * (1 - f * this16[1]);
-				t = this16[2] * (1 - (1 - f) * this16[1]);
+				p = this10[2] * (1 - this10[1]);
+				q = this10[2] * (1 - f * this10[1]);
+				t = this10[2] * (1 - (1 - f) * this10[1]);
 				switch(i) {
 				case 0:
-					r = this16[2];
+					r = this10[2];
 					g = t;
 					b = p;
 					break;
 				case 1:
 					r = q;
-					g = this16[2];
+					g = this10[2];
 					b = p;
 					break;
 				case 2:
 					r = p;
-					g = this16[2];
+					g = this10[2];
 					b = t;
 					break;
 				case 3:
 					r = p;
 					g = q;
-					b = this16[2];
+					b = this10[2];
 					break;
 				case 4:
 					r = t;
 					g = p;
-					b = this16[2];
+					b = this10[2];
 					break;
 				default:
-					r = this16[2];
+					r = this10[2];
 					g = p;
 					b = q;
 				}
-				this23 = [r,g,b];
+				this11 = [r,g,b];
 			}
-			var channels8 = this23.concat([1.0]);
-			return channels8;
+			var channels10 = this11.concat([1.0]);
+			return channels10;
 		case "hsva":
-			var this17;
-			var channels9 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this17 = channels9;
-			if(this17[1] == 0) return [this17[2],this17[2],this17[2],this17[3]]; else {
+			var this12;
+			var channels11 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
+			this12 = channels11;
+			if(this12[1] == 0) return [this12[2],this12[2],this12[2],this12[3]]; else {
 				var r1;
 				var g1;
 				var b1;
@@ -720,50 +714,50 @@ thx.color.Color.parse = function(color) {
 				var p1;
 				var q1;
 				var t1;
-				var h1 = this17[0] / 60;
+				var h1 = this12[0] / 60;
 				i1 = Math.floor(h1);
 				f1 = h1 + -i1;
-				p1 = this17[2] * (1 - this17[1]);
-				q1 = this17[2] * (1 - f1 * this17[1]);
-				t1 = this17[2] * (1 - (1 - f1) * this17[1]);
+				p1 = this12[2] * (1 - this12[1]);
+				q1 = this12[2] * (1 - f1 * this12[1]);
+				t1 = this12[2] * (1 - (1 - f1) * this12[1]);
 				switch(i1) {
 				case 0:
-					r1 = this17[2];
+					r1 = this12[2];
 					g1 = t1;
 					b1 = p1;
 					break;
 				case 1:
 					r1 = q1;
-					g1 = this17[2];
+					g1 = this12[2];
 					b1 = p1;
 					break;
 				case 2:
 					r1 = p1;
-					g1 = this17[2];
+					g1 = this12[2];
 					b1 = t1;
 					break;
 				case 3:
 					r1 = p1;
 					g1 = q1;
-					b1 = this17[2];
+					b1 = this12[2];
 					break;
 				case 4:
 					r1 = t1;
 					g1 = p1;
-					b1 = this17[2];
+					b1 = this12[2];
 					break;
 				default:
-					r1 = this17[2];
+					r1 = this12[2];
 					g1 = p1;
 					b1 = q1;
 				}
-				return [r1,g1,b1,this17[3]];
+				return [r1,g1,b1,this12[3]];
 			}
 			break;
 		case "rgb":
-			var this18 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
-			var channels10 = this18.concat([1.0]);
-			return channels10;
+			var this13 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
+			var channels12 = this13.concat([1.0]);
+			return channels12;
 		case "rgba":
 			return thx.color._RGBXA.RGBXA_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,4));
 		default:
@@ -808,6 +802,12 @@ thx.color._Grey.Grey_Impl_.toHSL = function(this1) {
 thx.color._Grey.Grey_Impl_.toHSV = function(this1) {
 	return thx.color._RGBX.RGBX_Impl_.toHSV([this1,this1,this1]);
 };
+thx.color._Grey.Grey_Impl_.toRGB = function(this1) {
+	var this_0 = this1;
+	var this_1 = this1;
+	var this_2 = this1;
+	return thx.color._RGB.RGB_Impl_.fromFloats(this_0,this_1,this_2);
+};
 thx.color._Grey.Grey_Impl_.toRGBX = function(this1) {
 	return [this1,this1,this1];
 };
@@ -817,6 +817,9 @@ thx.color._Grey.Grey_Impl_.toRGBXA = function(this1) {
 };
 thx.color._Grey.Grey_Impl_.equals = function(this1,other) {
 	return this1 == other;
+};
+thx.color._Grey.Grey_Impl_.contrast = function(this1) {
+	if(this1 > 0.5) return thx.color._Grey.Grey_Impl_.black; else return thx.color._Grey.Grey_Impl_.white;
 };
 thx.color._Grey.Grey_Impl_.darker = function(color,t) {
 	var grey = thx.core.Floats.interpolateBetween(t,color,0);
@@ -891,6 +894,12 @@ thx.color._HSL.HSL_Impl_.toHSV = function(this1) {
 		$r = channels;
 		return $r;
 	}(this)));
+};
+thx.color._HSL.HSL_Impl_.toRGB = function(this1) {
+	var this2;
+	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
+	this2 = channels;
+	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
 };
 thx.color._HSL.HSL_Impl_.toRGBX = function(this1) {
 	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
@@ -993,6 +1002,15 @@ thx.color._HSLA.HSLA_Impl_.toHSVA = function(this1) {
 		$r = channels;
 		return $r;
 	}(this)));
+};
+thx.color._HSLA.HSLA_Impl_.toRGB = function(this1) {
+	var this2;
+	var channels = [thx.color._HSLA.HSLA_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0] + -120,this1[1],this1[2]),this1[3]];
+	this2 = channels;
+	var this3;
+	var channels1 = this2.slice(0,3);
+	this3 = channels1;
+	return thx.color._RGB.RGB_Impl_.fromFloats(this3[0],this3[1],this3[2]);
 };
 thx.color._HSLA.HSLA_Impl_.toRGBXA = function(this1) {
 	var channels = [thx.color._HSLA.HSLA_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0] + -120,this1[1],this1[2]),this1[3]];
@@ -1233,6 +1251,58 @@ thx.color._HSV.HSV_Impl_.toHSL = function(this1) {
 		return $r;
 	}(this)));
 };
+thx.color._HSV.HSV_Impl_.toRGB = function(this1) {
+	var this2;
+	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h + -i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		this2 = [r,g,b];
+	}
+	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+};
 thx.color._HSV.HSV_Impl_.toRGBX = function(this1) {
 	if(this1[1] == 0) return [this1[2],this1[2],this1[2]];
 	var r;
@@ -1460,6 +1530,61 @@ thx.color._HSVA.HSVA_Impl_.toHSLA = function(this1) {
 		return $r;
 	}(this)));
 };
+thx.color._HSVA.HSVA_Impl_.toRGB = function(this1) {
+	var this2;
+	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2],this1[3]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h + -i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		this2 = [r,g,b,this1[3]];
+	}
+	var this3;
+	var channels = this2.slice(0,3);
+	this3 = channels;
+	return thx.color._RGB.RGB_Impl_.fromFloats(this3[0],this3[1],this3[2]);
+};
 thx.color._HSVA.HSVA_Impl_.toRGBXA = function(this1) {
 	if(this1[1] == 0) return [this1[2],this1[2],this1[2],this1[3]];
 	var r;
@@ -1629,7 +1754,7 @@ thx.color._RGB.RGB_Impl_.toCSS3 = function(this1) {
 	return "rgb(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + ")";
 };
 thx.color._RGB.RGB_Impl_.toString = function(this1) {
-	return "rgb(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + ")";
+	return "" + "#" + StringTools.hex(this1 >> 16 & 255,2) + StringTools.hex(this1 >> 8 & 255,2) + StringTools.hex(this1 & 255,2);
 };
 thx.color._RGB.RGB_Impl_.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
@@ -1992,6 +2117,12 @@ thx.color._RGBXA.RGBXA_Impl_.toHSVA = function(this1) {
 	var alpha = Math.round(this1[3] * 255);
 	var channels1 = this2.concat([alpha]);
 	return channels1;
+};
+thx.color._RGBXA.RGBXA_Impl_.toRGB = function(this1) {
+	var this2;
+	var channels = this1.slice(0,3);
+	this2 = channels;
+	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
 };
 thx.color._RGBXA.RGBXA_Impl_.toRGBX = function(this1) {
 	var channels = this1.slice(0,3);
@@ -2572,18 +2703,18 @@ thx.geom.EdgeCubic.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this11 = $this.p1;
-			$r = "Point(" + this11[0] + "," + this11[1] + ")";
+			var this2 = $this.p1;
+			$r = "Point(" + this2[0] + "," + this2[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this12 = $this.p2;
-			$r = "Point(" + this12[0] + "," + this12[1] + ")";
+			var this3 = $this.p2;
+			$r = "Point(" + this3[0] + "," + this3[1] + ")";
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this13 = $this.p3;
-			$r = "Point(" + this13[0] + "," + this13[1] + ")";
+			var this4 = $this.p3;
+			$r = "Point(" + this4[0] + "," + this4[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -2600,59 +2731,59 @@ thx.geom.EdgeCubic.prototype = {
 		var l1;
 		var this1 = this.p0;
 		var p;
-		var this11;
-		var this12 = this.p1;
+		var this2;
+		var this3 = this.p1;
 		var p1 = this.p0;
 		var p_0 = -p1[0];
 		var p_1 = -p1[1];
-		this11 = [this12[0] + p_0,this12[1] + p_1];
-		p = [this11[0] * v,this11[1] * v];
+		this2 = [this3[0] + p_0,this3[1] + p_1];
+		p = [this2[0] * v,this2[1] * v];
 		l1 = [this1[0] + p[0],this1[1] + p[1]];
 		var m;
-		var this13 = this.p1;
+		var this4 = this.p1;
 		var p2;
-		var this14;
-		var this15 = this.p2;
+		var this5;
+		var this6 = this.p2;
 		var p3 = this.p1;
 		var p_01 = -p3[0];
 		var p_11 = -p3[1];
-		this14 = [this15[0] + p_01,this15[1] + p_11];
-		p2 = [this14[0] * v,this14[1] * v];
-		m = [this13[0] + p2[0],this13[1] + p2[1]];
+		this5 = [this6[0] + p_01,this6[1] + p_11];
+		p2 = [this5[0] * v,this5[1] * v];
+		m = [this4[0] + p2[0],this4[1] + p2[1]];
 		var r2;
-		var this16 = this.p2;
+		var this7 = this.p2;
 		var p4;
-		var this17;
-		var this18 = this.p3;
+		var this8;
+		var this9 = this.p3;
 		var p5 = this.p2;
 		var p_02 = -p5[0];
 		var p_12 = -p5[1];
-		this17 = [this18[0] + p_02,this18[1] + p_12];
-		p4 = [this17[0] * v,this17[1] * v];
-		r2 = [this16[0] + p4[0],this16[1] + p4[1]];
+		this8 = [this9[0] + p_02,this9[1] + p_12];
+		p4 = [this8[0] * v,this8[1] * v];
+		r2 = [this7[0] + p4[0],this7[1] + p4[1]];
 		var l2;
 		var p6;
-		var this19;
+		var this10;
 		var p_03 = -l1[0];
 		var p_13 = -l1[1];
-		this19 = [m[0] + p_03,m[1] + p_13];
-		p6 = [this19[0] * v,this19[1] * v];
+		this10 = [m[0] + p_03,m[1] + p_13];
+		p6 = [this10[0] * v,this10[1] * v];
 		l2 = [l1[0] + p6[0],l1[1] + p6[1]];
 		var r1;
 		var p7;
-		var this110;
+		var this11;
 		var p_04 = -m[0];
 		var p_14 = -m[1];
-		this110 = [r2[0] + p_04,r2[1] + p_14];
-		p7 = [this110[0] * v,this110[1] * v];
+		this11 = [r2[0] + p_04,r2[1] + p_14];
+		p7 = [this11[0] * v,this11[1] * v];
 		r1 = [m[0] + p7[0],m[1] + p7[1]];
 		var l3;
 		var p8;
-		var this111;
+		var this12;
 		var p_05 = -l2[0];
 		var p_15 = -l2[1];
-		this111 = [r1[0] + p_05,r1[1] + p_15];
-		p8 = [this111[0] * v,this111[1] * v];
+		this12 = [r1[0] + p_05,r1[1] + p_15];
+		p8 = [this12[0] * v,this12[1] * v];
 		l3 = [l2[0] + p8[0],l2[1] + p8[1]];
 		return [new thx.geom.EdgeCubic(this.p0,l1,l2,l3),new thx.geom.EdgeCubic(l3,r1,r2,this.p3)];
 	}
@@ -2774,50 +2905,50 @@ thx.geom.EdgeLinear.prototype = {
 					var $r;
 					var this1;
 					{
-						var this11 = $this.p0;
+						var this2 = $this.p0;
 						var p1 = $this.p1;
-						var x = Math.min(this11[0],p1[0]);
-						var y = Math.min(this11[1],p1[1]);
+						var x = Math.min(this2[0],p1[0]);
+						var y = Math.min(this2[1],p1[1]);
 						this1 = [x,y];
 					}
 					$r = this1[1];
 					return $r;
 				}(this)) && p[1] <= (function($this) {
 					var $r;
-					var this12;
+					var this3;
 					{
-						var this13 = $this.p0;
+						var this4 = $this.p0;
 						var p2 = $this.p1;
-						var x1 = Math.max(this13[0],p2[0]);
-						var y1 = Math.max(this13[1],p2[1]);
-						this12 = [x1,y1];
+						var x1 = Math.max(this4[0],p2[0]);
+						var y1 = Math.max(this4[1],p2[1]);
+						this3 = [x1,y1];
 					}
-					$r = this12[1];
+					$r = this3[1];
 					return $r;
 				}(this))) return [p];
 			} else if(p[0] >= (function($this) {
 				var $r;
-				var this14;
+				var this5;
 				{
-					var this15 = $this.p0;
+					var this6 = $this.p0;
 					var p3 = $this.p1;
-					var x2 = Math.min(this15[0],p3[0]);
-					var y2 = Math.min(this15[1],p3[1]);
-					this14 = [x2,y2];
+					var x2 = Math.min(this6[0],p3[0]);
+					var y2 = Math.min(this6[1],p3[1]);
+					this5 = [x2,y2];
 				}
-				$r = this14[0];
+				$r = this5[0];
 				return $r;
 			}(this)) && p[0] <= (function($this) {
 				var $r;
-				var this16;
+				var this7;
 				{
-					var this17 = $this.p0;
+					var this8 = $this.p0;
 					var p4 = $this.p1;
-					var x3 = Math.max(this17[0],p4[0]);
-					var y3 = Math.max(this17[1],p4[1]);
-					this16 = [x3,y3];
+					var x3 = Math.max(this8[0],p4[0]);
+					var y3 = Math.max(this8[1],p4[1]);
+					this7 = [x3,y3];
 				}
-				$r = this16[0];
+				$r = this7[0];
 				return $r;
 			}(this))) return [p];
 		}
@@ -2849,8 +2980,8 @@ thx.geom.EdgeLinear.prototype = {
 			return $r;
 		}(this)) + "," + (function($this) {
 			var $r;
-			var this11 = $this.p1;
-			$r = "Point(" + this11[0] + "," + this11[1] + ")";
+			var this2 = $this.p1;
+			$r = "Point(" + this2[0] + "," + this2[1] + ")";
 			return $r;
 		}(this)) + ")";
 	}
@@ -2888,11 +3019,11 @@ thx.geom.EdgeLinear.prototype = {
 		if(!this._lengthSquared) {
 			this._lengthSquared = true;
 			var this1;
-			var this11 = this.p1;
+			var this2 = this.p1;
 			var p = this.p0;
 			var p_0 = -p[0];
 			var p_1 = -p[1];
-			this1 = [this11[0] + p_0,this11[1] + p_1];
+			this1 = [this2[0] + p_0,this2[1] + p_1];
 			this.lengthSquared = this1[0] * this1[0] + this1[1] * this1[1];
 		}
 		return this.lengthSquared;
@@ -4481,8 +4612,8 @@ thx.geom.Spline.prototype = {
 				return $r;
 			}(this)) || (function($this) {
 				var $r;
-				var this11 = node.normalOut;
-				$r = !(this11[0] == null[0] && this11[1] == null[1]);
+				var this2 = node.normalOut;
+				$r = !(this2[0] == null[0] && this2[1] == null[1]);
 				return $r;
 			}(this))) return false;
 		}
@@ -4672,14 +4803,14 @@ thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
 };
 thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
 	var bottomLeft;
-	var this11 = this1[0];
-	var x = Math.min(this11[0],point[0]);
-	var y = Math.min(this11[1],point[1]);
+	var this2 = this1[0];
+	var x = Math.min(this2[0],point[0]);
+	var y = Math.min(this2[1],point[1]);
 	bottomLeft = [x,y];
 	var topRight;
-	var this12 = this1[1];
-	var x1 = Math.max(this12[0],point[0]);
-	var y1 = Math.max(this12[1],point[1]);
+	var this3 = this1[1];
+	var x1 = Math.max(this3[0],point[0]);
+	var y1 = Math.max(this3[1],point[1]);
 	topRight = [x1,y1];
 	return [bottomLeft,topRight];
 };
@@ -4707,15 +4838,15 @@ thx.geom.shape._Box.Box_Impl_.contains = function(this1,point) {
 thx.geom.shape._Box.Box_Impl_.equals = function(this1,other) {
 	return (function($this) {
 		var $r;
-		var this11 = this1[0];
+		var this2 = this1[0];
 		var p = other[0];
-		$r = this11[0] == p[0] && this11[1] == p[1];
+		$r = this2[0] == p[0] && this2[1] == p[1];
 		return $r;
 	}(this)) && (function($this) {
 		var $r;
-		var this12 = this1[1];
+		var this3 = this1[1];
 		var p1 = other[1];
-		$r = this12[0] == p1[0] && this12[1] == p1[1];
+		$r = this3[0] == p1[0] && this3[1] == p1[1];
 		return $r;
 	}(this));
 };
@@ -4791,7 +4922,7 @@ thx.unit.angle._Degree.Degree_Impl_.sin = function(this1) {
 	return Math.sin(this1 / thx.unit.angle.Const.TO_DEGREE);
 };
 thx.unit.angle._Degree.Degree_Impl_.toString = function(this1) {
-	return "" + this1 + "̊";
+	return "" + this1 + "º";
 };
 thx.unit.angle._Degree.Degree_Impl_.toRadians = function(this1) {
 	return this1 / thx.unit.angle.Const.TO_DEGREE;
@@ -5312,6 +5443,20 @@ chad.render._Join.Join_Impl_.miter = "miter";
 chad.render._Join.Join_Impl_.round = "round";
 chad.render._Join.Join_Impl_.bevel = "bevel";
 chad.render.LineStyle.defaultColor = -16777216;
+thx.color._Grey.Grey_Impl_.black = (function($this) {
+	var $r;
+	var this1;
+	this1 = 0;
+	$r = this1;
+	return $r;
+}(this));
+thx.color._Grey.Grey_Impl_.white = (function($this) {
+	var $r;
+	var this1;
+	this1 = 1;
+	$r = this1;
+	return $r;
+}(this));
 thx.color.parse.ColorParser.parser = new thx.color.parse.ColorParser();
 thx.color.parse.ColorParser.isPureHex = new EReg("^([0-9a-f]{2}){3,4}$","i");
 thx.core.Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
