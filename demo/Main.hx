@@ -5,9 +5,8 @@ import chad.*;
 import chad.export.ThreeJS;
 
 class Main {
-	static function main() {
+	static function main()
 		untyped __js__("(window || {})").Main = Main;
-	}
 
 	public static function geom() {
 		return ThreeJS.toModel(
