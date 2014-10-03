@@ -13,7 +13,7 @@ class LineStyle {
 
   public function new(width = 1.0, ?color : RGBA, join = Join.miter, cap = Cap.butt) {
     this.width = width;
-    this.color = color.def(defaultColor);
+    this.color = color.or(defaultColor);
     this.join = join;
     this.cap = cap;
   }
