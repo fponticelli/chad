@@ -1,0 +1,9 @@
+-cp .
+-cp ../src
+-main Perf
+-js ../bin/perf/main.js
+-D js-flatten
+-lib utest
+-lib thx.core
+-D nodejs
+-cmd node ../bin/perf/main.js
