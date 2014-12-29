@@ -1,0 +1,12 @@
+-cp demo
+-cp src
+-main Boolean
+-js bin/boolean.js
+-lib thx.core
+-lib thx.color
+-lib thx.geom
+-lib thx.math
+-lib thx.unit
+-lib minicanvas
+-D js-flatten
+-D analyzer
