@@ -1,7 +1,7 @@
 package chad.render;
 
 import thx.color.RGBA;
-using thx.core.Defaults;
+using thx.core.Nulls;
 
 class LineStyle {
   public  static var defaultColor(default, null) : RGBA = new RGBA(0xFF000000);
