@@ -1,8 +1,10 @@
 package chad.render;
 
+using thx.core.Iterables;
 import thx.geom.Line;
 import thx.geom.Point;
 import thx.geom.Point3D;
+import thx.geom.Path;
 import thx.geom.shape.Circle;
 import thx.geom.Spline;
 using thx.geom.Transformable;
@@ -45,6 +47,9 @@ class Render {
     }
     drawSegment(a, b, style);
   }
+
+  public function drawPath(path : Path, ?stroke : StrokeStyle, ?fill : FillStyle)
+    path.pluck(drawSpline(_, stroke, fill));
 
   public function drawSpline(spline : Spline, ?stroke : StrokeStyle, ?fill : FillStyle)
     g.wrap(stroke, fill, function() {

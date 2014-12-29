@@ -1,6 +1,5 @@
 (function () { "use strict";
 var console = (1,eval)('this').console || {log:function(){}};
-var $estr = function() { return js_Boot.__string_rec(this,''); };
 function $extend(from, fields) {
 	function Inherit() {} Inherit.prototype = from; var proto = new Inherit();
 	for (var name in fields) proto[name] = fields[name];
@@ -10,117 +9,38 @@ function $extend(from, fields) {
 var Canvas = function() { };
 Canvas.__name__ = ["Canvas"];
 Canvas.draw = function(r) {
-	var xp = thx_geom_Spline.fromArray([[0,0],[800,0]],false);
-	var xn = thx_geom_Spline.fromArray([[0,0],[-800,0]],false);
-	var yp = thx_geom_Spline.fromArray([[0,0],[0,800]],false);
-	var yn = thx_geom_Spline.fromArray([[0,0],[0,-800]],false);
-	var red = new chad_render_LineStyle(2,thx_color__$RGBA_RGBA_$Impl_$.fromString("#f00"));
-	var green = new chad_render_LineStyle(2,thx_color__$RGBA_RGBA_$Impl_$.fromString("#0f0"));
-	r.drawSpline(xp,chad_render_StrokeStyle.StrokeLine(red));
-	r.drawSpline(xn,chad_render_StrokeStyle.StrokeDash([8,8],green));
-	r.drawSpline(yp,chad_render_StrokeStyle.StrokeLine(green));
-	r.drawSpline(yn,chad_render_StrokeStyle.StrokeDash([8,8],red));
-	var line = thx_geom_Line.fromPoints([0,500],[500,0]);
-	var _g = 0;
-	while(_g < 10) {
-		var i = _g++;
-		r.drawLine(line.offset(i * 10),chad_render_StrokeStyle.StrokeDash([3,4]));
-		if(i != 0) r.drawLine(line.offset(-i * 10),chad_render_StrokeStyle.StrokeDot(3));
-	}
-	line = thx_geom_Line.fromPoints([0,120],[500,120]);
-	r.drawLine(line,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(2)));
-	line = thx_geom_Line.fromPoints([120,0],[120,100]);
-	r.drawLine(line,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(3)));
-	line = thx_geom_Line.fromPoints([0,100],[500,200]);
-	r.drawLine(line,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(4)));
-	var rect = [[50,100],[250,300]];
-	r.drawSpline(thx_geom_shape__$Box_Box_$Impl_$.toSpline(rect));
+	var rect = thx_geom_shape__$Box_Box_$Impl_$.toSpline([[50,100],[250,300]]);
 	var tmp;
-	var tmp10;
-	var tmp11;
-	var t2 = thx_geom_shape__$Box_Box_$Impl_$.toSpline([[200,150],[400,350]]);
-	var tmp12;
-	var tmp13;
-	var this2 = thx_unit_angle__$Degree_Degree_$Impl_$._new(30);
-	tmp13 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this2 * 0.0174532925199433);
-	var this1 = tmp13;
-	tmp12 = this1;
-	var angle = tmp12;
-	tmp11 = t2.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(angle));
-	var t1 = tmp11;
-	tmp10 = t1.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
-	var t = tmp10;
-	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-20,0]));
-	var rect2 = tmp;
-	r.drawSpline(rect2);
-	var intersection = thx_geom_shape__$Box_Box_$Impl_$.toSpline(rect).intersectionsSpline(rect2);
-	intersection.map(function(p) {
-		r.drawDot(p,null,null,4);
-	});
-	var tmp1;
-	var tmp14;
-	var tmp15;
-	var t5 = new thx_geom_EdgeCubic([0,0],[0,0.5522847498307936],[0.447715250169206436,1],[1,1]);
-	tmp15 = t5.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([200,200,1]));
-	var t4 = tmp15;
-	tmp14 = t4.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([50,0,0]));
-	var t3 = tmp14;
-	tmp1 = t3.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,50,0]));
-	var arc = tmp1;
-	var s = arc.subdivide();
-	s[1] = s[1].transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([2,0,0]));
-	r.drawSpline(thx_geom_Spline.fromEdges([s[0]],false),chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(3)));
-	r.drawSpline(thx_geom_Spline.fromEdges([s[1]],false),chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(3)));
-	var tmp2;
-	var t6 = arc.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
-	tmp2 = t6.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-20,0]));
-	r.drawSpline(tmp2.toSpline(),chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(10)));
 	var tmp3;
-	var tmp16;
-	var t8 = arc.toSpline().toLinear();
-	tmp16 = t8.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
-	var t7 = tmp16;
-	tmp3 = t7.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-20,0]));
-	r.drawSpline(tmp3,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(2,thx_color__$RGBA_RGBA_$Impl_$.fromString("#fff"))));
 	var tmp4;
-	var tmp17;
-	var t10 = new thx_geom_EdgeCubic([0,0],[0,0.5522847498307936],[0.447715250169206436,1],[1,1]);
-	tmp17 = t10.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([200,200,1]));
-	var t9 = tmp17;
-	tmp4 = t9.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([40,40,0]));
+	var t2 = thx_geom_shape__$Box_Box_$Impl_$.toSpline([[200,150],[400,350]]);
 	var tmp5;
-	var tmp18;
-	var t12 = new thx_geom_EdgeCubic([1,1],[1.55228474983079368,1],[2,0.5522847498307936],[2,0]);
-	tmp18 = t12.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([200,200,1]));
-	var t11 = tmp18;
-	tmp5 = t11.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([40,40,0]));
-	var e = [tmp4,tmp5];
 	var tmp6;
-	var t13 = thx_geom_Spline.fromEdges(e,false);
-	tmp6 = t13.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([0.4,0.4,1]));
-	var c = tmp6;
-	var tmp7;
-	var this3 = thx_color_Color.red;
-	tmp7 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this3 >> 16 & 255,this3 >> 8 & 255,this3 & 255,255]);
-	r.drawSpline(c,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(8,tmp7)));
-	var tmp8;
-	var this4 = thx_color_Color.lime;
-	tmp8 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this4 >> 16 & 255,this4 >> 8 & 255,this4 & 255,255]);
-	r.drawSpline(c.toLinear(),chad_render_StrokeStyle.StrokeDash([5,5],new chad_render_LineStyle(4,tmp8)));
-	var tmp9;
-	var this5 = thx_color_Color.orange;
-	tmp9 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this5 >> 16 & 255,this5 >> 8 & 255,this5 & 255,255]);
-	r.drawSpline(e[0].toSpline().toLinear(),chad_render_StrokeStyle.StrokeDash([8,4],new chad_render_LineStyle(4,tmp9)));
-	var circle1 = { center : [300,250], radius : 100};
-	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle1).toLinear());
+	var this11 = thx_unit_angle__$Degree_Degree_$Impl_$._new(30);
+	tmp6 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this11 * 0.0174532925199433);
+	var this1 = tmp6;
+	tmp5 = this1;
+	var angle = tmp5;
+	tmp4 = t2.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(angle));
+	var t1 = tmp4;
+	tmp3 = t1.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
+	var t = tmp3;
+	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-140,0]));
+	var rect2 = tmp;
+	var circle1 = { center : [200,250], radius : 100};
+	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle1));
 	var circle2 = { center : [200,200], radius : 80};
 	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle2),chad_render_StrokeStyle.StrokeDash([4,4,8,4]),chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("rgba(0,255,155,0.1)")));
 	var circle3 = { center : [240,280], radius : 60};
 	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle3),chad_render_StrokeStyle.StrokeDot(4),chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("rgba(100,255,155,0.5)")));
-	new thx_geom_Path([thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle1),thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle2),thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle3)]);
-	thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle2).intersectionsSpline(thx_geom_shape__$Box_Box_$Impl_$.toSpline(rect)).map(function(point) {
-		r.drawDot(point,chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("#aa3300")),null,6);
-	});
+	var p = rect2.toPath().intersection(rect.toPath()).union(thx_geom_shape__$Circle_Circle_$Impl_$.toPath(circle1));
+	var tmp1;
+	var this12 = thx_color_Color.darkblue;
+	tmp1 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this12 >> 16 & 255,this12 >> 8 & 255,this12 & 255,255]);
+	var tmp2;
+	var this13 = thx_color_Color.lightblue;
+	tmp2 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this13 >> 16 & 255,this13 >> 8 & 255,this13 & 255,255]);
+	r.drawPath(p,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(6,tmp1)),chad_render_FillStyle.FillColor(tmp2));
 };
 Canvas.main = function() {
 	var canvas = window.document.querySelector("canvas");
@@ -371,27 +291,20 @@ StringTools.hex = function(n,digits) {
 };
 var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
 ValueType.TNull = ["TNull",0];
-ValueType.TNull.toString = $estr;
 ValueType.TNull.__enum__ = ValueType;
 ValueType.TInt = ["TInt",1];
-ValueType.TInt.toString = $estr;
 ValueType.TInt.__enum__ = ValueType;
 ValueType.TFloat = ["TFloat",2];
-ValueType.TFloat.toString = $estr;
 ValueType.TFloat.__enum__ = ValueType;
 ValueType.TBool = ["TBool",3];
-ValueType.TBool.toString = $estr;
 ValueType.TBool.__enum__ = ValueType;
 ValueType.TObject = ["TObject",4];
-ValueType.TObject.toString = $estr;
 ValueType.TObject.__enum__ = ValueType;
 ValueType.TFunction = ["TFunction",5];
-ValueType.TFunction.toString = $estr;
 ValueType.TFunction.__enum__ = ValueType;
-ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; return $x; };
 ValueType.TUnknown = ["TUnknown",8];
-ValueType.TUnknown.toString = $estr;
 ValueType.TUnknown.__enum__ = ValueType;
 var Type = function() { };
 Type.__name__ = ["Type"];
@@ -461,7 +374,7 @@ Type["typeof"] = function(v) {
 	}
 };
 var chad_render_FillStyle = { __ename__ : ["chad","render","FillStyle"], __constructs__ : ["FillColor"] };
-chad_render_FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad_render_FillStyle; $x.toString = $estr; return $x; };
+chad_render_FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad_render_FillStyle; return $x; };
 var chad_render_IGraphics = function() { };
 chad_render_IGraphics.__name__ = ["chad","render","IGraphics"];
 chad_render_IGraphics.prototype = {
@@ -540,6 +453,12 @@ chad_render_Render.prototype = {
 		}
 		this.drawSegment(a,b,style);
 	}
+	,drawPath: function(path,stroke,fill) {
+		var _g = this;
+		thx_core_Iterators.map(path.iterator(),function(_) {
+			return _g.drawSpline(_,stroke,fill);
+		});
+	}
 	,drawSpline: function(spline,stroke,fill) {
 		var _g = this;
 		this.g.wrap(stroke,fill,function() {
@@ -571,9 +490,9 @@ chad_render_Render.prototype = {
 	,__class__: chad_render_Render
 };
 var chad_render_StrokeStyle = { __ename__ : ["chad","render","StrokeStyle"], __constructs__ : ["StrokeLine","StrokeDash","StrokeDot"] };
-chad_render_StrokeStyle.StrokeLine = function(style) { var $x = ["StrokeLine",0,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
-chad_render_StrokeStyle.StrokeDash = function(pattern,style) { var $x = ["StrokeDash",1,pattern,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
-chad_render_StrokeStyle.StrokeDot = function(spacing,style) { var $x = ["StrokeDot",2,spacing,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
+chad_render_StrokeStyle.StrokeLine = function(style) { var $x = ["StrokeLine",0,style]; $x.__enum__ = chad_render_StrokeStyle; return $x; };
+chad_render_StrokeStyle.StrokeDash = function(pattern,style) { var $x = ["StrokeDash",1,pattern,style]; $x.__enum__ = chad_render_StrokeStyle; return $x; };
+chad_render_StrokeStyle.StrokeDot = function(spacing,style) { var $x = ["StrokeDot",2,spacing,style]; $x.__enum__ = chad_render_StrokeStyle; return $x; };
 var chad_render_canvas_CanvasGraphics = function(canvas,matrix,weightScale) {
 	this.width = canvas.width;
 	this.height = canvas.height;
@@ -671,12 +590,11 @@ chad_render_canvas_CanvasGraphics.prototype = {
 };
 var haxe_StackItem = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"] };
 haxe_StackItem.CFunction = ["CFunction",0];
-haxe_StackItem.CFunction.toString = $estr;
 haxe_StackItem.CFunction.__enum__ = haxe_StackItem;
-haxe_StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
-haxe_StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
-haxe_StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
-haxe_StackItem.LocalFunction = function(v) { var $x = ["LocalFunction",4,v]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
+haxe_StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = haxe_StackItem; return $x; };
+haxe_StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe_StackItem; return $x; };
+haxe_StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe_StackItem; return $x; };
+haxe_StackItem.LocalFunction = function(v) { var $x = ["LocalFunction",4,v]; $x.__enum__ = haxe_StackItem; return $x; };
 var haxe_CallStack = function() { };
 haxe_CallStack.__name__ = ["haxe","CallStack"];
 haxe_CallStack.callStack = function() {
@@ -4317,12 +4235,12 @@ thx_color_parse_ColorInfo.prototype = {
 	,__class__: thx_color_parse_ColorInfo
 };
 var thx_color_parse_ChannelInfo = { __ename__ : ["thx","color","parse","ChannelInfo"], __constructs__ : ["CIPercent","CIFloat","CIDegree","CIInt8","CIInt","CIBool"] };
-thx_color_parse_ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIInt8 = function(value) { var $x = ["CIInt8",3,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIInt = function(value) { var $x = ["CIInt",4,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIBool = function(value) { var $x = ["CIBool",5,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+thx_color_parse_ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIInt8 = function(value) { var $x = ["CIInt8",3,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIInt = function(value) { var $x = ["CIInt",4,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIBool = function(value) { var $x = ["CIBool",5,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
 var thx_core_Arrays = function() { };
 thx_core_Arrays.__name__ = ["thx","core","Arrays"];
 thx_core_Arrays.after = function(array,element) {
@@ -4750,6 +4668,16 @@ thx_core_ArrayStrings.min = function(arr) {
 		return v < min?v:min;
 	},arr[0]);
 };
+var thx_core_Bools = function() { };
+thx_core_Bools.__name__ = ["thx","core","Bools"];
+thx_core_Bools.compare = function(a,b) {
+	var tmp;
+	if(a == b) tmp = 0; else if(a) tmp = -1; else tmp = 1;
+	return tmp;
+};
+thx_core_Bools.toInt = function(v) {
+	return v?1:0;
+};
 var thx_core_Error = function(message,stack,pos) {
 	Error.call(this,message);
 	this.message = message;
@@ -5098,6 +5026,58 @@ thx_core_Ints.wrapCircular = function(v,max) {
 	if(v < 0) v += max;
 	return v;
 };
+var thx_core_Iterables = function() { };
+thx_core_Iterables.__name__ = ["thx","core","Iterables"];
+thx_core_Iterables.all = function(it,predicate) {
+	return thx_core_Iterators.all($iterator(it)(),predicate);
+};
+thx_core_Iterables.any = function(it,predicate) {
+	return thx_core_Iterators.any($iterator(it)(),predicate);
+};
+thx_core_Iterables.eachPair = function(it,handler) {
+	return thx_core_Iterators.eachPair($iterator(it)(),handler);
+};
+thx_core_Iterables.filter = function(it,predicate) {
+	return thx_core_Iterators.filter($iterator(it)(),predicate);
+};
+thx_core_Iterables.find = function(it,predicate) {
+	return thx_core_Iterators.find($iterator(it)(),predicate);
+};
+thx_core_Iterables.first = function(it) {
+	return thx_core_Iterators.first($iterator(it)());
+};
+thx_core_Iterables.last = function(it) {
+	return thx_core_Iterators.last($iterator(it)());
+};
+thx_core_Iterables.isEmpty = function(it) {
+	var tmp;
+	var it1 = $iterator(it)();
+	tmp = !it1.hasNext();
+	return tmp;
+};
+thx_core_Iterables.isIterable = function(v) {
+	var fields = (Reflect.isObject(v)?null == Type.getClass(v):false)?Reflect.fields(v):Type.getInstanceFields(Type.getClass(v));
+	if(!Lambda.has(fields,"iterator")) return false;
+	return Reflect.isFunction(Reflect.field(v,"iterator"));
+};
+thx_core_Iterables.map = function(it,f) {
+	return thx_core_Iterators.map($iterator(it)(),f);
+};
+thx_core_Iterables.mapi = function(it,f) {
+	return thx_core_Iterators.mapi($iterator(it)(),f);
+};
+thx_core_Iterables.order = function(it,sort) {
+	return thx_core_Iterators.order($iterator(it)(),sort);
+};
+thx_core_Iterables.reduce = function(it,callback,initial) {
+	return thx_core_Iterators.reduce($iterator(it)(),callback,initial);
+};
+thx_core_Iterables.reducei = function(it,callback,initial) {
+	return thx_core_Iterators.reducei($iterator(it)(),callback,initial);
+};
+thx_core_Iterables.toArray = function(it) {
+	return thx_core_Iterators.toArray($iterator(it)());
+};
 var thx_core_Iterators = function() { };
 thx_core_Iterators.__name__ = ["thx","core","Iterators"];
 thx_core_Iterators.all = function(it,predicate) {
@@ -5190,7 +5170,6 @@ thx_core_Iterators.toArray = function(it) {
 };
 var thx_core_Nil = { __ename__ : ["thx","core","Nil"], __constructs__ : ["nil"] };
 thx_core_Nil.nil = ["nil",0];
-thx_core_Nil.nil.toString = $estr;
 thx_core_Nil.nil.__enum__ = thx_core_Nil;
 var thx_core_Nulls = function() { };
 thx_core_Nulls.__name__ = ["thx","core","Nulls"];
@@ -5727,9 +5706,11 @@ thx_geom_EdgeCubic.prototype = {
 		var tmp;
 		var this1 = this.last;
 		var p = this.first;
+		var tmp1;
 		var p_0 = -p[0];
 		var p_1 = -p[1];
-		tmp = [this1[0] + p_0,this1[1] + p_1];
+		tmp1 = [this1[0] + p_0,this1[1] + p_1];
+		tmp = tmp1;
 		return tmp;
 	}
 	,intersects: function(other) {
@@ -5780,14 +5761,14 @@ thx_geom_EdgeCubic.prototype = {
 		var this1 = this.p0;
 		tmp = "Point(" + this1[0] + "," + this1[1] + ")";
 		var tmp1;
-		var this2 = this.p1;
-		tmp1 = "Point(" + this2[0] + "," + this2[1] + ")";
+		var this11 = this.p1;
+		tmp1 = "Point(" + this11[0] + "," + this11[1] + ")";
 		var tmp2;
-		var this3 = this.p2;
-		tmp2 = "Point(" + this3[0] + "," + this3[1] + ")";
+		var this12 = this.p2;
+		tmp2 = "Point(" + this12[0] + "," + this12[1] + ")";
 		var tmp3;
-		var this4 = this.p3;
-		tmp3 = "Point(" + this4[0] + "," + this4[1] + ")";
+		var this13 = this.p3;
+		tmp3 = "Point(" + this13[0] + "," + this13[1] + ")";
 		return "Edge(" + tmp + "," + tmp1 + "," + tmp2 + "," + tmp3 + ")";
 	}
 	,toSpline: function() {
@@ -5804,75 +5785,87 @@ thx_geom_EdgeCubic.prototype = {
 		var this1 = this.p0;
 		var tmp6;
 		var tmp7;
-		var this3 = this.p1;
+		var this12 = this.p1;
 		var p1 = this.p0;
+		var tmp8;
 		var p_0 = -p1[0];
 		var p_1 = -p1[1];
-		tmp7 = [this3[0] + p_0,this3[1] + p_1];
-		var this2 = tmp7;
-		tmp6 = [this2[0] * v,this2[1] * v];
+		tmp8 = [this12[0] + p_0,this12[1] + p_1];
+		tmp7 = tmp8;
+		var this11 = tmp7;
+		tmp6 = [this11[0] * v,this11[1] * v];
 		var p = tmp6;
 		tmp = [this1[0] + p[0],this1[1] + p[1]];
 		var l1 = tmp;
 		var tmp1;
-		var this4 = this.p1;
-		var tmp8;
+		var this13 = this.p1;
 		var tmp9;
-		var this6 = this.p2;
+		var tmp10;
+		var this15 = this.p2;
 		var p3 = this.p1;
+		var tmp11;
 		var p_01 = -p3[0];
 		var p_11 = -p3[1];
-		tmp9 = [this6[0] + p_01,this6[1] + p_11];
-		var this5 = tmp9;
-		tmp8 = [this5[0] * v,this5[1] * v];
-		var p2 = tmp8;
-		tmp1 = [this4[0] + p2[0],this4[1] + p2[1]];
+		tmp11 = [this15[0] + p_01,this15[1] + p_11];
+		tmp10 = tmp11;
+		var this14 = tmp10;
+		tmp9 = [this14[0] * v,this14[1] * v];
+		var p2 = tmp9;
+		tmp1 = [this13[0] + p2[0],this13[1] + p2[1]];
 		var m = tmp1;
 		var tmp2;
-		var this7 = this.p2;
-		var tmp10;
-		var tmp11;
-		var this9 = this.p3;
-		var p5 = this.p2;
-		var p_02 = -p5[0];
-		var p_12 = -p5[1];
-		tmp11 = [this9[0] + p_02,this9[1] + p_12];
-		var this8 = tmp11;
-		tmp10 = [this8[0] * v,this8[1] * v];
-		var p4 = tmp10;
-		tmp2 = [this7[0] + p4[0],this7[1] + p4[1]];
-		var r2 = tmp2;
-		var tmp3;
+		var this16 = this.p2;
 		var tmp12;
 		var tmp13;
+		var this18 = this.p3;
+		var p5 = this.p2;
+		var tmp14;
+		var p_02 = -p5[0];
+		var p_12 = -p5[1];
+		tmp14 = [this18[0] + p_02,this18[1] + p_12];
+		tmp13 = tmp14;
+		var this17 = tmp13;
+		tmp12 = [this17[0] * v,this17[1] * v];
+		var p4 = tmp12;
+		tmp2 = [this16[0] + p4[0],this16[1] + p4[1]];
+		var r2 = tmp2;
+		var tmp3;
+		var tmp15;
+		var tmp16;
+		var tmp17;
 		var p_03 = -l1[0];
 		var p_13 = -l1[1];
-		tmp13 = [m[0] + p_03,m[1] + p_13];
-		var this10 = tmp13;
-		tmp12 = [this10[0] * v,this10[1] * v];
-		var p6 = tmp12;
+		tmp17 = [m[0] + p_03,m[1] + p_13];
+		tmp16 = tmp17;
+		var this19 = tmp16;
+		tmp15 = [this19[0] * v,this19[1] * v];
+		var p6 = tmp15;
 		tmp3 = [l1[0] + p6[0],l1[1] + p6[1]];
 		var l2 = tmp3;
 		var tmp4;
-		var tmp14;
-		var tmp15;
+		var tmp18;
+		var tmp19;
+		var tmp20;
 		var p_04 = -m[0];
 		var p_14 = -m[1];
-		tmp15 = [r2[0] + p_04,r2[1] + p_14];
-		var this11 = tmp15;
-		tmp14 = [this11[0] * v,this11[1] * v];
-		var p7 = tmp14;
+		tmp20 = [r2[0] + p_04,r2[1] + p_14];
+		tmp19 = tmp20;
+		var this110 = tmp19;
+		tmp18 = [this110[0] * v,this110[1] * v];
+		var p7 = tmp18;
 		tmp4 = [m[0] + p7[0],m[1] + p7[1]];
 		var r1 = tmp4;
 		var tmp5;
-		var tmp16;
-		var tmp17;
+		var tmp21;
+		var tmp22;
+		var tmp23;
 		var p_05 = -l2[0];
 		var p_15 = -l2[1];
-		tmp17 = [r1[0] + p_05,r1[1] + p_15];
-		var this12 = tmp17;
-		tmp16 = [this12[0] * v,this12[1] * v];
-		var p8 = tmp16;
+		tmp23 = [r1[0] + p_05,r1[1] + p_15];
+		tmp22 = tmp23;
+		var this111 = tmp22;
+		tmp21 = [this111[0] * v,this111[1] * v];
+		var p8 = tmp21;
 		tmp5 = [l2[0] + p8[0],l2[1] + p8[1]];
 		var l3 = tmp5;
 		return [new thx_geom_EdgeCubic(this.p0,l1,l2,l3),new thx_geom_EdgeCubic(l3,r1,r2,this.p3)];
@@ -5993,9 +5986,11 @@ thx_geom_EdgeLinear.prototype = {
 		var tmp;
 		var this1 = this.last;
 		var p = this.first;
+		var tmp1;
 		var p_0 = -p[0];
 		var p_1 = -p[1];
-		tmp = [this1[0] + p_0,this1[1] + p_1];
+		tmp1 = [this1[0] + p_0,this1[1] + p_1];
+		tmp = tmp1;
 		return tmp;
 	}
 	,intersects: function(other) {
@@ -6022,51 +6017,59 @@ thx_geom_EdgeLinear.prototype = {
 			if(this.p0[0] == this.p1[0]) {
 				var tmp;
 				var tmp2;
-				var this2 = this.p0;
+				var this11 = this.p0;
 				var p1 = this.p1;
-				var x = Math.min(this2[0],p1[0]);
-				var y = Math.min(this2[1],p1[1]);
-				tmp2 = [x,y];
+				var tmp3;
+				var x = Math.min(this11[0],p1[0]);
+				var y = Math.min(this11[1],p1[1]);
+				tmp3 = [x,y];
+				tmp2 = tmp3;
 				var this1 = tmp2;
 				tmp = this1[1];
 				var tmp1;
 				if(p[1] >= tmp) {
-					var tmp3;
 					var tmp4;
-					var this4 = this.p0;
+					var tmp5;
+					var this13 = this.p0;
 					var p2 = this.p1;
-					var x1 = Math.max(this4[0],p2[0]);
-					var y1 = Math.max(this4[1],p2[1]);
-					tmp4 = [x1,y1];
-					var this3 = tmp4;
-					tmp3 = this3[1];
-					tmp1 = p[1] <= tmp3;
+					var tmp6;
+					var x1 = Math.max(this13[0],p2[0]);
+					var y1 = Math.max(this13[1],p2[1]);
+					tmp6 = [x1,y1];
+					tmp5 = tmp6;
+					var this12 = tmp5;
+					tmp4 = this12[1];
+					tmp1 = p[1] <= tmp4;
 				} else tmp1 = false;
 				if(tmp1) return [p];
 			} else {
-				var tmp5;
 				var tmp7;
-				var this6 = this.p0;
+				var tmp9;
+				var this15 = this.p0;
 				var p3 = this.p1;
-				var x2 = Math.min(this6[0],p3[0]);
-				var y2 = Math.min(this6[1],p3[1]);
-				tmp7 = [x2,y2];
-				var this5 = tmp7;
-				tmp5 = this5[0];
-				var tmp6;
-				if(p[0] >= tmp5) {
-					var tmp8;
-					var tmp9;
-					var this8 = this.p0;
+				var tmp10;
+				var x2 = Math.min(this15[0],p3[0]);
+				var y2 = Math.min(this15[1],p3[1]);
+				tmp10 = [x2,y2];
+				tmp9 = tmp10;
+				var this14 = tmp9;
+				tmp7 = this14[0];
+				var tmp8;
+				if(p[0] >= tmp7) {
+					var tmp11;
+					var tmp12;
+					var this17 = this.p0;
 					var p4 = this.p1;
-					var x3 = Math.max(this8[0],p4[0]);
-					var y3 = Math.max(this8[1],p4[1]);
-					tmp9 = [x3,y3];
-					var this7 = tmp9;
-					tmp8 = this7[0];
-					tmp6 = p[0] <= tmp8;
-				} else tmp6 = false;
-				if(tmp6) return [p];
+					var tmp13;
+					var x3 = Math.max(this17[0],p4[0]);
+					var y3 = Math.max(this17[1],p4[1]);
+					tmp13 = [x3,y3];
+					tmp12 = tmp13;
+					var this16 = tmp12;
+					tmp11 = this16[0];
+					tmp8 = p[0] <= tmp11;
+				} else tmp8 = false;
+				if(tmp8) return [p];
 			}
 		}
 		return [];
@@ -6094,8 +6097,8 @@ thx_geom_EdgeLinear.prototype = {
 		var this1 = this.p0;
 		tmp = "Point(" + this1[0] + "," + this1[1] + ")";
 		var tmp1;
-		var this2 = this.p1;
-		tmp1 = "Point(" + this2[0] + "," + this2[1] + ")";
+		var this11 = this.p1;
+		tmp1 = "Point(" + this11[0] + "," + this11[1] + ")";
 		return "Edge(" + tmp + "," + tmp1 + ")";
 	}
 	,toSpline: function() {
@@ -6108,9 +6111,11 @@ thx_geom_EdgeLinear.prototype = {
 			var tmp;
 			var this1 = this.p1;
 			var p1 = this.p0;
+			var tmp1;
 			var p_0 = -p1[0];
 			var p_1 = -p1[1];
-			tmp = [this1[0] + p_0,this1[1] + p_1];
+			tmp1 = [this1[0] + p_0,this1[1] + p_1];
+			tmp = tmp1;
 			var p = tmp;
 			this.area = this.p0[1] * (this.p1[0] - this.p0[0]) + p[0] * p[1] / 2;
 		}
@@ -6137,11 +6142,13 @@ thx_geom_EdgeLinear.prototype = {
 			this._lengthSquared = true;
 			var tmp;
 			var tmp1;
-			var this2 = this.p1;
+			var this11 = this.p1;
 			var p = this.p0;
+			var tmp2;
 			var p_0 = -p[0];
 			var p_1 = -p[1];
-			tmp1 = [this2[0] + p_0,this2[1] + p_1];
+			tmp2 = [this11[0] + p_0,this11[1] + p_1];
+			tmp1 = tmp2;
 			var this1 = tmp1;
 			tmp = this1[0] * this1[0] + this1[1] * this1[1];
 			this.lengthSquared = tmp;
@@ -7113,13 +7120,58 @@ thx_geom_Path.prototype = {
 		return false;
 	}
 	,union: function(other) {
-		throw "not implemented";
+		var result = [];
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			var _g2 = 0;
+			var _g3 = other.splines;
+			while(_g2 < _g3.length) {
+				var ospline = _g3[_g2];
+				++_g2;
+				result = result.concat(spline.union(ospline));
+			}
+		}
+		if(result.length == 0) result = this.splines;
+		return new thx_geom_Path(result);
 	}
 	,difference: function(other) {
-		throw "not implemented";
+		var result = [];
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			var _g2 = 0;
+			var _g3 = other.splines;
+			while(_g2 < _g3.length) {
+				var ospline = _g3[_g2];
+				++_g2;
+				result = result.concat(spline.difference(ospline));
+			}
+		}
+		if(result.length == 0) result = this.splines;
+		return new thx_geom_Path(result);
 	}
 	,intersection: function(other) {
-		throw "not implemented";
+		var result = [];
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			var _g2 = 0;
+			var _g3 = other.splines;
+			while(_g2 < _g3.length) {
+				var ospline = _g3[_g2];
+				++_g2;
+				result = result.concat(spline.intersection(ospline));
+			}
+		}
+		if(result.length == 0) result = this.splines;
+		return new thx_geom_Path(result);
 	}
 	,intersections: function(other) {
 		throw "not implemented";
@@ -7168,6 +7220,9 @@ thx_geom_Path.prototype = {
 		});
 		tmp = Array.prototype.concat.apply([],array);
 		return tmp;
+	}
+	,iterator: function() {
+		return HxOverrides.iter(this.splines);
 	}
 	,selfIntersections: function() {
 		var intersections = [];
@@ -7811,6 +7866,24 @@ thx_geom_Spline.prototype = {
 		var edges = tmp;
 		return thx_geom_Spline.fromEdges(edges,this.isClosed);
 	}
+	,union: function(other) {
+		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).union(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
+			return _.toSpline();
+		});
+	}
+	,difference: function(other) {
+		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).difference(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
+			return _.toSpline();
+		});
+	}
+	,intersection: function(other) {
+		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).intersection(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
+			return _.toSpline();
+		});
+	}
+	,intersections: function(other) {
+		throw "not implemented";
+	}
 	,toPath: function() {
 		return new thx_geom_Path([this]);
 	}
@@ -7874,9 +7947,9 @@ thx_geom_Spline.prototype = {
 			tmp = !tmp2;
 			var tmp1;
 			if(!tmp) {
-				var this2 = node.normalOut;
+				var this11 = node.normalOut;
 				var tmp3;
-				if(this2[0] == null[0]) tmp3 = this2[1] == null[1]; else tmp3 = false;
+				if(this11[0] == null[0]) tmp3 = this11[1] == null[1]; else tmp3 = false;
 				tmp1 = !tmp3;
 			} else tmp1 = true;
 			if(tmp1) return false;
@@ -8004,19 +8077,233 @@ thx_geom_Vertex3D.prototype = {
 	}
 	,__class__: thx_geom_Vertex3D
 };
+var thx_geom_bool_Polygon = function(points) {
+	this.vertices = 0;
+	var _g = this;
+	if(null != points) thx_core_Iterators.map($iterator(points)(),function(_) {
+		return _g.add(new thx_geom_bool_PolygonVertex(_));
+	});
+};
+thx_geom_bool_Polygon.__name__ = ["thx","geom","bool","Polygon"];
+thx_geom_bool_Polygon.fromSpline = function(spline) {
+	var points = spline.toPoints();
+	return new thx_geom_bool_Polygon(points);
+};
+thx_geom_bool_Polygon.prototype = {
+	first: null
+	,vertices: null
+	,add: function(vertex) {
+		if(null == this.first) {
+			this.first = vertex;
+			this.first.next = vertex;
+			this.first.prev = vertex;
+		} else {
+			var next;
+			var prev;
+			prev = this.first.prev;
+			next = this.first;
+			next.prev = vertex;
+			vertex.next = next;
+			vertex.prev = prev;
+			prev.next = vertex;
+		}
+		this.vertices++;
+	}
+	,insert: function(vertex,start,end) {
+		var curr = start;
+		var prev;
+		while(curr != end?curr.alpha < vertex.alpha:false) curr = curr.next;
+		vertex.next = curr;
+		prev = curr.prev;
+		vertex.prev = prev;
+		prev.next = vertex;
+		curr.prev = vertex;
+		this.vertices++;
+	}
+	,getNext: function(vertex) {
+		var c = vertex;
+		while(c.intersect) c = c.next;
+		return c;
+	}
+	,getFirstIntersect: function() {
+		var vertex = this.first;
+		do {
+			if(vertex.intersect?!vertex.checked:false) break;
+			vertex = vertex.next;
+		} while(vertex != this.first);
+		return vertex;
+	}
+	,hasUnprocessed: function() {
+		var vertex = this.first;
+		do {
+			if(vertex.intersect?!vertex.checked:false) return true;
+			vertex = vertex.next;
+		} while(vertex != this.first);
+		return false;
+	}
+	,union: function(other) {
+		return this.clip(other,false,false);
+	}
+	,intersection: function(other) {
+		return this.clip(other,true,true);
+	}
+	,difference: function(other) {
+		return this.clip(other,false,true);
+	}
+	,clip: function(clip,subjectFlag,clipperFlag) {
+		var subject = this.first;
+		var clipper = clip.first;
+		var intersection;
+		do {
+			if(!subject.intersect) do {
+				if(!clipper.intersect) {
+					intersection = new thx_geom_bool_Intersection(subject,this.getNext(subject.next),clipper,clip.getNext(clipper.next));
+					if(intersection.test()) {
+						var intersectionSubject = thx_geom_bool_PolygonVertex.createIntersection(intersection.point,intersection.uSubject);
+						var intersectionClipper = thx_geom_bool_PolygonVertex.createIntersection(intersection.point,intersection.uClipper);
+						intersectionSubject.nextPolygon = intersectionClipper;
+						intersectionClipper.nextPolygon = intersectionSubject;
+						this.insert(intersectionSubject,subject,this.getNext(subject.next));
+						clip.insert(intersectionClipper,clipper,clip.getNext(clipper.next));
+					}
+				}
+				clipper = clipper.next;
+			} while(clipper != clip.first);
+			subject = subject.next;
+		} while(subject != this.first);
+		subject = this.first;
+		clipper = clip.first;
+		subjectFlag = subjectFlag != subject.isInside(clip);
+		clipperFlag = clipperFlag != clipper.isInside(this);
+		do {
+			if(subject.intersect) {
+				subject.entry = subjectFlag;
+				subjectFlag = !subjectFlag;
+			}
+			subject = subject.next;
+		} while(subject != this.first);
+		do {
+			if(clipper.intersect) {
+				clipper.entry = clipperFlag;
+				clipperFlag = !clipperFlag;
+			}
+			clipper = clipper.next;
+		} while(clipper != clip.first);
+		var polygons = [];
+		while(this.hasUnprocessed()) {
+			var current = this.getFirstIntersect();
+			var clipped = new thx_geom_bool_Polygon();
+			clipped.add(new thx_geom_bool_PolygonVertex(current.point));
+			do {
+				current.setChecked();
+				if(current.entry) do {
+					current = current.next;
+					clipped.add(new thx_geom_bool_PolygonVertex(current.point));
+				} while(!current.intersect); else do {
+					current = current.prev;
+					clipped.add(new thx_geom_bool_PolygonVertex(current.point));
+				} while(!current.intersect);
+				current = current.nextPolygon;
+			} while(!current.checked);
+			polygons.push(clipped);
+		}
+		return polygons;
+	}
+	,toSpline: function() {
+		var nodes = [];
+		var vertex = this.first;
+		do {
+			nodes.push(new thx_geom_SplineNode(vertex.point));
+			vertex = vertex.next;
+		} while(vertex != this.first);
+		return new thx_geom_Spline(nodes,true);
+	}
+	,__class__: thx_geom_bool_Polygon
+};
+var thx_geom_bool_PolygonVertex = function(point) {
+	this.point = point;
+	this.next = null;
+	this.prev = null;
+	this.nextPolygon = null;
+	this.alpha = 0.0;
+	this.entry = true;
+	this.intersect = false;
+	this.checked = false;
+};
+thx_geom_bool_PolygonVertex.__name__ = ["thx","geom","bool","PolygonVertex"];
+thx_geom_bool_PolygonVertex.createIntersection = function(point,alpha) {
+	var v = new thx_geom_bool_PolygonVertex(point);
+	v.alpha = alpha;
+	v.intersect = true;
+	v.entry = false;
+	return v;
+};
+thx_geom_bool_PolygonVertex.prototype = {
+	point: null
+	,next: null
+	,prev: null
+	,nextPolygon: null
+	,alpha: null
+	,entry: null
+	,intersect: null
+	,checked: null
+	,setChecked: function() {
+		this.checked = true;
+		if(null != this.nextPolygon?!this.nextPolygon.checked:false) this.nextPolygon.setChecked();
+	}
+	,isInside: function(polygon) {
+		var windings = 0;
+		var tmp;
+		var x = Infinity;
+		tmp = [x,this.point[1]];
+		var boundary = new thx_geom_bool_PolygonVertex(tmp);
+		var q = polygon.first;
+		do {
+			if(!q.intersect?new thx_geom_bool_Intersection(this,boundary,q,polygon.getNext(q.next)).test():false) windings++;
+			q = q.next;
+		} while(q != polygon.first);
+		return windings % 2 != 0;
+	}
+	,__class__: thx_geom_bool_PolygonVertex
+};
+var thx_geom_bool_Intersection = function(s1,s2,c1,c2) {
+	var den = (c2.point[1] - c1.point[1]) * (s2.point[0] - s1.point[0]) - (c2.point[0] - c1.point[0]) * (s2.point[1] - s1.point[1]);
+	if(den == 0.0) return;
+	this.uSubject = ((c2.point[0] - c1.point[0]) * (s1.point[1] - c1.point[1]) - (c2.point[1] - c1.point[1]) * (s1.point[0] - c1.point[0])) / den;
+	this.uClipper = ((s2.point[0] - s1.point[0]) * (s1.point[1] - c1.point[1]) - (s2.point[1] - s1.point[1]) * (s1.point[0] - c1.point[0])) / den;
+	if(this.test()) this.point = [s1.point[0] + this.uSubject * (s2.point[0] - s1.point[0]),s1.point[1] + this.uSubject * (s2.point[1] - s1.point[1])];
+};
+thx_geom_bool_Intersection.__name__ = ["thx","geom","bool","Intersection"];
+thx_geom_bool_Intersection.prototype = {
+	point: null
+	,uSubject: null
+	,uClipper: null
+	,test: function() {
+		var tmp;
+		if(0 < this.uSubject?this.uSubject < 1:false) {
+			if(0 < this.uClipper) tmp = this.uClipper < 1; else tmp = false;
+		} else tmp = false;
+		return tmp;
+	}
+	,__class__: thx_geom_bool_Intersection
+};
 var thx_geom_shape__$Box_Box_$Impl_$ = {};
 thx_geom_shape__$Box_Box_$Impl_$.__name__ = ["thx","geom","shape","_Box","Box_Impl_"];
 thx_geom_shape__$Box_Box_$Impl_$.fromPoints = function(a,b) {
 	var tmp;
 	var tmp1;
+	var tmp3;
 	var x = Math.min(a[0],b[0]);
 	var y = Math.min(a[1],b[1]);
-	tmp1 = [x,y];
+	tmp3 = [x,y];
+	tmp1 = tmp3;
 	var bottomLeft = tmp1;
 	var tmp2;
+	var tmp4;
 	var x1 = Math.max(a[0],b[0]);
 	var y1 = Math.max(a[1],b[1]);
-	tmp2 = [x1,y1];
+	tmp4 = [x1,y1];
+	tmp2 = tmp4;
 	var topRight = tmp2;
 	tmp = [bottomLeft,topRight];
 	return tmp;
@@ -8063,16 +8350,20 @@ thx_geom_shape__$Box_Box_$Impl_$.get_height = function(this1) {
 thx_geom_shape__$Box_Box_$Impl_$.expandByPoint = function(this1,point) {
 	var tmp;
 	var tmp1;
-	var this2 = this1[0];
-	var x = Math.min(this2[0],point[0]);
-	var y = Math.min(this2[1],point[1]);
-	tmp1 = [x,y];
+	var this11 = this1[0];
+	var tmp3;
+	var x = Math.min(this11[0],point[0]);
+	var y = Math.min(this11[1],point[1]);
+	tmp3 = [x,y];
+	tmp1 = tmp3;
 	var bottomLeft = tmp1;
 	var tmp2;
-	var this3 = this1[1];
-	var x1 = Math.max(this3[0],point[0]);
-	var y1 = Math.max(this3[1],point[1]);
-	tmp2 = [x1,y1];
+	var this12 = this1[1];
+	var tmp4;
+	var x1 = Math.max(this12[0],point[0]);
+	var y1 = Math.max(this12[1],point[1]);
+	tmp4 = [x1,y1];
+	tmp2 = tmp4;
 	var topRight = tmp2;
 	tmp = [bottomLeft,topRight];
 	return tmp;
@@ -8084,14 +8375,18 @@ thx_geom_shape__$Box_Box_$Impl_$.expandByPoints = function(this1,points) {
 	while( $it0.hasNext() ) {
 		var point = $it0.next();
 		var tmp;
+		var tmp2;
 		var x = Math.min(min[0],point[0]);
 		var y = Math.min(min[1],point[1]);
-		tmp = [x,y];
+		tmp2 = [x,y];
+		tmp = tmp2;
 		min = tmp;
 		var tmp1;
+		var tmp3;
 		var x1 = Math.max(max[0],point[0]);
 		var y1 = Math.max(max[1],point[1]);
-		tmp1 = [x1,y1];
+		tmp3 = [x1,y1];
+		tmp1 = tmp3;
 		max = tmp1;
 	}
 	return [min,max];
@@ -8108,14 +8403,14 @@ thx_geom_shape__$Box_Box_$Impl_$.contains = function(this1,point) {
 };
 thx_geom_shape__$Box_Box_$Impl_$.equals = function(this1,other) {
 	var tmp;
-	var this2 = this1[0];
+	var this11 = this1[0];
 	var p = other[0];
-	if(this2[0] == p[0]) tmp = this2[1] == p[1]; else tmp = false;
+	if(this11[0] == p[0]) tmp = this11[1] == p[1]; else tmp = false;
 	var tmp1;
 	if(tmp) {
-		var this3 = this1[1];
+		var this12 = this1[1];
 		var p1 = other[1];
-		if(this3[0] == p1[0]) tmp1 = this3[1] == p1[1]; else tmp1 = false;
+		if(this12[0] == p1[0]) tmp1 = this12[1] == p1[1]; else tmp1 = false;
 	} else tmp1 = false;
 	return tmp1;
 };
@@ -8126,7 +8421,7 @@ thx_geom_shape__$Box_Box_$Impl_$.toSpline = function(this1) {
 	return thx_geom_Spline.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
 };
 thx_geom_shape__$Box_Box_$Impl_$.toPath = function(this1) {
-	return new thx_geom_Path([thx_geom_shape__$Box_Box_$Impl_$.toSpline(this1)]);
+	return thx_geom_shape__$Box_Box_$Impl_$.toSpline(this1).toPath();
 };
 var thx_geom_shape__$Circle_Circle_$Impl_$ = {};
 thx_geom_shape__$Circle_Circle_$Impl_$.__name__ = ["thx","geom","shape","_Circle","Circle_Impl_"];
@@ -8147,6 +8442,9 @@ thx_geom_shape__$Circle_Circle_$Impl_$.toSpline = function(this1) {
 	var t = thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([this1.radius,this1.radius,1]));
 	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([this1.center[0],this1.center[1],0]));
 	return tmp;
+};
+thx_geom_shape__$Circle_Circle_$Impl_$.toPath = function(this1) {
+	return thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(this1).toPath();
 };
 var thx_math_Const = function() { };
 thx_math_Const.__name__ = ["thx","math","Const"];

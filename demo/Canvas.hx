@@ -9,6 +9,7 @@ import thx.color.*;
 
 class Canvas {
   public static function draw(r : Render) {
+    /*
     var len = 800,
         xp = Spline.fromArray([new Point(0, 0), new Point(len, 0)], false),
         xn = Spline.fromArray([new Point(0, 0), new Point(-len, 0)], false),
@@ -37,18 +38,19 @@ class Canvas {
     r.drawLine(line, StrokeLine(new LineStyle(3)));
     line = Line.fromPoints(new Point(0, 100), new Point(500, 200));
     r.drawLine(line, StrokeLine(new LineStyle(4)));
-
-    var rect = new Box(new Point(50, 100), new Point(250, 300));
-    r.drawSpline(rect);
+*/
+    var rect = new Box(new Point(50, 100), new Point(250, 300)).toSpline();
+//    r.drawSpline(rect);
 
     var rect2 = new Box(new Point(200, 150), new Point(400, 350))
       .toSpline()
       .rotateZ((30 : Degree).toRadian())
       .translateX(20)
-      .translateY(-20);
+      .translateY(-140);
+/*
     r.drawSpline(rect2);
 
-    var intersection = rect.toSpline().intersectionsSpline(rect2);
+    var intersection = rect.intersectionsSpline(rect2);
     intersection.map(function(p) r.drawDot(p, 4));
 
     var arc = new EdgeCubic(
@@ -90,18 +92,37 @@ class Canvas {
     var circle1 = new Circle(new Point(300, 250), 100);
     r.drawSpline(circle1.toSpline().toLinear());
 
+
+    var path = new Path([circle1.toSpline(), circle2.toSpline(), circle3.toSpline()]);
+
+    circle2.toSpline()
+      .intersectionsSpline(rect)
+      .map(function(point) r.drawDot(point, FillColor("#aa3300"), 6));
+*/
+    var circle1 = new Circle(new Point(200, 250), 100);
+    r.drawSpline(circle1.toSpline());
+
     var circle2 = new Circle(new Point(200, 200), 80);
     r.drawSpline(circle2, StrokeDash([4, 4, 8, 4]), FillColor("rgba(0,255,155,0.1)"));
 
     var circle3 = new Circle(new Point(240, 280), 60);
     r.drawSpline(circle3, StrokeDot(4), FillColor("rgba(100,255,155,0.5)"));
 
-    var path = new Path([circle1.toSpline(), circle2.toSpline(), circle3.toSpline()]);
+    var p = rect2.toPath()
+      .intersection(rect.toPath())
+      .union(circle1)
+    ;
 
-    circle2.toSpline()
-      .intersectionsSpline(rect.toSpline())
-      .map(function(point) r.drawDot(point, FillColor("#aa3300"), 6));
-
+    r.drawPath(
+      p,
+      StrokeLine(new LineStyle(6, Color.darkblue)),
+      FillColor(Color.lightblue));
+/*
+    r.drawSpline(
+        rect2.translateX(150)
+          .translateY(50),
+        FillColor("rgba(200,55,0,0.5)"));
+*/
 // selfIntersection is looping forever
 //    path.selfIntersections()
 //      .map(function(point) r.drawDot(point, FillColor("#aa3300"), 4));
