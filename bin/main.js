@@ -1,4 +1,18 @@
 (function () { "use strict";
+var console = (1,eval)('this').console || {log:function(){}};
+var EReg = function(r,opt) {
+	opt = opt.split("u").join("");
+	this.r = new RegExp(r,opt);
+};
+EReg.__name__ = true;
+EReg.prototype = {
+	match: function(s) {
+		if(this.r.global) this.r.lastIndex = 0;
+		this.r.m = this.r.exec(s);
+		this.r.s = s;
+		return this.r.m != null;
+	}
+};
 var HxOverrides = function() { };
 HxOverrides.__name__ = true;
 HxOverrides.iter = function(a) {
@@ -114,8 +128,6 @@ Main.geom = function() {
 		return $r;
 	}(this)),0.15)));
 };
-var IMap = function() { };
-IMap.__name__ = true;
 Math.__name__ = true;
 var Std = function() { };
 Std.__name__ = true;
@@ -199,7 +211,7 @@ chad.csg.Node.prototype = {
 	}
 };
 chad.csg._Solid = {};
-chad.csg._Solid.Solid_Impl_ = function() { };
+chad.csg._Solid.Solid_Impl_ = {};
 chad.csg._Solid.Solid_Impl_.__name__ = true;
 chad.csg._Solid.Solid_Impl_._new = function(polygons) {
 	return polygons;
@@ -273,33 +285,33 @@ chad.csg.Solids.cylinder = function(start,end,radius,resolution) {
 	if(null == resolution) resolution = chad.csg.Solids.getResolution;
 	var slices = resolution(radius);
 	var ray;
-	var p_0 = -start[0];
-	var p_1 = -start[1];
-	var p_2 = -start[2];
-	ray = [end[0] + p_0,end[1] + p_1,end[2] + p_2];
+	var p_03 = -start[0];
+	var p_13 = -start[1];
+	var p_23 = -start[2];
+	ray = [end[0] + p_03,end[1] + p_13,end[2] + p_23];
 	var axisZ;
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(ray,[ray[0],ray[1],ray[2]]));
-	axisZ = [ray[0] / v,ray[1] / v,ray[2] / v];
+	var v4 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(ray,[ray[0],ray[1],ray[2]]));
+	axisZ = [ray[0] / v4,ray[1] / v4,ray[2] / v4];
 	var isY = Math.abs(axisZ[1]) > 0.5;
 	var axisX;
-	var this1;
+	var this4;
 	var this_0;
 	if(isY) this_0 = 1; else this_0 = 0;
 	var this_1;
 	if(isY) this_1 = 0; else this_1 = 1;
 	var this_2 = 0;
-	this1 = [this_1 * axisZ[2] - this_2 * axisZ[1],this_2 * axisZ[0] - this_0 * axisZ[2],this_0 * axisZ[1] - this_1 * axisZ[0]];
-	var v1 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	axisX = [this1[0] / v1,this1[1] / v1,this1[2] / v1];
+	this4 = [this_1 * axisZ[2] - this_2 * axisZ[1],this_2 * axisZ[0] - this_0 * axisZ[2],this_0 * axisZ[1] - this_1 * axisZ[0]];
+	var v5 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this4,[this4[0],this4[1],this4[2]]));
+	axisX = [this4[0] / v5,this4[1] / v5,this4[2] / v5];
 	var axisY;
-	var this2 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
-	var v2 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this2,[this2[0],this2[1],this2[2]]));
-	axisY = [this2[0] / v2,this2[1] / v2,this2[2] / v2];
+	var this5 = [axisX[1] * axisZ[2] - axisX[2] * axisZ[1],axisX[2] * axisZ[0] - axisX[0] * axisZ[2],axisX[0] * axisZ[1] - axisX[1] * axisZ[0]];
+	var v6 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this5,[this5[0],this5[1],this5[2]]));
+	axisY = [this5[0] / v6,this5[1] / v6,this5[2] / v6];
 	var s = new thx.geom.Vertex3D(start,[-axisZ[0],-axisZ[1],-axisZ[2]]);
 	var e = new thx.geom.Vertex3D(end,(function($this) {
 		var $r;
-		var v3 = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(axisZ,[axisZ[0],axisZ[1],axisZ[2]]));
-		$r = [axisZ[0] / v3,axisZ[1] / v3,axisZ[2] / v3];
+		var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(axisZ,[axisZ[0],axisZ[1],axisZ[2]]));
+		$r = [axisZ[0] / v,axisZ[1] / v,axisZ[2] / v];
 		return $r;
 	}(this)));
 	var polygons = [];
@@ -308,31 +320,31 @@ chad.csg.Solids.cylinder = function(start,end,radius,resolution) {
 	var point = function(stack,slice,normalBlend) {
 		var angle = slice * Math.PI * 2;
 		var out;
-		var this3;
-		var v4 = Math.cos(angle);
-		this3 = [axisX[0] * v4,axisX[1] * v4,axisX[2] * v4];
+		var this1;
+		var v1 = Math.cos(angle);
+		this1 = [axisX[0] * v1,axisX[1] * v1,axisX[2] * v1];
 		var p;
-		var v5 = Math.sin(angle);
-		p = [axisY[0] * v5,axisY[1] * v5,axisY[2] * v5];
-		out = [this3[0] + p[0],this3[1] + p[1],this3[2] + p[2]];
+		var v2 = Math.sin(angle);
+		p = [axisY[0] * v2,axisY[1] * v2,axisY[2] * v2];
+		out = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
 		var pos;
-		var this4;
+		var this2;
 		var p_01 = ray[0] * stack;
 		var p_11 = ray[1] * stack;
 		var p_21 = ray[2] * stack;
-		this4 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
-		var p_02 = out[0] * radius;
-		var p_12 = out[1] * radius;
-		var p_22 = out[2] * radius;
-		pos = [this4[0] + p_02,this4[1] + p_12,this4[2] + p_22];
+		this2 = [start[0] + p_01,start[1] + p_11,start[2] + p_21];
+		var p_0 = out[0] * radius;
+		var p_1 = out[1] * radius;
+		var p_2 = out[2] * radius;
+		pos = [this2[0] + p_0,this2[1] + p_1,this2[2] + p_2];
 		var normal;
-		var this5;
-		var v6 = 1 - Math.abs(normalBlend);
-		this5 = [out[0] * v6,out[1] * v6,out[2] * v6];
-		var p_03 = axisZ[0] * normalBlend;
-		var p_13 = axisZ[1] * normalBlend;
-		var p_23 = axisZ[2] * normalBlend;
-		normal = [this5[0] + p_03,this5[1] + p_13,this5[2] + p_23];
+		var this3;
+		var v3 = 1 - Math.abs(normalBlend);
+		this3 = [out[0] * v3,out[1] * v3,out[2] * v3];
+		var p_02 = axisZ[0] * normalBlend;
+		var p_12 = axisZ[1] * normalBlend;
+		var p_22 = axisZ[2] * normalBlend;
+		normal = [this3[0] + p_02,this3[1] + p_12,this3[2] + p_22];
 		return new thx.geom.Vertex3D(pos,normal);
 	};
 	var _g = 0;
@@ -421,9 +433,9 @@ chad.export.ThreeJS.toModel = function(solid) {
 		while( $it1.hasNext() ) {
 			var Vertex3D = $it1.next();
 			var key = Vertex3D.toString();
-			if(!vertices.exists(key)) {
+			if(!vertices.h.hasOwnProperty("$" + key)) {
 				var value = { index : index++, Vertex3D : Vertex3D};
-				vertices.set(key,value);
+				vertices.h["$" + key] = value;
 			}
 		}
 	}
@@ -439,32 +451,32 @@ chad.export.ThreeJS.toModel = function(solid) {
 			faces = faces.concat([32,((function($this) {
 				var $r;
 				var key1 = arr[0].toString();
-				$r = vertices.get(key1);
+				$r = vertices.h["$" + key1];
 				return $r;
 			}(this))).index,((function($this) {
 				var $r;
 				var key2 = arr[i - 1].toString();
-				$r = vertices.get(key2);
+				$r = vertices.h["$" + key2];
 				return $r;
 			}(this))).index,((function($this) {
 				var $r;
 				var key3 = arr[i].toString();
-				$r = vertices.get(key3);
+				$r = vertices.h["$" + key3];
 				return $r;
 			}(this))).index,((function($this) {
 				var $r;
 				var key4 = arr[0].toString();
-				$r = vertices.get(key4);
+				$r = vertices.h["$" + key4];
 				return $r;
 			}(this))).index,((function($this) {
 				var $r;
 				var key5 = arr[i - 1].toString();
-				$r = vertices.get(key5);
+				$r = vertices.h["$" + key5];
 				return $r;
 			}(this))).index,((function($this) {
 				var $r;
 				var key6 = arr[i].toString();
-				$r = vertices.get(key6);
+				$r = vertices.h["$" + key6];
 				return $r;
 			}(this))).index]);
 		}
@@ -472,23 +484,16 @@ chad.export.ThreeJS.toModel = function(solid) {
 	return { metadata : { formatVersion : 3}, vertices : chad.export.ThreeJS.getVertices(vertices), normals : chad.export.ThreeJS.getNormals(vertices), faces : faces};
 };
 var haxe = {};
+haxe.IMap = function() { };
+haxe.IMap.__name__ = true;
 haxe.ds = {};
 haxe.ds.StringMap = function() {
 	this.h = { };
 };
 haxe.ds.StringMap.__name__ = true;
-haxe.ds.StringMap.__interfaces__ = [IMap];
+haxe.ds.StringMap.__interfaces__ = [haxe.IMap];
 haxe.ds.StringMap.prototype = {
-	set: function(key,value) {
-		this.h["$" + key] = value;
-	}
-	,get: function(key) {
-		return this.h["$" + key];
-	}
-	,exists: function(key) {
-		return this.h.hasOwnProperty("$" + key);
-	}
-	,keys: function() {
+	keys: function() {
 		var a = [];
 		for( var key in this.h ) {
 		if(this.h.hasOwnProperty(key)) a.push(key.substr(1));
@@ -517,18 +522,18 @@ js.Boot.__string_rec = function(o,s) {
 		if(o instanceof Array) {
 			if(o.__enum__) {
 				if(o.length == 2) return o[0];
-				var str = o[0] + "(";
+				var str2 = o[0] + "(";
 				s += "\t";
 				var _g1 = 2;
 				var _g = o.length;
 				while(_g1 < _g) {
-					var i = _g1++;
-					if(i != 2) str += "," + js.Boot.__string_rec(o[i],s); else str += js.Boot.__string_rec(o[i],s);
+					var i1 = _g1++;
+					if(i1 != 2) str2 += "," + js.Boot.__string_rec(o[i1],s); else str2 += js.Boot.__string_rec(o[i1],s);
 				}
-				return str + ")";
+				return str2 + ")";
 			}
 			var l = o.length;
-			var i1;
+			var i;
 			var str1 = "[";
 			s += "\t";
 			var _g2 = 0;
@@ -545,12 +550,12 @@ js.Boot.__string_rec = function(o,s) {
 		} catch( e ) {
 			return "???";
 		}
-		if(tostr != null && tostr != Object.toString) {
+		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
 			var s2 = o.toString();
 			if(s2 != "[object Object]") return s2;
 		}
 		var k = null;
-		var str2 = "{\n";
+		var str = "{\n";
 		s += "\t";
 		var hasp = o.hasOwnProperty != null;
 		for( var k in o ) {
@@ -560,12 +565,12 @@ js.Boot.__string_rec = function(o,s) {
 		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
 			continue;
 		}
-		if(str2.length != 2) str2 += ", \n";
-		str2 += s + k + " : " + js.Boot.__string_rec(o[k],s);
+		if(str.length != 2) str += ", \n";
+		str += s + k + " : " + js.Boot.__string_rec(o[k],s);
 		}
 		s = s.substring(1);
-		str2 += "\n" + s + "}";
-		return str2;
+		str += "\n" + s + "}";
+		return str;
 	case "function":
 		return "<function>";
 	case "string":
@@ -575,9 +580,95 @@ js.Boot.__string_rec = function(o,s) {
 	}
 };
 var thx = {};
+thx.core = {};
+thx.core.Floats = function() { };
+thx.core.Floats.__name__ = true;
+thx.core.Floats.angleDifference = function(a,b,turn) {
+	if(turn == null) turn = 360;
+	var r = (b - a) % turn;
+	if(r < 0) r += turn;
+	if(r > turn / 2) r -= turn;
+	return r;
+};
+thx.core.Floats.ceilTo = function(f,decimals) {
+	var p = Math.pow(10,decimals);
+	return Math.ceil(f * p) / p;
+};
+thx.core.Floats.canParse = function(s) {
+	return thx.core.Floats.pattern_parse.match(s);
+};
+thx.core.Floats.clamp = function(v,min,max) {
+	if(v < min) return min; else if(v > max) return max; else return v;
+};
+thx.core.Floats.clampSym = function(v,max) {
+	return thx.core.Floats.clamp(v,-max,max);
+};
+thx.core.Floats.compare = function(a,b) {
+	if(a < b) return -1; else if(b > a) return 1; else return 0;
+};
+thx.core.Floats.floorTo = function(f,decimals) {
+	var p = Math.pow(10,decimals);
+	return Math.floor(f * p) / p;
+};
+thx.core.Floats.interpolate = function(f,a,b) {
+	return (b - a) * f + a;
+};
+thx.core.Floats.interpolateAngle = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	return thx.core.Floats.wrapCircular(thx.core.Floats.interpolate(f,a,a + thx.core.Floats.angleDifference(a,b,turn)),turn);
+};
+thx.core.Floats.interpolateAngleWidest = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	return thx.core.Floats.wrapCircular(thx.core.Floats.interpolateAngle(f,a,b,turn) - turn / 2,turn);
+};
+thx.core.Floats.interpolateAngleCW = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	a = thx.core.Floats.wrapCircular(a,turn);
+	b = thx.core.Floats.wrapCircular(b,turn);
+	if(b < a) b += turn;
+	return thx.core.Floats.wrapCircular(thx.core.Floats.interpolate(f,a,b),turn);
+};
+thx.core.Floats.interpolateAngleCCW = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	a = thx.core.Floats.wrapCircular(a,turn);
+	b = thx.core.Floats.wrapCircular(b,turn);
+	if(b > a) b -= turn;
+	return thx.core.Floats.wrapCircular(thx.core.Floats.interpolate(f,a,b),turn);
+};
+thx.core.Floats.nearEquals = function(a,b) {
+	return Math.abs(a - b) <= 10e-10;
+};
+thx.core.Floats.nearZero = function(n) {
+	return Math.abs(n) <= 10e-10;
+};
+thx.core.Floats.normalize = function(v) {
+	if(v < 0) return 0; else if(v > 1) return 1; else return v;
+};
+thx.core.Floats.parse = function(s) {
+	if(s.substring(0,1) == "+") s = s.substring(1);
+	return parseFloat(s);
+};
+thx.core.Floats.root = function(base,index) {
+	return Math.pow(base,1 / index);
+};
+thx.core.Floats.roundTo = function(f,decimals) {
+	var p = Math.pow(10,decimals);
+	return Math.round(f * p) / p;
+};
+thx.core.Floats.sign = function(value) {
+	if(value < 0) return -1; else return 1;
+};
+thx.core.Floats.wrap = function(v,min,max) {
+	var range = max - min + 1;
+	if(v < min) v += range * ((min - v) / range + 1);
+	return min + (v - min) % range;
+};
+thx.core.Floats.wrapCircular = function(v,max) {
+	v = v % max;
+	if(v < 0) v += max;
+	return v;
+};
 thx.geom = {};
-thx.geom.Const = function() { };
-thx.geom.Const.__name__ = true;
 thx.geom.Line = function(normal,w) {
 	var l = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
 	this.w = w * l;
@@ -777,7 +868,7 @@ thx.geom.Line3D.prototype = {
 	}
 };
 thx.geom._Matrix4x4 = {};
-thx.geom._Matrix4x4.Matrix4x4_Impl_ = function() { };
+thx.geom._Matrix4x4.Matrix4x4_Impl_ = {};
 thx.geom._Matrix4x4.Matrix4x4_Impl_.__name__ = true;
 thx.geom._Matrix4x4.Matrix4x4_Impl_.fromArray = function(e) {
 	if(e.length != 16) throw "Invalid array length (" + e.length + ") for Matrix4x4, should be 16";
@@ -1018,10 +1109,10 @@ thx.geom.Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
 	var p_11 = -a[1];
 	var p_21 = -a[2];
 	v2 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v1,[v1[0],v1[1],v1[2]])) < 1e-5) v1 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v2);
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v2,[v2[0],v2[1],v2[2]])) < 1e-5) v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
+	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v1,[v1[0],v1[1],v1[2]])) < 10e-10) v1 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v2);
+	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v2,[v2[0],v2[1],v2[2]])) < 10e-10) v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
 	var normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]])) < 1e-5) {
+	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]])) < 10e-10) {
 		v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
 		normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
 	}
@@ -1080,7 +1171,7 @@ thx.geom.Plane.prototype = {
 		while( $it0.hasNext() ) {
 			var vertex = $it0.next();
 			t1 = thx.geom._Point3D.Point3D_Impl_.dot(this.normal,vertex.position) - this.w;
-			if(t1 < -1e-05) type = 2; else if(t1 > 1e-5) type = 1; else type = 0;
+			if(t1 < -1e-09) type = 2; else if(t1 > 10e-10) type = 1; else type = 0;
 			polygonType |= type;
 			types.push(type);
 		}
@@ -1199,7 +1290,7 @@ thx.geom.Plane.prototype = {
 	}
 };
 thx.geom._Point3D = {};
-thx.geom._Point3D.Point3D_Impl_ = function() { };
+thx.geom._Point3D.Point3D_Impl_ = {};
 thx.geom._Point3D.Point3D_Impl_.__name__ = true;
 thx.geom._Point3D.Point3D_Impl_.fromObject = function(o) {
 	return [o.x,o.y,o.z];
@@ -1272,7 +1363,7 @@ thx.geom._Point3D.Point3D_Impl_.abs = function(this1) {
 	return [x,y,z];
 };
 thx.geom._Point3D.Point3D_Impl_.nearEquals = function(this1,p) {
-	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5 && Math.abs(this1[2] - p[2]) <= 1e-5;
+	return Math.abs(this1[0] - p[0]) <= 10e-10 && Math.abs(this1[1] - p[1]) <= 10e-10 && Math.abs(this1[2] - p[2]) <= 10e-10;
 };
 thx.geom._Point3D.Point3D_Impl_.interpolate = function(this1,p,f) {
 	var p1;
@@ -1387,16 +1478,16 @@ thx.geom.OrthoNormalBasis.prototype = {
 	,to3D: function(vec2) {
 		var this1;
 		var this2 = this.planeOrigin;
-		var p;
+		var p1;
 		var this3 = this.u;
 		var v = vec2[0];
-		p = [this3[0] * v,this3[1] * v,this3[2] * v];
-		this1 = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
-		var p1;
+		p1 = [this3[0] * v,this3[1] * v,this3[2] * v];
+		this1 = [this2[0] + p1[0],this2[1] + p1[1],this2[2] + p1[2]];
+		var p;
 		var this4 = this.v;
 		var v1 = vec2[1];
-		p1 = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
-		return [this1[0] + p1[0],this1[1] + p1[1],this1[2] + p1[2]];
+		p = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
+		return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
 	}
 	,line3Dto2D: function(line) {
 		return thx.geom.Line.fromPoints(this.to2D(line.point),this.to2D((function($this) {
@@ -1434,7 +1525,7 @@ thx.geom.OrthoNormalBasis.prototype = {
 	}
 };
 thx.geom._Point = {};
-thx.geom._Point.Point_Impl_ = function() { };
+thx.geom._Point.Point_Impl_ = {};
 thx.geom._Point.Point_Impl_.__name__ = true;
 thx.geom._Point.Point_Impl_.fromObject = function(o) {
 	return [o.x,o.y];
@@ -1507,7 +1598,7 @@ thx.geom._Point.Point_Impl_.abs = function(this1) {
 	return [x,y];
 };
 thx.geom._Point.Point_Impl_.nearEquals = function(this1,p) {
-	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5;
+	return Math.abs(this1[0] - p[0]) <= 10e-10 && Math.abs(this1[1] - p[1]) <= 10e-10;
 };
 thx.geom._Point.Point_Impl_.interpolate = function(this1,p,f) {
 	var p1;
@@ -1583,12 +1674,11 @@ thx.geom._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
 	return [this2[0] + p[0],this2[1] + p[1]];
 };
 thx.geom._Point.Point_Impl_.isOnLine = function(this1,line) {
-	if(line.get_isHorizontal()) return thx.math.Number.nearEquals(this1[1],line.w);
-	return thx.math.Number.nearEquals(line.xAtY(this1[1]),this1[0]);
+	if(line.get_isHorizontal()) return Math.abs(this1[1] - line.w) <= 10e-10;
+	return thx.core.Floats.nearEquals(line.xAtY(this1[1]),this1[0]);
 };
 thx.geom._Point.Point_Impl_.toAngle = function(this1) {
-	var angle = Math.atan2(this1[1],this1[0]);
-	return angle;
+	return Math.atan2(this1[1],this1[0]);
 };
 thx.geom._Point.Point_Impl_.toArray = function(this1) {
 	return this1.slice();
@@ -1738,141 +1828,6 @@ thx.geom.Vertex3D.prototype = {
 		}(this));
 	}
 };
-thx.math = {};
-thx.math.Number = function() { };
-thx.math.Number.__name__ = true;
-thx.math.Number.isNearZero = function(n) {
-	return Math.abs(n) <= 10e-10;
-};
-thx.math.Number.nearEquals = function(a,b) {
-	return Math.abs(a - b) <= 10e-10;
-};
-thx.math.Number.integrate = function(f,a,b,n) {
-	var x = thx.math.Number.abscissas[n - 2];
-	var w = thx.math.Number.weights[n - 2];
-	var A = 0.5 * (b - a);
-	var B = A + a;
-	var i = 0;
-	var m = n + 1 >> 1;
-	var sum;
-	if((n & 1) == 1) sum = w[i++] * f(B); else sum = 0;
-	var Ax;
-	while(i < m) {
-		Ax = A * x[i];
-		sum += w[i++] * (f(B + Ax) + f(B - Ax));
-	}
-	return A * sum;
-};
-thx.unit = {};
-thx.unit.angle = {};
-thx.unit.angle.Const = function() { };
-thx.unit.angle.Const.__name__ = true;
-thx.unit.angle._Degree = {};
-thx.unit.angle._Degree.Degree_Impl_ = function() { };
-thx.unit.angle._Degree.Degree_Impl_.__name__ = true;
-thx.unit.angle._Degree.Degree_Impl_.fromFloat = function(angle) {
-	return angle;
-};
-thx.unit.angle._Degree.Degree_Impl_._new = function(degrees) {
-	return degrees;
-};
-thx.unit.angle._Degree.Degree_Impl_.cos = function(this1) {
-	return Math.cos(this1 / thx.unit.angle.Const.TO_DEGREE);
-};
-thx.unit.angle._Degree.Degree_Impl_.sin = function(this1) {
-	return Math.sin(this1 / thx.unit.angle.Const.TO_DEGREE);
-};
-thx.unit.angle._Degree.Degree_Impl_.toString = function(this1) {
-	return "" + this1 + "º";
-};
-thx.unit.angle._Degree.Degree_Impl_.toRadians = function(this1) {
-	return this1 / thx.unit.angle.Const.TO_DEGREE;
-};
-thx.unit.angle._Degree.Degree_Impl_.toFloat = function(this1) {
-	return this1;
-};
-thx.unit.angle._Degree.Degree_Impl_.negate = function(this1) {
-	return -this1;
-};
-thx.unit.angle._Degree.Degree_Impl_.multiply = function(this1,v) {
-	return this1 * v;
-};
-thx.unit.angle._Degree.Degree_Impl_.divide = function(this1,v) {
-	return this1 / v;
-};
-thx.unit.angle._Degree.Degree_Impl_.add = function(this1,r) {
-	return this1 + r;
-};
-thx.unit.angle._Degree.Degree_Impl_.addFloat = function(this1,v) {
-	return this1 + v;
-};
-thx.unit.angle._Degree.Degree_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
-};
-thx.unit.angle._Degree.Degree_Impl_.subtractFloat = function(this1,v) {
-	return this1 + -v;
-};
-thx.unit.angle._Degree.Degree_Impl_.equals = function(this1,v) {
-	return this1 == v;
-};
-thx.unit.angle.FloatDegree = function() { };
-thx.unit.angle.FloatDegree.__name__ = true;
-thx.unit.angle.FloatDegree.toDegrees = function(v) {
-	return v;
-};
-thx.unit.angle._Radian = {};
-thx.unit.angle._Radian.Radian_Impl_ = function() { };
-thx.unit.angle._Radian.Radian_Impl_.__name__ = true;
-thx.unit.angle._Radian.Radian_Impl_.fromFloat = function(angle) {
-	return angle;
-};
-thx.unit.angle._Radian.Radian_Impl_._new = function(radians) {
-	return radians;
-};
-thx.unit.angle._Radian.Radian_Impl_.cos = function(this1) {
-	return Math.cos(this1);
-};
-thx.unit.angle._Radian.Radian_Impl_.sin = function(this1) {
-	return Math.sin(this1);
-};
-thx.unit.angle._Radian.Radian_Impl_.toString = function(this1) {
-	return "" + this1 + "rad";
-};
-thx.unit.angle._Radian.Radian_Impl_.toDegrees = function(this1) {
-	return this1 * thx.unit.angle.Const.TO_DEGREE;
-};
-thx.unit.angle._Radian.Radian_Impl_.toFloat = function(this1) {
-	return this1;
-};
-thx.unit.angle._Radian.Radian_Impl_.negate = function(this1) {
-	return -this1;
-};
-thx.unit.angle._Radian.Radian_Impl_.multiply = function(this1,v) {
-	return this1 * v;
-};
-thx.unit.angle._Radian.Radian_Impl_.divide = function(this1,v) {
-	return this1 / v;
-};
-thx.unit.angle._Radian.Radian_Impl_.add = function(this1,r) {
-	return this1 + r;
-};
-thx.unit.angle._Radian.Radian_Impl_.addFloat = function(this1,v) {
-	return this1 + v;
-};
-thx.unit.angle._Radian.Radian_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
-};
-thx.unit.angle._Radian.Radian_Impl_.subtractFloat = function(this1,v) {
-	return this1 + -v;
-};
-thx.unit.angle._Radian.Radian_Impl_.equals = function(this1,v) {
-	return this1 == v;
-};
-thx.unit.angle.FloatRadian = function() { };
-thx.unit.angle.FloatRadian.__name__ = true;
-thx.unit.angle.FloatRadian.toRadians = function(v) {
-	return v;
-};
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
@@ -1889,8 +1844,9 @@ if(Array.prototype.map == null) Array.prototype.map = function(f) {
 	return a;
 };
 chad.csg.Solids.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
-thx.geom.Const.EPSILON = 1e-5;
-thx.geom.Const.KAPPA = 0.5522847498307936;
+thx.core.Floats.TOLERANCE = 10e-5;
+thx.core.Floats.EPSILON = 10e-10;
+thx.core.Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
 thx.geom._Matrix4x4.Matrix4x4_Impl_.identity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
 thx.geom.Plane.COPLANAR = 0;
 thx.geom.Plane.FRONT = 1;
@@ -1902,10 +1858,5 @@ thx.geom._Point.Point_Impl_.zero = [0,0];
 thx.geom.Transformables.MX = new thx.geom.Plane([1,0,0],0);
 thx.geom.Transformables.MY = new thx.geom.Plane([0,1,0],0);
 thx.geom.Transformables.MZ = new thx.geom.Plane([0,0,1],0);
-thx.math.Number.TOLERANCE = 10e-5;
-thx.math.Number.EPSILON = 10e-10;
-thx.math.Number.abscissas = [[0.5773502691896257645091488],[0,0.7745966692414833770358531],[0.3399810435848562648026658,0.8611363115940525752239465],[0,0.5384693101056830910363144,0.9061798459386639927976269],[0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],[0,0.4058451513773971669066064,0.7415311855993944398638648,0.9491079123427585245261897],[0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],[0,0.3242534234038089290385380,0.6133714327005903973087020,0.8360311073266357942994298,0.9681602395076260898355762],[0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],[0,0.2695431559523449723315320,0.5190961292068118159257257,0.7301520055740493240934163,0.8870625997680952990751578,0.9782286581460569928039380],[0.1252334085114689154724414,0.3678314989981801937526915,0.5873179542866174472967024,0.7699026741943046870368938,0.9041172563704748566784659,0.9815606342467192506905491],[0,0.2304583159551347940655281,0.4484927510364468528779129,0.6423493394403402206439846,0.8015780907333099127942065,0.9175983992229779652065478,0.9841830547185881494728294],[0.1080549487073436620662447,0.3191123689278897604356718,0.5152486363581540919652907,0.6872929048116854701480198,0.8272013150697649931897947,0.9284348836635735173363911,0.9862838086968123388415973],[0,0.2011940939974345223006283,0.3941513470775633698972074,0.5709721726085388475372267,0.7244177313601700474161861,0.8482065834104272162006483,0.9372733924007059043077589,0.9879925180204854284895657],[0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]];
-thx.math.Number.weights = [[1.0],[0.8888888888888888888888889,0.5555555555555555555555556],[0.6521451548625461426269361,0.3478548451374538573730639],[0.5688888888888888888888889,0.4786286704993664680412915,0.2369268850561890875142640],[0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],[0.4179591836734693877551020,0.3818300505051189449503698,0.2797053914892766679014678,0.1294849661688696932706114],[0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],[0.3302393550012597631645251,0.3123470770400028400686304,0.2606106964029354623187429,0.1806481606948574040584720,0.0812743883615744119718922],[0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],[0.2729250867779006307144835,0.2628045445102466621806889,0.2331937645919904799185237,0.1862902109277342514260976,0.1255803694649046246346943,0.0556685671161736664827537],[0.2491470458134027850005624,0.2334925365383548087608499,0.2031674267230659217490645,0.1600783285433462263346525,0.1069393259953184309602547,0.0471753363865118271946160],[0.2325515532308739101945895,0.2262831802628972384120902,0.2078160475368885023125232,0.1781459807619457382800467,0.1388735102197872384636018,0.0921214998377284479144218,0.0404840047653158795200216],[0.2152638534631577901958764,0.2051984637212956039659241,0.1855383974779378137417166,0.1572031671581935345696019,0.1215185706879031846894148,0.0801580871597602098056333,0.0351194603317518630318329],[0.2025782419255612728806202,0.1984314853271115764561183,0.1861610000155622110268006,0.1662692058169939335532009,0.1395706779261543144478048,0.1071592204671719350118695,0.0703660474881081247092674,0.0307532419961172683546284],[0.1894506104550684962853967,0.1826034150449235888667637,0.1691565193950025381893121,0.1495959888165767320815017,0.1246289712555338720524763,0.0951585116824927848099251,0.0622535239386478928628438,0.0271524594117540948517806]];
-thx.unit.angle.Const.TO_DEGREE = 180 / Math.PI;
 Main.main();
 })();

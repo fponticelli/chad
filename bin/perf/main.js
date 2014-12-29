@@ -13,7 +13,9 @@ EReg.prototype = {
 		return this.r.m != null;
 	}
 	,matched: function(n) {
-		if(this.r.m != null && n >= 0 && n < this.r.m.length) return this.r.m[n]; else throw "EReg::matched";
+		var tmp;
+		if((this.r.m != null?n >= 0:false)?n < this.r.m.length:false) tmp = this.r.m[n]; else throw "EReg::matched";
+		return tmp;
 	}
 	,matchedPos: function() {
 		if(this.r.m == null) throw "No string matched";
@@ -21,46 +23,54 @@ EReg.prototype = {
 	}
 	,matchSub: function(s,pos,len) {
 		if(len == null) len = -1;
+		var tmp;
 		if(this.r.global) {
 			this.r.lastIndex = pos;
 			this.r.m = this.r.exec(len < 0?s:HxOverrides.substr(s,0,pos + len));
 			var b = this.r.m != null;
 			if(b) this.r.s = s;
-			return b;
+			tmp = b;
 		} else {
 			var b1 = this.match(len < 0?HxOverrides.substr(s,pos,null):HxOverrides.substr(s,pos,len));
 			if(b1) {
 				this.r.s = s;
 				this.r.m.index += pos;
 			}
-			return b1;
+			tmp = b1;
 		}
+		return tmp;
 	}
 	,split: function(s) {
-		var d = "#__delim__#";
-		return s.replace(this.r,d).split(d);
+		return s.replace(this.r,"#__delim__#").split("#__delim__#");
 	}
 	,replace: function(s,by) {
 		return s.replace(this.r,by);
 	}
 	,map: function(s,f) {
 		var offset = 0;
-		var buf = new StringBuf();
+		var buf_b = "";
 		do {
 			if(offset >= s.length) break; else if(!this.matchSub(s,offset)) {
-				buf.add(HxOverrides.substr(s,offset,null));
+				var x = HxOverrides.substr(s,offset,null);
+				buf_b += x == null?"null":"" + x;
 				break;
 			}
 			var p = this.matchedPos();
-			buf.add(HxOverrides.substr(s,offset,p.pos - offset));
-			buf.add(f(this));
+			var x1 = HxOverrides.substr(s,offset,p.pos - offset);
+			buf_b += x1 == null?"null":"" + x1;
+			var x2 = f(this);
+			buf_b += x2 == null?"null":"" + x2;
 			if(p.len == 0) {
-				buf.add(HxOverrides.substr(s,p.pos,1));
+				var x3 = HxOverrides.substr(s,p.pos,1);
+				buf_b += x3 == null?"null":"" + x3;
 				offset = p.pos + 1;
 			} else offset = p.pos + p.len;
 		} while(this.r.global);
-		if(!this.r.global && offset > 0 && offset < s.length) buf.add(HxOverrides.substr(s,offset,null));
-		return buf.b;
+		if((!this.r.global?offset > 0:false)?offset < s.length:false) {
+			var x4 = HxOverrides.substr(s,offset,null);
+			buf_b += x4 == null?"null":"" + x4;
+		}
+		return buf_b;
 	}
 };
 var HxOverrides = function() { };
@@ -71,7 +81,7 @@ HxOverrides.cca = function(s,index) {
 	return x;
 };
 HxOverrides.substr = function(s,pos,len) {
-	if(pos != null && pos != 0 && len != null && len < 0) return "";
+	if(((pos != null?pos != 0:false)?len != null:false)?len < 0:false) return "";
 	if(len == null) len = s.length;
 	if(pos < 0) {
 		pos = s.length + pos;
@@ -133,41 +143,32 @@ Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
 Std.random = function(x) {
-	if(x <= 0) return 0; else return Math.floor(Math.random() * x);
-};
-var StringBuf = function() {
-	this.b = "";
-};
-StringBuf.__name__ = true;
-StringBuf.prototype = {
-	add: function(x) {
-		this.b += Std.string(x);
-	}
+	return x <= 0?0:Math.floor(Math.random() * x);
 };
 var StringTools = function() { };
 StringTools.__name__ = true;
 StringTools.startsWith = function(s,start) {
-	return s.length >= start.length && HxOverrides.substr(s,0,start.length) == start;
+	return s.length >= start.length?HxOverrides.substr(s,0,start.length) == start:false;
 };
 StringTools.endsWith = function(s,end) {
 	var elen = end.length;
 	var slen = s.length;
-	return slen >= elen && HxOverrides.substr(s,slen - elen,elen) == end;
+	return slen >= elen?HxOverrides.substr(s,slen - elen,elen) == end:false;
 };
 StringTools.isSpace = function(s,pos) {
 	var c = HxOverrides.cca(s,pos);
-	return c > 8 && c < 14 || c == 32;
+	return !(c > 8?c < 14:false)?c == 32:true;
 };
 StringTools.ltrim = function(s) {
 	var l = s.length;
 	var r = 0;
-	while(r < l && StringTools.isSpace(s,r)) r++;
+	while(r < l?StringTools.isSpace(s,r):false) r++;
 	if(r > 0) return HxOverrides.substr(s,r,l - r); else return s;
 };
 StringTools.rtrim = function(s) {
 	var l = s.length;
 	var r = 0;
-	while(r < l && StringTools.isSpace(s,l - r - 1)) r++;
+	while(r < l?StringTools.isSpace(s,l - r - 1):false) r++;
 	if(r > 0) return HxOverrides.substr(s,0,l - r); else return s;
 };
 StringTools.trim = function(s) {
@@ -216,7 +217,11 @@ js_Boot.__string_rec = function(o,s) {
 	if(o == null) return "null";
 	if(s.length >= 5) return "<...>";
 	var t = typeof(o);
-	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
+	var tmp;
+	if(t == "function") {
+		if(!o.__name__) tmp = o.__ename__; else tmp = true;
+	} else tmp = false;
+	if(tmp) t = "object";
 	switch(t) {
 	case "object":
 		if(o instanceof Array) {
@@ -250,7 +255,7 @@ js_Boot.__string_rec = function(o,s) {
 		} catch( e ) {
 			return "???";
 		}
-		if(tostr != null && tostr != Object.toString && typeof(tostr) == "function") {
+		if((tostr != null?tostr != Object.toString:false)?typeof(tostr) == "function":false) {
 			var s2 = o.toString();
 			if(s2 != "[object Object]") return s2;
 		}
@@ -259,10 +264,10 @@ js_Boot.__string_rec = function(o,s) {
 		s += "\t";
 		var hasp = o.hasOwnProperty != null;
 		for( var k in o ) {
-		if(hasp && !o.hasOwnProperty(k)) {
+		if(hasp?!o.hasOwnProperty(k):false) {
 			continue;
 		}
-		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+		if(!(!(!(!(k == "prototype")?k == "__class__":true)?k == "__super__":true)?k == "__interfaces__":true)?k == "__properties__":true) {
 			continue;
 		}
 		if(str.length != 2) str += ", \n";
@@ -323,7 +328,7 @@ thx_benchmark_SpeedTest.prototype = {
 		return this.addLoop(description,function(tot) {
 			var _g = 0;
 			while(_g < tot) {
-				var i = _g++;
+				_g++;
 				f();
 			}
 		},isReference);
@@ -379,36 +384,48 @@ thx_benchmark_SpeedTest.prototype = {
 			var i = _g1++;
 			var d = this.descriptions[i];
 			if(d.length > sl) sl = d.length;
-			if(slowest < 0 || slowest > this.results[i]) slowest = this.results[i];
+			if(!(slowest < 0)?slowest > this.results[i]:true) slowest = this.results[i];
 			var v = thx_benchmark_SpeedTest.formatDecimal(this.results[i] / this.averages,1);
 			var n = v.split(sep);
 			if(bd < n[0].length) bd = n[0].length;
 			r.push(n);
 		}
 		sl += 3;
-		var s = new StringBuf();
-		s.b += Std.string("test repeated " + this.repetitions + " time(s), average on " + this.averages + " cycle(s)\n\n");
+		var s_b = "";
+		s_b += Std.string("test repeated " + this.repetitions + " time(s), average on " + this.averages + " cycle(s)\n\n");
 		if(this.reference >= 0) slowest = this.results[this.reference];
 		var _g11 = 0;
 		var _g2 = this.descriptions.length;
 		while(_g11 < _g2) {
 			var i1 = _g11++;
 			var d1 = this.descriptions[i1];
-			s.add(StringTools.rpad(d1,".",sl));
-			s.b += ": ";
-			s.add(StringTools.lpad(r[i1][0]," ",bd));
-			s.b += ".";
-			s.b += Std.string(r[i1][1]);
-			s.b += " ms. ";
-			if(this.reference < 0) s.add(thx_benchmark_SpeedTest.formatPercent(Math.round(100 * slowest / this.results[i1]))); else if(this.reference == i1) s.b += "        reference"; else {
+			var x = StringTools.rpad(d1,".",sl);
+			s_b += x == null?"null":"" + x;
+			s_b += ": ";
+			var x1 = StringTools.lpad(r[i1][0]," ",bd);
+			s_b += x1 == null?"null":"" + x1;
+			s_b += ".";
+			s_b += Std.string(r[i1][1]);
+			s_b += " ms. ";
+			if(this.reference < 0) {
+				var x2 = thx_benchmark_SpeedTest.formatPercent(Math.round(100 * slowest / this.results[i1]));
+				s_b += x2 == null?"null":"" + x2;
+			} else if(this.reference == i1) s_b += "        reference"; else {
 				var v1 = Math.round(100 * slowest / this.results[i1]);
-				if(v1 < 100) s.add("(" + StringTools.lpad(thx_benchmark_SpeedTest.formatPercentInt(100 - v1)," ",5) + ") slower"); else if(v1 == 100) s.b += "        same"; else s.add(" " + StringTools.lpad(thx_benchmark_SpeedTest.formatPercentInt(v1 - 100)," ",5) + "  faster");
+				if(v1 < 100) {
+					var x3 = "(" + StringTools.lpad(thx_benchmark_SpeedTest.formatPercentInt(100 - v1)," ",5) + ") slower";
+					s_b += x3 == null?"null":"" + x3;
+				} else if(v1 == 100) s_b += "        same"; else {
+					var x4 = " " + StringTools.lpad(thx_benchmark_SpeedTest.formatPercentInt(v1 - 100)," ",5) + "  faster";
+					s_b += x4 == null?"null":"" + x4;
+				}
 			}
-			s.b += "\n";
+			s_b += "\n";
 		}
-		s.b += "\n";
-		s.add("total execution time: " + thx_benchmark_SpeedTest.formatInt(total) + " ms.");
-		return s.b;
+		s_b += "\n";
+		var x5 = "total execution time: " + thx_benchmark_SpeedTest.formatInt(total) + " ms.";
+		s_b += x5 == null?"null":"" + x5;
+		return s_b;
 	}
 };
 var thx_core_Arrays = function() { };
@@ -512,7 +529,7 @@ thx_core_Arrays.eachPair = function(array,callback) {
 	}
 };
 thx_core_Arrays.equals = function(a,b,equality) {
-	if(a == null || b == null || a.length != b.length) return false;
+	if(!(!(a == null)?b == null:true)?a.length != b.length:true) return false;
 	if(null == equality) equality = thx_core_Functions.equality;
 	var _g1 = 0;
 	var _g = a.length;
@@ -555,7 +572,10 @@ thx_core_Arrays.first = function(array) {
 	return array[0];
 };
 thx_core_Arrays.flatMap = function(array,callback) {
-	return thx_core_Arrays.flatten(array.map(callback));
+	var tmp;
+	var array1 = array.map(callback);
+	tmp = Array.prototype.concat.apply([],array1);
+	return tmp;
 };
 thx_core_Arrays.flatten = function(array) {
 	return Array.prototype.concat.apply([],array);
@@ -567,7 +587,7 @@ thx_core_Arrays.head = function(array) {
 	return array[0];
 };
 thx_core_Arrays.ifEmpty = function(value,alt) {
-	if(null != value && 0 != value.length) return value; else return alt;
+	return (null != value?0 != value.length:false)?value:alt;
 };
 thx_core_Arrays.initial = function(array) {
 	return array.slice(0,array.length - 1);
@@ -636,12 +656,15 @@ thx_core_Arrays.rest = function(array) {
 	return array.slice(1);
 };
 thx_core_Arrays.sample = function(array,n) {
-	n = thx_core_Ints.min(n,array.length);
+	var tmp;
+	var b = array.length;
+	if(n < b) tmp = n; else tmp = b;
+	n = tmp;
 	var copy = array.slice();
 	var result = [];
 	var _g = 0;
 	while(_g < n) {
-		var i = _g++;
+		_g++;
 		result.push(copy.splice(Std.random(copy.length),1)[0]);
 	}
 	return result;
@@ -667,7 +690,11 @@ thx_core_Arrays.takeLast = function(arr,n) {
 	return arr.slice(arr.length - n);
 };
 thx_core_Arrays.zip = function(array1,array2) {
-	var length = thx_core_Ints.min(array1.length,array2.length);
+	var tmp;
+	var a = array1.length;
+	var b = array2.length;
+	if(a < b) tmp = a; else tmp = b;
+	var length = tmp;
 	var array = [];
 	var _g = 0;
 	while(_g < length) {
@@ -761,17 +788,17 @@ thx_core_ArrayFloats.average = function(arr) {
 };
 thx_core_ArrayFloats.compact = function(arr) {
 	return arr.filter(function(v) {
-		return null != v && isFinite(v);
+		return null != v?isFinite(v):false;
 	});
 };
 thx_core_ArrayFloats.max = function(arr) {
-	if(arr.length == 0) return null; else return arr.reduce(function(max,v) {
-		if(v > max) return v; else return max;
+	return arr.length == 0?null:arr.reduce(function(max,v) {
+		return v > max?v:max;
 	},arr[0]);
 };
 thx_core_ArrayFloats.min = function(arr) {
-	if(arr.length == 0) return null; else return arr.reduce(function(min,v) {
-		if(v < min) return v; else return min;
+	return arr.length == 0?null:arr.reduce(function(min,v) {
+		return v < min?v:min;
 	},arr[0]);
 };
 thx_core_ArrayFloats.resize = function(array,length,fill) {
@@ -791,13 +818,13 @@ thx_core_ArrayInts.average = function(arr) {
 	return thx_core_ArrayInts.sum(arr) / arr.length;
 };
 thx_core_ArrayInts.max = function(arr) {
-	if(arr.length == 0) return null; else return arr.reduce(function(max,v) {
-		if(v > max) return v; else return max;
+	return arr.length == 0?null:arr.reduce(function(max,v) {
+		return v > max?v:max;
 	},arr[0]);
 };
 thx_core_ArrayInts.min = function(arr) {
-	if(arr.length == 0) return null; else return arr.reduce(function(min,v) {
-		if(v < min) return v; else return min;
+	return arr.length == 0?null:arr.reduce(function(min,v) {
+		return v < min?v:min;
 	},arr[0]);
 };
 thx_core_ArrayInts.resize = function(array,length,fill) {
@@ -819,13 +846,13 @@ thx_core_ArrayStrings.compact = function(arr) {
 	});
 };
 thx_core_ArrayStrings.max = function(arr) {
-	if(arr.length == 0) return null; else return arr.reduce(function(max,v) {
-		if(v > max) return v; else return max;
+	return arr.length == 0?null:arr.reduce(function(max,v) {
+		return v > max?v:max;
 	},arr[0]);
 };
 thx_core_ArrayStrings.min = function(arr) {
-	if(arr.length == 0) return null; else return arr.reduce(function(min,v) {
-		if(v < min) return v; else return min;
+	return arr.length == 0?null:arr.reduce(function(min,v) {
+		return v < min?v:min;
 	},arr[0]);
 };
 var thx_core_Floats = function() { };
@@ -845,13 +872,20 @@ thx_core_Floats.canParse = function(s) {
 	return thx_core_Floats.pattern_parse.match(s);
 };
 thx_core_Floats.clamp = function(v,min,max) {
-	if(v < min) return min; else if(v > max) return max; else return v;
+	var tmp;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
 };
 thx_core_Floats.clampSym = function(v,max) {
-	return thx_core_Floats.clamp(v,-max,max);
+	var tmp;
+	var min = -max;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
 };
 thx_core_Floats.compare = function(a,b) {
-	if(a < b) return -1; else if(b > a) return 1; else return 0;
+	var tmp;
+	if(a < b) tmp = -1; else if(b > a) tmp = 1; else tmp = 0;
+	return tmp;
 };
 thx_core_Floats.floorTo = function(f,decimals) {
 	var p = Math.pow(10,decimals);
@@ -889,7 +923,9 @@ thx_core_Floats.nearZero = function(n) {
 	return Math.abs(n) <= 10e-10;
 };
 thx_core_Floats.normalize = function(v) {
-	if(v < 0) return 0; else if(v > 1) return 1; else return v;
+	var tmp;
+	if(v < 0) tmp = 0; else if(v > 1) tmp = 1; else tmp = v;
+	return tmp;
 };
 thx_core_Floats.parse = function(s) {
 	if(s.substring(0,1) == "+") s = s.substring(1);
@@ -903,7 +939,7 @@ thx_core_Floats.roundTo = function(f,decimals) {
 	return Math.round(f * p) / p;
 };
 thx_core_Floats.sign = function(value) {
-	if(value < 0) return -1; else return 1;
+	return value < 0?-1:1;
 };
 thx_core_Floats.wrap = function(v,min,max) {
 	var range = max - min + 1;
@@ -931,7 +967,6 @@ thx_core_Functions0.join = function(fa,fb) {
 thx_core_Functions0.once = function(f) {
 	return function() {
 		var t = f;
-		f = thx_core_Functions.noop;
 		t();
 	};
 };
@@ -1064,16 +1099,21 @@ thx_core_Functions.noop = function() {
 var thx_core_Ints = function() { };
 thx_core_Ints.__name__ = true;
 thx_core_Ints.abs = function(v) {
-	if(v < 0) return -v; else return v;
+	return v < 0?-v:v;
 };
 thx_core_Ints.canParse = function(s) {
 	return thx_core_Ints.pattern_parse.match(s);
 };
 thx_core_Ints.clamp = function(v,min,max) {
-	if(v < min) return min; else if(v > max) return max; else return v;
+	var tmp;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
 };
 thx_core_Ints.clampSym = function(v,max) {
-	return thx_core_Ints.clamp(v,-max,max);
+	var tmp;
+	var min = -max;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
 };
 thx_core_Ints.compare = function(a,b) {
 	return a - b;
@@ -1088,14 +1128,14 @@ thx_core_Ints.isOdd = function(v) {
 	return v % 2 != 0;
 };
 thx_core_Ints.max = function(a,b) {
-	if(a > b) return a; else return b;
+	return a > b?a:b;
 };
 thx_core_Ints.min = function(a,b) {
-	if(a < b) return a; else return b;
+	return a < b?a:b;
 };
 thx_core_Ints.parse = function(s,base) {
 	var v = parseInt(s,base);
-	if(isNaN(v)) return null; else return v;
+	return isNaN(v)?null:v;
 };
 thx_core_Ints.random = function(min,max) {
 	if(min == null) min = 0;
@@ -1118,7 +1158,7 @@ thx_core_Ints.toString = function(value,base) {
 	return value.toString(base);
 };
 thx_core_Ints.sign = function(value) {
-	if(value < 0) return -1; else return 1;
+	return value < 0?-1:1;
 };
 thx_core_Ints.wrapCircular = function(v,max) {
 	v = v % max;
@@ -1145,7 +1185,9 @@ thx_core_Strings.collapse = function(value) {
 	return thx_core_Strings.WSG.replace(StringTools.trim(value)," ");
 };
 thx_core_Strings.compare = function(a,b) {
-	if(a < b) return -1; else if(a > b) return 1; else return 0;
+	var tmp;
+	if(a < b) tmp = -1; else if(a > b) tmp = 1; else tmp = 0;
+	return tmp;
 };
 thx_core_Strings.contains = function(s,test) {
 	return s.indexOf(test) >= 0;
@@ -1156,13 +1198,15 @@ thx_core_Strings.dasherize = function(s) {
 thx_core_Strings.ellipsis = function(s,maxlen,symbol) {
 	if(symbol == null) symbol = "...";
 	if(maxlen == null) maxlen = 20;
-	if(s.length > maxlen) return s.substring(0,symbol.length > maxlen - symbol.length?symbol.length:maxlen - symbol.length) + symbol; else return s;
+	return s.length > maxlen?s.substring(0,symbol.length > maxlen - symbol.length?symbol.length:maxlen - symbol.length) + symbol:s;
 };
 thx_core_Strings.filter = function(s,predicate) {
 	return s.split("").filter(predicate).join("");
 };
 thx_core_Strings.filterCharcode = function(s,predicate) {
-	return thx_core_Strings.toCharcodeArray(s).filter(predicate).map(function(i) {
+	return thx_core_Strings.map(s,function(s1) {
+		return HxOverrides.cca(s1,0);
+	}).filter(predicate).map(function(i) {
 		return String.fromCharCode(i);
 	}).join("");
 };
@@ -1183,17 +1227,19 @@ thx_core_Strings.isUpperCase = function(value) {
 	return value.toUpperCase() == value;
 };
 thx_core_Strings.ifEmpty = function(value,alt) {
-	if(null != value && "" != value) return value; else return alt;
+	return (null != value?"" != value:false)?value:alt;
 };
 thx_core_Strings.isDigitsOnly = function(value) {
 	return thx_core_Strings.DIGITS.match(value);
 };
 thx_core_Strings.isEmpty = function(value) {
-	return value == null || value == "";
+	return !(value == null)?value == "":true;
 };
 thx_core_Strings.iterator = function(s) {
+	var tmp;
 	var _this = s.split("");
-	return HxOverrides.iter(_this);
+	tmp = HxOverrides.iter(_this);
+	return tmp;
 };
 thx_core_Strings.map = function(value,callback) {
 	return value.split("").map(callback);
@@ -1202,25 +1248,21 @@ thx_core_Strings.remove = function(value,toremove) {
 	return StringTools.replace(value,toremove,"");
 };
 thx_core_Strings.removeAfter = function(value,toremove) {
-	if(StringTools.endsWith(value,toremove)) return value.substring(0,value.length - toremove.length); else return value;
+	return StringTools.endsWith(value,toremove)?value.substring(0,value.length - toremove.length):value;
 };
 thx_core_Strings.removeBefore = function(value,toremove) {
-	if(StringTools.startsWith(value,toremove)) return value.substring(toremove.length); else return value;
+	return StringTools.startsWith(value,toremove)?value.substring(toremove.length):value;
 };
 thx_core_Strings.repeat = function(s,times) {
-	return ((function($this) {
-		var $r;
-		var _g = [];
-		{
-			var _g1 = 0;
-			while(_g1 < times) {
-				var i = _g1++;
-				_g.push(s);
-			}
-		}
-		$r = _g;
-		return $r;
-	}(this))).join("");
+	var tmp;
+	var _g = [];
+	var _g1 = 0;
+	while(_g1 < times) {
+		_g1++;
+		_g.push(s);
+	}
+	tmp = _g;
+	return tmp.join("");
 };
 thx_core_Strings.reverse = function(s) {
 	var arr = s.split("");
@@ -1258,7 +1300,10 @@ thx_core_Strings.trimCharsLeft = function(value,charlist) {
 	var _g = value.length;
 	while(_g1 < _g) {
 		var i = _g1++;
-		if(thx_core_Strings.contains(charlist,value.charAt(i))) pos++; else break;
+		var tmp;
+		var test = value.charAt(i);
+		tmp = charlist.indexOf(test) >= 0;
+		if(tmp) pos++; else break;
 	}
 	return value.substring(pos);
 };
@@ -1270,7 +1315,10 @@ thx_core_Strings.trimCharsRight = function(value,charlist) {
 	while(_g < len) {
 		var j = _g++;
 		i = len - j - 1;
-		if(thx_core_Strings.contains(charlist,value.charAt(i))) pos = i; else break;
+		var tmp;
+		var test = value.charAt(i);
+		tmp = charlist.indexOf(test) >= 0;
+		if(tmp) pos = i; else break;
 	}
 	return value.substring(0,pos);
 };
@@ -1308,10 +1356,10 @@ thx_core_Strings.wrapLine = function(s,columns,indent,newline) {
 			break;
 		}
 		var i = 0;
-		while(!StringTools.isSpace(s,pos + columns - i) && i < columns) i++;
+		while(!StringTools.isSpace(s,pos + columns - i)?i < columns:false) i++;
 		if(i == columns) {
 			i = 0;
-			while(!StringTools.isSpace(s,pos + columns + i) && pos + columns + i < len) i++;
+			while(!StringTools.isSpace(s,pos + columns + i)?pos + columns + i < len:false) i++;
 			parts.push(s.substring(pos,pos + columns + i));
 			pos += columns + i + 1;
 		} else {

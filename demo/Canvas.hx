@@ -1,30 +1,23 @@
-import chad.render.*;
-
-import chad.render.canvas.CanvasGraphics;
-import thx.geom.Const;
-import thx.geom.EdgeCubic;
-import thx.geom.Matrix4x4;
-import thx.geom.Point;
-import thx.geom.Line;
-import thx.geom.Point3D;
-import thx.geom.shape.Box;
-import thx.geom.shape.Circle;
-import thx.geom.Spline;
+import thx.geom.*;
+import thx.geom.shape.*;
 using thx.geom.Transformable;
+import thx.math.Const;
 import thx.unit.angle.Degree;
-import thx.geom.Path;
-import thx.color.Color;
+import chad.render.*;
+import chad.render.canvas.CanvasGraphics;
+import thx.color.*;
 
 class Canvas {
   public static function draw(r : Render) {
     var len = 800,
-      xp = Spline.fromArray([new Point(0, 0), new Point(len, 0)], false),
-      xn = Spline.fromArray([new Point(0, 0), new Point(-len, 0)], false),
-      yp = Spline.fromArray([new Point(0, 0), new Point(0, len)], false),
-      yn = Spline.fromArray([new Point(0, 0), new Point(0, -len)], false);
+        xp = Spline.fromArray([new Point(0, 0), new Point(len, 0)], false),
+        xn = Spline.fromArray([new Point(0, 0), new Point(-len, 0)], false),
+        yp = Spline.fromArray([new Point(0, 0), new Point(0, len)], false),
+        yn = Spline.fromArray([new Point(0, 0), new Point(0, -len)], false);
 
     var red = new LineStyle(2, "#f00"),
-      green = new LineStyle(2, "#0f0");
+        green = new LineStyle(2, "#0f0");
+
     r.drawSpline(xp, StrokeLine(red));
     r.drawSpline(xn, StrokeDash([8, 8], green));
 
@@ -48,9 +41,9 @@ class Canvas {
     var rect = new Box(new Point(50, 100), new Point(250, 300));
     r.drawSpline(rect);
 
-    var rect2 = new Box(new Point(100, 50), new Point(300, 250))
+    var rect2 = new Box(new Point(200, 150), new Point(400, 350))
       .toSpline()
-      .rotateZ((30 : Degree))
+      .rotateZ((30 : Degree).toRadian())
       .translateX(20)
       .translateY(-20);
     r.drawSpline(rect2);
@@ -104,19 +97,19 @@ class Canvas {
     r.drawSpline(circle3, StrokeDot(4), FillColor("rgba(100,255,155,0.5)"));
 
     var path = new Path([circle1.toSpline(), circle2.toSpline(), circle3.toSpline()]);
+
     circle2.toSpline()
       .intersectionsSpline(rect.toSpline())
       .map(function(point) r.drawDot(point, FillColor("#aa3300"), 6));
 
-    path.selfIntersections()
-      .map(function(point) r.drawDot(point, FillColor("#aa3300"), 4));
+// selfIntersection is looping forever
+//    path.selfIntersections()
+//      .map(function(point) r.drawDot(point, FillColor("#aa3300"), 4));
   }
-
   public static function main() {
     var canvas : js.html.CanvasElement = cast js.Browser.document.querySelector('canvas'),
-      graphics = CanvasGraphics.scaled(canvas, 2),
-      r = new Render(graphics);
-    //var r = CanvasRender.scaled(canvas, 2);
+        graphics = CanvasGraphics.scaled(canvas, 2),
+        r = new Render(graphics);
     draw(r);
   }
 }

@@ -1,115 +1,217 @@
 (function () { "use strict";
+var console = (1,eval)('this').console || {log:function(){}};
+var $estr = function() { return js_Boot.__string_rec(this,''); };
+function $extend(from, fields) {
+	function Inherit() {} Inherit.prototype = from; var proto = new Inherit();
+	for (var name in fields) proto[name] = fields[name];
+	if( fields.toString !== Object.prototype.toString ) proto.toString = fields.toString;
+	return proto;
+}
 var Canvas = function() { };
-Canvas.__name__ = true;
+Canvas.__name__ = ["Canvas"];
 Canvas.draw = function(r) {
-	var len = 800;
-	var xp = thx.geom.Spline.fromArray([[0,0],[len,0]],false);
-	var xn = thx.geom.Spline.fromArray([[0,0],[-len,0]],false);
-	var yp = thx.geom.Spline.fromArray([[0,0],[0,len]],false);
-	var yn = thx.geom.Spline.fromArray([[0,0],[0,-len]],false);
-	var red = new chad.render.LineStyle(2,thx.color._RGBA.RGBA_Impl_.fromString("#f00"));
-	var green = new chad.render.LineStyle(2,thx.color._RGBA.RGBA_Impl_.fromString("#0f0"));
-	r.drawSpline(xp,chad.render.StrokeStyle.StrokeLine(red));
-	r.drawSpline(xn,chad.render.StrokeStyle.StrokeDash([8,8],green));
-	r.drawSpline(yp,chad.render.StrokeStyle.StrokeLine(green));
-	r.drawSpline(yn,chad.render.StrokeStyle.StrokeDash([8,8],red));
-	var line = thx.geom.Line.fromPoints([0,500],[500,0]);
+	var xp = thx_geom_Spline.fromArray([[0,0],[800,0]],false);
+	var xn = thx_geom_Spline.fromArray([[0,0],[-800,0]],false);
+	var yp = thx_geom_Spline.fromArray([[0,0],[0,800]],false);
+	var yn = thx_geom_Spline.fromArray([[0,0],[0,-800]],false);
+	var red = new chad_render_LineStyle(2,thx_color__$RGBA_RGBA_$Impl_$.fromString("#f00"));
+	var green = new chad_render_LineStyle(2,thx_color__$RGBA_RGBA_$Impl_$.fromString("#0f0"));
+	r.drawSpline(xp,chad_render_StrokeStyle.StrokeLine(red));
+	r.drawSpline(xn,chad_render_StrokeStyle.StrokeDash([8,8],green));
+	r.drawSpline(yp,chad_render_StrokeStyle.StrokeLine(green));
+	r.drawSpline(yn,chad_render_StrokeStyle.StrokeDash([8,8],red));
+	var line = thx_geom_Line.fromPoints([0,500],[500,0]);
 	var _g = 0;
 	while(_g < 10) {
 		var i = _g++;
-		r.drawLine(line.offset(i * 10),chad.render.StrokeStyle.StrokeDash([3,4]));
-		if(i != 0) r.drawLine(line.offset(-i * 10),chad.render.StrokeStyle.StrokeDot(3));
+		r.drawLine(line.offset(i * 10),chad_render_StrokeStyle.StrokeDash([3,4]));
+		if(i != 0) r.drawLine(line.offset(-i * 10),chad_render_StrokeStyle.StrokeDot(3));
 	}
-	line = thx.geom.Line.fromPoints([0,120],[500,120]);
-	r.drawLine(line,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(2)));
-	line = thx.geom.Line.fromPoints([120,0],[120,100]);
-	r.drawLine(line,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(3)));
-	line = thx.geom.Line.fromPoints([0,100],[500,200]);
-	r.drawLine(line,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(4)));
+	line = thx_geom_Line.fromPoints([0,120],[500,120]);
+	r.drawLine(line,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(2)));
+	line = thx_geom_Line.fromPoints([120,0],[120,100]);
+	r.drawLine(line,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(3)));
+	line = thx_geom_Line.fromPoints([0,100],[500,200]);
+	r.drawLine(line,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(4)));
 	var rect = [[50,100],[250,300]];
-	r.drawSpline(thx.geom.shape._Box.Box_Impl_.toSpline(rect));
-	var rect2 = thx.geom.Transformables.translateY(thx.geom.Transformables.translateX(thx.geom.Transformables.rotateZ(thx.geom.shape._Box.Box_Impl_.toSpline([[100,50],[300,250]]),30 / thx.unit.angle.Const.TO_DEGREE),20),-20);
+	r.drawSpline(thx_geom_shape__$Box_Box_$Impl_$.toSpline(rect));
+	var tmp;
+	var tmp10;
+	var tmp11;
+	var t2 = thx_geom_shape__$Box_Box_$Impl_$.toSpline([[200,150],[400,350]]);
+	var tmp12;
+	var tmp13;
+	var this2 = thx_unit_angle__$Degree_Degree_$Impl_$._new(30);
+	tmp13 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this2 * 0.0174532925199433);
+	var this1 = tmp13;
+	tmp12 = this1;
+	var angle = tmp12;
+	tmp11 = t2.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(angle));
+	var t1 = tmp11;
+	tmp10 = t1.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
+	var t = tmp10;
+	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-20,0]));
+	var rect2 = tmp;
 	r.drawSpline(rect2);
-	var intersection = thx.geom.shape._Box.Box_Impl_.toSpline(rect).intersectionsSpline(rect2);
+	var intersection = thx_geom_shape__$Box_Box_$Impl_$.toSpline(rect).intersectionsSpline(rect2);
 	intersection.map(function(p) {
 		r.drawDot(p,null,null,4);
 	});
-	var arc = thx.geom.Transformables.translateY(thx.geom.Transformables.translateX(thx.geom.Transformables.scale(new thx.geom.EdgeCubic([0,0],[0,0.5522847498307936],[0.447715250169206436,1],[1,1]),[200,200,1]),50),50);
+	var tmp1;
+	var tmp14;
+	var tmp15;
+	var t5 = new thx_geom_EdgeCubic([0,0],[0,0.5522847498307936],[0.447715250169206436,1],[1,1]);
+	tmp15 = t5.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([200,200,1]));
+	var t4 = tmp15;
+	tmp14 = t4.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([50,0,0]));
+	var t3 = tmp14;
+	tmp1 = t3.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,50,0]));
+	var arc = tmp1;
 	var s = arc.subdivide();
-	s[1] = s[1].transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([2,0,0]));
-	r.drawSpline(thx.geom.Spline.fromEdges([s[0]],false),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(3)));
-	r.drawSpline(thx.geom.Spline.fromEdges([s[1]],false),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(3)));
-	r.drawSpline(thx.geom.Transformables.translateY(arc.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([20,0,0])),-20).toSpline(),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(10)));
-	r.drawSpline(thx.geom.Transformables.translateY(thx.geom.Transformables.translateX(arc.toSpline().toLinear(),20),-20),chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(2,thx.color._RGBA.RGBA_Impl_.fromString("#fff"))));
-	var e = [thx.geom.Transformables.translate(thx.geom.Transformables.scale(new thx.geom.EdgeCubic([0,0],[0,0.5522847498307936],[0.447715250169206436,1],[1,1]),[200,200,1]),[40,40,0]),thx.geom.Transformables.translate(thx.geom.Transformables.scale(new thx.geom.EdgeCubic([1,1],[1.55228474983079368,1],[2,0.5522847498307936],[2,0]),[200,200,1]),[40,40,0])];
-	var c = thx.geom.Transformables.scale(thx.geom.Spline.fromEdges(e,false),[0.4,0.4,1]);
-	r.drawSpline(c,chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle(8,(function($this) {
-		var $r;
-		var this1 = thx.color.Color.red;
-		var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-		return $r;
-	}(this)))));
-	r.drawSpline(c.toLinear(),chad.render.StrokeStyle.StrokeDash([5,5],new chad.render.LineStyle(4,(function($this) {
-		var $r;
-		var this3 = thx.color.Color.lime;
-		var this4 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this3 >> 16 & 255 & 255) << 16 | (this3 >> 8 & 255 & 255) << 8 | this3 & 255 & 255);
-		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this4[0],this4[1],this4[2],this4[3]);
-		return $r;
-	}(this)))));
-	r.drawSpline(e[0].toSpline().toLinear(),chad.render.StrokeStyle.StrokeDash([8,4],new chad.render.LineStyle(4,(function($this) {
-		var $r;
-		var this5 = thx.color.Color.orange;
-		var this6 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this5 >> 16 & 255 & 255) << 16 | (this5 >> 8 & 255 & 255) << 8 | this5 & 255 & 255);
-		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this6[0],this6[1],this6[2],this6[3]);
-		return $r;
-	}(this)))));
+	s[1] = s[1].transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([2,0,0]));
+	r.drawSpline(thx_geom_Spline.fromEdges([s[0]],false),chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(3)));
+	r.drawSpline(thx_geom_Spline.fromEdges([s[1]],false),chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(3)));
+	var tmp2;
+	var t6 = arc.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
+	tmp2 = t6.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-20,0]));
+	r.drawSpline(tmp2.toSpline(),chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(10)));
+	var tmp3;
+	var tmp16;
+	var t8 = arc.toSpline().toLinear();
+	tmp16 = t8.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
+	var t7 = tmp16;
+	tmp3 = t7.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-20,0]));
+	r.drawSpline(tmp3,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(2,thx_color__$RGBA_RGBA_$Impl_$.fromString("#fff"))));
+	var tmp4;
+	var tmp17;
+	var t10 = new thx_geom_EdgeCubic([0,0],[0,0.5522847498307936],[0.447715250169206436,1],[1,1]);
+	tmp17 = t10.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([200,200,1]));
+	var t9 = tmp17;
+	tmp4 = t9.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([40,40,0]));
+	var tmp5;
+	var tmp18;
+	var t12 = new thx_geom_EdgeCubic([1,1],[1.55228474983079368,1],[2,0.5522847498307936],[2,0]);
+	tmp18 = t12.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([200,200,1]));
+	var t11 = tmp18;
+	tmp5 = t11.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([40,40,0]));
+	var e = [tmp4,tmp5];
+	var tmp6;
+	var t13 = thx_geom_Spline.fromEdges(e,false);
+	tmp6 = t13.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([0.4,0.4,1]));
+	var c = tmp6;
+	var tmp7;
+	var this3 = thx_color_Color.red;
+	tmp7 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this3 >> 16 & 255,this3 >> 8 & 255,this3 & 255,255]);
+	r.drawSpline(c,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(8,tmp7)));
+	var tmp8;
+	var this4 = thx_color_Color.lime;
+	tmp8 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this4 >> 16 & 255,this4 >> 8 & 255,this4 & 255,255]);
+	r.drawSpline(c.toLinear(),chad_render_StrokeStyle.StrokeDash([5,5],new chad_render_LineStyle(4,tmp8)));
+	var tmp9;
+	var this5 = thx_color_Color.orange;
+	tmp9 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this5 >> 16 & 255,this5 >> 8 & 255,this5 & 255,255]);
+	r.drawSpline(e[0].toSpline().toLinear(),chad_render_StrokeStyle.StrokeDash([8,4],new chad_render_LineStyle(4,tmp9)));
 	var circle1 = { center : [300,250], radius : 100};
-	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle1).toLinear());
+	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle1).toLinear());
 	var circle2 = { center : [200,200], radius : 80};
-	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2),chad.render.StrokeStyle.StrokeDash([4,4,8,4]),chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("rgba(0,255,155,0.1)")));
+	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle2),chad_render_StrokeStyle.StrokeDash([4,4,8,4]),chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("rgba(0,255,155,0.1)")));
 	var circle3 = { center : [240,280], radius : 60};
-	r.drawSpline(thx.geom.shape._Circle.Circle_Impl_.toSpline(circle3),chad.render.StrokeStyle.StrokeDot(4),chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("rgba(100,255,155,0.5)")));
-	var path = new thx.geom.Path([thx.geom.shape._Circle.Circle_Impl_.toSpline(circle1),thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2),thx.geom.shape._Circle.Circle_Impl_.toSpline(circle3)]);
-	thx.geom.shape._Circle.Circle_Impl_.toSpline(circle2).intersectionsSpline(thx.geom.shape._Box.Box_Impl_.toSpline(rect)).map(function(point) {
-		r.drawDot(point,chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("#aa3300")),null,6);
-	});
-	path.selfIntersections().map(function(point1) {
-		r.drawDot(point1,chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("#aa3300")),null,4);
+	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle3),chad_render_StrokeStyle.StrokeDot(4),chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("rgba(100,255,155,0.5)")));
+	new thx_geom_Path([thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle1),thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle2),thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle3)]);
+	thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle2).intersectionsSpline(thx_geom_shape__$Box_Box_$Impl_$.toSpline(rect)).map(function(point) {
+		r.drawDot(point,chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("#aa3300")),null,6);
 	});
 };
 Canvas.main = function() {
 	var canvas = window.document.querySelector("canvas");
-	var graphics = chad.render.canvas.CanvasGraphics.scaled(canvas,2);
-	var r = new chad.render.Render(graphics);
+	var graphics = chad_render_canvas_CanvasGraphics.scaled(canvas,2);
+	var r = new chad_render_Render(graphics);
 	Canvas.draw(r);
 };
 var EReg = function(r,opt) {
 	opt = opt.split("u").join("");
 	this.r = new RegExp(r,opt);
 };
-EReg.__name__ = true;
+EReg.__name__ = ["EReg"];
 EReg.prototype = {
-	match: function(s) {
+	r: null
+	,match: function(s) {
 		if(this.r.global) this.r.lastIndex = 0;
 		this.r.m = this.r.exec(s);
 		this.r.s = s;
 		return this.r.m != null;
 	}
 	,matched: function(n) {
-		if(this.r.m != null && n >= 0 && n < this.r.m.length) return this.r.m[n]; else throw "EReg::matched";
+		var tmp;
+		if((this.r.m != null?n >= 0:false)?n < this.r.m.length:false) tmp = this.r.m[n]; else throw "EReg::matched";
+		return tmp;
+	}
+	,matchedPos: function() {
+		if(this.r.m == null) throw "No string matched";
+		return { pos : this.r.m.index, len : this.r.m[0].length};
+	}
+	,matchSub: function(s,pos,len) {
+		if(len == null) len = -1;
+		var tmp;
+		if(this.r.global) {
+			this.r.lastIndex = pos;
+			this.r.m = this.r.exec(len < 0?s:HxOverrides.substr(s,0,pos + len));
+			var b = this.r.m != null;
+			if(b) this.r.s = s;
+			tmp = b;
+		} else {
+			var b1 = this.match(len < 0?HxOverrides.substr(s,pos,null):HxOverrides.substr(s,pos,len));
+			if(b1) {
+				this.r.s = s;
+				this.r.m.index += pos;
+			}
+			tmp = b1;
+		}
+		return tmp;
+	}
+	,split: function(s) {
+		return s.replace(this.r,"#__delim__#").split("#__delim__#");
+	}
+	,replace: function(s,by) {
+		return s.replace(this.r,by);
+	}
+	,map: function(s,f) {
+		var offset = 0;
+		var buf_b = "";
+		do {
+			if(offset >= s.length) break; else if(!this.matchSub(s,offset)) {
+				var x = HxOverrides.substr(s,offset,null);
+				buf_b += x == null?"null":"" + x;
+				break;
+			}
+			var p = this.matchedPos();
+			var x1 = HxOverrides.substr(s,offset,p.pos - offset);
+			buf_b += x1 == null?"null":"" + x1;
+			var x2 = f(this);
+			buf_b += x2 == null?"null":"" + x2;
+			if(p.len == 0) {
+				var x3 = HxOverrides.substr(s,p.pos,1);
+				buf_b += x3 == null?"null":"" + x3;
+				offset = p.pos + 1;
+			} else offset = p.pos + p.len;
+		} while(this.r.global);
+		if((!this.r.global?offset > 0:false)?offset < s.length:false) {
+			var x4 = HxOverrides.substr(s,offset,null);
+			buf_b += x4 == null?"null":"" + x4;
+		}
+		return buf_b;
 	}
 	,__class__: EReg
 };
 var HxOverrides = function() { };
-HxOverrides.__name__ = true;
+HxOverrides.__name__ = ["HxOverrides"];
 HxOverrides.cca = function(s,index) {
 	var x = s.charCodeAt(index);
 	if(x != x) return undefined;
 	return x;
 };
 HxOverrides.substr = function(s,pos,len) {
-	if(pos != null && pos != 0 && len != null && len < 0) return "";
+	if(((pos != null?pos != 0:false)?len != null:false)?len < 0:false) return "";
 	if(len == null) len = s.length;
 	if(pos < 0) {
 		pos = s.length + pos;
@@ -129,6 +231,12 @@ HxOverrides.indexOf = function(a,obj,i) {
 	}
 	return -1;
 };
+HxOverrides.remove = function(a,obj) {
+	var i = HxOverrides.indexOf(a,obj,0);
+	if(i == -1) return false;
+	a.splice(i,1);
+	return true;
+};
 HxOverrides.iter = function(a) {
 	return { cur : 0, arr : a, hasNext : function() {
 		return this.cur < this.arr.length;
@@ -136,77 +244,276 @@ HxOverrides.iter = function(a) {
 		return this.arr[this.cur++];
 	}};
 };
-var IMap = function() { };
-IMap.__name__ = true;
-Math.__name__ = true;
+var Lambda = function() { };
+Lambda.__name__ = ["Lambda"];
+Lambda.has = function(it,elt) {
+	var $it0 = $iterator(it)();
+	while( $it0.hasNext() ) {
+		var x = $it0.next();
+		if(x == elt) return true;
+	}
+	return false;
+};
+Math.__name__ = ["Math"];
+var Reflect = function() { };
+Reflect.__name__ = ["Reflect"];
+Reflect.field = function(o,field) {
+	var tmp;
+	try {
+		tmp = o[field];
+	} catch( e ) {
+		tmp = null;
+	}
+	return tmp;
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if((f != "__id__"?f != "hx__closures__":false)?hasOwnProperty.call(o,f):false) a.push(f);
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	var tmp;
+	if(typeof(f) == "function") {
+		var tmp1;
+		if(!f.__name__) tmp1 = f.__ename__; else tmp1 = true;
+		tmp = !tmp1;
+	} else tmp = false;
+	return tmp;
+};
+Reflect.isObject = function(v) {
+	if(v == null) return false;
+	var t = typeof(v);
+	var tmp;
+	if(!(t == "string")) {
+		if(t == "object") tmp = v.__enum__ == null; else tmp = false;
+	} else tmp = true;
+	var tmp1;
+	if(!tmp) {
+		if(t == "function") {
+			var tmp2;
+			if(!v.__name__) tmp2 = v.__ename__; else tmp2 = true;
+			tmp1 = tmp2 != null;
+		} else tmp1 = false;
+	} else tmp1 = true;
+	return tmp1;
+};
 var Std = function() { };
-Std.__name__ = true;
+Std.__name__ = ["Std"];
 Std.string = function(s) {
-	return js.Boot.__string_rec(s,"");
+	return js_Boot.__string_rec(s,"");
 };
 Std.parseInt = function(x) {
 	var v = parseInt(x,10);
-	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
+	var tmp;
+	if(v == 0) {
+		if(!(HxOverrides.cca(x,1) == 120)) tmp = HxOverrides.cca(x,1) == 88; else tmp = true;
+	} else tmp = false;
+	if(tmp) v = parseInt(x);
 	if(isNaN(v)) return null;
 	return v;
 };
-Std.parseFloat = function(x) {
-	return parseFloat(x);
-};
 Std.random = function(x) {
-	if(x <= 0) return 0; else return Math.floor(Math.random() * x);
+	return x <= 0?0:Math.floor(Math.random() * x);
+};
+var StringBuf = function() {
+	this.b = "";
+};
+StringBuf.__name__ = ["StringBuf"];
+StringBuf.prototype = {
+	b: null
+	,__class__: StringBuf
 };
 var StringTools = function() { };
-StringTools.__name__ = true;
+StringTools.__name__ = ["StringTools"];
+StringTools.startsWith = function(s,start) {
+	return s.length >= start.length?HxOverrides.substr(s,0,start.length) == start:false;
+};
+StringTools.endsWith = function(s,end) {
+	var elen = end.length;
+	var slen = s.length;
+	return slen >= elen?HxOverrides.substr(s,slen - elen,elen) == end:false;
+};
+StringTools.isSpace = function(s,pos) {
+	var c = HxOverrides.cca(s,pos);
+	return !(c > 8?c < 14:false)?c == 32:true;
+};
+StringTools.ltrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l?StringTools.isSpace(s,r):false) r++;
+	if(r > 0) return HxOverrides.substr(s,r,l - r); else return s;
+};
+StringTools.rtrim = function(s) {
+	var l = s.length;
+	var r = 0;
+	while(r < l?StringTools.isSpace(s,l - r - 1):false) r++;
+	if(r > 0) return HxOverrides.substr(s,0,l - r); else return s;
+};
+StringTools.trim = function(s) {
+	return StringTools.ltrim(StringTools.rtrim(s));
+};
+StringTools.replace = function(s,sub,by) {
+	return s.split(sub).join(by);
+};
 StringTools.hex = function(n,digits) {
 	var s = "";
-	var hexChars = "0123456789ABCDEF";
 	do {
-		s = hexChars.charAt(n & 15) + s;
+		s = "0123456789ABCDEF".charAt(n & 15) + s;
 		n >>>= 4;
 	} while(n > 0);
 	if(digits != null) while(s.length < digits) s = "0" + s;
 	return s;
 };
-var chad = {};
-chad.render = {};
-chad.render._Cap = {};
-chad.render._Cap.Cap_Impl_ = function() { };
-chad.render._Cap.Cap_Impl_.__name__ = true;
-chad.render.FillStyle = { __ename__ : true, __constructs__ : ["FillColor"] };
-chad.render.FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad.render.FillStyle; return $x; };
-chad.render.IGraphics = function() { };
-chad.render.IGraphics.__name__ = true;
-chad.render.IGraphics.prototype = {
-	__class__: chad.render.IGraphics
+var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
+ValueType.TNull = ["TNull",0];
+ValueType.TNull.toString = $estr;
+ValueType.TNull.__enum__ = ValueType;
+ValueType.TInt = ["TInt",1];
+ValueType.TInt.toString = $estr;
+ValueType.TInt.__enum__ = ValueType;
+ValueType.TFloat = ["TFloat",2];
+ValueType.TFloat.toString = $estr;
+ValueType.TFloat.__enum__ = ValueType;
+ValueType.TBool = ["TBool",3];
+ValueType.TBool.toString = $estr;
+ValueType.TBool.__enum__ = ValueType;
+ValueType.TObject = ["TObject",4];
+ValueType.TObject.toString = $estr;
+ValueType.TObject.__enum__ = ValueType;
+ValueType.TFunction = ["TFunction",5];
+ValueType.TFunction.toString = $estr;
+ValueType.TFunction.__enum__ = ValueType;
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TUnknown = ["TUnknown",8];
+ValueType.TUnknown.toString = $estr;
+ValueType.TUnknown.__enum__ = ValueType;
+var Type = function() { };
+Type.__name__ = ["Type"];
+Type.getClass = function(o) {
+	if(o == null) return null;
+	var tmp;
+	if((o instanceof Array)?o.__enum__ == null:false) tmp = Array; else {
+		var cl = o.__class__;
+		if(cl != null) tmp = cl; else {
+			var name = js_Boot.__nativeClassName(o);
+			if(name != null) tmp = js_Boot.__resolveNativeClass(name); else tmp = null;
+		}
+	}
+	return tmp;
 };
-chad.render._Join = {};
-chad.render._Join.Join_Impl_ = function() { };
-chad.render._Join.Join_Impl_.__name__ = true;
-chad.render.LineStyle = function(width,color,join,cap) {
+Type.getSuperClass = function(c) {
+	return c.__super__;
+};
+Type.getClassName = function(c) {
+	var a = c.__name__;
+	if(a == null) return null;
+	return a.join(".");
+};
+Type.getEnumName = function(e) {
+	var a = e.__ename__;
+	return a.join(".");
+};
+Type.getInstanceFields = function(c) {
+	var a = [];
+	for(var i in c.prototype) a.push(i);
+	HxOverrides.remove(a,"__class__");
+	HxOverrides.remove(a,"__properties__");
+	return a;
+};
+Type["typeof"] = function(v) {
+	var _g = typeof(v);
+	switch(_g) {
+	case "boolean":
+		return ValueType.TBool;
+	case "string":
+		return ValueType.TClass(String);
+	case "number":
+		if(Math.ceil(v) == v % 2147483648.0) return ValueType.TInt;
+		return ValueType.TFloat;
+	case "object":
+		if(v == null) return ValueType.TNull;
+		var e = v.__enum__;
+		if(e != null) return ValueType.TEnum(e);
+		var tmp;
+		if((v instanceof Array)?v.__enum__ == null:false) tmp = Array; else {
+			var cl = v.__class__;
+			if(cl != null) tmp = cl; else {
+				var name = js_Boot.__nativeClassName(v);
+				if(name != null) tmp = js_Boot.__resolveNativeClass(name); else tmp = null;
+			}
+		}
+		var c = tmp;
+		if(c != null) return ValueType.TClass(c);
+		return ValueType.TObject;
+	case "function":
+		if(!v.__name__?v.__ename__:true) return ValueType.TObject;
+		return ValueType.TFunction;
+	case "undefined":
+		return ValueType.TNull;
+	default:
+		return ValueType.TUnknown;
+	}
+};
+var chad_render_FillStyle = { __ename__ : ["chad","render","FillStyle"], __constructs__ : ["FillColor"] };
+chad_render_FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad_render_FillStyle; $x.toString = $estr; return $x; };
+var chad_render_IGraphics = function() { };
+chad_render_IGraphics.__name__ = ["chad","render","IGraphics"];
+chad_render_IGraphics.prototype = {
+	get_reverseCoords: null
+	,weightScale: null
+	,reverseCoords: null
+	,wrap: null
+	,lineTo: null
+	,curveTo: null
+	,moveTo: null
+	,applyStrokeStyle: null
+	,applyFillStyle: null
+	,__class__: chad_render_IGraphics
+};
+var chad_render_LineStyle = function(width,color,join,cap) {
 	if(cap == null) cap = "butt";
 	if(join == null) join = "miter";
 	if(width == null) width = 1.0;
 	this.width = width;
-	if(null == color) this.color = color = chad.render.LineStyle.defaultColor; else this.color = color;
+	var tmp;
+	var tmp1;
+	var _0 = color;
+	if(null == _0) tmp1 = null; else tmp1 = _0;
+	var t = tmp1;
+	if(t != null) tmp = t; else tmp = chad_render_LineStyle.defaultColor;
+	this.color = tmp;
 	this.join = join;
 	this.cap = cap;
 };
-chad.render.LineStyle.__name__ = true;
-chad.render.LineStyle.prototype = {
-	__class__: chad.render.LineStyle
+chad_render_LineStyle.__name__ = ["chad","render","LineStyle"];
+chad_render_LineStyle.prototype = {
+	width: null
+	,color: null
+	,join: null
+	,cap: null
+	,__class__: chad_render_LineStyle
 };
-chad.render.Render = function(graphics) {
+var chad_render_Render = function(graphics) {
 	this.g = graphics;
-	this.g.applyStrokeStyle(chad.render.StrokeStyle.StrokeLine(new chad.render.LineStyle()));
-	this.g.applyFillStyle(chad.render.FillStyle.FillColor(thx.color._RGBA.RGBA_Impl_.fromString("#000000")));
+	this.g.applyStrokeStyle(chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle()));
+	this.g.applyFillStyle(chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("#000000")));
 };
-chad.render.Render.__name__ = true;
-chad.render.Render.prototype = {
-	drawDot: function(point,fill,stroke,size) {
+chad_render_Render.__name__ = ["chad","render","Render"];
+chad_render_Render.prototype = {
+	g: null
+	,drawDot: function(point,fill,stroke,size) {
 		if(size == null) size = 2;
 		size = this.g.weightScale(size);
-		var spline = thx.geom.Transformables.translate(thx.geom.shape._Circle.Circle_Impl_.unitaryCircle.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling([size,size,1])),[point[0],point[1],1]);
+		var tmp;
+		var t = thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([size,size,1]));
+		tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([point[0],point[1],1]));
+		var spline = tmp;
 		this.drawSpline(spline,stroke,fill);
 	}
 	,drawSegment: function(a,b,style) {
@@ -218,26 +525,18 @@ chad.render.Render.prototype = {
 	}
 	,drawLine: function(line,style) {
 		var box = this.g.get_reverseCoords();
-		var deg;
-		deg = (function($this) {
-			var $r;
-			var this1;
-			{
-				var this2 = line.normal;
-				var angle = Math.atan2(this2[1],this2[0]);
-				this1 = angle;
-			}
-			$r = this1;
-			return $r;
-		}(this)) % Math.PI;
+		var tmp;
+		var this1 = line.normal;
+		tmp = Math.atan2(this1[1],this1[0]);
+		var deg = tmp % Math.PI;
 		var a;
 		var b;
 		if(deg < Math.PI / 4) {
-			a = line.intersectionLine(new thx.geom.Line([0,1],box[1][1]));
-			b = line.intersectionLine(new thx.geom.Line([0,1],box[0][1]));
+			a = line.intersectionLine(new thx_geom_Line([0,1],box[1][1]));
+			b = line.intersectionLine(new thx_geom_Line([0,1],box[0][1]));
 		} else {
-			a = line.intersectionLine(new thx.geom.Line([1,0],box[0][0]));
-			b = line.intersectionLine(new thx.geom.Line([1,0],box[1][0]));
+			a = line.intersectionLine(new thx_geom_Line([1,0],box[0][0]));
+			b = line.intersectionLine(new thx_geom_Line([1,0],box[1][0]));
 		}
 		this.drawSegment(a,b,style);
 	}
@@ -247,7 +546,7 @@ chad.render.Render.prototype = {
 			spline.iterate(function(init) {
 				_g.g.moveTo(init);
 			},function(a,b,nout,nin) {
-				if(null == nout && null == nin) _g.g.lineTo(b); else {
+				if(null == nout?null == nin:false) _g.g.lineTo(b); else {
 					if(null == nout) nout = a; else if(null == nin) nin = b;
 					_g.g.curveTo(b,nout,nin);
 				}
@@ -269,44 +568,49 @@ chad.render.Render.prototype = {
 	,applyFillStyle: function(style) {
 		this.g.applyFillStyle(style);
 	}
-	,__class__: chad.render.Render
+	,__class__: chad_render_Render
 };
-chad.render.StrokeStyle = { __ename__ : true, __constructs__ : ["StrokeLine","StrokeDash","StrokeDot"] };
-chad.render.StrokeStyle.StrokeLine = function(style) { var $x = ["StrokeLine",0,style]; $x.__enum__ = chad.render.StrokeStyle; return $x; };
-chad.render.StrokeStyle.StrokeDash = function(pattern,style) { var $x = ["StrokeDash",1,pattern,style]; $x.__enum__ = chad.render.StrokeStyle; return $x; };
-chad.render.StrokeStyle.StrokeDot = function(spacing,style) { var $x = ["StrokeDot",2,spacing,style]; $x.__enum__ = chad.render.StrokeStyle; return $x; };
-chad.render.canvas = {};
-chad.render.canvas.CanvasGraphics = function(canvas,matrix,weightScale) {
+var chad_render_StrokeStyle = { __ename__ : ["chad","render","StrokeStyle"], __constructs__ : ["StrokeLine","StrokeDash","StrokeDot"] };
+chad_render_StrokeStyle.StrokeLine = function(style) { var $x = ["StrokeLine",0,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
+chad_render_StrokeStyle.StrokeDash = function(pattern,style) { var $x = ["StrokeDash",1,pattern,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
+chad_render_StrokeStyle.StrokeDot = function(spacing,style) { var $x = ["StrokeDot",2,spacing,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
+var chad_render_canvas_CanvasGraphics = function(canvas,matrix,weightScale) {
 	this.width = canvas.width;
 	this.height = canvas.height;
 	this.ctx = canvas.getContext("2d");
-	if(null == weightScale) this.weightScale = function(v) {
+	this.weightScale = null == weightScale?function(v) {
 		return v;
-	}; else this.weightScale = weightScale;
-	var halfPixel = thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([0.5,0.5,1]);
-	var mirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MY);
-	var translateY = thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([0,this.height,0]);
-	var correctionMatrix = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(thx.geom._Matrix4x4.Matrix4x4_Impl_.identity,halfPixel),mirror),translateY);
-	this.matrix = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(null == matrix?thx.geom._Matrix4x4.Matrix4x4_Impl_.identity:matrix,correctionMatrix);
+	}:weightScale;
+	var halfPixel = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0.5,0.5,1]);
+	var mirror = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MY);
+	var translateY = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,this.height,0]);
+	var correctionMatrix = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.identity,halfPixel),mirror),translateY);
+	this.matrix = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(null == matrix?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.identity:matrix,correctionMatrix);
 	this.ctx.transform(this.matrix[0],this.matrix[1],this.matrix[4],this.matrix[5],this.matrix[12],this.matrix[13]);
 };
-chad.render.canvas.CanvasGraphics.__name__ = true;
-chad.render.canvas.CanvasGraphics.__interfaces__ = [chad.render.IGraphics];
-chad.render.canvas.CanvasGraphics.scaled = function(canvas,scale) {
-	return new chad.render.canvas.CanvasGraphics(canvas,thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling([scale,scale,1]),function(v) {
+chad_render_canvas_CanvasGraphics.__name__ = ["chad","render","canvas","CanvasGraphics"];
+chad_render_canvas_CanvasGraphics.__interfaces__ = [chad_render_IGraphics];
+chad_render_canvas_CanvasGraphics.scaled = function(canvas,scale) {
+	return new chad_render_canvas_CanvasGraphics(canvas,thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([scale,scale,1]),function(v) {
 		return v / scale;
 	});
 };
-chad.render.canvas.CanvasGraphics.prototype = {
-	wrap: function(stroke,fill,f) {
-		var hasStyle = null != fill || null != stroke;
+chad_render_canvas_CanvasGraphics.prototype = {
+	ctx: null
+	,matrix: null
+	,weightScale: null
+	,width: null
+	,height: null
+	,reverseCoords: null
+	,wrap: function(stroke,fill,f) {
+		var hasStyle = !(null != fill)?null != stroke:true;
 		if(hasStyle) this.ctx.save();
 		this.ctx.beginPath();
 		if(null != stroke) this.applyStrokeStyle(stroke);
 		if(null != fill) this.applyFillStyle(fill);
 		f();
 		if(null != fill) this.ctx.fill();
-		if(null != stroke || null == fill) this.ctx.stroke();
+		if(!(null != stroke)?null == fill:true) this.ctx.stroke();
 		if(hasStyle) this.ctx.restore();
 	}
 	,lineTo: function(point) {
@@ -323,8 +627,10 @@ chad.render.canvas.CanvasGraphics.prototype = {
 		this.ctx.lineWidth = this.weightScale(style.width);
 		this.ctx.lineCap = style.cap;
 		this.ctx.lineJoin = style.join;
+		var tmp;
 		var this1 = style.color;
-		this.ctx.strokeStyle = "rgba(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + "," + (this1 >> 24 & 255) / 255 + ")";
+		tmp = "rgba(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + "," + (this1 >> 24 & 255) / 255 + ")";
+		this.ctx.strokeStyle = tmp;
 	}
 	,applyStrokeStyle: function(style) {
 		switch(style[1]) {
@@ -355,67 +661,169 @@ chad.render.canvas.CanvasGraphics.prototype = {
 	}
 	,get_reverseCoords: function() {
 		if(null == this.reverseCoords) {
-			var inverted = thx.geom._Matrix4x4.Matrix4x4_Impl_.inverse(this.matrix);
+			var inverted = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.inverse(this.matrix);
 			if(null == inverted) throw "unable to inverse coords matrix";
-			this.reverseCoords = thx.geom.shape._Box.Box_Impl_.transform([thx.geom._Point.Point_Impl_.zero,[this.width,this.height]],inverted);
+			this.reverseCoords = thx_geom_shape__$Box_Box_$Impl_$.transform([thx_geom__$Point_Point_$Impl_$.zero,[this.width,this.height]],inverted);
 		}
 		return this.reverseCoords;
 	}
-	,__class__: chad.render.canvas.CanvasGraphics
+	,__class__: chad_render_canvas_CanvasGraphics
 };
-var haxe = {};
-haxe.ds = {};
-haxe.ds.StringMap = function() {
+var haxe_StackItem = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"] };
+haxe_StackItem.CFunction = ["CFunction",0];
+haxe_StackItem.CFunction.toString = $estr;
+haxe_StackItem.CFunction.__enum__ = haxe_StackItem;
+haxe_StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
+haxe_StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
+haxe_StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
+haxe_StackItem.LocalFunction = function(v) { var $x = ["LocalFunction",4,v]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
+var haxe_CallStack = function() { };
+haxe_CallStack.__name__ = ["haxe","CallStack"];
+haxe_CallStack.callStack = function() {
+	var oldValue = Error.prepareStackTrace;
+	Error.prepareStackTrace = function(error,callsites) {
+		var stack = [];
+		var _g = 0;
+		while(_g < callsites.length) {
+			var site = callsites[_g];
+			++_g;
+			var method = null;
+			var fullName = site.getFunctionName();
+			if(fullName != null) {
+				var idx = fullName.lastIndexOf(".");
+				if(idx >= 0) {
+					var className = HxOverrides.substr(fullName,0,idx);
+					var methodName = HxOverrides.substr(fullName,idx + 1,null);
+					method = haxe_StackItem.Method(className,methodName);
+				}
+			}
+			stack.push(haxe_StackItem.FilePos(method,site.getFileName(),site.getLineNumber()));
+		}
+		return stack;
+	};
+	var a = haxe_CallStack.makeStack(new Error().stack);
+	a.shift();
+	Error.prepareStackTrace = oldValue;
+	return a;
+};
+haxe_CallStack.exceptionStack = function() {
+	return [];
+};
+haxe_CallStack.toString = function(stack) {
+	var b = new StringBuf();
+	var _g = 0;
+	while(_g < stack.length) {
+		var s = stack[_g];
+		++_g;
+		b.b += "\nCalled from ";
+		haxe_CallStack.itemToString(b,s);
+	}
+	return b.b;
+};
+haxe_CallStack.itemToString = function(b,s) {
+	switch(s[1]) {
+	case 0:
+		b.b += "a C function";
+		break;
+	case 1:
+		var m = s[2];
+		b.b += "module ";
+		b.b += m == null?"null":"" + m;
+		break;
+	case 2:
+		var line = s[4];
+		var file = s[3];
+		var s1 = s[2];
+		if(s1 != null) {
+			haxe_CallStack.itemToString(b,s1);
+			b.b += " (";
+		}
+		b.b += file == null?"null":"" + file;
+		b.b += " line ";
+		b.b += line == null?"null":"" + line;
+		if(s1 != null) b.b += ")";
+		break;
+	case 3:
+		var meth = s[3];
+		var cname = s[2];
+		b.b += cname == null?"null":"" + cname;
+		b.b += ".";
+		b.b += meth == null?"null":"" + meth;
+		break;
+	case 4:
+		var n = s[2];
+		b.b += "local function #";
+		b.b += n == null?"null":"" + n;
+		break;
+	}
+};
+haxe_CallStack.makeStack = function(s) {
+	if(typeof(s) == "string") {
+		var stack = s.split("\n");
+		var m = [];
+		var _g = 0;
+		while(_g < stack.length) {
+			var line = stack[_g];
+			++_g;
+			m.push(haxe_StackItem.Module(line));
+		}
+		return m;
+	} else return s;
+};
+var haxe_IMap = function() { };
+haxe_IMap.__name__ = ["haxe","IMap"];
+var haxe_ds_StringMap = function() {
 	this.h = { };
 };
-haxe.ds.StringMap.__name__ = true;
-haxe.ds.StringMap.__interfaces__ = [IMap];
-haxe.ds.StringMap.prototype = {
-	set: function(key,value) {
-		this.h["$" + key] = value;
-	}
-	,get: function(key) {
-		return this.h["$" + key];
-	}
-	,exists: function(key) {
-		return this.h.hasOwnProperty("$" + key);
-	}
-	,__class__: haxe.ds.StringMap
+haxe_ds_StringMap.__name__ = ["haxe","ds","StringMap"];
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.prototype = {
+	h: null
+	,__class__: haxe_ds_StringMap
 };
-var js = {};
-js.Boot = function() { };
-js.Boot.__name__ = true;
-js.Boot.getClass = function(o) {
-	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
+var js_Boot = function() { };
+js_Boot.__name__ = ["js","Boot"];
+js_Boot.getClass = function(o) {
+	if((o instanceof Array)?o.__enum__ == null:false) return Array; else {
+		var cl = o.__class__;
+		if(cl != null) return cl;
+		var name = js_Boot.__nativeClassName(o);
+		if(name != null) return js_Boot.__resolveNativeClass(name);
+		return null;
+	}
 };
-js.Boot.__string_rec = function(o,s) {
+js_Boot.__string_rec = function(o,s) {
 	if(o == null) return "null";
 	if(s.length >= 5) return "<...>";
 	var t = typeof(o);
-	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
+	var tmp;
+	if(t == "function") {
+		if(!o.__name__) tmp = o.__ename__; else tmp = true;
+	} else tmp = false;
+	if(tmp) t = "object";
 	switch(t) {
 	case "object":
 		if(o instanceof Array) {
 			if(o.__enum__) {
 				if(o.length == 2) return o[0];
-				var str = o[0] + "(";
+				var str2 = o[0] + "(";
 				s += "\t";
 				var _g1 = 2;
 				var _g = o.length;
 				while(_g1 < _g) {
-					var i = _g1++;
-					if(i != 2) str += "," + js.Boot.__string_rec(o[i],s); else str += js.Boot.__string_rec(o[i],s);
+					var i1 = _g1++;
+					if(i1 != 2) str2 += "," + js_Boot.__string_rec(o[i1],s); else str2 += js_Boot.__string_rec(o[i1],s);
 				}
-				return str + ")";
+				return str2 + ")";
 			}
 			var l = o.length;
-			var i1;
+			var i;
 			var str1 = "[";
 			s += "\t";
 			var _g2 = 0;
 			while(_g2 < l) {
 				var i2 = _g2++;
-				str1 += (i2 > 0?",":"") + js.Boot.__string_rec(o[i2],s);
+				str1 += (i2 > 0?",":"") + js_Boot.__string_rec(o[i2],s);
 			}
 			str1 += "]";
 			return str1;
@@ -426,27 +834,27 @@ js.Boot.__string_rec = function(o,s) {
 		} catch( e ) {
 			return "???";
 		}
-		if(tostr != null && tostr != Object.toString) {
+		if((tostr != null?tostr != Object.toString:false)?typeof(tostr) == "function":false) {
 			var s2 = o.toString();
 			if(s2 != "[object Object]") return s2;
 		}
 		var k = null;
-		var str2 = "{\n";
+		var str = "{\n";
 		s += "\t";
 		var hasp = o.hasOwnProperty != null;
 		for( var k in o ) {
-		if(hasp && !o.hasOwnProperty(k)) {
+		if(hasp?!o.hasOwnProperty(k):false) {
 			continue;
 		}
-		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+		if(!(!(!(!(k == "prototype")?k == "__class__":true)?k == "__super__":true)?k == "__interfaces__":true)?k == "__properties__":true) {
 			continue;
 		}
-		if(str2.length != 2) str2 += ", \n";
-		str2 += s + k + " : " + js.Boot.__string_rec(o[k],s);
+		if(str.length != 2) str += ", \n";
+		str += s + k + " : " + js_Boot.__string_rec(o[k],s);
 		}
 		s = s.substring(1);
-		str2 += "\n" + s + "}";
-		return str2;
+		str += "\n" + s + "}";
+		return str;
 	case "function":
 		return "<function>";
 	case "string":
@@ -455,7 +863,7 @@ js.Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
-js.Boot.__interfLoop = function(cc,cl) {
+js_Boot.__interfLoop = function(cc,cl) {
 	if(cc == null) return false;
 	if(cc == cl) return true;
 	var intf = cc.__interfaces__;
@@ -465,12 +873,12 @@ js.Boot.__interfLoop = function(cc,cl) {
 		while(_g1 < _g) {
 			var i = _g1++;
 			var i1 = intf[i];
-			if(i1 == cl || js.Boot.__interfLoop(i1,cl)) return true;
+			if(!(i1 == cl)?js_Boot.__interfLoop(i1,cl):true) return true;
 		}
 	}
-	return js.Boot.__interfLoop(cc.__super__,cl);
+	return js_Boot.__interfLoop(cc.__super__,cl);
 };
-js.Boot.__instanceof = function(o,cl) {
+js_Boot.__instanceof = function(o,cl) {
 	if(cl == null) return false;
 	switch(cl) {
 	case Int:
@@ -482,14 +890,16 @@ js.Boot.__instanceof = function(o,cl) {
 	case String:
 		return typeof(o) == "string";
 	case Array:
-		return (o instanceof Array) && o.__enum__ == null;
+		return (o instanceof Array)?o.__enum__ == null:false;
 	case Dynamic:
 		return true;
 	default:
 		if(o != null) {
 			if(typeof(cl) == "function") {
 				if(o instanceof cl) return true;
-				if(js.Boot.__interfLoop(js.Boot.getClass(o),cl)) return true;
+				if(js_Boot.__interfLoop(js_Boot.getClass(o),cl)) return true;
+			} else if(typeof(cl) == "object"?js_Boot.__isNativeObj(cl):false) {
+				if(o instanceof cl) return true;
 			}
 		} else return false;
 		if(cl == Class && o.__name__ != null) return true;
@@ -497,161 +907,685 @@ js.Boot.__instanceof = function(o,cl) {
 		return o.__enum__ == cl;
 	}
 };
-var thx = {};
-thx.color = {};
-thx.color._CMYK = {};
-thx.color._CMYK.CMYK_Impl_ = function() { };
-thx.color._CMYK.CMYK_Impl_.__name__ = true;
-thx.color._CMYK.CMYK_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseColor(color);
+js_Boot.__nativeClassName = function(o) {
+	var name = js_Boot.__toStr.call(o).slice(8,-1);
+	if(!(!(!(name == "Object")?name == "Function":true)?name == "Math":true)?name == "JSON":true) return null;
+	return name;
+};
+js_Boot.__isNativeObj = function(o) {
+	return js_Boot.__nativeClassName(o) != null;
+};
+js_Boot.__resolveNativeClass = function(name) {
+	if(typeof window != "undefined") return window[name]; else return global[name];
+};
+var thx_color__$CIELCh_CIELCh_$Impl_$ = {};
+thx_color__$CIELCh_CIELCh_$Impl_$.__name__ = ["thx","color","_CIELCh","CIELCh_Impl_"];
+thx_color__$CIELCh_CIELCh_$Impl_$.create = function(lightness,chroma,hue) {
+	var tmp;
+	var channels = [lightness,chroma,thx_core_Floats.wrapCircular(hue,360)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$CIELCh_CIELCh_$Impl_$.create(arr[0],arr[1],arr[2]);
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
-		case "cmyk":
-			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			return channels;
+		case "cielch":
+			tmp = thx_color__$CIELCh_CIELCh_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._CMYK.CMYK_Impl_.fromFloats = function(cyan,magenta,yellow,black) {
-	return [cyan < 0?0:cyan > 1?1:cyan,magenta < 0?0:magenta > 1?1:magenta,yellow < 0?0:yellow > 1?1:yellow,black < 0?0:black > 1?1:black];
-};
-thx.color._CMYK.CMYK_Impl_._new = function(channels) {
+thx_color__$CIELCh_CIELCh_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx.color._CMYK.CMYK_Impl_.toGrey = function(this1) {
-	var this2;
-	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
-	this2 = channels;
-	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
-	var this3;
-	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
-	return this3;
+thx_color__$CIELCh_CIELCh_$Impl_$.analogous = function(this1,spread) {
+	if(spread == null) spread = 30.0;
+	var tmp;
+	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
 };
-thx.color._CMYK.CMYK_Impl_.toHSL = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSL((function($this) {
-		var $r;
-		var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
-		$r = channels;
-		return $r;
-	}(this)));
+thx_color__$CIELCh_CIELCh_$Impl_$.complement = function(this1) {
+	return thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,180);
 };
-thx.color._CMYK.CMYK_Impl_.toHSV = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSV((function($this) {
-		var $r;
-		var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
-		$r = channels;
-		return $r;
-	}(this)));
+thx_color__$CIELCh_CIELCh_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolateAngle(t,this1[2],other[2],360)];
+	tmp = channels;
+	return tmp;
 };
-thx.color._CMYK.CMYK_Impl_.toRGB = function(this1) {
-	var this2;
-	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
-	this2 = channels;
-	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+thx_color__$CIELCh_CIELCh_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$CIELCh_CIELCh_$Impl_$.withHue(this1,this1[2] + angle);
 };
-thx.color._CMYK.CMYK_Impl_.toRGBX = function(this1) {
-	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
-	return channels;
+thx_color__$CIELCh_CIELCh_$Impl_$.split = function(this1,spread) {
+	if(spread == null) spread = 144.0;
+	var tmp;
+	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
 };
-thx.color._CMYK.CMYK_Impl_.toRGBXA = function(this1) {
-	var this2;
-	var channels = [thx.core.Floats.normalize(1 - this1[0] - this1[3]),thx.core.Floats.normalize(1 - this1[1] - this1[3]),thx.core.Floats.normalize(1 - this1[2] - this1[3])];
-	this2 = channels;
-	var channels1 = this2.concat([1.0]);
-	return channels1;
+thx_color__$CIELCh_CIELCh_$Impl_$.square = function(this1) {
+	return thx_color__$CIELCh_CIELCh_$Impl_$.tetrad(this1,90);
 };
-thx.color._CMYK.CMYK_Impl_.toString = function(this1) {
-	return "cmyk(" + this1[0] + "," + this1[1] + "," + this1[2] + "," + this1[3] + ")";
+thx_color__$CIELCh_CIELCh_$Impl_$.tetrad = function(this1,angle) {
+	var tmp;
+	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,0);
+	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,angle);
+	var _2 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,180);
+	var _3 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,180 + angle);
+	tmp = { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
+	return tmp;
 };
-thx.color._CMYK.CMYK_Impl_.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
+thx_color__$CIELCh_CIELCh_$Impl_$.triad = function(this1) {
+	var tmp;
+	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,-120);
+	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,0);
+	var _2 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,120);
+	tmp = { _0 : _0, _1 : _1, _2 : _2};
+	return tmp;
 };
-thx.color._CMYK.CMYK_Impl_.darker = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
-	return channels;
+thx_color__$CIELCh_CIELCh_$Impl_$.withLightness = function(this1,newlightness) {
+	return [newlightness,this1[1],this1[2]];
 };
-thx.color._CMYK.CMYK_Impl_.lighter = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
-	return channels;
+thx_color__$CIELCh_CIELCh_$Impl_$.withChroma = function(this1,newchroma) {
+	return [this1[0],newchroma,this1[2]];
 };
-thx.color._CMYK.CMYK_Impl_.interpolate = function(this1,other,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
-	return channels;
+thx_color__$CIELCh_CIELCh_$Impl_$.withHue = function(this1,newhue) {
+	var tmp;
+	var channels = [this1[0],this1[1],thx_core_Floats.wrapCircular(newhue,360)];
+	tmp = channels;
+	return tmp;
 };
-thx.color._CMYK.CMYK_Impl_.get_black = function(this1) {
-	return this1[3];
+thx_color__$CIELCh_CIELCh_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
 };
-thx.color._CMYK.CMYK_Impl_.get_cyan = function(this1) {
+thx_color__$CIELCh_CIELCh_$Impl_$.toString = function(this1) {
+	return "CIELCh(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab = function(this1) {
+	var hradi = this1[2] * (Math.PI / 180);
+	var a = Math.cos(hradi) * this1[1];
+	var b = Math.sin(hradi) * this1[1];
+	return [this1[0],a,b];
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toCMY = function(this1) {
+	var tmp;
+	var this2 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this2));
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(tmp);
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toCMYK = function(this1) {
+	var tmp;
+	var this2 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this2));
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(tmp);
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var tmp1;
+	var this3 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp1 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this3));
+	var this2 = tmp1;
+	tmp = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	return tmp;
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toHSL = function(this1) {
+	var tmp;
+	var this2 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this2));
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(tmp);
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toHSV = function(this1) {
+	var tmp;
+	var this2 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this2));
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(tmp);
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var tmp1;
+	var this3 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp1 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this3));
+	var this2 = tmp1;
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX = function(this1) {
+	var tmp;
+	var this2 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this2));
+	return tmp;
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var tmp1;
+	var this3 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp1 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this3));
+	var this2 = tmp1;
+	var tmp2;
+	var channels = this2.concat([1.0]);
+	tmp2 = channels;
+	tmp = tmp2;
+	return tmp;
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toXYZ = function(this1) {
+	return thx_color__$CIELab_CIELab_$Impl_$.toXYZ(thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1));
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.toYxy = function(this1) {
+	var tmp;
+	var this2 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this2));
+	return tmp;
+};
+thx_color__$CIELCh_CIELCh_$Impl_$.get_lightness = function(this1) {
 	return this1[0];
 };
-thx.color._CMYK.CMYK_Impl_.get_magenta = function(this1) {
+thx_color__$CIELCh_CIELCh_$Impl_$.get_chroma = function(this1) {
 	return this1[1];
 };
-thx.color._CMYK.CMYK_Impl_.get_yellow = function(this1) {
+thx_color__$CIELCh_CIELCh_$Impl_$.get_hue = function(this1) {
 	return this1[2];
 };
-thx.color.Color = function() { };
-thx.color.Color.__name__ = true;
-thx.color.Color.parse = function(color) {
-	if(thx.color.Color.names.exists(color)) {
-		var this1 = thx.color.Color.names.get(color);
-		return thx.color._RGBA.RGBA_Impl_.toRGBXA((function($this) {
-			var $r;
-			var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-			$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-			return $r;
-		}(this)));
-	}
-	var info = thx.color.parse.ColorParser.parseHex(color);
-	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$CIELab_CIELab_$Impl_$ = {};
+thx_color__$CIELab_CIELab_$Impl_$.__name__ = ["thx","color","_CIELab","CIELab_Impl_"];
+thx_color__$CIELab_CIELab_$Impl_$.create = function(l,a,b) {
+	return [l,a,b];
+};
+thx_color__$CIELab_CIELab_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$CIELab_CIELab_$Impl_$.create(arr[0],arr[1],arr[2]);
+};
+thx_color__$CIELab_CIELab_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "cielab":
+			tmp = thx_color__$CIELab_CIELab_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
+			break;
+		default:
+			tmp = null;
+		}
+	} catch( e ) {
+		tmp = null;
+	}
+	return tmp;
+};
+thx_color__$CIELab_CIELab_$Impl_$._new = function(channels) {
+	return channels;
+};
+thx_color__$CIELab_CIELab_$Impl_$.distance = function(this1,other) {
+	return (this1[0] - other[0]) * (this1[0] - other[0]) + (this1[1] - other[1]) * (this1[1] - other[1]) + (this1[2] - other[2]) * (this1[2] - other[2]);
+};
+thx_color__$CIELab_CIELab_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CIELab_CIELab_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],0),this1[1],this1[2]];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CIELab_CIELab_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],100),this1[1],this1[2]];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CIELab_CIELab_$Impl_$.match = function(this1,palette) {
+	var it = palette;
+	if(null == it) throw new thx_core_error_NullArgument("Iterable argument \"this\" cannot be null",{ fileName : "NullArgument.hx", lineNumber : 73, className : "thx.color._CIELab.CIELab_Impl_", methodName : "match"}); else if(!$iterator(it)().hasNext()) throw new thx_core_error_NullArgument("Iterable argument \"this\" cannot be empty",{ fileName : "NullArgument.hx", lineNumber : 75, className : "thx.color._CIELab.CIELab_Impl_", methodName : "match"});
+	var dist = Infinity;
+	var closest = null;
+	var $it0 = $iterator(palette)();
+	while( $it0.hasNext() ) {
+		var color = $it0.next();
+		var ndist = thx_color__$CIELab_CIELab_$Impl_$.distance(this1,color);
+		if(ndist < dist) {
+			dist = ndist;
+			closest = color;
+		}
+	}
+	return closest;
+};
+thx_color__$CIELab_CIELab_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
+};
+thx_color__$CIELab_CIELab_$Impl_$.withLightness = function(this1,lightness) {
+	return [lightness,this1[1],this1[2]];
+};
+thx_color__$CIELab_CIELab_$Impl_$.withA = function(this1,newa) {
+	return [this1[0],newa,this1[2]];
+};
+thx_color__$CIELab_CIELab_$Impl_$.withB = function(this1,newb) {
+	return [this1[0],this1[1],newb];
+};
+thx_color__$CIELab_CIELab_$Impl_$.toString = function(this1) {
+	return "CIELab(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+};
+thx_color__$CIELab_CIELab_$Impl_$.toCIELCh = function(this1) {
+	var h = thx_core_Floats.wrapCircular(Math.atan2(this1[2],this1[1]) * 180 / Math.PI,360);
+	var c = Math.sqrt(this1[1] * this1[1] + this1[2] * this1[2]);
+	return [this1[0],c,h];
+};
+thx_color__$CIELab_CIELab_$Impl_$.toCMY = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1)));
+};
+thx_color__$CIELab_CIELab_$Impl_$.toCMYK = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1)));
+};
+thx_color__$CIELab_CIELab_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+	tmp = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	return tmp;
+};
+thx_color__$CIELab_CIELab_$Impl_$.toHSL = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1)));
+};
+thx_color__$CIELab_CIELab_$Impl_$.toHSV = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1)));
+};
+thx_color__$CIELab_CIELab_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$CIELab_CIELab_$Impl_$.toRGBX = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+};
+thx_color__$CIELab_CIELab_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+	var tmp1;
+	var channels = this2.concat([1.0]);
+	tmp1 = channels;
+	tmp = tmp1;
+	return tmp;
+};
+thx_color__$CIELab_CIELab_$Impl_$.toXYZ = function(this1) {
+	var y = (this1[0] + 16) / 116;
+	var x = this1[1] / 500 + y;
+	var z = y - this1[2] / 200;
+	var p;
+	p = Math.pow(y,3);
+	y = p > 0.008856?p:(y - 0.137931034482758619) / 7.787;
+	p = Math.pow(x,3);
+	x = p > 0.008856?p:(x - 0.137931034482758619) / 7.787;
+	p = Math.pow(z,3);
+	z = p > 0.008856?p:(z - 0.137931034482758619) / 7.787;
+	return [95.047 * x,100 * y,108.883 * z];
+};
+thx_color__$CIELab_CIELab_$Impl_$.toYxy = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+};
+thx_color__$CIELab_CIELab_$Impl_$.get_l = function(this1) {
+	return this1[0];
+};
+thx_color__$CIELab_CIELab_$Impl_$.get_a = function(this1) {
+	return this1[1];
+};
+thx_color__$CIELab_CIELab_$Impl_$.get_b = function(this1) {
+	return this1[2];
+};
+var thx_color__$CMY_CMY_$Impl_$ = {};
+thx_color__$CMY_CMY_$Impl_$.__name__ = ["thx","color","_CMY","CMY_Impl_"];
+thx_color__$CMY_CMY_$Impl_$.create = function(cyan,magenta,yellow) {
+	var tmp;
+	if(cyan < 0) tmp = 0; else if(cyan > 1) tmp = 1; else tmp = cyan;
+	var tmp1;
+	if(magenta < 0) tmp1 = 0; else if(magenta > 1) tmp1 = 1; else tmp1 = magenta;
+	var tmp2;
+	if(yellow < 0) tmp2 = 0; else if(yellow > 1) tmp2 = 1; else tmp2 = yellow;
+	return [tmp,tmp1,tmp2];
+};
+thx_color__$CMY_CMY_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$CMY_CMY_$Impl_$.create(arr[0],arr[1],arr[2]);
+};
+thx_color__$CMY_CMY_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
+	if(null == info) return null;
+	var tmp;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "cmy":
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
+			tmp = channels;
+			break;
+		default:
+			tmp = null;
+		}
+	} catch( e ) {
+		tmp = null;
+	}
+	return tmp;
+};
+thx_color__$CMY_CMY_$Impl_$._new = function(channels) {
+	return channels;
+};
+thx_color__$CMY_CMY_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CMY_CMY_$Impl_$.withCyan = function(this1,newcyan) {
+	var tmp;
+	if(newcyan < 0) tmp = 0; else if(newcyan > 1) tmp = 1; else tmp = newcyan;
+	return [tmp,this1[1],this1[2]];
+};
+thx_color__$CMY_CMY_$Impl_$.withMagenta = function(this1,newmagenta) {
+	var tmp;
+	if(newmagenta < 0) tmp = 0; else if(newmagenta > 1) tmp = 1; else tmp = newmagenta;
+	return [this1[0],tmp,this1[2]];
+};
+thx_color__$CMY_CMY_$Impl_$.withYellow = function(this1,newyellow) {
+	var tmp;
+	if(newyellow < 0) tmp = 0; else if(newyellow > 1) tmp = 1; else tmp = newyellow;
+	return [this1[0],this1[1],tmp];
+};
+thx_color__$CMY_CMY_$Impl_$.toString = function(this1) {
+	return "cmy(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+};
+thx_color__$CMY_CMY_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
+};
+thx_color__$CMY_CMY_$Impl_$.toCIELab = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab([1 - this1[0],1 - this1[1],1 - this1[2]]);
+};
+thx_color__$CMY_CMY_$Impl_$.toCIELCh = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh([1 - this1[0],1 - this1[1],1 - this1[2]]);
+};
+thx_color__$CMY_CMY_$Impl_$.toCMYK = function(this1) {
+	var k = Math.min(Math.min(this1[0],this1[1]),this1[2]);
+	if(k == 1) return [0,0,0,1]; else return [(this1[0] - k) / (1 - k),(this1[1] - k) / (1 - k),(this1[2] - k) / (1 - k),k];
+};
+thx_color__$CMY_CMY_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var this_0 = 1 - this1[0];
+	var this_1 = 1 - this1[1];
+	var this_2 = 1 - this1[2];
+	tmp = this_0 * .2126 + this_1 * .7152 + this_2 * .0722;
+	return tmp;
+};
+thx_color__$CMY_CMY_$Impl_$.toHSL = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL([1 - this1[0],1 - this1[1],1 - this1[2]]);
+};
+thx_color__$CMY_CMY_$Impl_$.toHSV = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV([1 - this1[0],1 - this1[1],1 - this1[2]]);
+};
+thx_color__$CMY_CMY_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var this_0 = 1 - this1[0];
+	var this_1 = 1 - this1[1];
+	var this_2 = 1 - this1[2];
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this_0,this_1,this_2);
+	return tmp;
+};
+thx_color__$CMY_CMY_$Impl_$.toRGBX = function(this1) {
+	return [1 - this1[0],1 - this1[1],1 - this1[2]];
+};
+thx_color__$CMY_CMY_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var channels = [1 - this1[0],1 - this1[1],1 - this1[2]].concat([1.0]);
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CMY_CMY_$Impl_$.toXYZ = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ([1 - this1[0],1 - this1[1],1 - this1[2]]);
+};
+thx_color__$CMY_CMY_$Impl_$.toYxy = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ([1 - this1[0],1 - this1[1],1 - this1[2]]));
+};
+thx_color__$CMY_CMY_$Impl_$.get_cyan = function(this1) {
+	return this1[0];
+};
+thx_color__$CMY_CMY_$Impl_$.get_magenta = function(this1) {
+	return this1[1];
+};
+thx_color__$CMY_CMY_$Impl_$.get_yellow = function(this1) {
+	return this1[2];
+};
+var thx_color__$CMYK_CMYK_$Impl_$ = {};
+thx_color__$CMYK_CMYK_$Impl_$.__name__ = ["thx","color","_CMYK","CMYK_Impl_"];
+thx_color__$CMYK_CMYK_$Impl_$.create = function(cyan,magenta,yellow,black) {
+	var tmp;
+	if(cyan < 0) tmp = 0; else if(cyan > 1) tmp = 1; else tmp = cyan;
+	var tmp1;
+	if(magenta < 0) tmp1 = 0; else if(magenta > 1) tmp1 = 1; else tmp1 = magenta;
+	var tmp2;
+	if(yellow < 0) tmp2 = 0; else if(yellow > 1) tmp2 = 1; else tmp2 = yellow;
+	var tmp3;
+	if(black < 0) tmp3 = 0; else if(black > 1) tmp3 = 1; else tmp3 = black;
+	return [tmp,tmp1,tmp2,tmp3];
+};
+thx_color__$CMYK_CMYK_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,4);
+	return thx_color__$CMYK_CMYK_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+};
+thx_color__$CMYK_CMYK_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
+	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "cmyk":
-			var this3;
-			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this3 = channels;
-			var this4;
-			var channels1 = [thx.core.Floats.normalize(1 - this3[0] - this3[3]),thx.core.Floats.normalize(1 - this3[1] - this3[3]),thx.core.Floats.normalize(1 - this3[2] - this3[3])];
-			this4 = channels1;
-			var channels2 = this4.concat([1.0]);
-			return channels2;
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,4);
+			tmp = channels;
+			break;
+		default:
+			tmp = null;
+		}
+	} catch( e ) {
+		tmp = null;
+	}
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$._new = function(channels) {
+	return channels;
+};
+thx_color__$CMYK_CMYK_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Floats.interpolate(t,this1[3],1)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Floats.interpolate(t,this1[3],0)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2]),thx_core_Floats.interpolate(t,this1[3],other[3])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$.withCyan = function(this1,newcyan) {
+	var tmp;
+	if(newcyan < 0) tmp = 0; else if(newcyan > 1) tmp = 1; else tmp = newcyan;
+	return [tmp,this1[1],this1[2],this1[3]];
+};
+thx_color__$CMYK_CMYK_$Impl_$.withMagenta = function(this1,newmagenta) {
+	var tmp;
+	if(newmagenta < 0) tmp = 0; else if(newmagenta > 1) tmp = 1; else tmp = newmagenta;
+	return [this1[0],tmp,this1[2],this1[3]];
+};
+thx_color__$CMYK_CMYK_$Impl_$.withYellow = function(this1,newyellow) {
+	var tmp;
+	if(newyellow < 0) tmp = 0; else if(newyellow > 1) tmp = 1; else tmp = newyellow;
+	return [this1[0],this1[1],tmp,this1[3]];
+};
+thx_color__$CMYK_CMYK_$Impl_$.withBlack = function(this1,newblack) {
+	var tmp;
+	if(newblack < 0) tmp = 0; else if(newblack > 1) tmp = 1; else tmp = newblack;
+	return [this1[0],this1[1],this1[2],tmp];
+};
+thx_color__$CMYK_CMYK_$Impl_$.toString = function(this1) {
+	return "cmyk(" + this1[0] + "," + this1[1] + "," + this1[2] + "," + this1[3] + ")";
+};
+thx_color__$CMYK_CMYK_$Impl_$.equals = function(this1,other) {
+	return ((Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false)?Math.abs(this1[3] - other[3]) <= 10e-10:false;
+};
+thx_color__$CMYK_CMYK_$Impl_$.toCIELab = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab([(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])]);
+};
+thx_color__$CMYK_CMYK_$Impl_$.toCIELCh = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh([(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])]);
+};
+thx_color__$CMYK_CMYK_$Impl_$.toCMY = function(this1) {
+	return [this1[3] + (1 - this1[3]) * this1[0],this1[3] + (1 - this1[3]) * this1[1],this1[3] + (1 - this1[3]) * this1[2]];
+};
+thx_color__$CMYK_CMYK_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var this_0 = (1 - this1[3]) * (1 - this1[0]);
+	var this_1 = (1 - this1[3]) * (1 - this1[1]);
+	var this_2 = (1 - this1[3]) * (1 - this1[2]);
+	tmp = this_0 * .2126 + this_1 * .7152 + this_2 * .0722;
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$.toHSL = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL([(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])]);
+};
+thx_color__$CMYK_CMYK_$Impl_$.toHSV = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV([(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])]);
+};
+thx_color__$CMYK_CMYK_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var this_0 = (1 - this1[3]) * (1 - this1[0]);
+	var this_1 = (1 - this1[3]) * (1 - this1[1]);
+	var this_2 = (1 - this1[3]) * (1 - this1[2]);
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this_0,this_1,this_2);
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$.toRGBX = function(this1) {
+	return [(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])];
+};
+thx_color__$CMYK_CMYK_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var channels = [(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])].concat([1.0]);
+	tmp = channels;
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$.get_cyan = function(this1) {
+	return this1[0];
+};
+thx_color__$CMYK_CMYK_$Impl_$.get_magenta = function(this1) {
+	return this1[1];
+};
+thx_color__$CMYK_CMYK_$Impl_$.get_yellow = function(this1) {
+	return this1[2];
+};
+thx_color__$CMYK_CMYK_$Impl_$.get_black = function(this1) {
+	return this1[3];
+};
+thx_color__$CMYK_CMYK_$Impl_$.toXYZ = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ([(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])]);
+};
+thx_color__$CMYK_CMYK_$Impl_$.toYxy = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ([(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])]));
+};
+var thx_color_Color = function() { };
+thx_color_Color.__name__ = ["thx","color","Color"];
+thx_color_Color.parse = function(color) {
+	if(thx_color_Color.names.h.hasOwnProperty("$" + color)) {
+		var tmp1;
+		var this1 = thx_color_Color.names.h["$" + color];
+		tmp1 = thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255,255]));
+		return tmp1;
+	}
+	var info = thx_color_parse_ColorParser.parseHex(color);
+	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
+	if(null == info) return null;
+	var tmp;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "cielab":
+			var this2 = thx_color__$CIELab_CIELab_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
+			var this3 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this2));
+			var tmp2;
+			var channels = this3.concat([1.0]);
+			tmp2 = channels;
+			tmp = tmp2;
+			break;
+		case "cielch":
+			var this4 = thx_color__$CIELCh_CIELCh_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
+			var tmp3;
+			var this6 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this4);
+			tmp3 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this6));
+			var this5 = tmp3;
+			var tmp4;
+			var channels1 = this5.concat([1.0]);
+			tmp4 = channels1;
+			tmp = tmp4;
+			break;
+		case "cmy":
+			var this7 = thx_color__$CMY_CMY_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
+			var tmp5;
+			var channels2 = [1 - this7[0],1 - this7[1],1 - this7[2]].concat([1.0]);
+			tmp5 = channels2;
+			tmp = tmp5;
+			break;
+		case "cmyk":
+			var this8 = thx_color__$CMYK_CMYK_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
+			var tmp6;
+			var channels3 = [(1 - this8[3]) * (1 - this8[0]),(1 - this8[3]) * (1 - this8[1]),(1 - this8[3]) * (1 - this8[2])].concat([1.0]);
+			tmp6 = channels3;
+			tmp = tmp6;
+			break;
 		case "grey":case "gray":
-			var this5;
-			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
-			var this6;
-			if(grey < 0) this6 = 0; else if(grey > 1) this6 = 1; else this6 = grey;
-			this5 = this6;
-			var channels3 = [this5,this5,this5].concat([1.0]);
-			return channels3;
+			var this9 = thx_color__$Grey_Grey_$Impl_$.create(thx_color_parse_ColorParser.getFloatChannels(info.channels,1)[0]);
+			var tmp7;
+			var channels4 = [this9,this9,this9].concat([1.0]);
+			tmp7 = channels4;
+			tmp = tmp7;
+			break;
 		case "hsl":
-			var this7;
-			var channels4 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this7 = channels4;
-			var this8;
-			var channels5 = [thx.color._HSL.HSL_Impl_._c(this7[0] + 120,this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0],this7[1],this7[2]),thx.color._HSL.HSL_Impl_._c(this7[0] + -120,this7[1],this7[2])];
-			this8 = channels5;
-			var channels6 = this8.concat([1.0]);
-			return channels6;
+			var this10 = thx_color__$HSL_HSL_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
+			var tmp8;
+			var channels5 = [thx_color__$HSL_HSL_$Impl_$._c(this10[0] + 120,this10[1],this10[2]),thx_color__$HSL_HSL_$Impl_$._c(this10[0],this10[1],this10[2]),thx_color__$HSL_HSL_$Impl_$._c(this10[0] - 120,this10[1],this10[2])];
+			tmp8 = channels5;
+			var this11 = tmp8;
+			var tmp9;
+			var channels6 = this11.concat([1.0]);
+			tmp9 = channels6;
+			tmp = tmp9;
+			break;
 		case "hsla":
-			var this9;
-			var channels7 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this9 = channels7;
-			var channels8 = [thx.color._HSLA.HSLA_Impl_._c(this9[0] + 120,this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0],this9[1],this9[2]),thx.color._HSLA.HSLA_Impl_._c(this9[0] + -120,this9[1],this9[2]),this9[3]];
-			return channels8;
+			var this12 = thx_color__$HSLA_HSLA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
+			var channels7 = [thx_color__$HSLA_HSLA_$Impl_$._c(this12[0] + 120,this12[1],this12[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this12[0],this12[1],this12[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this12[0] - 120,this12[1],this12[2]),this12[3]];
+			tmp = channels7;
+			break;
 		case "hsv":
-			var this10;
-			var channels9 = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this10 = channels9;
-			var this11;
-			if(this10[1] == 0) this11 = [this10[2],this10[2],this10[2]]; else {
+			var this13 = thx_color__$HSV_HSV_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
+			var tmp10;
+			if(this13[1] == 0) tmp10 = [this13[2],this13[2],this13[2]]; else {
 				var r;
 				var g;
 				var b;
@@ -660,52 +1594,54 @@ thx.color.Color.parse = function(color) {
 				var p;
 				var q;
 				var t;
-				var h = this10[0] / 60;
+				var h = this13[0] / 60;
 				i = Math.floor(h);
-				f = h + -i;
-				p = this10[2] * (1 - this10[1]);
-				q = this10[2] * (1 - f * this10[1]);
-				t = this10[2] * (1 - (1 - f) * this10[1]);
+				f = h - i;
+				p = this13[2] * (1 - this13[1]);
+				q = this13[2] * (1 - f * this13[1]);
+				t = this13[2] * (1 - (1 - f) * this13[1]);
 				switch(i) {
 				case 0:
-					r = this10[2];
+					r = this13[2];
 					g = t;
 					b = p;
 					break;
 				case 1:
 					r = q;
-					g = this10[2];
+					g = this13[2];
 					b = p;
 					break;
 				case 2:
 					r = p;
-					g = this10[2];
+					g = this13[2];
 					b = t;
 					break;
 				case 3:
 					r = p;
 					g = q;
-					b = this10[2];
+					b = this13[2];
 					break;
 				case 4:
 					r = t;
 					g = p;
-					b = this10[2];
+					b = this13[2];
 					break;
 				default:
-					r = this10[2];
+					r = this13[2];
 					g = p;
 					b = q;
 				}
-				this11 = [r,g,b];
+				tmp10 = [r,g,b];
 			}
-			var channels10 = this11.concat([1.0]);
-			return channels10;
+			var this14 = tmp10;
+			var tmp11;
+			var channels8 = this14.concat([1.0]);
+			tmp11 = channels8;
+			tmp = tmp11;
+			break;
 		case "hsva":
-			var this12;
-			var channels11 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			this12 = channels11;
-			if(this12[1] == 0) return [this12[2],this12[2],this12[2],this12[3]]; else {
+			var this15 = thx_color__$HSVA_HSVA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
+			if(this15[1] == 0) tmp = [this15[2],this15[2],this15[2],this15[3]]; else {
 				var r1;
 				var g1;
 				var b1;
@@ -714,439 +1650,710 @@ thx.color.Color.parse = function(color) {
 				var p1;
 				var q1;
 				var t1;
-				var h1 = this12[0] / 60;
+				var h1 = this15[0] / 60;
 				i1 = Math.floor(h1);
-				f1 = h1 + -i1;
-				p1 = this12[2] * (1 - this12[1]);
-				q1 = this12[2] * (1 - f1 * this12[1]);
-				t1 = this12[2] * (1 - (1 - f1) * this12[1]);
+				f1 = h1 - i1;
+				p1 = this15[2] * (1 - this15[1]);
+				q1 = this15[2] * (1 - f1 * this15[1]);
+				t1 = this15[2] * (1 - (1 - f1) * this15[1]);
 				switch(i1) {
 				case 0:
-					r1 = this12[2];
+					r1 = this15[2];
 					g1 = t1;
 					b1 = p1;
 					break;
 				case 1:
 					r1 = q1;
-					g1 = this12[2];
+					g1 = this15[2];
 					b1 = p1;
 					break;
 				case 2:
 					r1 = p1;
-					g1 = this12[2];
+					g1 = this15[2];
 					b1 = t1;
 					break;
 				case 3:
 					r1 = p1;
 					g1 = q1;
-					b1 = this12[2];
+					b1 = this15[2];
 					break;
 				case 4:
 					r1 = t1;
 					g1 = p1;
-					b1 = this12[2];
+					b1 = this15[2];
 					break;
 				default:
-					r1 = this12[2];
+					r1 = this15[2];
 					g1 = p1;
 					b1 = q1;
 				}
-				return [r1,g1,b1,this12[3]];
+				tmp = [r1,g1,b1,this15[3]];
 			}
 			break;
 		case "rgb":
-			var this13 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
-			var channels12 = this13.concat([1.0]);
-			return channels12;
+			var this16 = thx_color__$RGBX_RGBX_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
+			var tmp12;
+			var channels9 = this16.concat([1.0]);
+			tmp12 = channels9;
+			tmp = tmp12;
+			break;
 		case "rgba":
-			return thx.color._RGBXA.RGBXA_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,4));
+			tmp = thx_color__$RGBXA_RGBXA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._Grey = {};
-thx.color._Grey.Grey_Impl_ = function() { };
-thx.color._Grey.Grey_Impl_.__name__ = true;
-thx.color._Grey.Grey_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$Grey_Grey_$Impl_$ = {};
+thx_color__$Grey_Grey_$Impl_$.__name__ = ["thx","color","_Grey","Grey_Impl_"];
+thx_color__$Grey_Grey_$Impl_$.create = function(v) {
+	var tmp;
+	if(v < 0) tmp = 0; else if(v > 1) tmp = 1; else tmp = v;
+	return tmp;
+};
+thx_color__$Grey_Grey_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "grey":case "gray":
-			var grey = thx.color.parse.ColorParser.getFloatChannels(info.channels,1)[0];
-			var this1;
-			if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
-			return this1;
+			var grey = thx_color_parse_ColorParser.getFloatChannels(info.channels,1)[0];
+			tmp = grey;
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._Grey.Grey_Impl_._new = function(grey) {
-	var this1;
-	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
+thx_color__$Grey_Grey_$Impl_$._new = function(grey) {
+	return grey;
+};
+thx_color__$Grey_Grey_$Impl_$.contrast = function(this1) {
+	return this1 > 0.5?thx_color__$Grey_Grey_$Impl_$.black:thx_color__$Grey_Grey_$Impl_$.white;
+};
+thx_color__$Grey_Grey_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var grey = thx_core_Floats.interpolate(t,this1,0);
+	tmp = grey;
+	return tmp;
+};
+thx_color__$Grey_Grey_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var grey = thx_core_Floats.interpolate(t,this1,1);
+	tmp = grey;
+	return tmp;
+};
+thx_color__$Grey_Grey_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var grey = thx_core_Floats.interpolate(t,this1,other);
+	tmp = grey;
+	return tmp;
+};
+thx_color__$Grey_Grey_$Impl_$.toString = function(this1) {
+	return "grey(" + this1 * 100 + "%)";
+};
+thx_color__$Grey_Grey_$Impl_$.equals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_color__$Grey_Grey_$Impl_$.get_grey = function(this1) {
 	return this1;
 };
-thx.color._Grey.Grey_Impl_.toCMYK = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toCMYK([this1,this1,this1]);
+thx_color__$Grey_Grey_$Impl_$.toCIELab = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab([this1,this1,this1]);
 };
-thx.color._Grey.Grey_Impl_.toHSL = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSL([this1,this1,this1]);
+thx_color__$Grey_Grey_$Impl_$.toCIELCh = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh([this1,this1,this1]);
 };
-thx.color._Grey.Grey_Impl_.toHSV = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSV([this1,this1,this1]);
+thx_color__$Grey_Grey_$Impl_$.toCMY = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY([this1,this1,this1]);
 };
-thx.color._Grey.Grey_Impl_.toRGB = function(this1) {
+thx_color__$Grey_Grey_$Impl_$.toCMYK = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK([this1,this1,this1]);
+};
+thx_color__$Grey_Grey_$Impl_$.toHSL = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL([this1,this1,this1]);
+};
+thx_color__$Grey_Grey_$Impl_$.toHSV = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV([this1,this1,this1]);
+};
+thx_color__$Grey_Grey_$Impl_$.toRGB = function(this1) {
+	var tmp;
 	var this_0 = this1;
 	var this_1 = this1;
 	var this_2 = this1;
-	return thx.color._RGB.RGB_Impl_.fromFloats(this_0,this_1,this_2);
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this_0,this_1,this_2);
+	return tmp;
 };
-thx.color._Grey.Grey_Impl_.toRGBX = function(this1) {
+thx_color__$Grey_Grey_$Impl_$.toRGBX = function(this1) {
 	return [this1,this1,this1];
 };
-thx.color._Grey.Grey_Impl_.toRGBXA = function(this1) {
+thx_color__$Grey_Grey_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
 	var channels = [this1,this1,this1].concat([1.0]);
-	return channels;
+	tmp = channels;
+	return tmp;
 };
-thx.color._Grey.Grey_Impl_.equals = function(this1,other) {
-	return this1 == other;
+thx_color__$Grey_Grey_$Impl_$.toXYZ = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ([this1,this1,this1]);
 };
-thx.color._Grey.Grey_Impl_.contrast = function(this1) {
-	if(this1 > 0.5) return thx.color._Grey.Grey_Impl_.black; else return thx.color._Grey.Grey_Impl_.white;
+thx_color__$Grey_Grey_$Impl_$.toYxy = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ([this1,this1,this1]));
 };
-thx.color._Grey.Grey_Impl_.darker = function(color,t) {
-	var grey = thx.core.Floats.interpolateBetween(t,color,0);
-	var this1;
-	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
-	return this1;
+var thx_color__$HSL_HSL_$Impl_$ = {};
+thx_color__$HSL_HSL_$Impl_$.__name__ = ["thx","color","_HSL","HSL_Impl_"];
+thx_color__$HSL_HSL_$Impl_$.create = function(hue,saturation,lightness) {
+	var tmp;
+	var tmp1;
+	if(saturation < 0) tmp1 = 0; else if(saturation > 1) tmp1 = 1; else tmp1 = saturation;
+	var tmp2;
+	if(lightness < 0) tmp2 = 0; else if(lightness > 1) tmp2 = 1; else tmp2 = lightness;
+	var channels = [thx_core_Floats.wrapCircular(hue,360),tmp1,tmp2];
+	tmp = channels;
+	return tmp;
 };
-thx.color._Grey.Grey_Impl_.lighter = function(color,t) {
-	var grey = thx.core.Floats.interpolateBetween(t,color,1);
-	var this1;
-	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
-	return this1;
+thx_color__$HSL_HSL_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$HSL_HSL_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx.color._Grey.Grey_Impl_.interpolate = function(a,b,t) {
-	var grey = thx.core.Floats.interpolateBetween(t,a,b);
-	var this1;
-	if(grey < 0) this1 = 0; else if(grey > 1) this1 = 1; else this1 = grey;
-	return this1;
-};
-thx.color._Grey.Grey_Impl_.get_grey = function(this1) {
-	return this1;
-};
-thx.color._Grey.Grey_Impl_.toString = function(this1) {
-	return "grey(" + this1 * 100 + "%)";
-};
-thx.color._HSL = {};
-thx.color._HSL.HSL_Impl_ = function() { };
-thx.color._HSL.HSL_Impl_.__name__ = true;
-thx.color._HSL.HSL_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseColor(color);
+thx_color__$HSL_HSL_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "hsl":
-			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			return channels;
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
+			tmp = channels;
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.fromFloats = function(hue,saturation,lightness) {
-	return [hue,saturation,lightness];
-};
-thx.color._HSL.HSL_Impl_._new = function(channels) {
+thx_color__$HSL_HSL_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx.color._HSL.HSL_Impl_.toCMYK = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toCMYK((function($this) {
-		var $r;
-		var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
-		$r = channels;
-		return $r;
-	}(this)));
+thx_color__$HSL_HSL_$Impl_$.analogous = function(this1,spread) {
+	if(spread == null) spread = 30.0;
+	var tmp;
+	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.toGrey = function(this1) {
-	var this2;
-	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
-	this2 = channels;
-	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
-	var this3;
-	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
-	return this3;
+thx_color__$HSL_HSL_$Impl_$.complement = function(this1) {
+	return thx_color__$HSL_HSL_$Impl_$.rotate(this1,180);
 };
-thx.color._HSL.HSL_Impl_.toHSV = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSV((function($this) {
-		var $r;
-		var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
-		$r = channels;
-		return $r;
-	}(this)));
+thx_color__$HSL_HSL_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],thx_core_Floats.interpolate(t,this1[2],0)];
+	tmp = channels;
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.toRGB = function(this1) {
-	var this2;
-	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
-	this2 = channels;
-	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+thx_color__$HSL_HSL_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],thx_core_Floats.interpolate(t,this1[2],1)];
+	tmp = channels;
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.toRGBX = function(this1) {
-	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
-	return channels;
+thx_color__$HSL_HSL_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolateAngle(t,this1[0],other[0],360),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2])];
+	tmp = channels;
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.toRGBXA = function(this1) {
-	var this2;
-	var channels = [thx.color._HSL.HSL_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSL.HSL_Impl_._c(this1[0] + -120,this1[1],this1[2])];
-	this2 = channels;
+thx_color__$HSL_HSL_$Impl_$.rotate = function(this1,angle) {
+	var tmp;
+	var newhue = this1[0] + angle;
+	var tmp1;
+	if(newhue < 0) tmp1 = 0; else if(newhue > 1) tmp1 = 1; else tmp1 = newhue;
+	tmp = [tmp1,this1[1],this1[2]];
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.split = function(this1,spread) {
+	if(spread == null) spread = 144.0;
+	var tmp;
+	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.square = function(this1) {
+	return thx_color__$HSL_HSL_$Impl_$.tetrad(this1,90);
+};
+thx_color__$HSL_HSL_$Impl_$.tetrad = function(this1,angle) {
+	var tmp;
+	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,0);
+	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,angle);
+	var _2 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,180);
+	var _3 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,180 + angle);
+	tmp = { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.triad = function(this1) {
+	var tmp;
+	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,-120);
+	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,0);
+	var _2 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,120);
+	tmp = { _0 : _0, _1 : _1, _2 : _2};
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.withAlpha = function(this1,alpha) {
+	var tmp;
+	var tmp1;
+	if(alpha < 0) tmp1 = 0; else if(alpha > 1) tmp1 = 1; else tmp1 = alpha;
+	var channels = this1.concat([tmp1]);
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.withHue = function(this1,newhue) {
+	var tmp;
+	if(newhue < 0) tmp = 0; else if(newhue > 1) tmp = 1; else tmp = newhue;
+	return [tmp,this1[1],this1[2]];
+};
+thx_color__$HSL_HSL_$Impl_$.withLightness = function(this1,newlightness) {
+	var tmp;
+	if(newlightness < 0) tmp = 0; else if(newlightness > 1) tmp = 1; else tmp = newlightness;
+	return [this1[0],this1[1],tmp];
+};
+thx_color__$HSL_HSL_$Impl_$.withSaturation = function(this1,newsaturation) {
+	var tmp;
+	if(newsaturation < 0) tmp = 0; else if(newsaturation > 1) tmp = 1; else tmp = newsaturation;
+	return [this1[0],tmp,this1[2]];
+};
+thx_color__$HSL_HSL_$Impl_$.toCSS3 = function(this1) {
+	return "hsl(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx_color__$HSL_HSL_$Impl_$.toString = function(this1) {
+	return "hsl(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx_color__$HSL_HSL_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
+};
+thx_color__$HSL_HSL_$Impl_$.toCIELab = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp = channels;
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(tmp);
+};
+thx_color__$HSL_HSL_$Impl_$.toCIELCh = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp = channels;
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(tmp);
+};
+thx_color__$HSL_HSL_$Impl_$.toCMY = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp = channels;
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(tmp);
+};
+thx_color__$HSL_HSL_$Impl_$.toCMYK = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp = channels;
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(tmp);
+};
+thx_color__$HSL_HSL_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.toHSV = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp = channels;
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(tmp);
+};
+thx_color__$HSL_HSL_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.toRGBX = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp1 = channels;
+	var this2 = tmp1;
+	var tmp2;
 	var channels1 = this2.concat([1.0]);
-	return channels1;
+	tmp2 = channels1;
+	tmp = tmp2;
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.toHSLA = function(this1) {
+thx_color__$HSL_HSL_$Impl_$.toHSLA = function(this1) {
+	var tmp;
 	var channels = this1.concat([1.0]);
-	return channels;
+	tmp = channels;
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.withAlpha = function(this1,alpha) {
-	var channels = this1.concat([alpha]);
-	return channels;
+thx_color__$HSL_HSL_$Impl_$.toXYZ = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp = channels;
+	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(tmp);
 };
-thx.color._HSL.HSL_Impl_.toCSS3 = function(this1) {
-	return "hsl(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+thx_color__$HSL_HSL_$Impl_$.toYxy = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ(this2));
+	return tmp;
 };
-thx.color._HSL.HSL_Impl_.toString = function(this1) {
-	return "hsl(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
-};
-thx.color._HSL.HSL_Impl_.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2];
-};
-thx.color._HSL.HSL_Impl_.darker = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0)];
-	return channels;
-};
-thx.color._HSL.HSL_Impl_.lighter = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1)];
-	return channels;
-};
-thx.color._HSL.HSL_Impl_.interpolate = function(this1,other,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2])];
-	return channels;
-};
-thx.color._HSL.HSL_Impl_.get_hue = function(this1) {
+thx_color__$HSL_HSL_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx.color._HSL.HSL_Impl_.get_huef = function(this1) {
+thx_color__$HSL_HSL_$Impl_$.get_huef = function(this1) {
 	return this1[0];
 };
-thx.color._HSL.HSL_Impl_.get_saturation = function(this1) {
+thx_color__$HSL_HSL_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx.color._HSL.HSL_Impl_.get_lightness = function(this1) {
+thx_color__$HSL_HSL_$Impl_$.get_lightness = function(this1) {
 	return this1[2];
 };
-thx.color._HSL.HSL_Impl_._c = function(d,s,l) {
-	var m2;
-	if(l <= 0.5) m2 = l * (1 + s); else m2 = l + s - l * s;
+thx_color__$HSL_HSL_$Impl_$._c = function(d,s,l) {
+	var m2 = l <= 0.5?l * (1 + s):l + s - l * s;
 	var m1 = 2 * l - m2;
-	d = thx.core.Floats.wrapCircular(d,360);
+	d = thx_core_Floats.wrapCircular(d,360);
 	if(d < 60) return m1 + (m2 - m1) * d / 60; else if(d < 180) return m2; else if(d < 240) return m1 + (m2 - m1) * (240 - d) / 60; else return m1;
 };
-thx.color._HSLA = {};
-thx.color._HSLA.HSLA_Impl_ = function() { };
-thx.color._HSLA.HSLA_Impl_.__name__ = true;
-thx.color._HSLA.HSLA_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$HSLA_HSLA_$Impl_$ = {};
+thx_color__$HSLA_HSLA_$Impl_$.__name__ = ["thx","color","_HSLA","HSLA_Impl_"];
+thx_color__$HSLA_HSLA_$Impl_$.create = function(hue,saturation,lightness,alpha) {
+	var tmp;
+	var tmp1;
+	if(saturation < 0) tmp1 = 0; else if(saturation > 1) tmp1 = 1; else tmp1 = saturation;
+	var tmp2;
+	if(lightness < 0) tmp2 = 0; else if(lightness > 1) tmp2 = 1; else tmp2 = lightness;
+	var tmp3;
+	if(alpha < 0) tmp3 = 0; else if(alpha > 1) tmp3 = 1; else tmp3 = alpha;
+	var channels = [thx_core_Floats.wrapCircular(hue,360),tmp1,tmp2,tmp3];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,4);
+	return thx_color__$HSLA_HSLA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+};
+thx_color__$HSLA_HSLA_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "hsl":
-			var this1;
-			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this1 = channels;
+			var tmp1;
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
+			tmp1 = channels;
+			var this1 = tmp1;
+			var tmp2;
 			var channels1 = this1.concat([1.0]);
-			return channels1;
+			tmp2 = channels1;
+			tmp = tmp2;
+			break;
 		case "hsla":
-			var channels2 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			return channels2;
+			var channels2 = thx_color_parse_ColorParser.getFloatChannels(info.channels,4);
+			tmp = channels2;
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._HSLA.HSLA_Impl_.fromFloats = function(hue,saturation,lightness,alpha) {
-	return [hue,saturation,lightness,alpha];
-};
-thx.color._HSLA.HSLA_Impl_._new = function(channels) {
+thx_color__$HSLA_HSLA_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx.color._HSLA.HSLA_Impl_.toHSL = function(this1) {
+thx_color__$HSLA_HSLA_$Impl_$.analogous = function(this1,spread) {
+	if(spread == null) spread = 30.0;
+	var tmp;
+	var _0 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.complement = function(this1) {
+	return thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,180);
+};
+thx_color__$HSLA_HSLA_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],thx_core_Floats.interpolate(t,this1[2],0),this1[3]];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],thx_core_Floats.interpolate(t,this1[2],1),this1[3]];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.transparent = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Floats.interpolate(t,this1[3],0)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.opaque = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Floats.interpolate(t,this1[3],1)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolateAngle(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2]),thx_core_Floats.interpolate(t,this1[3],other[3])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$HSLA_HSLA_$Impl_$.create(this1[0] + angle,this1[1],this1[2],this1[3]);
+};
+thx_color__$HSLA_HSLA_$Impl_$.split = function(this1,spread) {
+	if(spread == null) spread = 150.0;
+	var tmp;
+	var _0 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.withAlpha = function(this1,newalpha) {
+	var tmp;
+	if(newalpha < 0) tmp = 0; else if(newalpha > 1) tmp = 1; else tmp = newalpha;
+	return [this1[0],this1[1],this1[2],tmp];
+};
+thx_color__$HSLA_HSLA_$Impl_$.withHue = function(this1,newhue) {
+	var tmp;
+	if(newhue < 0) tmp = 0; else if(newhue > 1) tmp = 1; else tmp = newhue;
+	return [tmp,this1[1],this1[2],this1[3]];
+};
+thx_color__$HSLA_HSLA_$Impl_$.withLightness = function(this1,newlightness) {
+	var tmp;
+	if(newlightness < 0) tmp = 0; else if(newlightness > 1) tmp = 1; else tmp = newlightness;
+	return [this1[0],this1[1],tmp,this1[3]];
+};
+thx_color__$HSLA_HSLA_$Impl_$.withSaturation = function(this1,newsaturation) {
+	var tmp;
+	if(newsaturation < 0) tmp = 0; else if(newsaturation > 1) tmp = 1; else tmp = newsaturation;
+	return [this1[0],tmp,this1[2],this1[3]];
+};
+thx_color__$HSLA_HSLA_$Impl_$.toCSS3 = function(this1) {
+	return "hsla(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx_color__$HSLA_HSLA_$Impl_$.toString = function(this1) {
+	return "hsla(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx_color__$HSLA_HSLA_$Impl_$.equals = function(this1,other) {
+	return ((Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false)?Math.abs(this1[3] - other[3]) <= 10e-10:false;
+};
+thx_color__$HSLA_HSLA_$Impl_$.toHSL = function(this1) {
+	var tmp;
 	var channels = this1.slice(0,3);
-	return channels;
+	tmp = channels;
+	return tmp;
 };
-thx.color._HSLA.HSLA_Impl_.toHSVA = function(this1) {
-	return thx.color._RGBXA.RGBXA_Impl_.toHSVA((function($this) {
-		var $r;
-		var channels = [thx.color._HSLA.HSLA_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0] + -120,this1[1],this1[2]),this1[3]];
-		$r = channels;
-		return $r;
-	}(this)));
+thx_color__$HSLA_HSLA_$Impl_$.toHSVA = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] - 120,this1[1],this1[2]),this1[3]];
+	tmp = channels;
+	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSVA(tmp);
 };
-thx.color._HSLA.HSLA_Impl_.toRGB = function(this1) {
-	var this2;
-	var channels = [thx.color._HSLA.HSLA_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0] + -120,this1[1],this1[2]),this1[3]];
-	this2 = channels;
-	var this3;
+thx_color__$HSLA_HSLA_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] - 120,this1[1],this1[2]),this1[3]];
+	tmp1 = channels;
+	var this2 = tmp1;
+	var tmp2;
 	var channels1 = this2.slice(0,3);
-	this3 = channels1;
-	return thx.color._RGB.RGB_Impl_.fromFloats(this3[0],this3[1],this3[2]);
+	tmp2 = channels1;
+	var this3 = tmp2;
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this3[0],this3[1],this3[2]);
+	return tmp;
 };
-thx.color._HSLA.HSLA_Impl_.toRGBXA = function(this1) {
-	var channels = [thx.color._HSLA.HSLA_Impl_._c(this1[0] + 120,this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0],this1[1],this1[2]),thx.color._HSLA.HSLA_Impl_._c(this1[0] + -120,this1[1],this1[2]),this1[3]];
-	return channels;
+thx_color__$HSLA_HSLA_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var channels = [thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] - 120,this1[1],this1[2]),this1[3]];
+	tmp = channels;
+	return tmp;
 };
-thx.color._HSLA.HSLA_Impl_.toCSS3 = function(this1) {
-	return "hsla(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
-};
-thx.color._HSLA.HSLA_Impl_.toString = function(this1) {
-	return "hsla(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
-};
-thx.color._HSLA.HSLA_Impl_.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
-};
-thx.color._HSLA.HSLA_Impl_.darker = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0),this1[3]];
-	return channels;
-};
-thx.color._HSLA.HSLA_Impl_.lighter = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1),this1[3]];
-	return channels;
-};
-thx.color._HSLA.HSLA_Impl_.transparent = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
-	return channels;
-};
-thx.color._HSLA.HSLA_Impl_.opaque = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
-	return channels;
-};
-thx.color._HSLA.HSLA_Impl_.interpolate = function(this1,other,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
-	return channels;
-};
-thx.color._HSLA.HSLA_Impl_.get_hue = function(this1) {
+thx_color__$HSLA_HSLA_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx.color._HSLA.HSLA_Impl_.get_huef = function(this1) {
+thx_color__$HSLA_HSLA_$Impl_$.get_huef = function(this1) {
 	return this1[0];
 };
-thx.color._HSLA.HSLA_Impl_.get_saturation = function(this1) {
+thx_color__$HSLA_HSLA_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx.color._HSLA.HSLA_Impl_.get_lightness = function(this1) {
+thx_color__$HSLA_HSLA_$Impl_$.get_lightness = function(this1) {
 	return this1[2];
 };
-thx.color._HSLA.HSLA_Impl_.get_alpha = function(this1) {
+thx_color__$HSLA_HSLA_$Impl_$.get_alpha = function(this1) {
 	return this1[3];
 };
-thx.color._HSLA.HSLA_Impl_._c = function(d,s,l) {
-	var m2;
-	if(l <= 0.5) m2 = l * (1 + s); else m2 = l + s - l * s;
+thx_color__$HSLA_HSLA_$Impl_$._c = function(d,s,l) {
+	var m2 = l <= 0.5?l * (1 + s):l + s - l * s;
 	var m1 = 2 * l - m2;
-	d = thx.core.Floats.wrapCircular(d,360);
+	d = thx_core_Floats.wrapCircular(d,360);
 	if(d < 60) return m1 + (m2 - m1) * d / 60; else if(d < 180) return m2; else if(d < 240) return m1 + (m2 - m1) * (240 - d) / 60; else return m1;
 };
-thx.color._HSV = {};
-thx.color._HSV.HSV_Impl_ = function() { };
-thx.color._HSV.HSV_Impl_.__name__ = true;
-thx.color._HSV.HSV_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$HSV_HSV_$Impl_$ = {};
+thx_color__$HSV_HSV_$Impl_$.__name__ = ["thx","color","_HSV","HSV_Impl_"];
+thx_color__$HSV_HSV_$Impl_$.create = function(hue,saturation,lightness) {
+	var tmp;
+	var tmp1;
+	if(saturation < 0) tmp1 = 0; else if(saturation > 1) tmp1 = 1; else tmp1 = saturation;
+	var tmp2;
+	if(lightness < 0) tmp2 = 0; else if(lightness > 1) tmp2 = 1; else tmp2 = lightness;
+	var channels = [thx_core_Floats.wrapCircular(hue,360),tmp1,tmp2];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$HSV_HSV_$Impl_$.create(arr[0],arr[1],arr[2]);
+};
+thx_color__$HSV_HSV_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "hsv":
-			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			return channels;
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
+			tmp = channels;
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._HSV.HSV_Impl_.fromFloats = function(hue,saturation,value) {
-	return [hue,saturation,value];
-};
-thx.color._HSV.HSV_Impl_._new = function(channels) {
+thx_color__$HSV_HSV_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx.color._HSV.HSV_Impl_.toCMYK = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toCMYK(this1[1] == 0?[this1[2],this1[2],this1[2]]:(function($this) {
-		var $r;
-		var r;
-		var g;
-		var b;
-		var i;
-		var f;
-		var p;
-		var q;
-		var t;
-		var h = this1[0] / 60;
-		i = Math.floor(h);
-		f = h + -i;
-		p = this1[2] * (1 - this1[1]);
-		q = this1[2] * (1 - f * this1[1]);
-		t = this1[2] * (1 - (1 - f) * this1[1]);
-		switch(i) {
-		case 0:
-			r = this1[2];
-			g = t;
-			b = p;
-			break;
-		case 1:
-			r = q;
-			g = this1[2];
-			b = p;
-			break;
-		case 2:
-			r = p;
-			g = this1[2];
-			b = t;
-			break;
-		case 3:
-			r = p;
-			g = q;
-			b = this1[2];
-			break;
-		case 4:
-			r = t;
-			g = p;
-			b = this1[2];
-			break;
-		default:
-			r = this1[2];
-			g = p;
-			b = q;
-		}
-		$r = [r,g,b];
-		return $r;
-	}(this)));
+thx_color__$HSV_HSV_$Impl_$.analogous = function(this1,spread) {
+	if(spread == null) spread = 30.0;
+	var tmp;
+	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
 };
-thx.color._HSV.HSV_Impl_.toGrey = function(this1) {
-	var this2;
-	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2]]; else {
+thx_color__$HSV_HSV_$Impl_$.complement = function(this1) {
+	return thx_color__$HSV_HSV_$Impl_$.rotate(this1,180);
+};
+thx_color__$HSV_HSV_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolateAngle(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.rotate = function(this1,angle) {
+	var tmp;
+	var newhue = this1[0] + angle;
+	var tmp1;
+	if(newhue < 0) tmp1 = 0; else if(newhue > 1) tmp1 = 1; else tmp1 = newhue;
+	tmp = [tmp1,this1[1],this1[2]];
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.split = function(this1,spread) {
+	if(spread == null) spread = 144.0;
+	var tmp;
+	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.square = function(this1) {
+	return thx_color__$HSV_HSV_$Impl_$.tetrad(this1,90);
+};
+thx_color__$HSV_HSV_$Impl_$.tetrad = function(this1,angle) {
+	var tmp;
+	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,0);
+	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,angle);
+	var _2 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,180);
+	var _3 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,180 + angle);
+	tmp = { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.triad = function(this1) {
+	var tmp;
+	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,-120);
+	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,0);
+	var _2 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,120);
+	tmp = { _0 : _0, _1 : _1, _2 : _2};
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.withAlpha = function(this1,alpha) {
+	var tmp;
+	var tmp1;
+	if(alpha < 0) tmp1 = 0; else if(alpha > 1) tmp1 = 1; else tmp1 = alpha;
+	var channels = this1.concat([tmp1]);
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.withHue = function(this1,newhue) {
+	var tmp;
+	if(newhue < 0) tmp = 0; else if(newhue > 1) tmp = 1; else tmp = newhue;
+	return [tmp,this1[1],this1[2]];
+};
+thx_color__$HSV_HSV_$Impl_$.withValue = function(this1,newvalue) {
+	var tmp;
+	if(newvalue < 0) tmp = 0; else if(newvalue > 1) tmp = 1; else tmp = newvalue;
+	return [this1[0],this1[1],tmp];
+};
+thx_color__$HSV_HSV_$Impl_$.withSaturation = function(this1,newsaturation) {
+	var tmp;
+	if(newsaturation < 0) tmp = 0; else if(newsaturation > 1) tmp = 1; else tmp = newsaturation;
+	return [this1[0],tmp,this1[2]];
+};
+thx_color__$HSV_HSV_$Impl_$.toString = function(this1) {
+	return "hsv(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+};
+thx_color__$HSV_HSV_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
+};
+thx_color__$HSV_HSV_$Impl_$.toCIELab = function(this1) {
+	var tmp;
+	if(this1[1] == 0) tmp = [this1[2],this1[2],this1[2]]; else {
 		var r;
 		var g;
 		var b;
@@ -1157,7 +2364,7 @@ thx.color._HSV.HSV_Impl_.toGrey = function(this1) {
 		var t;
 		var h = this1[0] / 60;
 		i = Math.floor(h);
-		f = h + -i;
+		f = h - i;
 		p = this1[2] * (1 - this1[1]);
 		q = this1[2] * (1 - f * this1[1]);
 		t = this1[2] * (1 - (1 - f) * this1[1]);
@@ -1192,16 +2399,13 @@ thx.color._HSV.HSV_Impl_.toGrey = function(this1) {
 			g = p;
 			b = q;
 		}
-		this2 = [r,g,b];
+		tmp = [r,g,b];
 	}
-	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
-	var this3;
-	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
-	return this3;
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(tmp);
 };
-thx.color._HSV.HSV_Impl_.toHSL = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSL(this1[1] == 0?[this1[2],this1[2],this1[2]]:(function($this) {
-		var $r;
+thx_color__$HSV_HSV_$Impl_$.toCIELCh = function(this1) {
+	var tmp;
+	if(this1[1] == 0) tmp = [this1[2],this1[2],this1[2]]; else {
 		var r;
 		var g;
 		var b;
@@ -1212,7 +2416,7 @@ thx.color._HSV.HSV_Impl_.toHSL = function(this1) {
 		var t;
 		var h = this1[0] / 60;
 		i = Math.floor(h);
-		f = h + -i;
+		f = h - i;
 		p = this1[2] * (1 - this1[1]);
 		q = this1[2] * (1 - f * this1[1]);
 		t = this1[2] * (1 - (1 - f) * this1[1]);
@@ -1247,63 +2451,283 @@ thx.color._HSV.HSV_Impl_.toHSL = function(this1) {
 			g = p;
 			b = q;
 		}
-		$r = [r,g,b];
-		return $r;
-	}(this)));
-};
-thx.color._HSV.HSV_Impl_.toRGB = function(this1) {
-	var this2;
-	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2]]; else {
-		var r;
-		var g;
-		var b;
-		var i;
-		var f;
-		var p;
-		var q;
-		var t;
-		var h = this1[0] / 60;
-		i = Math.floor(h);
-		f = h + -i;
-		p = this1[2] * (1 - this1[1]);
-		q = this1[2] * (1 - f * this1[1]);
-		t = this1[2] * (1 - (1 - f) * this1[1]);
-		switch(i) {
-		case 0:
-			r = this1[2];
-			g = t;
-			b = p;
-			break;
-		case 1:
-			r = q;
-			g = this1[2];
-			b = p;
-			break;
-		case 2:
-			r = p;
-			g = this1[2];
-			b = t;
-			break;
-		case 3:
-			r = p;
-			g = q;
-			b = this1[2];
-			break;
-		case 4:
-			r = t;
-			g = p;
-			b = this1[2];
-			break;
-		default:
-			r = this1[2];
-			g = p;
-			b = q;
-		}
-		this2 = [r,g,b];
+		tmp = [r,g,b];
 	}
-	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(tmp);
 };
-thx.color._HSV.HSV_Impl_.toRGBX = function(this1) {
+thx_color__$HSV_HSV_$Impl_$.toCMY = function(this1) {
+	var tmp;
+	if(this1[1] == 0) tmp = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp = [r,g,b];
+	}
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(tmp);
+};
+thx_color__$HSV_HSV_$Impl_$.toCMYK = function(this1) {
+	var tmp;
+	if(this1[1] == 0) tmp = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp = [r,g,b];
+	}
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(tmp);
+};
+thx_color__$HSV_HSV_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var tmp1;
+	if(this1[1] == 0) tmp1 = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp1 = [r,g,b];
+	}
+	var this2 = tmp1;
+	tmp = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.toHSL = function(this1) {
+	var tmp;
+	if(this1[1] == 0) tmp = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp = [r,g,b];
+	}
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(tmp);
+};
+thx_color__$HSV_HSV_$Impl_$.toHSVA = function(this1) {
+	var tmp;
+	var channels = this1.concat([1.0]);
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var tmp1;
+	if(this1[1] == 0) tmp1 = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp1 = [r,g,b];
+	}
+	var this2 = tmp1;
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$HSV_HSV_$Impl_$.toRGBX = function(this1) {
 	if(this1[1] == 0) return [this1[2],this1[2],this1[2]];
 	var r;
 	var g;
@@ -1315,7 +2739,7 @@ thx.color._HSV.HSV_Impl_.toRGBX = function(this1) {
 	var t;
 	var h = this1[0] / 60;
 	i = Math.floor(h);
-	f = h + -i;
+	f = h - i;
 	p = this1[2] * (1 - this1[1]);
 	q = this1[2] * (1 - f * this1[1]);
 	t = this1[2] * (1 - (1 - f) * this1[1]);
@@ -1352,9 +2776,10 @@ thx.color._HSV.HSV_Impl_.toRGBX = function(this1) {
 	}
 	return [r,g,b];
 };
-thx.color._HSV.HSV_Impl_.toRGBXA = function(this1) {
-	var this2;
-	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2]]; else {
+thx_color__$HSV_HSV_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var tmp1;
+	if(this1[1] == 0) tmp1 = [this1[2],this1[2],this1[2]]; else {
 		var r;
 		var g;
 		var b;
@@ -1365,7 +2790,7 @@ thx.color._HSV.HSV_Impl_.toRGBXA = function(this1) {
 		var t;
 		var h = this1[0] / 60;
 		i = Math.floor(h);
-		f = h + -i;
+		f = h - i;
 		p = this1[2] * (1 - this1[1]);
 		q = this1[2] * (1 - f * this1[1]);
 		t = this1[2] * (1 - (1 - f) * this1[1]);
@@ -1400,87 +2825,259 @@ thx.color._HSV.HSV_Impl_.toRGBXA = function(this1) {
 			g = p;
 			b = q;
 		}
-		this2 = [r,g,b];
+		tmp1 = [r,g,b];
 	}
+	var this2 = tmp1;
+	var tmp2;
 	var channels = this2.concat([1.0]);
-	return channels;
+	tmp2 = channels;
+	tmp = tmp2;
+	return tmp;
 };
-thx.color._HSV.HSV_Impl_.toHSVA = function(this1) {
-	var channels = this1.concat([1.0]);
-	return channels;
+thx_color__$HSV_HSV_$Impl_$.toXYZ = function(this1) {
+	var tmp;
+	if(this1[1] == 0) tmp = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp = [r,g,b];
+	}
+	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(tmp);
 };
-thx.color._HSV.HSV_Impl_.withAlpha = function(this1,alpha) {
-	var channels = this1.concat([alpha]);
-	return channels;
+thx_color__$HSV_HSV_$Impl_$.toYxy = function(this1) {
+	var tmp;
+	var tmp1;
+	if(this1[1] == 0) tmp1 = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp1 = [r,g,b];
+	}
+	var this2 = tmp1;
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ(this2));
+	return tmp;
 };
-thx.color._HSV.HSV_Impl_.toString = function(this1) {
-	return "hsv(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
-};
-thx.color._HSV.HSV_Impl_.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2];
-};
-thx.color._HSV.HSV_Impl_.darker = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0)];
-	return channels;
-};
-thx.color._HSV.HSV_Impl_.lighter = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1)];
-	return channels;
-};
-thx.color._HSV.HSV_Impl_.interpolate = function(this1,other,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2])];
-	return channels;
-};
-thx.color._HSV.HSV_Impl_.get_hue = function(this1) {
+thx_color__$HSV_HSV_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx.color._HSV.HSV_Impl_.get_huef = function(this1) {
+thx_color__$HSV_HSV_$Impl_$.get_huef = function(this1) {
 	return this1[0];
 };
-thx.color._HSV.HSV_Impl_.get_saturation = function(this1) {
+thx_color__$HSV_HSV_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx.color._HSV.HSV_Impl_.get_value = function(this1) {
+thx_color__$HSV_HSV_$Impl_$.get_value = function(this1) {
 	return this1[2];
 };
-thx.color._HSVA = {};
-thx.color._HSVA.HSVA_Impl_ = function() { };
-thx.color._HSVA.HSVA_Impl_.__name__ = true;
-thx.color._HSVA.HSVA_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$HSVA_HSVA_$Impl_$ = {};
+thx_color__$HSVA_HSVA_$Impl_$.__name__ = ["thx","color","_HSVA","HSVA_Impl_"];
+thx_color__$HSVA_HSVA_$Impl_$.create = function(hue,saturation,value,alpha) {
+	var tmp;
+	var tmp1;
+	if(saturation < 0) tmp1 = 0; else if(saturation > 1) tmp1 = 1; else tmp1 = saturation;
+	var tmp2;
+	if(value < 0) tmp2 = 0; else if(value > 1) tmp2 = 1; else tmp2 = value;
+	var tmp3;
+	if(alpha < 0) tmp3 = 0; else if(alpha > 1) tmp3 = 1; else tmp3 = alpha;
+	var channels = [thx_core_Floats.wrapCircular(hue,360),tmp1,tmp2,tmp3];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,4);
+	return thx_color__$HSVA_HSVA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+};
+thx_color__$HSVA_HSVA_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "hsv":
-			var this1;
-			var channels = thx.color.parse.ColorParser.getFloatChannels(info.channels,3);
-			this1 = channels;
+			var tmp1;
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
+			tmp1 = channels;
+			var this1 = tmp1;
+			var tmp2;
 			var channels1 = this1.concat([1.0]);
-			return channels1;
+			tmp2 = channels1;
+			tmp = tmp2;
+			break;
 		case "hsva":
-			var channels2 = thx.color.parse.ColorParser.getFloatChannels(info.channels,4);
-			return channels2;
+			var channels2 = thx_color_parse_ColorParser.getFloatChannels(info.channels,4);
+			tmp = channels2;
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._HSVA.HSVA_Impl_.fromFloats = function(hue,saturation,value,alpha) {
-	return [hue,saturation,value,alpha];
-};
-thx.color._HSVA.HSVA_Impl_._new = function(channels) {
+thx_color__$HSVA_HSVA_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx.color._HSVA.HSVA_Impl_.toHSV = function(this1) {
+thx_color__$HSVA_HSVA_$Impl_$.analogous = function(this1,spread) {
+	if(spread == null) spread = 30.0;
+	var tmp;
+	var _0 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.complement = function(this1) {
+	return thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,180);
+};
+thx_color__$HSVA_HSVA_$Impl_$.transparent = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Floats.interpolate(t,this1[3],0)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.opaque = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Floats.interpolate(t,this1[3],1)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolateAngle(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2]),thx_core_Floats.interpolate(t,this1[3],other[3])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$HSVA_HSVA_$Impl_$.create(this1[0] + angle,this1[1],this1[2],this1[3]);
+};
+thx_color__$HSVA_HSVA_$Impl_$.split = function(this1,spread) {
+	if(spread == null) spread = 150.0;
+	var tmp;
+	var _0 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,spread);
+	tmp = { _0 : _0, _1 : _1};
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.withAlpha = function(this1,newalpha) {
+	var tmp;
+	if(newalpha < 0) tmp = 0; else if(newalpha > 1) tmp = 1; else tmp = newalpha;
+	return [this1[0],this1[1],this1[2],tmp];
+};
+thx_color__$HSVA_HSVA_$Impl_$.withHue = function(this1,newhue) {
+	var tmp;
+	if(newhue < 0) tmp = 0; else if(newhue > 1) tmp = 1; else tmp = newhue;
+	return [tmp,this1[1],this1[2],this1[3]];
+};
+thx_color__$HSVA_HSVA_$Impl_$.withLightness = function(this1,newvalue) {
+	var tmp;
+	if(newvalue < 0) tmp = 0; else if(newvalue > 1) tmp = 1; else tmp = newvalue;
+	return [this1[0],this1[1],tmp,this1[3]];
+};
+thx_color__$HSVA_HSVA_$Impl_$.withSaturation = function(this1,newsaturation) {
+	var tmp;
+	if(newsaturation < 0) tmp = 0; else if(newsaturation > 1) tmp = 1; else tmp = newsaturation;
+	return [this1[0],tmp,this1[2],this1[3]];
+};
+thx_color__$HSVA_HSVA_$Impl_$.toString = function(this1) {
+	return "hsva(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+};
+thx_color__$HSVA_HSVA_$Impl_$.equals = function(this1,other) {
+	return ((Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false)?Math.abs(this1[3] - other[3]) <= 10e-10:false;
+};
+thx_color__$HSVA_HSVA_$Impl_$.toHSV = function(this1) {
+	var tmp;
 	var channels = this1.slice(0,3);
-	return channels;
+	tmp = channels;
+	return tmp;
 };
-thx.color._HSVA.HSVA_Impl_.toHSLA = function(this1) {
-	return thx.color._RGBXA.RGBXA_Impl_.toHSLA(this1[1] == 0?[this1[2],this1[2],this1[2],this1[3]]:(function($this) {
-		var $r;
+thx_color__$HSVA_HSVA_$Impl_$.toHSLA = function(this1) {
+	var tmp;
+	if(this1[1] == 0) tmp = [this1[2],this1[2],this1[2],this1[3]]; else {
 		var r;
 		var g;
 		var b;
@@ -1491,7 +3088,7 @@ thx.color._HSVA.HSVA_Impl_.toHSLA = function(this1) {
 		var t;
 		var h = this1[0] / 60;
 		i = Math.floor(h);
-		f = h + -i;
+		f = h - i;
 		p = this1[2] * (1 - this1[1]);
 		q = this1[2] * (1 - f * this1[1]);
 		t = this1[2] * (1 - (1 - f) * this1[1]);
@@ -1526,66 +3123,70 @@ thx.color._HSVA.HSVA_Impl_.toHSLA = function(this1) {
 			g = p;
 			b = q;
 		}
-		$r = [r,g,b,this1[3]];
-		return $r;
-	}(this)));
-};
-thx.color._HSVA.HSVA_Impl_.toRGB = function(this1) {
-	var this2;
-	if(this1[1] == 0) this2 = [this1[2],this1[2],this1[2],this1[3]]; else {
-		var r;
-		var g;
-		var b;
-		var i;
-		var f;
-		var p;
-		var q;
-		var t;
-		var h = this1[0] / 60;
-		i = Math.floor(h);
-		f = h + -i;
-		p = this1[2] * (1 - this1[1]);
-		q = this1[2] * (1 - f * this1[1]);
-		t = this1[2] * (1 - (1 - f) * this1[1]);
-		switch(i) {
-		case 0:
-			r = this1[2];
-			g = t;
-			b = p;
-			break;
-		case 1:
-			r = q;
-			g = this1[2];
-			b = p;
-			break;
-		case 2:
-			r = p;
-			g = this1[2];
-			b = t;
-			break;
-		case 3:
-			r = p;
-			g = q;
-			b = this1[2];
-			break;
-		case 4:
-			r = t;
-			g = p;
-			b = this1[2];
-			break;
-		default:
-			r = this1[2];
-			g = p;
-			b = q;
-		}
-		this2 = [r,g,b,this1[3]];
+		tmp = [r,g,b,this1[3]];
 	}
-	var this3;
-	var channels = this2.slice(0,3);
-	this3 = channels;
-	return thx.color._RGB.RGB_Impl_.fromFloats(this3[0],this3[1],this3[2]);
+	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSLA(tmp);
 };
-thx.color._HSVA.HSVA_Impl_.toRGBXA = function(this1) {
+thx_color__$HSVA_HSVA_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var tmp1;
+	if(this1[1] == 0) tmp1 = [this1[2],this1[2],this1[2],this1[3]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp1 = [r,g,b,this1[3]];
+	}
+	var this2 = tmp1;
+	var tmp2;
+	var channels = this2.slice(0,3);
+	tmp2 = channels;
+	var this3 = tmp2;
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this3[0],this3[1],this3[2]);
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.toRGBXA = function(this1) {
 	if(this1[1] == 0) return [this1[2],this1[2],this1[2],this1[3]];
 	var r;
 	var g;
@@ -1597,7 +3198,7 @@ thx.color._HSVA.HSVA_Impl_.toRGBXA = function(this1) {
 	var t;
 	var h = this1[0] / 60;
 	i = Math.floor(h);
-	f = h + -i;
+	f = h - i;
 	p = this1[2] * (1 - this1[1]);
 	q = this1[2] * (1 - f * this1[1]);
 	t = this1[2] * (1 - (1 - f) * this1[1]);
@@ -1634,346 +3235,414 @@ thx.color._HSVA.HSVA_Impl_.toRGBXA = function(this1) {
 	}
 	return [r,g,b,this1[3]];
 };
-thx.color._HSVA.HSVA_Impl_.toString = function(this1) {
-	return "hsva(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
-};
-thx.color._HSVA.HSVA_Impl_.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
-};
-thx.color._HSVA.HSVA_Impl_.darker = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],0),this1[3]];
-	return channels;
-};
-thx.color._HSVA.HSVA_Impl_.lighter = function(this1,t) {
-	var channels = [this1[0],this1[1],thx.core.Floats.interpolateBetween(t,this1[2],1),this1[3]];
-	return channels;
-};
-thx.color._HSVA.HSVA_Impl_.transparent = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
-	return channels;
-};
-thx.color._HSVA.HSVA_Impl_.opaque = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
-	return channels;
-};
-thx.color._HSVA.HSVA_Impl_.interpolate = function(this1,other,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
-	return channels;
-};
-thx.color._HSVA.HSVA_Impl_.get_hue = function(this1) {
+thx_color__$HSVA_HSVA_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx.color._HSVA.HSVA_Impl_.get_huef = function(this1) {
+thx_color__$HSVA_HSVA_$Impl_$.get_huef = function(this1) {
 	return this1[0];
 };
-thx.color._HSVA.HSVA_Impl_.get_saturation = function(this1) {
+thx_color__$HSVA_HSVA_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx.color._HSVA.HSVA_Impl_.get_value = function(this1) {
+thx_color__$HSVA_HSVA_$Impl_$.get_value = function(this1) {
 	return this1[2];
 };
-thx.color._HSVA.HSVA_Impl_.get_alpha = function(this1) {
+thx_color__$HSVA_HSVA_$Impl_$.get_alpha = function(this1) {
 	return this1[3];
 };
-thx.color._RGB = {};
-thx.color._RGB.RGB_Impl_ = function() { };
-thx.color._RGB.RGB_Impl_.__name__ = true;
-thx.color._RGB.RGB_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseHex(color);
-	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$RGB_RGB_$Impl_$ = {};
+thx_color__$RGB_RGB_$Impl_$.__name__ = ["thx","color","_RGB","RGB_Impl_"];
+thx_color__$RGB_RGB_$Impl_$.create = function(red,green,blue) {
+	return (red & 255) << 16 | (green & 255) << 8 | blue & 255;
+};
+thx_color__$RGB_RGB_$Impl_$.createf = function(red,green,blue) {
+	return thx_color__$RGB_RGB_$Impl_$.create(Math.round(red * 255),Math.round(green * 255),Math.round(blue * 255));
+};
+thx_color__$RGB_RGB_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseHex(color);
+	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			var arr = thx.color.parse.ColorParser.getInt8Channels(info.channels,3);
-			return (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
+			tmp = thx_color__$RGB_RGB_$Impl_$.fromInts(thx_color_parse_ColorParser.getInt8Channels(info.channels,3));
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._RGB.RGB_Impl_.fromFloats = function(red,green,blue) {
-	var red1 = Math.round((red < 0?0:red > 1?1:red) * 255);
-	var green1 = Math.round((green < 0?0:green > 1?1:green) * 255);
-	var blue1 = Math.round((blue < 0?0:blue > 1?1:blue) * 255);
-	return (red1 & 255) << 16 | (green1 & 255) << 8 | blue1 & 255;
+thx_color__$RGB_RGB_$Impl_$.fromInts = function(arr) {
+	thx_core_ArrayInts.resize(arr,3);
+	return thx_color__$RGB_RGB_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx.color._RGB.RGB_Impl_.fromArray = function(arr) {
-	return (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
-};
-thx.color._RGB.RGB_Impl_.fromInts = function(red,green,blue) {
-	return (red & 255) << 16 | (green & 255) << 8 | blue & 255;
-};
-thx.color._RGB.RGB_Impl_.fromInt = function(rgb) {
+thx_color__$RGB_RGB_$Impl_$._new = function(rgb) {
 	return rgb;
 };
-thx.color._RGB.RGB_Impl_._new = function(rgb) {
-	return rgb;
+thx_color__$RGB_RGB_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.darker(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]),t);
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
 };
-thx.color._RGB.RGB_Impl_.toInt = function(this1) {
-	return this1;
+thx_color__$RGB_RGB_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.lighter(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]),t);
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
 };
-thx.color._RGB.RGB_Impl_.toCMYK = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toCMYK(thx.color._RGB.RGB_Impl_.toRGBX(this1));
+thx_color__$RGB_RGB_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.interpolate(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]),thx_color__$RGBX_RGBX_$Impl_$.fromInts([other >> 16 & 255,other >> 8 & 255,other & 255]),t);
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
 };
-thx.color._RGB.RGB_Impl_.toGrey = function(this1) {
-	var this2 = thx.color._RGB.RGB_Impl_.toRGBX(this1);
-	var grey = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
-	var this3;
-	if(grey < 0) this3 = 0; else if(grey > 1) this3 = 1; else this3 = grey;
-	return this3;
+thx_color__$RGB_RGB_$Impl_$.withAlpha = function(this1,alpha) {
+	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255,alpha]);
 };
-thx.color._RGB.RGB_Impl_.toHSL = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSL(thx.color._RGB.RGB_Impl_.toRGBX(this1));
+thx_color__$RGB_RGB_$Impl_$.withRed = function(this1,newred) {
+	return thx_color__$RGB_RGB_$Impl_$.fromInts([newred,this1 >> 8 & 255,this1 & 255]);
 };
-thx.color._RGB.RGB_Impl_.toHSV = function(this1) {
-	return thx.color._RGBX.RGBX_Impl_.toHSV(thx.color._RGB.RGB_Impl_.toRGBX(this1));
+thx_color__$RGB_RGB_$Impl_$.withGreen = function(this1,newgreen) {
+	return thx_color__$RGB_RGB_$Impl_$.fromInts([this1 >> 16 & 255,newgreen,this1 & 255]);
 };
-thx.color._RGB.RGB_Impl_.toRGBX = function(this1) {
-	return [(this1 >> 16 & 255) / 255,(this1 >> 8 & 255) / 255,(this1 & 255) / 255];
+thx_color__$RGB_RGB_$Impl_$.withBlue = function(this1,newblue) {
+	return thx_color__$RGB_RGB_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,newblue]);
 };
-thx.color._RGB.RGB_Impl_.toRGBA = function(this1) {
-	var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-};
-thx.color._RGB.RGB_Impl_.toRGBXA = function(this1) {
-	return thx.color._RGBA.RGBA_Impl_.toRGBXA((function($this) {
-		var $r;
-		var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-		$r = thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-		return $r;
-	}(this)));
-};
-thx.color._RGB.RGB_Impl_.withAlpha = function(this1,alpha) {
-	return thx.color._RGBA.RGBA_Impl_.toRGBXA((alpha & 255) << 24 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-};
-thx.color._RGB.RGB_Impl_.toCSS3 = function(this1) {
+thx_color__$RGB_RGB_$Impl_$.toCSS3 = function(this1) {
 	return "rgb(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + ")";
 };
-thx.color._RGB.RGB_Impl_.toString = function(this1) {
-	return "" + "#" + StringTools.hex(this1 >> 16 & 255,2) + StringTools.hex(this1 >> 8 & 255,2) + StringTools.hex(this1 & 255,2);
+thx_color__$RGB_RGB_$Impl_$.toString = function(this1) {
+	return thx_color__$RGB_RGB_$Impl_$.toHex(this1);
 };
-thx.color._RGB.RGB_Impl_.toHex = function(this1,prefix) {
+thx_color__$RGB_RGB_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
 	return "" + prefix + StringTools.hex(this1 >> 16 & 255,2) + StringTools.hex(this1 >> 8 & 255,2) + StringTools.hex(this1 & 255,2);
 };
-thx.color._RGB.RGB_Impl_.equals = function(this1,other) {
-	return (this1 >> 16 & 255) == (other >> 16 & 255) && (this1 >> 8 & 255) == (other >> 8 & 255) && (this1 & 255) == (other & 255);
+thx_color__$RGB_RGB_$Impl_$.equals = function(this1,other) {
+	return ((this1 >> 16 & 255) == (other >> 16 & 255)?(this1 >> 8 & 255) == (other >> 8 & 255):false)?(this1 & 255) == (other & 255):false;
 };
-thx.color._RGB.RGB_Impl_.darker = function(this1,t) {
-	var this2 = thx.color._RGBX.RGBX_Impl_.darker(thx.color._RGB.RGB_Impl_.toRGBX(this1),t);
-	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+thx_color__$RGB_RGB_$Impl_$.toCIELab = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]));
 };
-thx.color._RGB.RGB_Impl_.lighter = function(this1,t) {
-	var this2 = thx.color._RGBX.RGBX_Impl_.lighter(thx.color._RGB.RGB_Impl_.toRGBX(this1),t);
-	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+thx_color__$RGB_RGB_$Impl_$.toCIELCh = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]));
 };
-thx.color._RGB.RGB_Impl_.interpolate = function(this1,other,t) {
-	var this2 = thx.color._RGBX.RGBX_Impl_.interpolate(thx.color._RGB.RGB_Impl_.toRGBX(this1),thx.color._RGB.RGB_Impl_.toRGBX(other),t);
-	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+thx_color__$RGB_RGB_$Impl_$.toCMY = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]));
 };
-thx.color._RGB.RGB_Impl_.get_red = function(this1) {
+thx_color__$RGB_RGB_$Impl_$.toCMYK = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]));
+};
+thx_color__$RGB_RGB_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]);
+	tmp = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	return tmp;
+};
+thx_color__$RGB_RGB_$Impl_$.toHSL = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]));
+};
+thx_color__$RGB_RGB_$Impl_$.toHSV = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]));
+};
+thx_color__$RGB_RGB_$Impl_$.toRGBX = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]);
+};
+thx_color__$RGB_RGB_$Impl_$.toRGBA = function(this1) {
+	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255,255]);
+};
+thx_color__$RGB_RGB_$Impl_$.toRGBXA = function(this1) {
+	return thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255,255]));
+};
+thx_color__$RGB_RGB_$Impl_$.toYxy = function(this1) {
+	var tmp;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]);
+	tmp = thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ(this2));
+	return tmp;
+};
+thx_color__$RGB_RGB_$Impl_$.toXYZ = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]));
+};
+thx_color__$RGB_RGB_$Impl_$.get_red = function(this1) {
 	return this1 >> 16 & 255;
 };
-thx.color._RGB.RGB_Impl_.get_green = function(this1) {
+thx_color__$RGB_RGB_$Impl_$.get_green = function(this1) {
 	return this1 >> 8 & 255;
 };
-thx.color._RGB.RGB_Impl_.get_blue = function(this1) {
+thx_color__$RGB_RGB_$Impl_$.get_blue = function(this1) {
 	return this1 & 255;
 };
-thx.color._RGBA = {};
-thx.color._RGBA.RGBA_Impl_ = function() { };
-thx.color._RGBA.RGBA_Impl_.__name__ = true;
-thx.color._RGBA.RGBA_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseHex(color);
-	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$RGBA_RGBA_$Impl_$ = {};
+thx_color__$RGBA_RGBA_$Impl_$.__name__ = ["thx","color","_RGBA","RGBA_Impl_"];
+thx_color__$RGBA_RGBA_$Impl_$.create = function(red,green,blue,alpha) {
+	return (alpha & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | blue & 255;
+};
+thx_color__$RGBA_RGBA_$Impl_$.fromFloats = function(arr) {
+	var ints = thx_core_ArrayFloats.resize(arr,4).map(function(_) {
+		return Math.round(_ * 255);
+	});
+	return thx_color__$RGBA_RGBA_$Impl_$.create(ints[0],ints[1],ints[2],ints[3]);
+};
+thx_color__$RGBA_RGBA_$Impl_$.fromInt = function(rgba) {
+	return rgba;
+};
+thx_color__$RGBA_RGBA_$Impl_$.fromInts = function(arr) {
+	thx_core_ArrayInts.resize(arr,4);
+	return thx_color__$RGBA_RGBA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+};
+thx_color__$RGBA_RGBA_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseHex(color);
+	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			var this1;
-			var arr = thx.color.parse.ColorParser.getInt8Channels(info.channels,3);
-			this1 = (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
-			var this2 = thx.color._RGBA.RGBA_Impl_.toRGBXA(-16777216 | (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255);
-			return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
+			var this1 = thx_color__$RGB_RGB_$Impl_$.fromInts(thx_color_parse_ColorParser.getInt8Channels(info.channels,3));
+			tmp = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255,255]);
+			break;
 		case "rgba":
-			var arr_0 = thx.color.parse.ColorParser.getInt8Channel(info.channels[0]);
-			var arr_1 = thx.color.parse.ColorParser.getInt8Channel(info.channels[1]);
-			var arr_2 = thx.color.parse.ColorParser.getInt8Channel(info.channels[2]);
-			var arr_3 = Math.round(thx.color.parse.ColorParser.getFloatChannel(info.channels[3]) * 255);
-			return (arr_3 & 255) << 24 | (arr_0 & 255) << 16 | (arr_1 & 255) << 8 | arr_2 & 255;
+			tmp = thx_color__$RGBA_RGBA_$Impl_$.create(thx_color_parse_ColorParser.getInt8Channel(info.channels[0]),thx_color_parse_ColorParser.getInt8Channel(info.channels[1]),thx_color_parse_ColorParser.getInt8Channel(info.channels[2]),Math.round(thx_color_parse_ColorParser.getFloatChannel(info.channels[3]) * 255));
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._RGBA.RGBA_Impl_.fromArray = function(arr) {
-	return (arr[3] & 255) << 24 | (arr[0] & 255) << 16 | (arr[1] & 255) << 8 | arr[2] & 255;
-};
-thx.color._RGBA.RGBA_Impl_.fromFloats = function(red,green,blue,alpha) {
-	var red1 = Math.round((red < 0?0:red > 1?1:red) * 255);
-	var green1 = Math.round((green < 0?0:green > 1?1:green) * 255);
-	var blue1 = Math.round((blue < 0?0:blue > 1?1:blue) * 255);
-	var alpha1 = Math.round((alpha < 0?0:alpha > 1?1:alpha) * 255);
-	return (alpha1 & 255) << 24 | (red1 & 255) << 16 | (green1 & 255) << 8 | blue1 & 255;
-};
-thx.color._RGBA.RGBA_Impl_.fromInts = function(red,green,blue,alpha) {
-	return (alpha & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | blue & 255;
-};
-thx.color._RGBA.RGBA_Impl_.fromInt = function(rgba) {
+thx_color__$RGBA_RGBA_$Impl_$._new = function(rgba) {
 	return rgba;
 };
-thx.color._RGBA.RGBA_Impl_._new = function(rgba) {
-	return rgba;
+thx_color__$RGBA_RGBA_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var this2 = thx_color__$RGBXA_RGBXA_$Impl_$.darker(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t);
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
 };
-thx.color._RGBA.RGBA_Impl_.toInt = function(this1) {
-	return this1;
+thx_color__$RGBA_RGBA_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var this2 = thx_color__$RGBXA_RGBXA_$Impl_$.lighter(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t);
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
 };
-thx.color._RGBA.RGBA_Impl_.toHSLA = function(this1) {
-	return thx.color._RGBXA.RGBXA_Impl_.toHSLA(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1));
+thx_color__$RGBA_RGBA_$Impl_$.transparent = function(this1,t) {
+	var tmp;
+	var this2 = thx_color__$RGBXA_RGBXA_$Impl_$.transparent(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t);
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
 };
-thx.color._RGBA.RGBA_Impl_.toHSVA = function(this1) {
-	return thx.color._RGBXA.RGBXA_Impl_.toHSVA(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1));
+thx_color__$RGBA_RGBA_$Impl_$.opaque = function(this1,t) {
+	var tmp;
+	var this2 = thx_color__$RGBXA_RGBXA_$Impl_$.opaque(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t);
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
 };
-thx.color._RGBA.RGBA_Impl_.toRGB = function(this1) {
-	return (this1 >> 16 & 255 & 255) << 16 | (this1 >> 8 & 255 & 255) << 8 | this1 & 255 & 255;
+thx_color__$RGBA_RGBA_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var this2 = thx_color__$RGBXA_RGBXA_$Impl_$.interpolate(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(other),t);
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
 };
-thx.color._RGBA.RGBA_Impl_.toRGBX = function(this1) {
-	return [(this1 >> 16 & 255) / 255,(this1 >> 8 & 255) / 255,(this1 & 255) / 255];
+thx_color__$RGBA_RGBA_$Impl_$.withAlpha = function(this1,newalpha) {
+	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255,newalpha]);
 };
-thx.color._RGBA.RGBA_Impl_.toRGBXA = function(this1) {
-	return [(this1 >> 16 & 255) / 255,(this1 >> 8 & 255) / 255,(this1 & 255) / 255,(this1 >> 24 & 255) / 255];
+thx_color__$RGBA_RGBA_$Impl_$.withRed = function(this1,newred) {
+	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([newred,this1 >> 8 & 255,this1 & 255]);
 };
-thx.color._RGBA.RGBA_Impl_.toCSS3 = function(this1) {
+thx_color__$RGBA_RGBA_$Impl_$.withGreen = function(this1,newgreen) {
+	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,newgreen,this1 & 255]);
+};
+thx_color__$RGBA_RGBA_$Impl_$.withBlue = function(this1,newblue) {
+	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,newblue]);
+};
+thx_color__$RGBA_RGBA_$Impl_$.toHSLA = function(this1) {
+	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSLA(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1));
+};
+thx_color__$RGBA_RGBA_$Impl_$.toHSVA = function(this1) {
+	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSVA(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1));
+};
+thx_color__$RGBA_RGBA_$Impl_$.toRGB = function(this1) {
+	return thx_color__$RGB_RGB_$Impl_$.create(this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255);
+};
+thx_color__$RGBA_RGBA_$Impl_$.toRGBX = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]);
+};
+thx_color__$RGBA_RGBA_$Impl_$.toRGBXA = function(this1) {
+	return thx_color__$RGBXA_RGBXA_$Impl_$.fromInts([this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255,this1 >> 24 & 255]);
+};
+thx_color__$RGBA_RGBA_$Impl_$.toCSS3 = function(this1) {
 	return "rgba(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + "," + (this1 >> 24 & 255) / 255 + ")";
 };
-thx.color._RGBA.RGBA_Impl_.toString = function(this1) {
+thx_color__$RGBA_RGBA_$Impl_$.toString = function(this1) {
 	return "rgba(" + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) + "," + (this1 >> 24 & 255) / 255 + ")";
 };
-thx.color._RGBA.RGBA_Impl_.toHex = function(this1,prefix) {
+thx_color__$RGBA_RGBA_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
 	return "" + prefix + StringTools.hex(this1 >> 24 & 255,2) + StringTools.hex(this1 >> 16 & 255,2) + StringTools.hex(this1 >> 8 & 255,2) + StringTools.hex(this1 & 255,2);
 };
-thx.color._RGBA.RGBA_Impl_.equals = function(this1,other) {
-	return (this1 >> 16 & 255) == (other >> 16 & 255) && (this1 >> 24 & 255) == (other >> 24 & 255) && (this1 >> 8 & 255) == (other >> 8 & 255) && (this1 & 255) == (other & 255);
+thx_color__$RGBA_RGBA_$Impl_$.equals = function(this1,other) {
+	return (((this1 >> 16 & 255) == (other >> 16 & 255)?(this1 >> 24 & 255) == (other >> 24 & 255):false)?(this1 >> 8 & 255) == (other >> 8 & 255):false)?(this1 & 255) == (other & 255):false;
 };
-thx.color._RGBA.RGBA_Impl_.darker = function(this1,t) {
-	var this2 = thx.color._RGBXA.RGBXA_Impl_.darker(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
-	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-};
-thx.color._RGBA.RGBA_Impl_.lighter = function(this1,t) {
-	var this2 = thx.color._RGBXA.RGBXA_Impl_.lighter(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
-	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-};
-thx.color._RGBA.RGBA_Impl_.transparent = function(this1,t) {
-	var this2 = thx.color._RGBXA.RGBXA_Impl_.transparent(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
-	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-};
-thx.color._RGBA.RGBA_Impl_.opaque = function(this1,t) {
-	var this2 = thx.color._RGBXA.RGBXA_Impl_.opaque(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),t);
-	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-};
-thx.color._RGBA.RGBA_Impl_.interpolate = function(this1,other,t) {
-	var this2 = thx.color._RGBXA.RGBXA_Impl_.interpolate(thx.color._RGBA.RGBA_Impl_.toRGBXA(this1),thx.color._RGBA.RGBA_Impl_.toRGBXA(other),t);
-	return thx.color._RGBA.RGBA_Impl_.fromFloats(this2[0],this2[1],this2[2],this2[3]);
-};
-thx.color._RGBA.RGBA_Impl_.get_alpha = function(this1) {
+thx_color__$RGBA_RGBA_$Impl_$.get_alpha = function(this1) {
 	return this1 >> 24 & 255;
 };
-thx.color._RGBA.RGBA_Impl_.get_red = function(this1) {
+thx_color__$RGBA_RGBA_$Impl_$.get_red = function(this1) {
 	return this1 >> 16 & 255;
 };
-thx.color._RGBA.RGBA_Impl_.get_green = function(this1) {
+thx_color__$RGBA_RGBA_$Impl_$.get_green = function(this1) {
 	return this1 >> 8 & 255;
 };
-thx.color._RGBA.RGBA_Impl_.get_blue = function(this1) {
+thx_color__$RGBA_RGBA_$Impl_$.get_blue = function(this1) {
 	return this1 & 255;
 };
-thx.color._RGBX = {};
-thx.color._RGBX.RGBX_Impl_ = function() { };
-thx.color._RGBX.RGBX_Impl_.__name__ = true;
-thx.color._RGBX.RGBX_Impl_.fromString = function(color) {
-	var info = thx.color.parse.ColorParser.parseHex(color);
-	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$RGBX_RGBX_$Impl_$ = {};
+thx_color__$RGBX_RGBX_$Impl_$.__name__ = ["thx","color","_RGBX","RGBX_Impl_"];
+thx_color__$RGBX_RGBX_$Impl_$.create = function(red,green,blue) {
+	var tmp;
+	if(red < 0) tmp = 0; else if(red > 1) tmp = 1; else tmp = red;
+	var tmp1;
+	if(green < 0) tmp1 = 0; else if(green > 1) tmp1 = 1; else tmp1 = green;
+	var tmp2;
+	if(blue < 0) tmp2 = 0; else if(blue > 1) tmp2 = 1; else tmp2 = blue;
+	return [tmp,tmp1,tmp2];
+};
+thx_color__$RGBX_RGBX_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$RGBX_RGBX_$Impl_$.create(arr[0],arr[1],arr[2]);
+};
+thx_color__$RGBX_RGBX_$Impl_$.fromInts = function(arr) {
+	thx_core_ArrayInts.resize(arr,3);
+	return thx_color__$RGBX_RGBX_$Impl_$.create(arr[0] / 255,arr[1] / 255,arr[2] / 255);
+};
+thx_color__$RGBX_RGBX_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseHex(color);
+	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			return thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
+			tmp = thx_color__$RGBX_RGBX_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._RGBX.RGBX_Impl_.fromArray = function(values) {
-	var channels = values.map(function(v) {
-		if(v < 0) return 0; else if(v > 1) return 1; else return v;
-	}).concat([0,0,0]).slice(0,3);
+thx_color__$RGBX_RGBX_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx.color._RGBX.RGBX_Impl_.fromInts = function(red,green,blue) {
-	return [red / 255,green / 255,blue / 255];
+thx_color__$RGBX_RGBX_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],0),thx_core_Floats.interpolate(t,this1[1],0),thx_core_Floats.interpolate(t,this1[2],0)];
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBX.RGBX_Impl_.fromFloats = function(red,green,blue) {
-	return [red,green,blue];
+thx_color__$RGBX_RGBX_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],1),thx_core_Floats.interpolate(t,this1[1],1),thx_core_Floats.interpolate(t,this1[2],1)];
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBX.RGBX_Impl_._new = function(channels) {
-	return channels;
+thx_color__$RGBX_RGBX_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2])];
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBX.RGBX_Impl_.toCSS3 = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.toCSS3 = function(this1) {
 	return "rgb(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
 };
-thx.color._RGBX.RGBX_Impl_.toString = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.toString = function(this1) {
 	return "rgb(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
 };
-thx.color._RGBX.RGBX_Impl_.toHex = function(this1,prefix) {
+thx_color__$RGBX_RGBX_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
 	return "" + prefix + StringTools.hex(Math.round(this1[0] * 255),2) + StringTools.hex(Math.round(this1[1] * 255),2) + StringTools.hex(Math.round(this1[2] * 255),2);
 };
-thx.color._RGBX.RGBX_Impl_.toCMYK = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
+};
+thx_color__$RGBX_RGBX_$Impl_$.withAlpha = function(this1,alpha) {
+	var tmp;
+	var tmp1;
+	if(alpha < 0) tmp1 = 0; else if(alpha > 1) tmp1 = 1; else tmp1 = alpha;
+	var channels = this1.concat([tmp1]);
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBX_RGBX_$Impl_$.withRed = function(this1,newred) {
+	var tmp;
+	var tmp1;
+	if(newred < 0) tmp1 = 0; else if(newred > 1) tmp1 = 1; else tmp1 = newred;
+	var channels = [tmp1,Math.round(this1[1] * 255),Math.round(this1[2] * 255)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBX_RGBX_$Impl_$.withGreen = function(this1,newgreen) {
+	var tmp;
+	var tmp1;
+	if(newgreen < 0) tmp1 = 0; else if(newgreen > 1) tmp1 = 1; else tmp1 = newgreen;
+	var channels = [Math.round(this1[0] * 255),tmp1,Math.round(this1[2] * 255)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBX_RGBX_$Impl_$.withBlue = function(this1,newblue) {
+	var tmp;
+	var tmp1;
+	if(newblue < 0) tmp1 = 0; else if(newblue > 1) tmp1 = 1; else tmp1 = newblue;
+	var channels = [Math.round(this1[0] * 255),Math.round(this1[1] * 255),tmp1];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBX_RGBX_$Impl_$.toCIELab = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toCIELab(thx_color__$RGBX_RGBX_$Impl_$.toXYZ(this1));
+};
+thx_color__$RGBX_RGBX_$Impl_$.toCIELCh = function(this1) {
+	return thx_color__$CIELab_CIELab_$Impl_$.toCIELCh(thx_color__$RGBX_RGBX_$Impl_$.toCIELab(this1));
+};
+thx_color__$RGBX_RGBX_$Impl_$.toCMY = function(this1) {
+	return [1 - this1[0],1 - this1[1],1 - this1[2]];
+};
+thx_color__$RGBX_RGBX_$Impl_$.toCMYK = function(this1) {
 	var c = 0.0;
 	var y = 0.0;
 	var m = 0.0;
 	var k;
 	if(this1[0] + this1[1] + this1[2] == 0) k = 1.0; else {
-		c = 1 - this1[0];
-		m = 1 - this1[1];
-		y = 1 - this1[2];
-		k = Math.min(Math.min(c,m),y);
-		c = (c - k) / (1 - k);
-		m = (m - k) / (1 - k);
-		y = (y - k) / (1 - k);
+		k = 1 - Math.max(Math.max(this1[0],this1[1]),this1[2]);
+		c = (1 - this1[0] - k) / (1 - k);
+		m = (1 - this1[1] - k) / (1 - k);
+		y = (1 - this1[2] - k) / (1 - k);
 	}
 	return [c,m,y,k];
 };
-thx.color._RGBX.RGBX_Impl_.toGrey = function(this1) {
-	var grey = this1[0] * .2126 + this1[1] * .7152 + this1[2] * .0722;
-	var this2;
-	if(grey < 0) this2 = 0; else if(grey > 1) this2 = 1; else this2 = grey;
-	return this2;
+thx_color__$RGBX_RGBX_$Impl_$.toGrey = function(this1) {
+	return this1[0] * .2126 + this1[1] * .7152 + this1[2] * .0722;
 };
-thx.color._RGBX.RGBX_Impl_.toPerceivedGrey = function(this1) {
-	var grey = this1[0] * .299 + this1[1] * .587 + this1[2] * .114;
-	var this2;
-	if(grey < 0) this2 = 0; else if(grey > 1) this2 = 1; else this2 = grey;
-	return this2;
+thx_color__$RGBX_RGBX_$Impl_$.toPerceivedGrey = function(this1) {
+	return this1[0] * .299 + this1[1] * .587 + this1[2] * .114;
 };
-thx.color._RGBX.RGBX_Impl_.toPerceivedAccurateGrey = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.toPerceivedAccurateGrey = function(this1) {
+	var tmp;
 	var grey = Math.pow(this1[0],2) * .241 + Math.pow(this1[1],2) * .691 + Math.pow(this1[2],2) * .068;
-	var this2;
-	if(grey < 0) this2 = 0; else if(grey > 1) this2 = 1; else this2 = grey;
-	return this2;
+	tmp = grey;
+	return tmp;
 };
-thx.color._RGBX.RGBX_Impl_.toHSL = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.toHSL = function(this1) {
 	var min = Math.min(Math.min(this1[0],this1[1]),this1[2]);
 	var max = Math.max(Math.max(this1[0],this1[1]),this1[2]);
 	var delta = max - min;
@@ -1981,13 +3650,13 @@ thx.color._RGBX.RGBX_Impl_.toHSL = function(this1) {
 	var s;
 	var l = (max + min) / 2;
 	if(delta == 0.0) s = h = 0.0; else {
-		if(l < 0.5) s = delta / (max + min); else s = delta / (2 - max - min);
+		s = l < 0.5?delta / (max + min):delta / (2 - max - min);
 		if(this1[0] == max) h = (this1[1] - this1[2]) / delta + (this1[1] < Math.round(this1[2] * 255)?6:0); else if(this1[1] == max) h = (this1[2] - this1[0]) / delta + 2; else h = (this1[0] - this1[1]) / delta + 4;
 		h *= 60;
 	}
 	return [h,s,l];
 };
-thx.color._RGBX.RGBX_Impl_.toHSV = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.toHSV = function(this1) {
 	var min = Math.min(Math.min(this1[0],this1[1]),this1[2]);
 	var max = Math.max(Math.max(this1[0],this1[1]),this1[2]);
 	var delta = max - min;
@@ -1997,276 +3666,584 @@ thx.color._RGBX.RGBX_Impl_.toHSV = function(this1) {
 	if(delta != 0) s = delta / max; else {
 		s = 0;
 		h = -1;
-		return [h,s,v];
+		return [-1,0,v];
 	}
 	if(this1[0] == max) h = (this1[1] - this1[2]) / delta; else if(this1[1] == max) h = 2 + (this1[2] - this1[0]) / delta; else h = 4 + (this1[0] - this1[1]) / delta;
 	h *= 60;
 	if(h < 0) h += 360;
 	return [h,s,v];
 };
-thx.color._RGBX.RGBX_Impl_.toRGBXA = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.toRGB = function(this1) {
+	return thx_color__$RGB_RGB_$Impl_$.createf(this1[0],this1[1],this1[2]);
+};
+thx_color__$RGBX_RGBX_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
 	var channels = this1.concat([1.0]);
-	return channels;
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBX.RGBX_Impl_.withAlpha = function(this1,alpha) {
-	var channels = this1.concat([alpha]);
-	return channels;
+thx_color__$RGBX_RGBX_$Impl_$.toXYZ = function(this1) {
+	var r = this1[0];
+	var g = this1[1];
+	var b = this1[2];
+	r = 100 * (r > 0.04045?Math.pow((r + 0.055) / 1.055,2.4):r / 12.92);
+	g = 100 * (g > 0.04045?Math.pow((g + 0.055) / 1.055,2.4):g / 12.92);
+	b = 100 * (b > 0.04045?Math.pow((b + 0.055) / 1.055,2.4):b / 12.92);
+	return [r * 0.4124 + g * 0.3576 + b * 0.1805,r * 0.2126 + g * 0.7152 + b * 0.0722,r * 0.0193 + g * 0.1192 + b * 0.9505];
 };
-thx.color._RGBX.RGBX_Impl_.toRGB = function(this1) {
-	return thx.color._RGB.RGB_Impl_.fromFloats(this1[0],this1[1],this1[2]);
+thx_color__$RGBX_RGBX_$Impl_$.toYxy = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ(this1));
 };
-thx.color._RGBX.RGBX_Impl_.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2];
-};
-thx.color._RGBX.RGBX_Impl_.darker = function(this1,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],0),thx.core.Floats.interpolateBetween(t,this1[1],0),thx.core.Floats.interpolateBetween(t,this1[2],0)];
-	return channels;
-};
-thx.color._RGBX.RGBX_Impl_.lighter = function(this1,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],1),thx.core.Floats.interpolateBetween(t,this1[1],1),thx.core.Floats.interpolateBetween(t,this1[2],1)];
-	return channels;
-};
-thx.color._RGBX.RGBX_Impl_.interpolate = function(this1,other,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2])];
-	return channels;
-};
-thx.color._RGBX.RGBX_Impl_.get_red = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.get_red = function(this1) {
 	return Math.round(this1[0] * 255);
 };
-thx.color._RGBX.RGBX_Impl_.get_green = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.get_green = function(this1) {
 	return Math.round(this1[1] * 255);
 };
-thx.color._RGBX.RGBX_Impl_.get_blue = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.get_blue = function(this1) {
 	return Math.round(this1[2] * 255);
 };
-thx.color._RGBX.RGBX_Impl_.get_redf = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.get_redf = function(this1) {
 	return this1[0];
 };
-thx.color._RGBX.RGBX_Impl_.get_greenf = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.get_greenf = function(this1) {
 	return this1[1];
 };
-thx.color._RGBX.RGBX_Impl_.get_bluef = function(this1) {
+thx_color__$RGBX_RGBX_$Impl_$.get_bluef = function(this1) {
 	return this1[2];
 };
-thx.color._RGBXA = {};
-thx.color._RGBXA.RGBXA_Impl_ = function() { };
-thx.color._RGBXA.RGBXA_Impl_.__name__ = true;
-thx.color._RGBXA.RGBXA_Impl_.parse = function(color) {
-	var info = thx.color.parse.ColorParser.parseHex(color);
-	if(null == info) info = thx.color.parse.ColorParser.parseColor(color);
+var thx_color__$RGBXA_RGBXA_$Impl_$ = {};
+thx_color__$RGBXA_RGBXA_$Impl_$.__name__ = ["thx","color","_RGBXA","RGBXA_Impl_"];
+thx_color__$RGBXA_RGBXA_$Impl_$.create = function(red,green,blue,alpha) {
+	var tmp;
+	if(red < 0) tmp = 0; else if(red > 1) tmp = 1; else tmp = red;
+	var tmp1;
+	if(green < 0) tmp1 = 0; else if(green > 1) tmp1 = 1; else tmp1 = green;
+	var tmp2;
+	if(blue < 0) tmp2 = 0; else if(blue > 1) tmp2 = 1; else tmp2 = blue;
+	var tmp3;
+	if(alpha < 0) tmp3 = 0; else if(alpha > 1) tmp3 = 1; else tmp3 = alpha;
+	return [tmp,tmp1,tmp2,tmp3];
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,4);
+	return thx_color__$RGBXA_RGBXA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.fromInts = function(arr) {
+	thx_core_ArrayInts.resize(arr,4);
+	return thx_color__$RGBXA_RGBXA_$Impl_$.create(arr[0] / 255,arr[1] / 255,arr[2] / 255,arr[3] / 255);
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseHex(color);
+	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
+	var tmp;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			var this1 = thx.color._RGBX.RGBX_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,3));
+			var this1 = thx_color__$RGBX_RGBX_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
+			var tmp1;
 			var channels = this1.concat([1.0]);
-			return channels;
+			tmp1 = channels;
+			tmp = tmp1;
+			break;
 		case "rgba":
-			return thx.color._RGBXA.RGBXA_Impl_.fromArray(thx.color.parse.ColorParser.getFloatChannels(info.channels,4));
+			tmp = thx_color__$RGBXA_RGBXA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
+			break;
 		default:
-			return null;
+			tmp = null;
 		}
 	} catch( e ) {
-		return null;
+		tmp = null;
 	}
+	return tmp;
 };
-thx.color._RGBXA.RGBXA_Impl_.fromArray = function(values) {
-	var channels = values.map(function(v) {
-		if(v < 0) return 0; else if(v > 1) return 1; else return v;
-	}).concat([0,0,0,0]).slice(0,4);
+thx_color__$RGBXA_RGBXA_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx.color._RGBXA.RGBXA_Impl_.fromInts = function(red,green,blue,alpha) {
-	return [red / 255,green / 255,blue / 255,alpha / 255];
+thx_color__$RGBXA_RGBXA_$Impl_$.darker = function(this1,t) {
+	var tmp;
+	var tmp1;
+	var channels1 = this1.slice(0,3);
+	tmp1 = channels1;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.darker(tmp1,t);
+	var alpha = Math.round(this1[3] * 255);
+	var tmp2;
+	if(alpha < 0) tmp2 = 0; else if(alpha > 1) tmp2 = 1; else tmp2 = alpha;
+	var channels = this2.concat([tmp2]);
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBXA.RGBXA_Impl_.fromFloats = function(red,green,blue,alpha) {
-	return [red,green,blue,alpha];
+thx_color__$RGBXA_RGBXA_$Impl_$.lighter = function(this1,t) {
+	var tmp;
+	var tmp1;
+	var channels1 = this1.slice(0,3);
+	tmp1 = channels1;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.lighter(tmp1,t);
+	var alpha = Math.round(this1[3] * 255);
+	var tmp2;
+	if(alpha < 0) tmp2 = 0; else if(alpha > 1) tmp2 = 1; else tmp2 = alpha;
+	var channels = this2.concat([tmp2]);
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBXA.RGBXA_Impl_._new = function(channels) {
-	return channels;
+thx_color__$RGBXA_RGBXA_$Impl_$.transparent = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Ints.interpolate(t,this1[3],0)];
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBXA.RGBXA_Impl_.toCSS3 = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.opaque = function(this1,t) {
+	var tmp;
+	var channels = [this1[0],this1[1],this1[2],thx_core_Ints.interpolate(t,this1[3],1)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Ints.interpolate(t,this1[0],other[0]),thx_core_Ints.interpolate(t,this1[1],other[1]),thx_core_Ints.interpolate(t,this1[2],other[2]),thx_core_Ints.interpolate(t,this1[3],other[3])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.withAlpha = function(this1,newalpha) {
+	var tmp;
+	var tmp1;
+	if(newalpha < 0) tmp1 = 0; else if(newalpha > 1) tmp1 = 1; else tmp1 = newalpha;
+	var channels = [Math.round(this1[0] * 255),Math.round(this1[1] * 255),Math.round(this1[2] * 255),tmp1];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.withRed = function(this1,newred) {
+	var tmp;
+	var tmp1;
+	if(newred < 0) tmp1 = 0; else if(newred > 1) tmp1 = 1; else tmp1 = newred;
+	var channels = [tmp1,Math.round(this1[1] * 255),Math.round(this1[2] * 255),Math.round(this1[3] * 255)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.withGreen = function(this1,newgreen) {
+	var tmp;
+	var tmp1;
+	if(newgreen < 0) tmp1 = 0; else if(newgreen > 1) tmp1 = 1; else tmp1 = newgreen;
+	var channels = [Math.round(this1[0] * 255),tmp1,Math.round(this1[2] * 255),Math.round(this1[3] * 255)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.withBlue = function(this1,newblue) {
+	var tmp;
+	var tmp1;
+	if(newblue < 0) tmp1 = 0; else if(newblue > 1) tmp1 = 1; else tmp1 = newblue;
+	var channels = [Math.round(this1[0] * 255),Math.round(this1[1] * 255),tmp1,Math.round(this1[3] * 255)];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.toCSS3 = function(this1) {
 	return "rgba(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
 };
-thx.color._RGBXA.RGBXA_Impl_.toString = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.toString = function(this1) {
 	return "rgba(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
 };
-thx.color._RGBXA.RGBXA_Impl_.toHex = function(this1,prefix) {
+thx_color__$RGBXA_RGBXA_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
 	return "" + prefix + StringTools.hex(Math.round(this1[3] * 255),2) + StringTools.hex(Math.round(this1[0] * 255),2) + StringTools.hex(Math.round(this1[1] * 255),2) + StringTools.hex(Math.round(this1[2] * 255),2);
 };
-thx.color._RGBXA.RGBXA_Impl_.toHSLA = function(this1) {
-	var this2 = thx.color._RGBX.RGBX_Impl_.toHSL((function($this) {
-		var $r;
-		var channels = this1.slice(0,3);
-		$r = channels;
-		return $r;
-	}(this)));
-	var alpha = Math.round(this1[3] * 255);
-	var channels1 = this2.concat([alpha]);
-	return channels1;
+thx_color__$RGBXA_RGBXA_$Impl_$.equals = function(this1,other) {
+	return ((Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false)?Math.abs(this1[3] - other[3]) <= 10e-10:false;
 };
-thx.color._RGBXA.RGBXA_Impl_.toHSVA = function(this1) {
-	var this2 = thx.color._RGBX.RGBX_Impl_.toHSV((function($this) {
-		var $r;
-		var channels = this1.slice(0,3);
-		$r = channels;
-		return $r;
-	}(this)));
+thx_color__$RGBXA_RGBXA_$Impl_$.toHSLA = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels1 = this1.slice(0,3);
+	tmp1 = channels1;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.toHSL(tmp1);
 	var alpha = Math.round(this1[3] * 255);
-	var channels1 = this2.concat([alpha]);
-	return channels1;
+	var tmp2;
+	if(alpha < 0) tmp2 = 0; else if(alpha > 1) tmp2 = 1; else tmp2 = alpha;
+	var channels = this2.concat([tmp2]);
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBXA.RGBXA_Impl_.toRGB = function(this1) {
-	var this2;
+thx_color__$RGBXA_RGBXA_$Impl_$.toHSVA = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels1 = this1.slice(0,3);
+	tmp1 = channels1;
+	var this2 = thx_color__$RGBX_RGBX_$Impl_$.toHSV(tmp1);
+	var alpha = Math.round(this1[3] * 255);
+	var tmp2;
+	if(alpha < 0) tmp2 = 0; else if(alpha > 1) tmp2 = 1; else tmp2 = alpha;
+	var channels = this2.concat([tmp2]);
+	tmp = channels;
+	return tmp;
+};
+thx_color__$RGBXA_RGBXA_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var tmp1;
 	var channels = this1.slice(0,3);
-	this2 = channels;
-	return thx.color._RGB.RGB_Impl_.fromFloats(this2[0],this2[1],this2[2]);
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
 };
-thx.color._RGBXA.RGBXA_Impl_.toRGBX = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.toRGBX = function(this1) {
+	var tmp;
 	var channels = this1.slice(0,3);
-	return channels;
+	tmp = channels;
+	return tmp;
 };
-thx.color._RGBXA.RGBXA_Impl_.toRGBA = function(this1) {
-	return thx.color._RGBA.RGBA_Impl_.fromFloats(this1[0],this1[1],this1[2],this1[3]);
+thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA = function(this1) {
+	return thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this1[0],this1[1],this1[2],this1[3]]);
 };
-thx.color._RGBXA.RGBXA_Impl_.equals = function(this1,other) {
-	return this1[0] == other[0] && this1[1] == other[1] && this1[2] == other[2] && this1[3] == other[3];
-};
-thx.color._RGBXA.RGBXA_Impl_.darker = function(this1,t) {
-	var this2 = thx.color._RGBX.RGBX_Impl_.darker((function($this) {
-		var $r;
-		var channels = this1.slice(0,3);
-		$r = channels;
-		return $r;
-	}(this)),t);
-	var alpha = Math.round(this1[3] * 255);
-	var channels1 = this2.concat([alpha]);
-	return channels1;
-};
-thx.color._RGBXA.RGBXA_Impl_.lighter = function(this1,t) {
-	var this2 = thx.color._RGBX.RGBX_Impl_.lighter((function($this) {
-		var $r;
-		var channels = this1.slice(0,3);
-		$r = channels;
-		return $r;
-	}(this)),t);
-	var alpha = Math.round(this1[3] * 255);
-	var channels1 = this2.concat([alpha]);
-	return channels1;
-};
-thx.color._RGBXA.RGBXA_Impl_.transparent = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],0)];
-	return channels;
-};
-thx.color._RGBXA.RGBXA_Impl_.opaque = function(this1,t) {
-	var channels = [this1[0],this1[1],this1[2],thx.core.Floats.interpolateBetween(t,this1[3],1)];
-	return channels;
-};
-thx.color._RGBXA.RGBXA_Impl_.interpolate = function(this1,other,t) {
-	var channels = [thx.core.Floats.interpolateBetween(t,this1[0],other[0]),thx.core.Floats.interpolateBetween(t,this1[1],other[1]),thx.core.Floats.interpolateBetween(t,this1[2],other[2]),thx.core.Floats.interpolateBetween(t,this1[3],other[3])];
-	return channels;
-};
-thx.color._RGBXA.RGBXA_Impl_.get_red = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_red = function(this1) {
 	return Math.round(this1[0] * 255);
 };
-thx.color._RGBXA.RGBXA_Impl_.get_green = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_green = function(this1) {
 	return Math.round(this1[1] * 255);
 };
-thx.color._RGBXA.RGBXA_Impl_.get_blue = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_blue = function(this1) {
 	return Math.round(this1[2] * 255);
 };
-thx.color._RGBXA.RGBXA_Impl_.get_alpha = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha = function(this1) {
 	return Math.round(this1[3] * 255);
 };
-thx.color._RGBXA.RGBXA_Impl_.get_redf = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_redf = function(this1) {
 	return this1[0];
 };
-thx.color._RGBXA.RGBXA_Impl_.get_greenf = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_greenf = function(this1) {
 	return this1[1];
 };
-thx.color._RGBXA.RGBXA_Impl_.get_bluef = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_bluef = function(this1) {
 	return this1[2];
 };
-thx.color._RGBXA.RGBXA_Impl_.get_alphaf = function(this1) {
+thx_color__$RGBXA_RGBXA_$Impl_$.get_alphaf = function(this1) {
 	return this1[3];
 };
-thx.color.parse = {};
-thx.color.parse.ColorParser = function() {
+var thx_color__$XYZ_XYZ_$Impl_$ = {};
+thx_color__$XYZ_XYZ_$Impl_$.__name__ = ["thx","color","_XYZ","XYZ_Impl_"];
+thx_color__$XYZ_XYZ_$Impl_$.create = function(x,y,z) {
+	return [x,y,z];
+};
+thx_color__$XYZ_XYZ_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$XYZ_XYZ_$Impl_$.create(arr[0],arr[1],arr[2]);
+};
+thx_color__$XYZ_XYZ_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
+	if(null == info) return null;
+	var tmp;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "ciexyz":case "xyz":
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
+			tmp = channels;
+			break;
+		default:
+			tmp = null;
+		}
+	} catch( e ) {
+		tmp = null;
+	}
+	return tmp;
+};
+thx_color__$XYZ_XYZ_$Impl_$._new = function(channels) {
+	return channels;
+};
+thx_color__$XYZ_XYZ_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$XYZ_XYZ_$Impl_$.withX = function(this1,newx) {
+	return [newx,this1[1],this1[2]];
+};
+thx_color__$XYZ_XYZ_$Impl_$.withY = function(this1,newy) {
+	return [this1[0],newy,this1[2]];
+};
+thx_color__$XYZ_XYZ_$Impl_$.withZ = function(this1,newz) {
+	return [this1[0],this1[1],newz];
+};
+thx_color__$XYZ_XYZ_$Impl_$.toString = function(this1) {
+	return "XYZ(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+};
+thx_color__$XYZ_XYZ_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
+};
+thx_color__$XYZ_XYZ_$Impl_$.toCIELab = function(this1) {
+	var x = this1[0] * 0.0105211106;
+	var y = this1[1] * 0.01;
+	var z = this1[2] * 0.00918417016;
+	x = x > 0.008856?Math.pow(x,0.333333333333333315):7.787 * x + 0.137931034482758619;
+	y = y > 0.008856?Math.pow(y,0.333333333333333315):7.787 * y + 0.137931034482758619;
+	z = z > 0.008856?Math.pow(z,0.333333333333333315):7.787 * z + 0.137931034482758619;
+	return y > 0.008856?[116 * y - 16,500 * (x - y),200 * (y - z)]:[903.3 * y,500 * (x - y),200 * (y - z)];
+};
+thx_color__$XYZ_XYZ_$Impl_$.toCIELCh = function(this1) {
+	return thx_color__$CIELab_CIELab_$Impl_$.toCIELCh(thx_color__$XYZ_XYZ_$Impl_$.toCIELab(this1));
+};
+thx_color__$XYZ_XYZ_$Impl_$.toCMY = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+};
+thx_color__$XYZ_XYZ_$Impl_$.toCMYK = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+};
+thx_color__$XYZ_XYZ_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1);
+	tmp = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	return tmp;
+};
+thx_color__$XYZ_XYZ_$Impl_$.toHSL = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+};
+thx_color__$XYZ_XYZ_$Impl_$.toHSV = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+};
+thx_color__$XYZ_XYZ_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1);
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$XYZ_XYZ_$Impl_$.toRGBX = function(this1) {
+	var x = this1[0] / 100;
+	var y = this1[1] / 100;
+	var z = this1[2] / 100;
+	var r = x * 3.2406 + y * -1.5372 + z * -0.4986;
+	var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
+	var b = x * 0.0557 + y * -0.204 + z * 1.0570;
+	r = r > 0.0031308?1.055 * Math.pow(r,0.416666666666666685) - 0.055:12.92 * r;
+	g = g > 0.0031308?1.055 * Math.pow(g,0.416666666666666685) - 0.055:12.92 * g;
+	b = b > 0.0031308?1.055 * Math.pow(b,0.416666666666666685) - 0.055:12.92 * b;
+	return [r,g,b];
+};
+thx_color__$XYZ_XYZ_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1);
+	var tmp1;
+	var channels = this2.concat([1.0]);
+	tmp1 = channels;
+	tmp = tmp1;
+	return tmp;
+};
+thx_color__$XYZ_XYZ_$Impl_$.toYxy = function(this1) {
+	var sum = this1[0] + this1[1] + this1[2];
+	return [this1[1],sum == 0?1:this1[0] / sum,sum == 0?1:this1[1] / sum];
+};
+thx_color__$XYZ_XYZ_$Impl_$.get_x = function(this1) {
+	return this1[0];
+};
+thx_color__$XYZ_XYZ_$Impl_$.get_y = function(this1) {
+	return this1[1];
+};
+thx_color__$XYZ_XYZ_$Impl_$.get_z = function(this1) {
+	return this1[2];
+};
+var thx_color__$Yxy_Yxy_$Impl_$ = {};
+thx_color__$Yxy_Yxy_$Impl_$.__name__ = ["thx","color","_Yxy","Yxy_Impl_"];
+thx_color__$Yxy_Yxy_$Impl_$.create = function(y1,x,y2) {
+	return [y1,x,y2];
+};
+thx_color__$Yxy_Yxy_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3);
+	return thx_color__$Yxy_Yxy_$Impl_$.create(arr[0],arr[1],arr[2]);
+};
+thx_color__$Yxy_Yxy_$Impl_$.fromString = function(color) {
+	var info = thx_color_parse_ColorParser.parseColor(color);
+	if(null == info) return null;
+	var tmp;
+	try {
+		var _g = info.name;
+		switch(_g) {
+		case "yxy":
+			var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
+			tmp = channels;
+			break;
+		default:
+			tmp = null;
+		}
+	} catch( e ) {
+		tmp = null;
+	}
+	return tmp;
+};
+thx_color__$Yxy_Yxy_$Impl_$._new = function(channels) {
+	return channels;
+};
+thx_color__$Yxy_Yxy_$Impl_$.interpolate = function(this1,other,t) {
+	var tmp;
+	var channels = [thx_core_Floats.interpolate(t,this1[0],other[0]),thx_core_Floats.interpolate(t,this1[1],other[1]),thx_core_Floats.interpolate(t,this1[2],other[2])];
+	tmp = channels;
+	return tmp;
+};
+thx_color__$Yxy_Yxy_$Impl_$.withY1 = function(this1,newy1) {
+	return [newy1,this1[1],this1[2]];
+};
+thx_color__$Yxy_Yxy_$Impl_$.withY = function(this1,newx) {
+	return [this1[0],this1[1],this1[2]];
+};
+thx_color__$Yxy_Yxy_$Impl_$.withZ = function(this1,newy2) {
+	return [this1[0],this1[1],this1[2]];
+};
+thx_color__$Yxy_Yxy_$Impl_$.toString = function(this1) {
+	return "Yxy(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+};
+thx_color__$Yxy_Yxy_$Impl_$.equals = function(this1,other) {
+	return (Math.abs(this1[0] - other[0]) <= 10e-10?Math.abs(this1[1] - other[1]) <= 10e-10:false)?Math.abs(this1[2] - other[2]) <= 10e-10:false;
+};
+thx_color__$Yxy_Yxy_$Impl_$.toCIELab = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toCIELab(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+};
+thx_color__$Yxy_Yxy_$Impl_$.toCIELCh = function(this1) {
+	return thx_color__$CIELab_CIELab_$Impl_$.toCIELCh(thx_color__$XYZ_XYZ_$Impl_$.toCIELab(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1)));
+};
+thx_color__$Yxy_Yxy_$Impl_$.toCMY = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1)));
+};
+thx_color__$Yxy_Yxy_$Impl_$.toCMYK = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1)));
+};
+thx_color__$Yxy_Yxy_$Impl_$.toGrey = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+	tmp = this2[0] * .2126 + this2[1] * .7152 + this2[2] * .0722;
+	return tmp;
+};
+thx_color__$Yxy_Yxy_$Impl_$.toHSL = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1)));
+};
+thx_color__$Yxy_Yxy_$Impl_$.toHSV = function(this1) {
+	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1)));
+};
+thx_color__$Yxy_Yxy_$Impl_$.toRGB = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$Yxy_Yxy_$Impl_$.toRGBX = function(this1) {
+	return thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+};
+thx_color__$Yxy_Yxy_$Impl_$.toRGBXA = function(this1) {
+	var tmp;
+	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+	var tmp1;
+	var channels = this2.concat([1.0]);
+	tmp1 = channels;
+	tmp = tmp1;
+	return tmp;
+};
+thx_color__$Yxy_Yxy_$Impl_$.toXYZ = function(this1) {
+	return [this1[1] * (this1[0] / this1[2]),this1[0],(1 - this1[1] - this1[2]) * (this1[0] / this1[2])];
+};
+thx_color__$Yxy_Yxy_$Impl_$.get_y1 = function(this1) {
+	return this1[0];
+};
+thx_color__$Yxy_Yxy_$Impl_$.get_x = function(this1) {
+	return this1[1];
+};
+thx_color__$Yxy_Yxy_$Impl_$.get_y2 = function(this1) {
+	return this1[2];
+};
+var thx_color_parse_ColorParser = function() {
 	this.pattern_color = new EReg("^\\s*([^(]+)\\s*\\(([^)]*)\\)\\s*$","i");
-	this.pattern_channel = new EReg("^\\s*(\\d*.\\d+|\\d+)(%|º|deg)?\\s*$","i");
+	this.pattern_channel = new EReg("^\\s*(\\d*.\\d+|\\d+)(%|deg|rad)?\\s*$","i");
 };
-thx.color.parse.ColorParser.__name__ = true;
-thx.color.parse.ColorParser.parseColor = function(s) {
-	return thx.color.parse.ColorParser.parser.processColor(s);
+thx_color_parse_ColorParser.__name__ = ["thx","color","parse","ColorParser"];
+thx_color_parse_ColorParser.parseColor = function(s) {
+	return thx_color_parse_ColorParser.parser.processColor(s);
 };
-thx.color.parse.ColorParser.parseHex = function(s) {
-	return thx.color.parse.ColorParser.parser.processHex(s);
+thx_color_parse_ColorParser.parseHex = function(s) {
+	return thx_color_parse_ColorParser.parser.processHex(s);
 };
-thx.color.parse.ColorParser.parseChannel = function(s) {
-	return thx.color.parse.ColorParser.parser.processChannel(s);
+thx_color_parse_ColorParser.parseChannel = function(s) {
+	return thx_color_parse_ColorParser.parser.processChannel(s);
 };
-thx.color.parse.ColorParser.getFloatChannels = function(channels,length) {
+thx_color_parse_ColorParser.getFloatChannels = function(channels,length,useInt8) {
+	if(useInt8 == null) useInt8 = true;
 	if(length != channels.length) throw "invalid number of channels, expected " + length + " but it is " + channels.length;
-	return channels.map(thx.color.parse.ColorParser.getFloatChannel);
+	var tmp;
+	var a2 = useInt8;
+	tmp = function(a1) {
+		return thx_color_parse_ColorParser.getFloatChannel(a1,a2);
+	};
+	return channels.map(tmp);
 };
-thx.color.parse.ColorParser.getInt8Channels = function(channels,length) {
+thx_color_parse_ColorParser.getInt8Channels = function(channels,length) {
 	if(length != channels.length) throw "invalid number of channels, expected " + length + " but it is " + channels.length;
-	return channels.map(thx.color.parse.ColorParser.getInt8Channel);
+	return channels.map(thx_color_parse_ColorParser.getInt8Channel);
 };
-thx.color.parse.ColorParser.getFloatChannel = function(channel) {
+thx_color_parse_ColorParser.getFloatChannel = function(channel,useInt8) {
+	if(useInt8 == null) useInt8 = true;
+	var tmp;
 	switch(channel[1]) {
 	case 5:
 		var v = channel[2];
-		if(v) return 1; else return 0;
+		if(v) tmp = 1; else tmp = 0;
 		break;
 	case 1:
 		var v1 = channel[2];
-		return v1;
+		tmp = v1;
+		break;
 	case 4:
 		var v2 = channel[2];
-		return v2;
+		tmp = v2;
+		break;
 	case 2:
 		var v3 = channel[2];
-		return v3;
+		tmp = v3;
+		break;
 	case 3:
 		var v4 = channel[2];
-		return v4 / 255;
+		if(useInt8) tmp = v4 / 255; else {
+			var v5 = channel[2];
+			tmp = v5;
+		}
+		break;
 	case 0:
-		var v5 = channel[2];
-		return v5 / 100;
+		var v6 = channel[2];
+		tmp = v6 / 100;
+		break;
 	}
+	return tmp;
 };
-thx.color.parse.ColorParser.getInt8Channel = function(channel) {
+thx_color_parse_ColorParser.getInt8Channel = function(channel) {
+	var tmp;
 	switch(channel[1]) {
 	case 5:
 		var v = channel[2];
-		if(v) return 1; else return 0;
+		if(v) tmp = 1; else tmp = 0;
 		break;
 	case 3:
 		var v1 = channel[2];
-		return v1;
+		tmp = v1;
+		break;
 	case 0:
 		var v2 = channel[2];
-		return Math.round(255 * v2 / 100);
+		tmp = Math.round(255 * v2 / 100);
+		break;
 	default:
 		throw "unable to extract a valid int8 value";
 	}
+	return tmp;
 };
-thx.color.parse.ColorParser.prototype = {
-	processHex: function(s) {
-		if(!thx.color.parse.ColorParser.isPureHex.match(s)) {
+thx_color_parse_ColorParser.prototype = {
+	pattern_color: null
+	,pattern_channel: null
+	,processHex: function(s) {
+		if(!thx_color_parse_ColorParser.isPureHex.match(s)) {
 			if(HxOverrides.substr(s,0,1) == "#") {
 				if(s.length == 4) s = s.charAt(1) + s.charAt(1) + s.charAt(2) + s.charAt(2) + s.charAt(3) + s.charAt(3); else if(s.length == 5) s = s.charAt(1) + s.charAt(1) + s.charAt(2) + s.charAt(2) + s.charAt(3) + s.charAt(3) + s.charAt(4) + s.charAt(4); else s = HxOverrides.substr(s,1,null);
 			} else if(HxOverrides.substr(s,0,2) == "0x") s = HxOverrides.substr(s,2,null); else return null;
 		}
 		var channels = [];
 		while(s.length > 0) {
-			channels.push(thx.color.parse.ChannelInfo.CIInt8(Std.parseInt("0x" + HxOverrides.substr(s,0,2))));
+			channels.push(thx_color_parse_ChannelInfo.CIInt8(Std.parseInt("0x" + HxOverrides.substr(s,0,2))));
 			s = HxOverrides.substr(s,2,null);
 		}
-		if(channels.length == 4) return new thx.color.parse.ColorInfo("rgba",channels.slice(1).concat([channels[0]])); else return new thx.color.parse.ColorInfo("rgb",channels);
+		if(channels.length == 4) return new thx_color_parse_ColorInfo("rgba",channels.slice(1).concat([channels[0]])); else return new thx_color_parse_ColorInfo("rgb",channels);
 	}
 	,processColor: function(s) {
 		if(!this.pattern_color.match(s)) return null;
@@ -2274,8 +4251,7 @@ thx.color.parse.ColorParser.prototype = {
 		if(null == name) return null;
 		name = name.toLowerCase();
 		var m2 = this.pattern_color.matched(2);
-		var s_channels;
-		if(null == m2) s_channels = []; else s_channels = m2.split(",");
+		var s_channels = null == m2?[]:m2.split(",");
 		var channels = [];
 		var channel;
 		var _g = 0;
@@ -2286,72 +4262,115 @@ thx.color.parse.ColorParser.prototype = {
 			if(null == channel) return null;
 			channels.push(channel);
 		}
-		return new thx.color.parse.ColorInfo(name,channels);
+		return new thx_color_parse_ColorInfo(name,channels);
 	}
 	,processChannel: function(s) {
 		if(!this.pattern_channel.match(s)) return null;
 		var value = this.pattern_channel.matched(1);
 		var unit = this.pattern_channel.matched(2);
 		if(unit == null) unit = "";
+		var tmp;
 		try {
 			switch(unit) {
 			case "%":
-				if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIPercent(thx.core.Floats.parse(value)); else return null;
+				if(thx_core_Floats.canParse(value)) tmp = thx_color_parse_ChannelInfo.CIPercent(thx_core_Floats.parse(value)); else tmp = null;
 				break;
 			case "deg":
-				if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIDegree(thx.core.Floats.parse(value)); else return null;
+				if(thx_core_Floats.canParse(value)) tmp = thx_color_parse_ChannelInfo.CIDegree(thx_core_Floats.parse(value)); else tmp = null;
 				break;
-			case "DEG":case "º":
-				if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIDegree(thx.core.Floats.parse(value)); else return null;
+			case "DEG":
+				if(thx_core_Floats.canParse(value)) tmp = thx_color_parse_ChannelInfo.CIDegree(thx_core_Floats.parse(value)); else tmp = null;
+				break;
+			case "rad":
+				if(thx_core_Floats.canParse(value)) tmp = thx_color_parse_ChannelInfo.CIDegree(thx_core_Floats.parse(value) * 180 / Math.PI); else tmp = null;
+				break;
+			case "RAD":
+				if(thx_core_Floats.canParse(value)) tmp = thx_color_parse_ChannelInfo.CIDegree(thx_core_Floats.parse(value) * 180 / Math.PI); else tmp = null;
 				break;
 			case "":
-				if(thx.core.Ints.canParse(value)) {
-					var i = thx.core.Ints.parse(value);
-					if(i == 0) return thx.color.parse.ChannelInfo.CIBool(false); else if(i == 1) return thx.color.parse.ChannelInfo.CIBool(true); else if(i < 256) return thx.color.parse.ChannelInfo.CIInt8(i); else return thx.color.parse.ChannelInfo.CIInt(i);
-				} else if(thx.core.Floats.canParse(value)) return thx.color.parse.ChannelInfo.CIFloat(thx.core.Floats.parse(value)); else return null;
+				if(thx_core_Ints.canParse(value)) {
+					var i = thx_core_Ints.parse(value);
+					if(i == 0) tmp = thx_color_parse_ChannelInfo.CIBool(false); else if(i == 1) tmp = thx_color_parse_ChannelInfo.CIBool(true); else if(i < 256) tmp = thx_color_parse_ChannelInfo.CIInt8(i); else tmp = thx_color_parse_ChannelInfo.CIInt(i);
+				} else if(thx_core_Floats.canParse(value)) tmp = thx_color_parse_ChannelInfo.CIFloat(thx_core_Floats.parse(value)); else tmp = null;
 				break;
 			default:
-				return null;
+				tmp = null;
 			}
 		} catch( e ) {
 			return null;
 		}
+		return tmp;
 	}
-	,__class__: thx.color.parse.ColorParser
+	,__class__: thx_color_parse_ColorParser
 };
-thx.color.parse.ColorInfo = function(name,channels) {
+var thx_color_parse_ColorInfo = function(name,channels) {
 	this.name = name;
 	this.channels = channels;
 };
-thx.color.parse.ColorInfo.__name__ = true;
-thx.color.parse.ColorInfo.prototype = {
-	toString: function() {
+thx_color_parse_ColorInfo.__name__ = ["thx","color","parse","ColorInfo"];
+thx_color_parse_ColorInfo.prototype = {
+	name: null
+	,channels: null
+	,toString: function() {
 		return "" + this.name + ", channels: " + Std.string(this.channels);
 	}
-	,__class__: thx.color.parse.ColorInfo
+	,__class__: thx_color_parse_ColorInfo
 };
-thx.color.parse.ChannelInfo = { __ename__ : true, __constructs__ : ["CIPercent","CIFloat","CIDegree","CIInt8","CIInt","CIBool"] };
-thx.color.parse.ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
-thx.color.parse.ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
-thx.color.parse.ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
-thx.color.parse.ChannelInfo.CIInt8 = function(value) { var $x = ["CIInt8",3,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
-thx.color.parse.ChannelInfo.CIInt = function(value) { var $x = ["CIInt",4,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
-thx.color.parse.ChannelInfo.CIBool = function(value) { var $x = ["CIBool",5,value]; $x.__enum__ = thx.color.parse.ChannelInfo; return $x; };
-thx.core = {};
-thx.core.Arrays = function() { };
-thx.core.Arrays.__name__ = true;
-thx.core.Arrays.same = function(a,b,eq) {
-	if(a == null || b == null || a.length != b.length) return false;
-	if(null == eq) eq = thx.core.Function.equality;
-	var _g1 = 0;
-	var _g = a.length;
-	while(_g1 < _g) {
-		var i = _g1++;
-		if(!eq(a[i],b[i])) return false;
+var thx_color_parse_ChannelInfo = { __ename__ : ["thx","color","parse","ChannelInfo"], __constructs__ : ["CIPercent","CIFloat","CIDegree","CIInt8","CIInt","CIBool"] };
+thx_color_parse_ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+thx_color_parse_ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+thx_color_parse_ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+thx_color_parse_ChannelInfo.CIInt8 = function(value) { var $x = ["CIInt8",3,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+thx_color_parse_ChannelInfo.CIInt = function(value) { var $x = ["CIInt",4,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+thx_color_parse_ChannelInfo.CIBool = function(value) { var $x = ["CIBool",5,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+var thx_core_Arrays = function() { };
+thx_core_Arrays.__name__ = ["thx","core","Arrays"];
+thx_core_Arrays.after = function(array,element) {
+	return array.slice(HxOverrides.indexOf(array,element,0) + 1);
+};
+thx_core_Arrays.all = function(arr,predicate) {
+	var _g = 0;
+	while(_g < arr.length) {
+		var item = arr[_g];
+		++_g;
+		if(!predicate(item)) return false;
 	}
 	return true;
 };
-thx.core.Arrays.cross = function(a,b) {
+thx_core_Arrays.any = function(arr,predicate) {
+	var _g = 0;
+	while(_g < arr.length) {
+		var item = arr[_g];
+		++_g;
+		if(predicate(item)) return true;
+	}
+	return false;
+};
+thx_core_Arrays.at = function(arr,indexes) {
+	return indexes.map(function(i) {
+		return arr[i];
+	});
+};
+thx_core_Arrays.before = function(array,element) {
+	return array.slice(0,HxOverrides.indexOf(array,element,0));
+};
+thx_core_Arrays.compact = function(arr) {
+	return arr.filter(function(v) {
+		return null != v;
+	});
+};
+thx_core_Arrays.contains = function(array,element,eq) {
+	if(null == eq) return HxOverrides.indexOf(array,element,0) >= 0; else {
+		var _g1 = 0;
+		var _g = array.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(eq(array[i],element)) return true;
+		}
+		return false;
+	}
+};
+thx_core_Arrays.cross = function(a,b) {
 	var r = [];
 	var _g = 0;
 	while(_g < a.length) {
@@ -2366,18 +4385,18 @@ thx.core.Arrays.cross = function(a,b) {
 	}
 	return r;
 };
-thx.core.Arrays.crossMulti = function(a) {
-	var acopy = a.slice();
+thx_core_Arrays.crossMulti = function(array) {
+	var acopy = array.slice();
 	var result = acopy.shift().map(function(v) {
 		return [v];
 	});
 	while(acopy.length > 0) {
-		var arr = acopy.shift();
+		var array1 = acopy.shift();
 		var tresult = result;
 		result = [];
 		var _g = 0;
-		while(_g < arr.length) {
-			var v1 = arr[_g];
+		while(_g < array1.length) {
+			var v1 = array1[_g];
 			++_g;
 			var _g1 = 0;
 			while(_g1 < tresult.length) {
@@ -2391,160 +4410,671 @@ thx.core.Arrays.crossMulti = function(a) {
 	}
 	return result;
 };
-thx.core.Arrays.pushIf = function(arr,cond,value) {
-	if(cond) arr.push(value);
-	return arr;
-};
-thx.core.Arrays.eachPair = function(arr,handler) {
+thx_core_Arrays.eachPair = function(array,callback) {
 	var _g1 = 0;
-	var _g = arr.length;
+	var _g = array.length;
 	while(_g1 < _g) {
 		var i = _g1++;
 		var _g3 = i;
-		var _g2 = arr.length;
+		var _g2 = array.length;
 		while(_g3 < _g2) {
 			var j = _g3++;
-			if(!handler(arr[i],arr[j])) return;
+			if(!callback(array[i],array[j])) return;
 		}
 	}
 };
-thx.core.Arrays.mapi = function(arr,handler) {
-	return arr.map(handler);
+thx_core_Arrays.equals = function(a,b,equality) {
+	if(!(!(a == null)?b == null:true)?a.length != b.length:true) return false;
+	if(null == equality) equality = thx_core_Functions.equality;
+	var _g1 = 0;
+	var _g = a.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		if(!equality(a[i],b[i])) return false;
+	}
+	return true;
 };
-thx.core.Arrays.flatMap = function(arr,callback) {
-	return thx.core.Arrays.flatten(arr.map(callback));
+thx_core_Arrays.extract = function(a,predicate) {
+	var _g1 = 0;
+	var _g = a.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		if(predicate(a[i])) return a.splice(i,1)[0];
+	}
+	return null;
 };
-thx.core.Arrays.flatten = function(arr) {
-	return Array.prototype.concat.apply([],arr);
+thx_core_Arrays.find = function(array,predicate) {
+	var _g = 0;
+	while(_g < array.length) {
+		var item = array[_g];
+		++_g;
+		if(predicate(item)) return item;
+	}
+	return null;
 };
-thx.core.Arrays.reduce = function(arr,callback,initial) {
-	return arr.reduce(callback,initial);
+thx_core_Arrays.findLast = function(array,predicate) {
+	var len = array.length;
+	var j;
+	var _g = 0;
+	while(_g < len) {
+		var i = _g++;
+		j = len - i - 1;
+		if(predicate(array[j])) return array[j];
+	}
+	return null;
 };
-thx.core.Arrays.reducei = function(arr,callback,initial) {
-	return arr.reduce(callback,initial);
+thx_core_Arrays.first = function(array) {
+	return array[0];
 };
-thx.core.Arrays.order = function(arr,sort) {
-	var n = arr.slice();
+thx_core_Arrays.flatMap = function(array,callback) {
+	var tmp;
+	var array1 = array.map(callback);
+	tmp = Array.prototype.concat.apply([],array1);
+	return tmp;
+};
+thx_core_Arrays.flatten = function(array) {
+	return Array.prototype.concat.apply([],array);
+};
+thx_core_Arrays.from = function(array,element) {
+	return array.slice(HxOverrides.indexOf(array,element,0));
+};
+thx_core_Arrays.head = function(array) {
+	return array[0];
+};
+thx_core_Arrays.ifEmpty = function(value,alt) {
+	return (null != value?0 != value.length:false)?value:alt;
+};
+thx_core_Arrays.initial = function(array) {
+	return array.slice(0,array.length - 1);
+};
+thx_core_Arrays.isEmpty = function(array) {
+	return array.length == 0;
+};
+thx_core_Arrays.last = function(array) {
+	return array[array.length - 1];
+};
+thx_core_Arrays.mapi = function(array,callback) {
+	var r = [];
+	var _g1 = 0;
+	var _g = array.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		r.push(callback(array[i],i));
+	}
+	return r;
+};
+thx_core_Arrays.mapRight = function(array,callback) {
+	var i = array.length;
+	var result = [];
+	while(--i >= 0) result.push(callback(array[i]));
+	return result;
+};
+thx_core_Arrays.order = function(array,sort) {
+	var n = array.slice();
 	n.sort(sort);
 	return n;
 };
-thx.core.Arrays.isEmpty = function(arr) {
-	return arr.length == 0;
-};
-thx.core.Arrays.contains = function(arr,element,eq) {
-	if(null == eq) return HxOverrides.indexOf(arr,element,0) >= 0; else {
-		var _g1 = 0;
-		var _g = arr.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			if(eq(arr[i],element)) return true;
-		}
-		return false;
+thx_core_Arrays.pull = function(array,toRemove,equality) {
+	var _g = 0;
+	while(_g < toRemove.length) {
+		var item = toRemove[_g];
+		++_g;
+		thx_core_Arrays.removeAll(array,item,equality);
 	}
 };
-thx.core.Arrays.shuffle = function(a) {
-	var t = thx.core.Ints.range(a.length);
-	var arr = [];
+thx_core_Arrays.pushIf = function(array,condition,value) {
+	if(condition) array.push(value);
+	return array;
+};
+thx_core_Arrays.reduce = function(array,callback,initial) {
+	return array.reduce(callback,initial);
+};
+thx_core_Arrays.resize = function(array,length,fill) {
+	while(array.length < length) array.push(fill);
+	array.splice(length,array.length - length);
+	return array;
+};
+thx_core_Arrays.reducei = function(array,callback,initial) {
+	return array.reduce(callback,initial);
+};
+thx_core_Arrays.reduceRight = function(array,callback,initial) {
+	var i = array.length;
+	while(--i >= 0) initial = callback(initial,array[i]);
+	return initial;
+};
+thx_core_Arrays.removeAll = function(array,element,equality) {
+	if(null == equality) equality = thx_core_Functions.equality;
+	var i = array.length;
+	while(--i >= 0) if(equality(array[i],element)) array.splice(i,1);
+};
+thx_core_Arrays.rest = function(array) {
+	return array.slice(1);
+};
+thx_core_Arrays.sample = function(array,n) {
+	var tmp;
+	var b = array.length;
+	if(n < b) tmp = n; else tmp = b;
+	n = tmp;
+	var copy = array.slice();
+	var result = [];
+	var _g = 0;
+	while(_g < n) {
+		_g++;
+		result.push(copy.splice(Std.random(copy.length),1)[0]);
+	}
+	return result;
+};
+thx_core_Arrays.sampleOne = function(array) {
+	return array[Std.random(array.length)];
+};
+thx_core_Arrays.shuffle = function(a) {
+	var t = thx_core_Ints.range(a.length);
+	var array = [];
 	while(t.length > 0) {
 		var pos = Std.random(t.length);
 		var index = t[pos];
 		t.splice(pos,1);
-		arr.push(a[index]);
+		array.push(a[index]);
 	}
-	return arr;
+	return array;
 };
-thx.core.Defaults = function() { };
-thx.core.Defaults.__name__ = true;
-thx.core.Floats = function() { };
-thx.core.Floats.__name__ = true;
-thx.core.Floats.interpolateBetween = function(t,a,b) {
-	return (b - a) * t + a;
+thx_core_Arrays.take = function(arr,n) {
+	return arr.slice(0,n);
 };
-thx.core.Floats.normalize = function(v) {
-	if(v < 0) return 0; else if(v > 1) return 1; else return v;
+thx_core_Arrays.takeLast = function(arr,n) {
+	return arr.slice(arr.length - n);
 };
-thx.core.Floats.clamp = function(v,min,max) {
-	if(v < min) return min; else if(v > max) return max; else return v;
+thx_core_Arrays.zip = function(array1,array2) {
+	var tmp;
+	var a = array1.length;
+	var b = array2.length;
+	if(a < b) tmp = a; else tmp = b;
+	var length = tmp;
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i]});
+	}
+	return array;
 };
-thx.core.Floats.clampSym = function(v,max) {
-	return thx.core.Floats.clamp(v,-max,max);
+thx_core_Arrays.zip3 = function(array1,array2,array3) {
+	var length = thx_core_ArrayInts.min([array1.length,array2.length,array3.length]);
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i]});
+	}
+	return array;
 };
-thx.core.Floats.wrap = function(v,min,max) {
+thx_core_Arrays.zip4 = function(array1,array2,array3,array4) {
+	var length = thx_core_ArrayInts.min([array1.length,array2.length,array3.length,array4.length]);
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i], _3 : array4[i]});
+	}
+	return array;
+};
+thx_core_Arrays.zip5 = function(array1,array2,array3,array4,array5) {
+	var length = thx_core_ArrayInts.min([array1.length,array2.length,array3.length,array4.length,array5.length]);
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i], _3 : array4[i], _4 : array5[i]});
+	}
+	return array;
+};
+thx_core_Arrays.unzip = function(array) {
+	var a1 = [];
+	var a2 = [];
+	array.map(function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+	});
+	return { _0 : a1, _1 : a2};
+};
+thx_core_Arrays.unzip3 = function(array) {
+	var a1 = [];
+	var a2 = [];
+	var a3 = [];
+	array.map(function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+		a3.push(t._2);
+	});
+	return { _0 : a1, _1 : a2, _2 : a3};
+};
+thx_core_Arrays.unzip4 = function(array) {
+	var a1 = [];
+	var a2 = [];
+	var a3 = [];
+	var a4 = [];
+	array.map(function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+		a3.push(t._2);
+		a4.push(t._3);
+	});
+	return { _0 : a1, _1 : a2, _2 : a3, _3 : a4};
+};
+thx_core_Arrays.unzip5 = function(array) {
+	var a1 = [];
+	var a2 = [];
+	var a3 = [];
+	var a4 = [];
+	var a5 = [];
+	array.map(function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+		a3.push(t._2);
+		a4.push(t._3);
+		a5.push(t._4);
+	});
+	return { _0 : a1, _1 : a2, _2 : a3, _3 : a4, _4 : a5};
+};
+var thx_core_ArrayFloats = function() { };
+thx_core_ArrayFloats.__name__ = ["thx","core","ArrayFloats"];
+thx_core_ArrayFloats.average = function(arr) {
+	return thx_core_ArrayFloats.sum(arr) / arr.length;
+};
+thx_core_ArrayFloats.compact = function(arr) {
+	return arr.filter(function(v) {
+		return null != v?isFinite(v):false;
+	});
+};
+thx_core_ArrayFloats.max = function(arr) {
+	return arr.length == 0?null:arr.reduce(function(max,v) {
+		return v > max?v:max;
+	},arr[0]);
+};
+thx_core_ArrayFloats.min = function(arr) {
+	return arr.length == 0?null:arr.reduce(function(min,v) {
+		return v < min?v:min;
+	},arr[0]);
+};
+thx_core_ArrayFloats.resize = function(array,length,fill) {
+	if(fill == null) fill = 0.0;
+	while(array.length < length) array.push(fill);
+	array.splice(length,array.length - length);
+	return array;
+};
+thx_core_ArrayFloats.sum = function(arr) {
+	return arr.reduce(function(tot,v) {
+		return tot + v;
+	},0.0);
+};
+var thx_core_ArrayInts = function() { };
+thx_core_ArrayInts.__name__ = ["thx","core","ArrayInts"];
+thx_core_ArrayInts.average = function(arr) {
+	return thx_core_ArrayInts.sum(arr) / arr.length;
+};
+thx_core_ArrayInts.max = function(arr) {
+	return arr.length == 0?null:arr.reduce(function(max,v) {
+		return v > max?v:max;
+	},arr[0]);
+};
+thx_core_ArrayInts.min = function(arr) {
+	return arr.length == 0?null:arr.reduce(function(min,v) {
+		return v < min?v:min;
+	},arr[0]);
+};
+thx_core_ArrayInts.resize = function(array,length,fill) {
+	if(fill == null) fill = 0;
+	while(array.length < length) array.push(fill);
+	array.splice(length,array.length - length);
+	return array;
+};
+thx_core_ArrayInts.sum = function(arr) {
+	return arr.reduce(function(tot,v) {
+		return tot + v;
+	},0);
+};
+var thx_core_ArrayStrings = function() { };
+thx_core_ArrayStrings.__name__ = ["thx","core","ArrayStrings"];
+thx_core_ArrayStrings.compact = function(arr) {
+	return arr.filter(function(v) {
+		return !thx_core_Strings.isEmpty(v);
+	});
+};
+thx_core_ArrayStrings.max = function(arr) {
+	return arr.length == 0?null:arr.reduce(function(max,v) {
+		return v > max?v:max;
+	},arr[0]);
+};
+thx_core_ArrayStrings.min = function(arr) {
+	return arr.length == 0?null:arr.reduce(function(min,v) {
+		return v < min?v:min;
+	},arr[0]);
+};
+var thx_core_Error = function(message,stack,pos) {
+	Error.call(this,message);
+	this.message = message;
+	if(null == stack) {
+		var tmp;
+		try {
+			tmp = haxe_CallStack.exceptionStack();
+		} catch( e ) {
+			tmp = [];
+		}
+		stack = tmp;
+		if(stack.length == 0) {
+			var tmp1;
+			try {
+				tmp1 = haxe_CallStack.callStack();
+			} catch( e1 ) {
+				tmp1 = [];
+			}
+			stack = tmp1;
+		}
+	}
+	this.stackItems = stack;
+	this.pos = pos;
+};
+thx_core_Error.__name__ = ["thx","core","Error"];
+thx_core_Error.fromDynamic = function(err,pos) {
+	if(js_Boot.__instanceof(err,thx_core_Error)) return err;
+	return new thx_core_Error("" + Std.string(err),null,pos);
+};
+thx_core_Error.__super__ = Error;
+thx_core_Error.prototype = $extend(Error.prototype,{
+	pos: null
+	,stackItems: null
+	,toString: function() {
+		return this.message + "\nfrom: " + this.pos.className + "." + this.pos.methodName + "() at " + this.pos.lineNumber + "\n\n" + haxe_CallStack.toString(this.stackItems);
+	}
+	,__class__: thx_core_Error
+});
+var thx_core_Floats = function() { };
+thx_core_Floats.__name__ = ["thx","core","Floats"];
+thx_core_Floats.angleDifference = function(a,b,turn) {
+	if(turn == null) turn = 360;
+	var r = (b - a) % turn;
+	if(r < 0) r += turn;
+	if(r > turn / 2) r -= turn;
+	return r;
+};
+thx_core_Floats.ceilTo = function(f,decimals) {
+	var p = Math.pow(10,decimals);
+	return Math.ceil(f * p) / p;
+};
+thx_core_Floats.canParse = function(s) {
+	return thx_core_Floats.pattern_parse.match(s);
+};
+thx_core_Floats.clamp = function(v,min,max) {
+	var tmp;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
+};
+thx_core_Floats.clampSym = function(v,max) {
+	var tmp;
+	var min = -max;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
+};
+thx_core_Floats.compare = function(a,b) {
+	var tmp;
+	if(a < b) tmp = -1; else if(b > a) tmp = 1; else tmp = 0;
+	return tmp;
+};
+thx_core_Floats.floorTo = function(f,decimals) {
+	var p = Math.pow(10,decimals);
+	return Math.floor(f * p) / p;
+};
+thx_core_Floats.interpolate = function(f,a,b) {
+	return (b - a) * f + a;
+};
+thx_core_Floats.interpolateAngle = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	return thx_core_Floats.wrapCircular(thx_core_Floats.interpolate(f,a,a + thx_core_Floats.angleDifference(a,b,turn)),turn);
+};
+thx_core_Floats.interpolateAngleWidest = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	return thx_core_Floats.wrapCircular(thx_core_Floats.interpolateAngle(f,a,b,turn) - turn / 2,turn);
+};
+thx_core_Floats.interpolateAngleCW = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	a = thx_core_Floats.wrapCircular(a,turn);
+	b = thx_core_Floats.wrapCircular(b,turn);
+	if(b < a) b += turn;
+	return thx_core_Floats.wrapCircular(thx_core_Floats.interpolate(f,a,b),turn);
+};
+thx_core_Floats.interpolateAngleCCW = function(f,a,b,turn) {
+	if(turn == null) turn = 360;
+	a = thx_core_Floats.wrapCircular(a,turn);
+	b = thx_core_Floats.wrapCircular(b,turn);
+	if(b > a) b -= turn;
+	return thx_core_Floats.wrapCircular(thx_core_Floats.interpolate(f,a,b),turn);
+};
+thx_core_Floats.nearEquals = function(a,b) {
+	return Math.abs(a - b) <= 10e-10;
+};
+thx_core_Floats.nearZero = function(n) {
+	return Math.abs(n) <= 10e-10;
+};
+thx_core_Floats.normalize = function(v) {
+	var tmp;
+	if(v < 0) tmp = 0; else if(v > 1) tmp = 1; else tmp = v;
+	return tmp;
+};
+thx_core_Floats.parse = function(s) {
+	if(s.substring(0,1) == "+") s = s.substring(1);
+	return parseFloat(s);
+};
+thx_core_Floats.root = function(base,index) {
+	return Math.pow(base,1 / index);
+};
+thx_core_Floats.roundTo = function(f,decimals) {
+	var p = Math.pow(10,decimals);
+	return Math.round(f * p) / p;
+};
+thx_core_Floats.sign = function(value) {
+	return value < 0?-1:1;
+};
+thx_core_Floats.wrap = function(v,min,max) {
 	var range = max - min + 1;
 	if(v < min) v += range * ((min - v) / range + 1);
 	return min + (v - min) % range;
 };
-thx.core.Floats.wrapCircular = function(v,max) {
+thx_core_Floats.wrapCircular = function(v,max) {
 	v = v % max;
 	if(v < 0) v += max;
 	return v;
 };
-thx.core.Floats.canParse = function(s) {
-	return thx.core.Floats.pattern_parse.match(s);
+var thx_core_Functions0 = function() { };
+thx_core_Functions0.__name__ = ["thx","core","Functions0"];
+thx_core_Functions0.after = function(callback,n) {
+	return function() {
+		if(--n == 0) callback();
+	};
 };
-thx.core.Floats.parse = function(s) {
-	if(HxOverrides.substr(s,0,1) == "+") s = HxOverrides.substr(s,1,null);
-	return Std.parseFloat(s);
-};
-thx.core.Function0 = function() { };
-thx.core.Function0.__name__ = true;
-thx.core.Function0.noop = function() {
-};
-thx.core.Function0.join = function(fa,fb) {
+thx_core_Functions0.join = function(fa,fb) {
 	return function() {
 		fa();
 		fb();
 	};
 };
-thx.core.Function0.once = function(f) {
+thx_core_Functions0.once = function(f) {
 	return function() {
-		f();
-		f = function() {
-		};
+		var t = f;
+		t();
 	};
 };
-thx.core.Function1 = function() { };
-thx.core.Function1.__name__ = true;
-thx.core.Function1.noop = function(_) {
+thx_core_Functions0.negate = function(callback) {
+	return function() {
+		return !callback();
+	};
 };
-thx.core.Function1.compose = function(fa,fb) {
+thx_core_Functions0.times = function(n,callback) {
+	return function() {
+		return thx_core_Ints.range(n).map(function(_) {
+			return callback();
+		});
+	};
+};
+thx_core_Functions0.timesi = function(n,callback) {
+	return function() {
+		return thx_core_Ints.range(n).map(function(i) {
+			return callback(i);
+		});
+	};
+};
+var thx_core_Functions1 = function() { };
+thx_core_Functions1.__name__ = ["thx","core","Functions1"];
+thx_core_Functions1.compose = function(fa,fb) {
 	return function(v) {
 		return fa(fb(v));
 	};
 };
-thx.core.Function1.join = function(fa,fb) {
+thx_core_Functions1.join = function(fa,fb) {
 	return function(v) {
 		fa(v);
 		fb(v);
 	};
 };
-thx.core.Function = function() { };
-thx.core.Function.__name__ = true;
-thx.core.Function.equality = function(a,b) {
+thx_core_Functions1.memoize = function(callback,resolver) {
+	if(null == resolver) resolver = function(v) {
+		return "" + Std.string(v);
+	};
+	var map_h = { };
+	return function(v1) {
+		var key = resolver(v1);
+		if(map_h.hasOwnProperty("$" + key)) return map_h["$" + key];
+		var result = callback(v1);
+		map_h["$" + key] = result;
+		return result;
+	};
+};
+thx_core_Functions1.negate = function(callback) {
+	return function(v) {
+		return !callback(v);
+	};
+};
+thx_core_Functions1.noop = function(_) {
+};
+thx_core_Functions1.times = function(n,callback) {
+	return function(value) {
+		return thx_core_Ints.range(n).map(function(_) {
+			return callback(value);
+		});
+	};
+};
+thx_core_Functions1.timesi = function(n,callback) {
+	return function(value) {
+		return thx_core_Ints.range(n).map(function(i) {
+			return callback(value,i);
+		});
+	};
+};
+thx_core_Functions1.swapArguments = function(callback) {
+	return function(a2,a1) {
+		return callback(a1,a2);
+	};
+};
+var thx_core_Functions2 = function() { };
+thx_core_Functions2.__name__ = ["thx","core","Functions2"];
+thx_core_Functions2.memoize = function(callback,resolver) {
+	if(null == resolver) resolver = function(v1,v2) {
+		return "" + Std.string(v1) + ":" + Std.string(v2);
+	};
+	var map_h = { };
+	return function(v11,v21) {
+		var key = resolver(v11,v21);
+		if(map_h.hasOwnProperty("$" + key)) return map_h["$" + key];
+		var result = callback(v11,v21);
+		map_h["$" + key] = result;
+		return result;
+	};
+};
+thx_core_Functions2.negate = function(callback) {
+	return function(v1,v2) {
+		return !callback(v1,v2);
+	};
+};
+var thx_core_Functions3 = function() { };
+thx_core_Functions3.__name__ = ["thx","core","Functions3"];
+thx_core_Functions3.memoize = function(callback,resolver) {
+	if(null == resolver) resolver = function(v1,v2,v3) {
+		return "" + Std.string(v1) + ":" + Std.string(v2) + ":" + Std.string(v3);
+	};
+	var map_h = { };
+	return function(v11,v21,v31) {
+		var key = resolver(v11,v21,v31);
+		if(map_h.hasOwnProperty("$" + key)) return map_h["$" + key];
+		var result = callback(v11,v21,v31);
+		map_h["$" + key] = result;
+		return result;
+	};
+};
+thx_core_Functions3.negate = function(callback) {
+	return function(v1,v2,v3) {
+		return !callback(v1,v2,v3);
+	};
+};
+var thx_core_Functions = function() { };
+thx_core_Functions.__name__ = ["thx","core","Functions"];
+thx_core_Functions.constant = function(v) {
+	return function() {
+		return v;
+	};
+};
+thx_core_Functions.equality = function(a,b) {
 	return a == b;
 };
-thx.core.Ints = function() { };
-thx.core.Ints.__name__ = true;
-thx.core.Ints.clamp = function(v,min,max) {
-	if(v < min) return min; else if(v > max) return max; else return v;
+thx_core_Functions.identity = function(value) {
+	return value;
 };
-thx.core.Ints.canParse = function(s) {
-	return thx.core.Ints.pattern_parse.match(s);
+thx_core_Functions.noop = function() {
 };
-thx.core.Ints.min = function(a,b) {
-	if(a < b) return a; else return b;
+var thx_core_Ints = function() { };
+thx_core_Ints.__name__ = ["thx","core","Ints"];
+thx_core_Ints.abs = function(v) {
+	return v < 0?-v:v;
 };
-thx.core.Ints.max = function(a,b) {
-	if(a > b) return a; else return b;
+thx_core_Ints.canParse = function(s) {
+	return thx_core_Ints.pattern_parse.match(s);
 };
-thx.core.Ints.parse = function(s) {
-	if(HxOverrides.substr(s,0,1) == "+") s = HxOverrides.substr(s,1,null);
-	return Std.parseInt(s);
+thx_core_Ints.clamp = function(v,min,max) {
+	var tmp;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
 };
-thx.core.Ints.compare = function(a,b) {
+thx_core_Ints.clampSym = function(v,max) {
+	var tmp;
+	var min = -max;
+	if(v < min) tmp = min; else if(v > max) tmp = max; else tmp = v;
+	return tmp;
+};
+thx_core_Ints.compare = function(a,b) {
 	return a - b;
 };
-thx.core.Ints.range = function(start,stop,step) {
+thx_core_Ints.interpolate = function(f,a,b) {
+	return Math.round(a + (b - a) * f);
+};
+thx_core_Ints.isEven = function(v) {
+	return v % 2 == 0;
+};
+thx_core_Ints.isOdd = function(v) {
+	return v % 2 != 0;
+};
+thx_core_Ints.max = function(a,b) {
+	return a > b?a:b;
+};
+thx_core_Ints.min = function(a,b) {
+	return a < b?a:b;
+};
+thx_core_Ints.parse = function(s,base) {
+	var v = parseInt(s,base);
+	return isNaN(v)?null:v;
+};
+thx_core_Ints.random = function(min,max) {
+	if(min == null) min = 0;
+	return Std.random(max + 1) + min;
+};
+thx_core_Ints.range = function(start,stop,step) {
 	if(step == null) step = 1;
 	if(null == stop) {
 		stop = start;
@@ -2557,9 +5087,66 @@ thx.core.Ints.range = function(start,stop,step) {
 	if(step < 0) while((j = start + step * ++i) > stop) range.push(j); else while((j = start + step * ++i) < stop) range.push(j);
 	return range;
 };
-thx.core.Iterators = function() { };
-thx.core.Iterators.__name__ = true;
-thx.core.Iterators.map = function(it,f) {
+thx_core_Ints.toString = function(value,base) {
+	return value.toString(base);
+};
+thx_core_Ints.sign = function(value) {
+	return value < 0?-1:1;
+};
+thx_core_Ints.wrapCircular = function(v,max) {
+	v = v % max;
+	if(v < 0) v += max;
+	return v;
+};
+var thx_core_Iterators = function() { };
+thx_core_Iterators.__name__ = ["thx","core","Iterators"];
+thx_core_Iterators.all = function(it,predicate) {
+	while( it.hasNext() ) {
+		var item = it.next();
+		if(!predicate(item)) return false;
+	}
+	return true;
+};
+thx_core_Iterators.any = function(it,predicate) {
+	while( it.hasNext() ) {
+		var item = it.next();
+		if(predicate(item)) return true;
+	}
+	return false;
+};
+thx_core_Iterators.eachPair = function(it,handler) {
+	thx_core_Arrays.eachPair(thx_core_Iterators.toArray(it),handler);
+};
+thx_core_Iterators.filter = function(it,predicate) {
+	return thx_core_Iterators.reduce(it,function(acc,item) {
+		if(predicate(item)) acc.push(item);
+		return acc;
+	},[]);
+};
+thx_core_Iterators.find = function(it,f) {
+	while( it.hasNext() ) {
+		var item = it.next();
+		if(f(item)) return item;
+	}
+	return null;
+};
+thx_core_Iterators.first = function(it) {
+	return it.hasNext()?it.next():null;
+};
+thx_core_Iterators.isEmpty = function(it) {
+	return !it.hasNext();
+};
+thx_core_Iterators.isIterator = function(v) {
+	var fields = (Reflect.isObject(v)?null == Type.getClass(v):false)?Reflect.fields(v):Type.getInstanceFields(Type.getClass(v));
+	if(!(!Lambda.has(fields,"next"))?!Lambda.has(fields,"hasNext"):true) return false;
+	return Reflect.isFunction(Reflect.field(v,"next"))?Reflect.isFunction(Reflect.field(v,"hasNext")):false;
+};
+thx_core_Iterators.last = function(it) {
+	var buf = null;
+	while(it.hasNext()) buf = it.next();
+	return buf;
+};
+thx_core_Iterators.map = function(it,f) {
 	var acc = [];
 	while( it.hasNext() ) {
 		var v = it.next();
@@ -2567,7 +5154,7 @@ thx.core.Iterators.map = function(it,f) {
 	}
 	return acc;
 };
-thx.core.Iterators.mapi = function(it,f) {
+thx_core_Iterators.mapi = function(it,f) {
 	var acc = [];
 	var i = 0;
 	while( it.hasNext() ) {
@@ -2576,10 +5163,24 @@ thx.core.Iterators.mapi = function(it,f) {
 	}
 	return acc;
 };
-thx.core.Iterators.eachPair = function(it,handler) {
-	thx.core.Arrays.eachPair(thx.core.Iterators.toArray(it),handler);
+thx_core_Iterators.order = function(it,sort) {
+	var n = thx_core_Iterators.toArray(it);
+	n.sort(sort);
+	return n;
 };
-thx.core.Iterators.toArray = function(it) {
+thx_core_Iterators.reduce = function(it,callback,initial) {
+	thx_core_Iterators.map(it,function(v) {
+		initial = callback(initial,v);
+	});
+	return initial;
+};
+thx_core_Iterators.reducei = function(it,callback,initial) {
+	thx_core_Iterators.mapi(it,function(v,i) {
+		initial = callback(initial,v,i);
+	});
+	return initial;
+};
+thx_core_Iterators.toArray = function(it) {
 	var items = [];
 	while( it.hasNext() ) {
 		var item = it.next();
@@ -2587,41 +5188,500 @@ thx.core.Iterators.toArray = function(it) {
 	}
 	return items;
 };
-thx.core.Iterators.order = function(it,sort) {
-	var n = thx.core.Iterators.toArray(it);
-	n.sort(sort);
-	return n;
+var thx_core_Nil = { __ename__ : ["thx","core","Nil"], __constructs__ : ["nil"] };
+thx_core_Nil.nil = ["nil",0];
+thx_core_Nil.nil.toString = $estr;
+thx_core_Nil.nil.__enum__ = thx_core_Nil;
+var thx_core_Nulls = function() { };
+thx_core_Nulls.__name__ = ["thx","core","Nulls"];
+var thx_core_Strings = function() { };
+thx_core_Strings.__name__ = ["thx","core","Strings"];
+thx_core_Strings.after = function(value,searchFor) {
+	var pos = value.indexOf(searchFor);
+	if(pos < 0) return ""; else return value.substring(pos + searchFor.length);
 };
-thx.core.Iterators.reduce = function(it,callback,initial) {
-	thx.core.Iterators.map(it,function(v) {
-		initial = callback(initial,v);
+thx_core_Strings.capitalize = function(s) {
+	return s.substring(0,1).toUpperCase() + s.substring(1);
+};
+thx_core_Strings.capitalizeWords = function(value,whiteSpaceOnly) {
+	if(whiteSpaceOnly == null) whiteSpaceOnly = false;
+	if(whiteSpaceOnly) return thx_core_Strings.UCWORDSWS.map(value.substring(0,1).toUpperCase() + value.substring(1),thx_core_Strings.upperMatch); else return thx_core_Strings.UCWORDS.map(value.substring(0,1).toUpperCase() + value.substring(1),thx_core_Strings.upperMatch);
+};
+thx_core_Strings.collapse = function(value) {
+	return thx_core_Strings.WSG.replace(StringTools.trim(value)," ");
+};
+thx_core_Strings.compare = function(a,b) {
+	var tmp;
+	if(a < b) tmp = -1; else if(a > b) tmp = 1; else tmp = 0;
+	return tmp;
+};
+thx_core_Strings.contains = function(s,test) {
+	return s.indexOf(test) >= 0;
+};
+thx_core_Strings.dasherize = function(s) {
+	return StringTools.replace(s,"_","-");
+};
+thx_core_Strings.ellipsis = function(s,maxlen,symbol) {
+	if(symbol == null) symbol = "...";
+	if(maxlen == null) maxlen = 20;
+	return s.length > maxlen?s.substring(0,symbol.length > maxlen - symbol.length?symbol.length:maxlen - symbol.length) + symbol:s;
+};
+thx_core_Strings.filter = function(s,predicate) {
+	return s.split("").filter(predicate).join("");
+};
+thx_core_Strings.filterCharcode = function(s,predicate) {
+	return thx_core_Strings.map(s,function(s1) {
+		return HxOverrides.cca(s1,0);
+	}).filter(predicate).map(function(i) {
+		return String.fromCharCode(i);
+	}).join("");
+};
+thx_core_Strings.from = function(value,searchFor) {
+	var pos = value.indexOf(searchFor);
+	if(pos < 0) return ""; else return value.substring(pos);
+};
+thx_core_Strings.humanize = function(s) {
+	return StringTools.replace(thx_core_Strings.underscore(s),"_"," ");
+};
+thx_core_Strings.isAlphaNum = function(value) {
+	return thx_core_Strings.ALPHANUM.match(value);
+};
+thx_core_Strings.isLowerCase = function(value) {
+	return value.toLowerCase() == value;
+};
+thx_core_Strings.isUpperCase = function(value) {
+	return value.toUpperCase() == value;
+};
+thx_core_Strings.ifEmpty = function(value,alt) {
+	return (null != value?"" != value:false)?value:alt;
+};
+thx_core_Strings.isDigitsOnly = function(value) {
+	return thx_core_Strings.DIGITS.match(value);
+};
+thx_core_Strings.isEmpty = function(value) {
+	return !(value == null)?value == "":true;
+};
+thx_core_Strings.iterator = function(s) {
+	var tmp;
+	var _this = s.split("");
+	tmp = HxOverrides.iter(_this);
+	return tmp;
+};
+thx_core_Strings.map = function(value,callback) {
+	return value.split("").map(callback);
+};
+thx_core_Strings.remove = function(value,toremove) {
+	return StringTools.replace(value,toremove,"");
+};
+thx_core_Strings.removeAfter = function(value,toremove) {
+	return StringTools.endsWith(value,toremove)?value.substring(0,value.length - toremove.length):value;
+};
+thx_core_Strings.removeBefore = function(value,toremove) {
+	return StringTools.startsWith(value,toremove)?value.substring(toremove.length):value;
+};
+thx_core_Strings.repeat = function(s,times) {
+	var tmp;
+	var _g = [];
+	var _g1 = 0;
+	while(_g1 < times) {
+		_g1++;
+		_g.push(s);
+	}
+	tmp = _g;
+	return tmp.join("");
+};
+thx_core_Strings.reverse = function(s) {
+	var arr = s.split("");
+	arr.reverse();
+	return arr.join("");
+};
+thx_core_Strings.stripTags = function(s) {
+	return thx_core_Strings.STRIPTAGS.replace(s,"");
+};
+thx_core_Strings.surround = function(s,left,right) {
+	return "" + left + s + (null == right?left:right);
+};
+thx_core_Strings.toArray = function(s) {
+	return s.split("");
+};
+thx_core_Strings.toCharcodeArray = function(s) {
+	return thx_core_Strings.map(s,function(s1) {
+		return HxOverrides.cca(s1,0);
 	});
-	return initial;
 };
-thx.core.Iterators.reducei = function(it,callback,initial) {
-	thx.core.Iterators.mapi(it,function(v,i) {
-		initial = callback(initial,v,i);
-	});
-	return initial;
+thx_core_Strings.toChunks = function(s,len) {
+	var chunks = [];
+	while(s.length > 0) {
+		chunks.push(s.substring(0,len));
+		s = s.substring(len);
+	}
+	return chunks;
 };
-thx.core.Iterators.isEmpty = function(it) {
-	return !it.hasNext();
+thx_core_Strings.trimChars = function(value,charlist) {
+	return thx_core_Strings.trimCharsRight(thx_core_Strings.trimCharsLeft(value,charlist),charlist);
 };
-thx.core.Iterators.filter = function(it,predicate) {
-	return thx.core.Iterators.reduce(it,function(acc,item) {
-		if(predicate(item)) acc.push(item);
-		return acc;
-	},[]);
+thx_core_Strings.trimCharsLeft = function(value,charlist) {
+	var pos = 0;
+	var _g1 = 0;
+	var _g = value.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		var tmp;
+		var test = value.charAt(i);
+		tmp = charlist.indexOf(test) >= 0;
+		if(tmp) pos++; else break;
+	}
+	return value.substring(pos);
 };
-thx.geom = {};
-thx.geom.Const = function() { };
-thx.geom.Const.__name__ = true;
-thx.geom.Edge = function() { };
-thx.geom.Edge.__name__ = true;
-thx.geom.Edge.prototype = {
-	__class__: thx.geom.Edge
+thx_core_Strings.trimCharsRight = function(value,charlist) {
+	var len = value.length;
+	var pos = len;
+	var i;
+	var _g = 0;
+	while(_g < len) {
+		var j = _g++;
+		i = len - j - 1;
+		var tmp;
+		var test = value.charAt(i);
+		tmp = charlist.indexOf(test) >= 0;
+		if(tmp) pos = i; else break;
+	}
+	return value.substring(0,pos);
 };
-thx.geom.EdgeCubic = function(p0,p1,p2,p3) {
+thx_core_Strings.underscore = function(s) {
+	s = new EReg("::","g").replace(s,"/");
+	s = new EReg("([A-Z]+)([A-Z][a-z])","g").replace(s,"$1_$2");
+	s = new EReg("([a-z\\d])([A-Z])","g").replace(s,"$1_$2");
+	s = new EReg("-","g").replace(s,"_");
+	return s.toLowerCase();
+};
+thx_core_Strings.upTo = function(value,searchFor) {
+	var pos = value.indexOf(searchFor);
+	if(pos < 0) return value; else return value.substring(0,pos);
+};
+thx_core_Strings.wrapColumns = function(s,columns,indent,newline) {
+	if(newline == null) newline = "\n";
+	if(indent == null) indent = "";
+	if(columns == null) columns = 78;
+	return thx_core_Strings.SPLIT_LINES.split(s).map(function(part) {
+		return thx_core_Strings.wrapLine(StringTools.trim(thx_core_Strings.WSG.replace(part," ")),columns,indent,newline);
+	}).join(newline);
+};
+thx_core_Strings.upperMatch = function(re) {
+	return re.matched(0).toUpperCase();
+};
+thx_core_Strings.wrapLine = function(s,columns,indent,newline) {
+	var parts = [];
+	var pos = 0;
+	var len = s.length;
+	var ilen = indent.length;
+	columns -= ilen;
+	while(true) {
+		if(pos + columns >= len - ilen) {
+			parts.push(s.substring(pos));
+			break;
+		}
+		var i = 0;
+		while(!StringTools.isSpace(s,pos + columns - i)?i < columns:false) i++;
+		if(i == columns) {
+			i = 0;
+			while(!StringTools.isSpace(s,pos + columns + i)?pos + columns + i < len:false) i++;
+			parts.push(s.substring(pos,pos + columns + i));
+			pos += columns + i + 1;
+		} else {
+			parts.push(s.substring(pos,pos + columns - i));
+			pos += columns - i + 1;
+		}
+	}
+	return indent + parts.join(newline + indent);
+};
+var thx_core__$Tuple_Tuple0_$Impl_$ = {};
+thx_core__$Tuple_Tuple0_$Impl_$.__name__ = ["thx","core","_Tuple","Tuple0_Impl_"];
+thx_core__$Tuple_Tuple0_$Impl_$._new = function() {
+	return thx_core_Nil.nil;
+};
+thx_core__$Tuple_Tuple0_$Impl_$["with"] = function(this1,v) {
+	return v;
+};
+thx_core__$Tuple_Tuple0_$Impl_$.toString = function(this1) {
+	return "Tuple0()";
+};
+thx_core__$Tuple_Tuple0_$Impl_$.toNil = function(this1) {
+	return this1;
+};
+thx_core__$Tuple_Tuple0_$Impl_$.nilToTuple = function(v) {
+	return thx_core_Nil.nil;
+};
+var thx_core__$Tuple_Tuple1_$Impl_$ = {};
+thx_core__$Tuple_Tuple1_$Impl_$.__name__ = ["thx","core","_Tuple","Tuple1_Impl_"];
+thx_core__$Tuple_Tuple1_$Impl_$._new = function(_0) {
+	return _0;
+};
+thx_core__$Tuple_Tuple1_$Impl_$.get__0 = function(this1) {
+	return this1;
+};
+thx_core__$Tuple_Tuple1_$Impl_$["with"] = function(this1,v) {
+	return { _0 : this1, _1 : v};
+};
+thx_core__$Tuple_Tuple1_$Impl_$.toString = function(this1) {
+	return "Tuple1(" + Std.string(this1) + ")";
+};
+var thx_core__$Tuple_Tuple2_$Impl_$ = {};
+thx_core__$Tuple_Tuple2_$Impl_$.__name__ = ["thx","core","_Tuple","Tuple2_Impl_"];
+thx_core__$Tuple_Tuple2_$Impl_$._new = function(_0,_1) {
+	return { _0 : _0, _1 : _1};
+};
+thx_core__$Tuple_Tuple2_$Impl_$.get_left = function(this1) {
+	return this1._0;
+};
+thx_core__$Tuple_Tuple2_$Impl_$.get_right = function(this1) {
+	return this1._1;
+};
+thx_core__$Tuple_Tuple2_$Impl_$.flip = function(this1) {
+	return { _0 : this1._1, _1 : this1._0};
+};
+thx_core__$Tuple_Tuple2_$Impl_$.dropLeft = function(this1) {
+	return this1._1;
+};
+thx_core__$Tuple_Tuple2_$Impl_$.dropRight = function(this1) {
+	return this1._0;
+};
+thx_core__$Tuple_Tuple2_$Impl_$["with"] = function(this1,v) {
+	return { _0 : this1._0, _1 : this1._1, _2 : v};
+};
+thx_core__$Tuple_Tuple2_$Impl_$.toString = function(this1) {
+	return "Tuple2(" + Std.string(this1._0) + "," + Std.string(this1._1) + ")";
+};
+var thx_core__$Tuple_Tuple3_$Impl_$ = {};
+thx_core__$Tuple_Tuple3_$Impl_$.__name__ = ["thx","core","_Tuple","Tuple3_Impl_"];
+thx_core__$Tuple_Tuple3_$Impl_$._new = function(_0,_1,_2) {
+	return { _0 : _0, _1 : _1, _2 : _2};
+};
+thx_core__$Tuple_Tuple3_$Impl_$.flip = function(this1) {
+	return { _0 : this1._2, _1 : this1._1, _2 : this1._0};
+};
+thx_core__$Tuple_Tuple3_$Impl_$.dropLeft = function(this1) {
+	return { _0 : this1._1, _1 : this1._2};
+};
+thx_core__$Tuple_Tuple3_$Impl_$.dropRight = function(this1) {
+	return { _0 : this1._0, _1 : this1._1};
+};
+thx_core__$Tuple_Tuple3_$Impl_$["with"] = function(this1,v) {
+	return { _0 : this1._0, _1 : this1._1, _2 : this1._2, _3 : v};
+};
+thx_core__$Tuple_Tuple3_$Impl_$.toString = function(this1) {
+	return "Tuple3(" + Std.string(this1._0) + "," + Std.string(this1._1) + "," + Std.string(this1._2) + ")";
+};
+var thx_core__$Tuple_Tuple4_$Impl_$ = {};
+thx_core__$Tuple_Tuple4_$Impl_$.__name__ = ["thx","core","_Tuple","Tuple4_Impl_"];
+thx_core__$Tuple_Tuple4_$Impl_$._new = function(_0,_1,_2,_3) {
+	return { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
+};
+thx_core__$Tuple_Tuple4_$Impl_$.flip = function(this1) {
+	return { _0 : this1._3, _1 : this1._2, _2 : this1._1, _3 : this1._0};
+};
+thx_core__$Tuple_Tuple4_$Impl_$.dropLeft = function(this1) {
+	return { _0 : this1._1, _1 : this1._2, _2 : this1._3};
+};
+thx_core__$Tuple_Tuple4_$Impl_$.dropRight = function(this1) {
+	return { _0 : this1._0, _1 : this1._1, _2 : this1._2};
+};
+thx_core__$Tuple_Tuple4_$Impl_$["with"] = function(this1,v) {
+	return { _0 : this1._0, _1 : this1._1, _2 : this1._2, _3 : this1._3, _4 : v};
+};
+thx_core__$Tuple_Tuple4_$Impl_$.toString = function(this1) {
+	return "Tuple4(" + Std.string(this1._0) + "," + Std.string(this1._1) + "," + Std.string(this1._2) + "," + Std.string(this1._3) + ")";
+};
+var thx_core__$Tuple_Tuple5_$Impl_$ = {};
+thx_core__$Tuple_Tuple5_$Impl_$.__name__ = ["thx","core","_Tuple","Tuple5_Impl_"];
+thx_core__$Tuple_Tuple5_$Impl_$._new = function(_0,_1,_2,_3,_4) {
+	return { _0 : _0, _1 : _1, _2 : _2, _3 : _3, _4 : _4};
+};
+thx_core__$Tuple_Tuple5_$Impl_$.flip = function(this1) {
+	return { _0 : this1._4, _1 : this1._3, _2 : this1._2, _3 : this1._1, _4 : this1._0};
+};
+thx_core__$Tuple_Tuple5_$Impl_$.dropLeft = function(this1) {
+	return { _0 : this1._1, _1 : this1._2, _2 : this1._3, _3 : this1._4};
+};
+thx_core__$Tuple_Tuple5_$Impl_$.dropRight = function(this1) {
+	return { _0 : this1._0, _1 : this1._1, _2 : this1._2, _3 : this1._3};
+};
+thx_core__$Tuple_Tuple5_$Impl_$["with"] = function(this1,v) {
+	return { _0 : this1._0, _1 : this1._1, _2 : this1._2, _3 : this1._3, _4 : this1._4, _5 : v};
+};
+thx_core__$Tuple_Tuple5_$Impl_$.toString = function(this1) {
+	return "Tuple5(" + Std.string(this1._0) + "," + Std.string(this1._1) + "," + Std.string(this1._2) + "," + Std.string(this1._3) + "," + Std.string(this1._4) + ")";
+};
+var thx_core__$Tuple_Tuple6_$Impl_$ = {};
+thx_core__$Tuple_Tuple6_$Impl_$.__name__ = ["thx","core","_Tuple","Tuple6_Impl_"];
+thx_core__$Tuple_Tuple6_$Impl_$._new = function(_0,_1,_2,_3,_4,_5) {
+	return { _0 : _0, _1 : _1, _2 : _2, _3 : _3, _4 : _4, _5 : _5};
+};
+thx_core__$Tuple_Tuple6_$Impl_$.flip = function(this1) {
+	return { _0 : this1._5, _1 : this1._4, _2 : this1._3, _3 : this1._2, _4 : this1._1, _5 : this1._0};
+};
+thx_core__$Tuple_Tuple6_$Impl_$.dropLeft = function(this1) {
+	return { _0 : this1._1, _1 : this1._2, _2 : this1._3, _3 : this1._4, _4 : this1._5};
+};
+thx_core__$Tuple_Tuple6_$Impl_$.dropRight = function(this1) {
+	return { _0 : this1._0, _1 : this1._1, _2 : this1._2, _3 : this1._3, _4 : this1._4};
+};
+thx_core__$Tuple_Tuple6_$Impl_$.toString = function(this1) {
+	return "Tuple6(" + Std.string(this1._0) + "," + Std.string(this1._1) + "," + Std.string(this1._2) + "," + Std.string(this1._3) + "," + Std.string(this1._4) + "," + Std.string(this1._5) + ")";
+};
+var thx_core_Types = function() { };
+thx_core_Types.__name__ = ["thx","core","Types"];
+thx_core_Types.isAnonymousObject = function(v) {
+	return Reflect.isObject(v)?null == Type.getClass(v):false;
+};
+thx_core_Types.isPrimitive = function(v) {
+	var tmp;
+	var _g = Type["typeof"](v);
+	switch(_g[1]) {
+	case 1:case 2:case 3:
+		tmp = true;
+		break;
+	case 0:case 5:case 7:case 4:case 8:
+		tmp = false;
+		break;
+	case 6:
+		var c = _g[2];
+		tmp = Type.getClassName(c) == "String";
+		break;
+	}
+	return tmp;
+};
+thx_core_Types.hasSuperClass = function(cls,sup) {
+	while(null != cls) {
+		if(cls == sup) return true;
+		cls = Type.getSuperClass(cls);
+	}
+	return false;
+};
+thx_core_Types.sameType = function(a,b) {
+	return thx_core_Types.typeToString(Type["typeof"](a)) == thx_core_Types.typeToString(Type["typeof"](b));
+};
+thx_core_Types.typeInheritance = function(type) {
+	var tmp;
+	switch(type[1]) {
+	case 1:
+		tmp = ["Int"];
+		break;
+	case 2:
+		tmp = ["Float"];
+		break;
+	case 3:
+		tmp = ["Bool"];
+		break;
+	case 4:
+		tmp = ["{}"];
+		break;
+	case 5:
+		tmp = ["Function"];
+		break;
+	case 6:
+		var c = type[2];
+		var classes = [];
+		while(null != c) {
+			classes.push(c);
+			c = Type.getSuperClass(c);
+		}
+		tmp = classes.map(Type.getClassName);
+		break;
+	case 7:
+		var e = type[2];
+		tmp = [Type.getEnumName(e)];
+		break;
+	default:
+		throw "invalid type " + Std.string(type);
+	}
+	return tmp;
+};
+thx_core_Types.typeToString = function(type) {
+	var tmp;
+	switch(type[1]) {
+	case 1:
+		tmp = "Int";
+		break;
+	case 2:
+		tmp = "Float";
+		break;
+	case 3:
+		tmp = "Bool";
+		break;
+	case 4:
+		tmp = "{}";
+		break;
+	case 5:
+		tmp = "Function";
+		break;
+	case 6:
+		var c = type[2];
+		tmp = Type.getClassName(c);
+		break;
+	case 7:
+		var e = type[2];
+		tmp = Type.getEnumName(e);
+		break;
+	default:
+		throw "invalid type " + Std.string(type);
+	}
+	return tmp;
+};
+thx_core_Types.valueTypeInheritance = function(value) {
+	return thx_core_Types.typeInheritance(Type["typeof"](value));
+};
+thx_core_Types.valueTypeToString = function(value) {
+	return thx_core_Types.typeToString(Type["typeof"](value));
+};
+var thx_core_error_NullArgument = function(message,posInfo) {
+	thx_core_Error.call(this,message,null,posInfo);
+};
+thx_core_error_NullArgument.__name__ = ["thx","core","error","NullArgument"];
+thx_core_error_NullArgument.__super__ = thx_core_Error;
+thx_core_error_NullArgument.prototype = $extend(thx_core_Error.prototype,{
+	__class__: thx_core_error_NullArgument
+});
+var thx_geom_Edge = function() { };
+thx_geom_Edge.__name__ = ["thx","geom","Edge"];
+thx_geom_Edge.prototype = {
+	get_box: null
+	,get_area: null
+	,get_length: null
+	,get_lengthSquared: null
+	,get_isLinear: null
+	,get_linearSegments: null
+	,get_linearSpline: null
+	,box: null
+	,area: null
+	,length: null
+	,lengthSquared: null
+	,isLinear: null
+	,first: null
+	,last: null
+	,normalIn: null
+	,normalOut: null
+	,linearSegments: null
+	,linearSpline: null
+	,equals: null
+	,matches: null
+	,transform: null
+	,flip: null
+	,direction: null
+	,intersects: null
+	,intersections: null
+	,intersectsLine: null
+	,intersectionsLine: null
+	,split: null
+	,interpolate: null
+	,interpolateNode: null
+	,toArray: null
+	,toLinear: null
+	,toString: null
+	,toSpline: null
+	,__class__: thx_geom_Edge
+};
+var thx_geom_EdgeCubic = function(p0,p1,p2,p3) {
 	this._lengthSquared = false;
 	this._length = false;
 	this._isLinear = false;
@@ -2631,40 +5691,60 @@ thx.geom.EdgeCubic = function(p0,p1,p2,p3) {
 	this.normalIn = this.p2 = p2;
 	this.last = this.p3 = p3;
 };
-thx.geom.EdgeCubic.__name__ = true;
-thx.geom.EdgeCubic.__interfaces__ = [thx.geom.Edge];
-thx.geom.EdgeCubic.prototype = {
-	equals: function(other) {
-		if(!js.Boot.__instanceof(other,thx.geom.EdgeCubic)) return false;
+thx_geom_EdgeCubic.__name__ = ["thx","geom","EdgeCubic"];
+thx_geom_EdgeCubic.__interfaces__ = [thx_geom_Edge];
+thx_geom_EdgeCubic.prototype = {
+	box: null
+	,area: null
+	,length: null
+	,lengthSquared: null
+	,linearSegments: null
+	,linearSpline: null
+	,isLinear: null
+	,p0: null
+	,p1: null
+	,p2: null
+	,p3: null
+	,first: null
+	,last: null
+	,normalIn: null
+	,normalOut: null
+	,equals: function(other) {
+		if(!js_Boot.__instanceof(other,thx_geom_EdgeCubic)) return false;
 		var t = other;
-		return thx.geom._Point.Point_Impl_.nearEquals(this.p0,t.p0) && thx.geom._Point.Point_Impl_.nearEquals(this.p1,t.p1) && thx.geom._Point.Point_Impl_.nearEquals(this.p2,t.p2) && thx.geom._Point.Point_Impl_.nearEquals(this.p3,t.p3);
+		return ((thx_geom__$Point_Point_$Impl_$.nearEquals(this.p0,t.p0)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p1,t.p1):false)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p2,t.p2):false)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p3,t.p3):false;
 	}
 	,matches: function(other) {
-		return thx.geom._Point.Point_Impl_.nearEquals(this.first,other.first) && thx.geom._Point.Point_Impl_.nearEquals(this.last,other.last);
+		return thx_geom__$Point_Point_$Impl_$.nearEquals(this.first,other.first)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.last,other.last):false;
 	}
 	,transform: function(matrix) {
-		return new thx.geom.EdgeCubic(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p0),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p1),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p2),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p3));
+		return new thx_geom_EdgeCubic(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p0),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p1),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p2),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p3));
 	}
 	,flip: function() {
-		return new thx.geom.EdgeCubic(this.p3,this.p2,this.p1,this.p0);
+		return new thx_geom_EdgeCubic(this.p3,this.p2,this.p1,this.p0);
 	}
 	,direction: function() {
+		var tmp;
 		var this1 = this.last;
 		var p = this.first;
 		var p_0 = -p[0];
 		var p_1 = -p[1];
-		return [this1[0] + p_0,this1[1] + p_1];
+		tmp = [this1[0] + p_0,this1[1] + p_1];
+		return tmp;
 	}
 	,intersects: function(other) {
 		return this.intersections(other).length > 0;
 	}
 	,intersections: function(other) {
-		if(js.Boot.__instanceof(other,thx.geom.EdgeLinear)) return this.intersectionsEdgeLinear(other); else return this.intersectionsEdgeCubic(other);
+		return js_Boot.__instanceof(other,thx_geom_EdgeLinear)?this.intersectionsEdgeLinear(other):this.intersectionsEdgeCubic(other);
 	}
 	,intersectionsEdgeLinear: function(other) {
-		return thx.core.Arrays.flatten(this.get_linearSegments().map(function(edge) {
+		var tmp;
+		var array = this.get_linearSegments().map(function(edge) {
 			return edge.intersectionsEdgeLinear(other);
-		}));
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
 	}
 	,intersectionsEdgeCubic: function(other) {
 		return this.get_linearSpline().intersectionsSpline(other.get_linearSpline());
@@ -2678,7 +5758,7 @@ thx.geom.EdgeCubic.prototype = {
 	,split: function(v) {
 		var node = this.interpolateNode(v);
 		if(null == node) return [];
-		return [new thx.geom.EdgeCubic(this.p0,this.p1,node.normalIn,node.position),new thx.geom.EdgeCubic(node.position,node.normalOut,this.p2,this.p3)];
+		return [new thx_geom_EdgeCubic(this.p0,this.p1,node.normalIn,node.position),new thx_geom_EdgeCubic(node.position,node.normalOut,this.p2,this.p3)];
 	}
 	,interpolate: function(v) {
 		var n = this.interpolateNode(v);
@@ -2687,145 +5767,168 @@ thx.geom.EdgeCubic.prototype = {
 	}
 	,interpolateNode: function(v) {
 		var edges = this.subdivide(v);
-		return new thx.geom.SplineNode(edges[0].last,edges[1].normalOut,edges[0].normalIn);
+		return new thx_geom_SplineNode(edges[0].last,edges[1].normalOut,edges[0].normalIn);
 	}
 	,toLinear: function() {
-		return new thx.geom.EdgeLinear(this.first,this.last);
+		return new thx_geom_EdgeLinear(this.first,this.last);
 	}
 	,toArray: function() {
 		return [this.p0,this.p1,this.p2,this.p3];
 	}
 	,toString: function() {
-		return "Edge(" + (function($this) {
-			var $r;
-			var this1 = $this.p0;
-			$r = "Point(" + this1[0] + "," + this1[1] + ")";
-			return $r;
-		}(this)) + "," + (function($this) {
-			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
-			return $r;
-		}(this)) + "," + (function($this) {
-			var $r;
-			var this3 = $this.p2;
-			$r = "Point(" + this3[0] + "," + this3[1] + ")";
-			return $r;
-		}(this)) + "," + (function($this) {
-			var $r;
-			var this4 = $this.p3;
-			$r = "Point(" + this4[0] + "," + this4[1] + ")";
-			return $r;
-		}(this)) + ")";
+		var tmp;
+		var this1 = this.p0;
+		tmp = "Point(" + this1[0] + "," + this1[1] + ")";
+		var tmp1;
+		var this2 = this.p1;
+		tmp1 = "Point(" + this2[0] + "," + this2[1] + ")";
+		var tmp2;
+		var this3 = this.p2;
+		tmp2 = "Point(" + this3[0] + "," + this3[1] + ")";
+		var tmp3;
+		var this4 = this.p3;
+		tmp3 = "Point(" + this4[0] + "," + this4[1] + ")";
+		return "Edge(" + tmp + "," + tmp1 + "," + tmp2 + "," + tmp3 + ")";
 	}
 	,toSpline: function() {
-		return thx.geom.Spline.fromEdges([this],false);
+		return thx_geom_Spline.fromEdges([this],false);
 	}
 	,isNearFlat: function() {
-		var sum = thx.geom._Point.Point_Impl_.distanceTo(this.p0,this.p1) + thx.geom._Point.Point_Impl_.distanceTo(this.p1,this.p2) + thx.geom._Point.Point_Impl_.distanceTo(this.p2,this.p3);
-		var len = thx.geom._Point.Point_Impl_.distanceTo(this.p0,this.p3);
-		return sum / len <= thx.geom.EdgeCubic.NEAR_FLAT;
+		var sum = thx_geom__$Point_Point_$Impl_$.distanceTo(this.p0,this.p1) + thx_geom__$Point_Point_$Impl_$.distanceTo(this.p1,this.p2) + thx_geom__$Point_Point_$Impl_$.distanceTo(this.p2,this.p3);
+		var len = thx_geom__$Point_Point_$Impl_$.distanceTo(this.p0,this.p3);
+		return sum / len <= thx_geom_EdgeCubic.NEAR_FLAT;
 	}
 	,subdivide: function(v) {
 		if(v == null) v = 0.5;
-		var l1;
+		var tmp;
 		var this1 = this.p0;
-		var p;
-		var this2;
+		var tmp6;
+		var tmp7;
 		var this3 = this.p1;
 		var p1 = this.p0;
 		var p_0 = -p1[0];
 		var p_1 = -p1[1];
-		this2 = [this3[0] + p_0,this3[1] + p_1];
-		p = [this2[0] * v,this2[1] * v];
-		l1 = [this1[0] + p[0],this1[1] + p[1]];
-		var m;
+		tmp7 = [this3[0] + p_0,this3[1] + p_1];
+		var this2 = tmp7;
+		tmp6 = [this2[0] * v,this2[1] * v];
+		var p = tmp6;
+		tmp = [this1[0] + p[0],this1[1] + p[1]];
+		var l1 = tmp;
+		var tmp1;
 		var this4 = this.p1;
-		var p2;
-		var this5;
+		var tmp8;
+		var tmp9;
 		var this6 = this.p2;
 		var p3 = this.p1;
 		var p_01 = -p3[0];
 		var p_11 = -p3[1];
-		this5 = [this6[0] + p_01,this6[1] + p_11];
-		p2 = [this5[0] * v,this5[1] * v];
-		m = [this4[0] + p2[0],this4[1] + p2[1]];
-		var r2;
+		tmp9 = [this6[0] + p_01,this6[1] + p_11];
+		var this5 = tmp9;
+		tmp8 = [this5[0] * v,this5[1] * v];
+		var p2 = tmp8;
+		tmp1 = [this4[0] + p2[0],this4[1] + p2[1]];
+		var m = tmp1;
+		var tmp2;
 		var this7 = this.p2;
-		var p4;
-		var this8;
+		var tmp10;
+		var tmp11;
 		var this9 = this.p3;
 		var p5 = this.p2;
 		var p_02 = -p5[0];
 		var p_12 = -p5[1];
-		this8 = [this9[0] + p_02,this9[1] + p_12];
-		p4 = [this8[0] * v,this8[1] * v];
-		r2 = [this7[0] + p4[0],this7[1] + p4[1]];
-		var l2;
-		var p6;
-		var this10;
+		tmp11 = [this9[0] + p_02,this9[1] + p_12];
+		var this8 = tmp11;
+		tmp10 = [this8[0] * v,this8[1] * v];
+		var p4 = tmp10;
+		tmp2 = [this7[0] + p4[0],this7[1] + p4[1]];
+		var r2 = tmp2;
+		var tmp3;
+		var tmp12;
+		var tmp13;
 		var p_03 = -l1[0];
 		var p_13 = -l1[1];
-		this10 = [m[0] + p_03,m[1] + p_13];
-		p6 = [this10[0] * v,this10[1] * v];
-		l2 = [l1[0] + p6[0],l1[1] + p6[1]];
-		var r1;
-		var p7;
-		var this11;
+		tmp13 = [m[0] + p_03,m[1] + p_13];
+		var this10 = tmp13;
+		tmp12 = [this10[0] * v,this10[1] * v];
+		var p6 = tmp12;
+		tmp3 = [l1[0] + p6[0],l1[1] + p6[1]];
+		var l2 = tmp3;
+		var tmp4;
+		var tmp14;
+		var tmp15;
 		var p_04 = -m[0];
 		var p_14 = -m[1];
-		this11 = [r2[0] + p_04,r2[1] + p_14];
-		p7 = [this11[0] * v,this11[1] * v];
-		r1 = [m[0] + p7[0],m[1] + p7[1]];
-		var l3;
-		var p8;
-		var this12;
+		tmp15 = [r2[0] + p_04,r2[1] + p_14];
+		var this11 = tmp15;
+		tmp14 = [this11[0] * v,this11[1] * v];
+		var p7 = tmp14;
+		tmp4 = [m[0] + p7[0],m[1] + p7[1]];
+		var r1 = tmp4;
+		var tmp5;
+		var tmp16;
+		var tmp17;
 		var p_05 = -l2[0];
 		var p_15 = -l2[1];
-		this12 = [r1[0] + p_05,r1[1] + p_15];
-		p8 = [this12[0] * v,this12[1] * v];
-		l3 = [l2[0] + p8[0],l2[1] + p8[1]];
-		return [new thx.geom.EdgeCubic(this.p0,l1,l2,l3),new thx.geom.EdgeCubic(l3,r1,r2,this.p3)];
+		tmp17 = [r1[0] + p_05,r1[1] + p_15];
+		var this12 = tmp17;
+		tmp16 = [this12[0] * v,this12[1] * v];
+		var p8 = tmp16;
+		tmp5 = [l2[0] + p8[0],l2[1] + p8[1]];
+		var l3 = tmp5;
+		return [new thx_geom_EdgeCubic(this.p0,l1,l2,l3),new thx_geom_EdgeCubic(l3,r1,r2,this.p3)];
 	}
+	,_area: null
 	,get_area: function() {
 		if(!this._area) {
 			this._area = true;
-			this.area = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+			var tmp;
+			var array = this.get_linearSegments();
+			tmp = array.reduce(function(acc,edge) {
 				return acc + edge.get_area();
 			},0);
+			this.area = tmp;
 		}
 		return this.area;
 	}
 	,get_box: function() {
-		if(null == this.box) this.box = thx.geom.shape._Box.Box_Impl_.expandByPoints(thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p1),[this.p2,this.p3]);
+		if(null == this.box) this.box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p1),[this.p2,this.p3]);
 		return this.box;
 	}
+	,_isLinear: null
 	,get_isLinear: function() {
 		if(!this._isLinear) {
 			this._isLinear = true;
-			var line = thx.geom.Line.fromPoints(this.p0,this.p3);
-			if(!thx.geom._Point.Point_Impl_.isOnLine(this.p1,line) || !thx.geom._Point.Point_Impl_.isOnLine(this.p0,line)) this.isLinear = false; else {
-				var box = thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p3);
-				this.isLinear = thx.geom.shape._Box.Box_Impl_.contains(box,this.p1) && thx.geom.shape._Box.Box_Impl_.contains(box,this.p2);
+			var line = thx_geom_Line.fromPoints(this.p0,this.p3);
+			if(!(!thx_geom__$Point_Point_$Impl_$.isOnLine(this.p1,line))?!thx_geom__$Point_Point_$Impl_$.isOnLine(this.p0,line):true) this.isLinear = false; else {
+				var box = thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p3);
+				this.isLinear = thx_geom_shape__$Box_Box_$Impl_$.contains(box,this.p1)?thx_geom_shape__$Box_Box_$Impl_$.contains(box,this.p2):false;
 			}
 		}
 		return this.isLinear;
 	}
+	,_length: null
 	,get_length: function() {
 		if(!this._length) {
 			this._length = true;
-			this.length = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+			var tmp;
+			var array = this.get_linearSegments();
+			tmp = array.reduce(function(acc,edge) {
 				return acc + edge.get_length();
 			},0);
+			this.length = tmp;
 		}
 		return this.length;
 	}
+	,_lengthSquared: null
 	,get_lengthSquared: function() {
 		if(!this._lengthSquared) {
 			this._lengthSquared = true;
-			this.lengthSquared = thx.core.Arrays.reduce(this.get_linearSegments(),function(acc,edge) {
+			var tmp;
+			var array = this.get_linearSegments();
+			tmp = array.reduce(function(acc,edge) {
 				return acc + edge.get_lengthSquared();
 			},0);
+			this.lengthSquared = tmp;
 		}
 		return this.lengthSquared;
 	}
@@ -2842,12 +5945,12 @@ thx.geom.EdgeCubic.prototype = {
 		return this.linearSegments;
 	}
 	,get_linearSpline: function() {
-		if(null == this.linearSpline) this.linearSpline = thx.geom.Spline.fromEdges(this.get_linearSegments(),false);
+		if(null == this.linearSpline) this.linearSpline = thx_geom_Spline.fromEdges(this.get_linearSegments(),false);
 		return this.linearSpline;
 	}
-	,__class__: thx.geom.EdgeCubic
+	,__class__: thx_geom_EdgeCubic
 };
-thx.geom.EdgeLinear = function(p0,p1) {
+var thx_geom_EdgeLinear = function(p0,p1) {
 	this._lengthSquared = false;
 	this._length = false;
 	this._area = false;
@@ -2855,40 +5958,56 @@ thx.geom.EdgeLinear = function(p0,p1) {
 	this.last = this.p1 = p1;
 	this.normalIn = this.normalOut = null;
 };
-thx.geom.EdgeLinear.__name__ = true;
-thx.geom.EdgeLinear.__interfaces__ = [thx.geom.Edge];
-thx.geom.EdgeLinear.prototype = {
-	equals: function(other) {
-		if(!js.Boot.__instanceof(other,thx.geom.EdgeLinear)) return false;
+thx_geom_EdgeLinear.__name__ = ["thx","geom","EdgeLinear"];
+thx_geom_EdgeLinear.__interfaces__ = [thx_geom_Edge];
+thx_geom_EdgeLinear.prototype = {
+	area: null
+	,box: null
+	,length: null
+	,lengthSquared: null
+	,line: null
+	,linearSegments: null
+	,linearSpline: null
+	,isLinear: null
+	,p0: null
+	,p1: null
+	,first: null
+	,last: null
+	,normalIn: null
+	,normalOut: null
+	,equals: function(other) {
+		if(!js_Boot.__instanceof(other,thx_geom_EdgeLinear)) return false;
 		var t = other;
-		return thx.geom._Point.Point_Impl_.nearEquals(this.p0,t.p0) && thx.geom._Point.Point_Impl_.nearEquals(this.p1,t.p1);
+		return thx_geom__$Point_Point_$Impl_$.nearEquals(this.p0,t.p0)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p1,t.p1):false;
 	}
 	,matches: function(other) {
-		return thx.geom._Point.Point_Impl_.nearEquals(this.first,other.first) && thx.geom._Point.Point_Impl_.nearEquals(this.last,other.last);
+		return thx_geom__$Point_Point_$Impl_$.nearEquals(this.first,other.first)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.last,other.last):false;
 	}
 	,transform: function(matrix) {
-		return new thx.geom.EdgeLinear(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p0),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.p1));
+		return new thx_geom_EdgeLinear(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p0),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p1));
 	}
 	,flip: function() {
-		return new thx.geom.EdgeLinear(this.p1,this.p0);
+		return new thx_geom_EdgeLinear(this.p1,this.p0);
 	}
 	,direction: function() {
+		var tmp;
 		var this1 = this.last;
 		var p = this.first;
 		var p_0 = -p[0];
 		var p_1 = -p[1];
-		return [this1[0] + p_0,this1[1] + p_1];
+		tmp = [this1[0] + p_0,this1[1] + p_1];
+		return tmp;
 	}
 	,intersects: function(other) {
 		return this.intersections(other).length > 0;
 	}
 	,intersections: function(other) {
-		if(!thx.geom.shape._Box.Box_Impl_.intersects(this.get_box(),other.get_box())) return [];
-		if(js.Boot.__instanceof(other,thx.geom.EdgeLinear)) return this.intersectionsEdgeLinear(other); else return this.intersectionsEdgeCubic(other);
+		if(!thx_geom_shape__$Box_Box_$Impl_$.intersects(this.get_box(),other.get_box())) return [];
+		if(js_Boot.__instanceof(other,thx_geom_EdgeLinear)) return this.intersectionsEdgeLinear(other); else return this.intersectionsEdgeCubic(other);
 	}
 	,intersectionsEdgeLinear: function(other) {
 		var ps = this.intersectionsLine(other.get_line());
-		if(ps.length == 0 || other.intersectsLine(this.get_line())) return ps; else return [];
+		if(!(ps.length == 0)?other.intersectsLine(this.get_line()):true) return ps; else return [];
 	}
 	,intersectionsEdgeCubic: function(other) {
 		return other.intersectionsEdgeLinear(this);
@@ -2897,74 +6016,72 @@ thx.geom.EdgeLinear.prototype = {
 		return this.intersectionsLine(line).length > 0;
 	}
 	,intersectionsLine: function(line) {
-		var l = thx.geom.Line.fromPoints(this.p0,this.p1);
+		var l = thx_geom_Line.fromPoints(this.p0,this.p1);
 		var p = l.intersectionLine(line);
 		if(null != p) {
 			if(this.p0[0] == this.p1[0]) {
-				if(p[1] >= (function($this) {
-					var $r;
-					var this1;
-					{
-						var this2 = $this.p0;
-						var p1 = $this.p1;
-						var x = Math.min(this2[0],p1[0]);
-						var y = Math.min(this2[1],p1[1]);
-						this1 = [x,y];
-					}
-					$r = this1[1];
-					return $r;
-				}(this)) && p[1] <= (function($this) {
-					var $r;
-					var this3;
-					{
-						var this4 = $this.p0;
-						var p2 = $this.p1;
-						var x1 = Math.max(this4[0],p2[0]);
-						var y1 = Math.max(this4[1],p2[1]);
-						this3 = [x1,y1];
-					}
-					$r = this3[1];
-					return $r;
-				}(this))) return [p];
-			} else if(p[0] >= (function($this) {
-				var $r;
-				var this5;
-				{
-					var this6 = $this.p0;
-					var p3 = $this.p1;
-					var x2 = Math.min(this6[0],p3[0]);
-					var y2 = Math.min(this6[1],p3[1]);
-					this5 = [x2,y2];
-				}
-				$r = this5[0];
-				return $r;
-			}(this)) && p[0] <= (function($this) {
-				var $r;
-				var this7;
-				{
-					var this8 = $this.p0;
-					var p4 = $this.p1;
+				var tmp;
+				var tmp2;
+				var this2 = this.p0;
+				var p1 = this.p1;
+				var x = Math.min(this2[0],p1[0]);
+				var y = Math.min(this2[1],p1[1]);
+				tmp2 = [x,y];
+				var this1 = tmp2;
+				tmp = this1[1];
+				var tmp1;
+				if(p[1] >= tmp) {
+					var tmp3;
+					var tmp4;
+					var this4 = this.p0;
+					var p2 = this.p1;
+					var x1 = Math.max(this4[0],p2[0]);
+					var y1 = Math.max(this4[1],p2[1]);
+					tmp4 = [x1,y1];
+					var this3 = tmp4;
+					tmp3 = this3[1];
+					tmp1 = p[1] <= tmp3;
+				} else tmp1 = false;
+				if(tmp1) return [p];
+			} else {
+				var tmp5;
+				var tmp7;
+				var this6 = this.p0;
+				var p3 = this.p1;
+				var x2 = Math.min(this6[0],p3[0]);
+				var y2 = Math.min(this6[1],p3[1]);
+				tmp7 = [x2,y2];
+				var this5 = tmp7;
+				tmp5 = this5[0];
+				var tmp6;
+				if(p[0] >= tmp5) {
+					var tmp8;
+					var tmp9;
+					var this8 = this.p0;
+					var p4 = this.p1;
 					var x3 = Math.max(this8[0],p4[0]);
 					var y3 = Math.max(this8[1],p4[1]);
-					this7 = [x3,y3];
-				}
-				$r = this7[0];
-				return $r;
-			}(this))) return [p];
+					tmp9 = [x3,y3];
+					var this7 = tmp9;
+					tmp8 = this7[0];
+					tmp6 = p[0] <= tmp8;
+				} else tmp6 = false;
+				if(tmp6) return [p];
+			}
 		}
 		return [];
 	}
 	,split: function(v) {
 		var mid = this.interpolate(v);
-		return [new thx.geom.EdgeLinear(this.p0,mid),new thx.geom.EdgeLinear(mid,this.p1)];
+		return [new thx_geom_EdgeLinear(this.p0,mid),new thx_geom_EdgeLinear(mid,this.p1)];
 	}
 	,interpolate: function(v) {
-		return thx.geom._Point.Point_Impl_.interpolate(this.p0,this.p1,v);
+		return thx_geom__$Point_Point_$Impl_$.interpolate(this.p0,this.p1,v);
 	}
 	,interpolateNode: function(v) {
 		var p = this.interpolate(v);
 		if(null == p) return null;
-		return new thx.geom.SplineNode(p,null,null);
+		return new thx_geom_SplineNode(p,null,null);
 	}
 	,toLinear: function() {
 		return this;
@@ -2973,41 +6090,40 @@ thx.geom.EdgeLinear.prototype = {
 		return [this.p0,this.p1];
 	}
 	,toString: function() {
-		return "Edge(" + (function($this) {
-			var $r;
-			var this1 = $this.p0;
-			$r = "Point(" + this1[0] + "," + this1[1] + ")";
-			return $r;
-		}(this)) + "," + (function($this) {
-			var $r;
-			var this2 = $this.p1;
-			$r = "Point(" + this2[0] + "," + this2[1] + ")";
-			return $r;
-		}(this)) + ")";
+		var tmp;
+		var this1 = this.p0;
+		tmp = "Point(" + this1[0] + "," + this1[1] + ")";
+		var tmp1;
+		var this2 = this.p1;
+		tmp1 = "Point(" + this2[0] + "," + this2[1] + ")";
+		return "Edge(" + tmp + "," + tmp1 + ")";
 	}
 	,toSpline: function() {
-		return thx.geom.Spline.fromEdges([this],false);
+		return thx_geom_Spline.fromEdges([this],false);
 	}
+	,_area: null
 	,get_area: function() {
 		if(!this._area) {
 			this._area = true;
-			var p;
+			var tmp;
 			var this1 = this.p1;
 			var p1 = this.p0;
 			var p_0 = -p1[0];
 			var p_1 = -p1[1];
-			p = [this1[0] + p_0,this1[1] + p_1];
+			tmp = [this1[0] + p_0,this1[1] + p_1];
+			var p = tmp;
 			this.area = this.p0[1] * (this.p1[0] - this.p0[0]) + p[0] * p[1] / 2;
 		}
 		return this.area;
 	}
 	,get_box: function() {
-		if(null == this.box) this.box = thx.geom.shape._Box.Box_Impl_.fromPoints(this.p0,this.p1);
+		if(null == this.box) this.box = thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p1);
 		return this.box;
 	}
 	,get_isLinear: function() {
 		return true;
 	}
+	,_length: null
 	,get_length: function() {
 		if(!this._length) {
 			this._length = true;
@@ -3015,111 +6131,122 @@ thx.geom.EdgeLinear.prototype = {
 		}
 		return this.length;
 	}
+	,_lengthSquared: null
 	,get_lengthSquared: function() {
 		if(!this._lengthSquared) {
 			this._lengthSquared = true;
-			var this1;
+			var tmp;
+			var tmp1;
 			var this2 = this.p1;
 			var p = this.p0;
 			var p_0 = -p[0];
 			var p_1 = -p[1];
-			this1 = [this2[0] + p_0,this2[1] + p_1];
-			this.lengthSquared = this1[0] * this1[0] + this1[1] * this1[1];
+			tmp1 = [this2[0] + p_0,this2[1] + p_1];
+			var this1 = tmp1;
+			tmp = this1[0] * this1[0] + this1[1] * this1[1];
+			this.lengthSquared = tmp;
 		}
 		return this.lengthSquared;
 	}
 	,get_line: function() {
-		if(null == this.line) this.line = thx.geom.Line.fromPoints(this.p0,this.p1);
+		if(null == this.line) this.line = thx_geom_Line.fromPoints(this.p0,this.p1);
 		return this.line;
 	}
 	,get_linearSegments: function() {
 		return [this];
 	}
 	,get_linearSpline: function() {
-		return this.linearSpline = thx.geom.Spline.fromEdges([this],false);
+		return this.linearSpline = thx_geom_Spline.fromEdges([this],false);
 	}
-	,__class__: thx.geom.EdgeLinear
+	,__class__: thx_geom_EdgeLinear
 };
-thx.geom.Line = function(normal,w) {
+var thx_geom_Line = function(normal,w) {
 	var l = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
 	this.w = w * l;
 	this.normal = [normal[0] / l,normal[1] / l];
 };
-thx.geom.Line.__name__ = true;
-thx.geom.Line.fromPoints = function(p1,p2) {
-	var direction;
+thx_geom_Line.__name__ = ["thx","geom","Line"];
+thx_geom_Line.fromPoints = function(p1,p2) {
+	var tmp;
 	var p_0 = -p1[0];
 	var p_1 = -p1[1];
-	direction = [p2[0] + p_0,p2[1] + p_1];
-	var normal;
-	var this1;
+	tmp = [p2[0] + p_0,p2[1] + p_1];
+	var direction = tmp;
+	var tmp1;
+	var tmp2;
 	var this_0 = direction[1];
 	var this_1 = -direction[0];
-	this1 = [-this_0,-this_1];
+	tmp2 = [-this_0,-this_1];
+	var this1 = tmp2;
 	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-	normal = [this1[0] / v,this1[1] / v];
+	tmp1 = [this1[0] / v,this1[1] / v];
+	var normal = tmp1;
 	var w = p1[0] * normal[0] + p1[1] * normal[1];
-	return new thx.geom.Line(normal,w);
+	return new thx_geom_Line(normal,w);
 };
-thx.geom.Line.prototype = {
-	offset: function(value) {
-		return new thx.geom.Line(this.normal,this.w + value);
+thx_geom_Line.prototype = {
+	normal: null
+	,w: null
+	,isHorizontal: null
+	,isVertical: null
+	,offset: function(value) {
+		return new thx_geom_Line(this.normal,this.w + value);
 	}
 	,reverse: function() {
-		return new thx.geom.Line((function($this) {
-			var $r;
-			var this1 = $this.normal;
-			$r = [-this1[0],-this1[1]];
-			return $r;
-		}(this)),-this.w);
+		var tmp;
+		var this1 = this.normal;
+		tmp = [-this1[0],-this1[1]];
+		return new thx_geom_Line(tmp,-this.w);
 	}
 	,equals: function(other) {
-		return (function($this) {
-			var $r;
-			var this1 = $this.normal;
-			var p = other.normal;
-			$r = this1[0] == p[0] && this1[1] == p[1];
-			return $r;
-		}(this)) && this.w == other.w;
+		var tmp;
+		var this1 = this.normal;
+		var p = other.normal;
+		if(this1[0] == p[0]) tmp = this1[1] == p[1]; else tmp = false;
+		return tmp?this.w == other.w:false;
 	}
 	,origin: function() {
+		var tmp;
 		var this1 = this.normal;
 		var v = this.w;
-		return [this1[0] * v,this1[1] * v];
+		tmp = [this1[0] * v,this1[1] * v];
+		return tmp;
 	}
 	,direction: function() {
+		var tmp;
 		var this1 = this.normal;
-		return [this1[1],-this1[0]];
+		tmp = [this1[1],-this1[0]];
+		return tmp;
 	}
 	,xAtY: function(y) {
 		return (this.w - this.normal[1] * y) / this.normal[0];
 	}
 	,absDistanceToPoint: function(point) {
-		return Math.abs((function($this) {
-			var $r;
-			var p = $this.normal;
-			$r = point[0] * p[0] + point[1] * p[1];
-			return $r;
-		}(this)) - this.w);
+		var tmp;
+		var p = this.normal;
+		tmp = point[0] * p[0] + point[1] * p[1];
+		return Math.abs(tmp - this.w);
 	}
 	,intersectionLine: function(line) {
-		return thx.geom._Point.Point_Impl_.solve2Linear(this.normal[0],this.normal[1],line.normal[0],line.normal[1],this.w,line.w);
+		return thx_geom__$Point_Point_$Impl_$.solve2Linear(this.normal[0],this.normal[1],line.normal[0],line.normal[1],this.w,line.w);
 	}
 	,transform: function(matrix) {
 		var origin = [0,0];
-		var pointOnPlane;
+		var tmp;
 		var this1 = this.normal;
 		var v = this.w;
-		pointOnPlane = [this1[0] * v,this1[1] * v];
-		var neworigin = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,origin);
-		var neworiginPlusNormal = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normal);
-		var newnormal;
+		tmp = [this1[0] * v,this1[1] * v];
+		var pointOnPlane = tmp;
+		var neworigin = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,origin);
+		var neworiginPlusNormal = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normal);
+		var tmp1;
 		var p_0 = -neworigin[0];
 		var p_1 = -neworigin[1];
-		newnormal = [neworiginPlusNormal[0] + p_0,neworiginPlusNormal[1] + p_1];
-		var newpointOnPlane = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,pointOnPlane);
+		tmp1 = [neworiginPlusNormal[0] + p_0,neworiginPlusNormal[1] + p_1];
+		var newnormal = tmp1;
+		var newpointOnPlane = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,pointOnPlane);
 		var neww = newnormal[0] * newpointOnPlane[0] + newnormal[1] * newpointOnPlane[1];
-		return new thx.geom.Line(newnormal,neww);
+		return new thx_geom_Line(newnormal,neww);
 	}
 	,get_isHorizontal: function() {
 		return this.normal[0] == 0;
@@ -3130,183 +6257,192 @@ thx.geom.Line.prototype = {
 	,toString: function() {
 		return "Line(" + this.normal[0] + "," + this.normal[1] + ",w:" + this.w + ")";
 	}
-	,__class__: thx.geom.Line
+	,__class__: thx_geom_Line
 };
-thx.geom.Line3D = function(point,direction) {
+var thx_geom_Line3D = function(point,direction) {
 	this.point = point;
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
-	this.direction = [direction[0] / v,direction[1] / v,direction[2] / v];
+	var tmp;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(direction,[direction[0],direction[1],direction[2]]));
+	tmp = [direction[0] / v,direction[1] / v,direction[2] / v];
+	this.direction = tmp;
 };
-thx.geom.Line3D.__name__ = true;
-thx.geom.Line3D.fromPoints = function(p1,p2) {
-	return new thx.geom.Line3D(p1,(function($this) {
-		var $r;
-		var this1;
-		{
-			var p_0 = -p1[0];
-			var p_1 = -p1[1];
-			var p_2 = -p1[2];
-			this1 = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
-		}
-		var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-		$r = [this1[0] / v,this1[1] / v,this1[2] / v];
-		return $r;
-	}(this)));
+thx_geom_Line3D.__name__ = ["thx","geom","Line3D"];
+thx_geom_Line3D.fromPoints = function(p1,p2) {
+	var tmp;
+	var tmp1;
+	var p_0 = -p1[0];
+	var p_1 = -p1[1];
+	var p_2 = -p1[2];
+	tmp1 = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
+	var this1 = tmp1;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
+	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
+	return new thx_geom_Line3D(p1,tmp);
 };
-thx.geom.Line3D.fromPlanes = function(p1,p2) {
-	var direction;
+thx_geom_Line3D.fromPlanes = function(p1,p2) {
+	var tmp;
 	var this1 = p1.normal;
 	var p = p2.normal;
-	direction = [this1[1] * p[2] - this1[2] * p[1],this1[2] * p[0] - this1[0] * p[2],this1[0] * p[1] - this1[1] * p[0]];
-	var l = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(direction,[direction[0],direction[1],direction[2]]));
+	tmp = [this1[1] * p[2] - this1[2] * p[1],this1[2] * p[0] - this1[0] * p[2],this1[0] * p[1] - this1[1] * p[0]];
+	var direction = tmp;
+	var l = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(direction,[direction[0],direction[1],direction[2]]));
 	if(l < 1e-10) throw "Parallel planes";
+	var tmp1;
 	var v = 1.0 / l;
-	direction = [direction[0] * v,direction[1] * v,direction[2] * v];
+	tmp1 = [direction[0] * v,direction[1] * v,direction[2] * v];
+	direction = tmp1;
 	var mabsx = Math.abs(direction[0]);
 	var mabsy = Math.abs(direction[1]);
 	var mabsz = Math.abs(direction[2]);
 	var origin;
-	if(mabsx >= mabsy && mabsx >= mabsz) {
-		var r = thx.geom._Point.Point_Impl_.solve2Linear(p1.normal[1],p1.normal[2],p2.normal[1],p2.normal[2],p1.w,p2.w);
+	if(mabsx >= mabsy?mabsx >= mabsz:false) {
+		var r = thx_geom__$Point_Point_$Impl_$.solve2Linear(p1.normal[1],p1.normal[2],p2.normal[1],p2.normal[2],p1.w,p2.w);
 		origin = [0,r[0],r[1]];
-	} else if(mabsy >= mabsx && mabsy >= mabsz) {
-		var r1 = thx.geom._Point.Point_Impl_.solve2Linear(p1.normal[0],p1.normal[2],p2.normal[0],p2.normal[2],p1.w,p2.w);
+	} else if(mabsy >= mabsx?mabsy >= mabsz:false) {
+		var r1 = thx_geom__$Point_Point_$Impl_$.solve2Linear(p1.normal[0],p1.normal[2],p2.normal[0],p2.normal[2],p1.w,p2.w);
 		origin = [r1[0],0,r1[1]];
 	} else {
-		var r2 = thx.geom._Point.Point_Impl_.solve2Linear(p1.normal[0],p1.normal[1],p2.normal[0],p2.normal[1],p1.w,p2.w);
+		var r2 = thx_geom__$Point_Point_$Impl_$.solve2Linear(p1.normal[0],p1.normal[1],p2.normal[0],p2.normal[1],p1.w,p2.w);
 		origin = [r2[0],r2[1],0];
 	}
-	return new thx.geom.Line3D(origin,direction);
+	return new thx_geom_Line3D(origin,direction);
 };
-thx.geom.Line3D.prototype = {
-	intersectWithPlane: function(plane) {
-		var lambda = (plane.w - thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.point)) / thx.geom._Point3D.Point3D_Impl_.dot(plane.normal,this.direction);
+thx_geom_Line3D.prototype = {
+	point: null
+	,direction: null
+	,intersectWithPlane: function(plane) {
+		var lambda = (plane.w - thx_geom__$Point3D_Point3D_$Impl_$.dot(plane.normal,this.point)) / thx_geom__$Point3D_Point3D_$Impl_$.dot(plane.normal,this.direction);
+		var tmp;
 		var this1 = this.point;
-		var p;
+		var tmp1;
 		var this2 = this.direction;
-		p = [this2[0] * lambda,this2[1] * lambda,this2[2] * lambda];
-		return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
+		tmp1 = [this2[0] * lambda,this2[1] * lambda,this2[2] * lambda];
+		var p = tmp1;
+		tmp = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
+		return tmp;
 	}
 	,reverse: function() {
-		return new thx.geom.Line3D(this.point,(function($this) {
-			var $r;
-			var this1 = $this.direction;
-			$r = [-this1[0],-this1[1],-this1[2]];
-			return $r;
-		}(this)));
+		var tmp;
+		var this1 = this.direction;
+		tmp = [-this1[0],-this1[1],-this1[2]];
+		return new thx_geom_Line3D(this.point,tmp);
 	}
 	,transform: function(matrix4x4) {
-		var newpoint;
+		var tmp;
 		var this1 = this.point;
-		newpoint = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
-		var pointaddDirection;
+		tmp = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
+		var newpoint = tmp;
+		var tmp1;
 		var this2 = this.point;
 		var p = this.direction;
-		pointaddDirection = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
-		var newPointaddDirection = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[pointaddDirection[0],pointaddDirection[1],pointaddDirection[2]]);
-		var newdirection;
+		tmp1 = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
+		var pointaddDirection = tmp1;
+		var newPointaddDirection = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[pointaddDirection[0],pointaddDirection[1],pointaddDirection[2]]);
+		var tmp2;
 		var p_0 = -newpoint[0];
 		var p_1 = -newpoint[1];
 		var p_2 = -newpoint[2];
-		newdirection = [newPointaddDirection[0] + p_0,newPointaddDirection[1] + p_1,newPointaddDirection[2] + p_2];
-		return new thx.geom.Line3D(newpoint,newdirection);
+		tmp2 = [newPointaddDirection[0] + p_0,newPointaddDirection[1] + p_1,newPointaddDirection[2] + p_2];
+		var newdirection = tmp2;
+		return new thx_geom_Line3D(newpoint,newdirection);
 	}
 	,closestPointOnLine: function(point) {
-		var t = thx.geom._Point3D.Point3D_Impl_.dot((function($this) {
-			var $r;
-			var p_0 = -point[0];
-			var p_1 = -point[1];
-			var p_2 = -point[2];
-			$r = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
-			return $r;
-		}(this)),this.direction) / thx.geom._Point3D.Point3D_Impl_.dot(this.direction,this.direction);
-		var p;
+		var tmp;
+		var p_0 = -point[0];
+		var p_1 = -point[1];
+		var p_2 = -point[2];
+		tmp = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
+		var t = thx_geom__$Point3D_Point3D_$Impl_$.dot(tmp,this.direction) / thx_geom__$Point3D_Point3D_$Impl_$.dot(this.direction,this.direction);
+		var tmp1;
+		var tmp2;
 		var this1 = this.direction;
-		p = [this1[0] * t,this1[1] * t,this1[2] * t];
-		return [point[0] + p[0],point[1] + p[1],point[2] + p[2]];
+		tmp2 = [this1[0] * t,this1[1] * t,this1[2] * t];
+		var p = tmp2;
+		tmp1 = [point[0] + p[0],point[1] + p[1],point[2] + p[2]];
+		return tmp1;
 	}
 	,distanceToPoint: function(point) {
 		var closestpoint = this.closestPointOnLine(point);
-		var distancevector;
+		var tmp;
 		var p_0 = -closestpoint[0];
 		var p_1 = -closestpoint[1];
 		var p_2 = -closestpoint[2];
-		distancevector = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
-		return Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(distancevector,[distancevector[0],distancevector[1],distancevector[2]]));
+		tmp = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
+		var distancevector = tmp;
+		return Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(distancevector,[distancevector[0],distancevector[1],distancevector[2]]));
 	}
 	,equals: function(line) {
-		if(!thx.geom._Point3D.Point3D_Impl_.equals(this.direction,line.direction)) return false;
+		if(!thx_geom__$Point3D_Point3D_$Impl_$.equals(this.direction,line.direction)) return false;
 		return this.distanceToPoint(line.point) <= 1e-8;
 	}
-	,__class__: thx.geom.Line3D
+	,__class__: thx_geom_Line3D
 };
-thx.geom._Matrix4x4 = {};
-thx.geom._Matrix4x4.Matrix4x4_Impl_ = function() { };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.__name__ = true;
-thx.geom._Matrix4x4.Matrix4x4_Impl_.fromArray = function(e) {
+var thx_geom__$Matrix4x4_Matrix4x4_$Impl_$ = {};
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.__name__ = ["thx","geom","_Matrix4x4","Matrix4x4_Impl_"];
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.fromArray = function(e) {
 	if(e.length != 16) throw "Invalid array length (" + e.length + ") for Matrix4x4, should be 16";
 	return [e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7],e[8],e[9],e[10],e[11],e[12],e[13],e[14],e[15]];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationX = function(radians) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationX = function(radians) {
 	var cos = Math.cos(radians);
 	var sin = Math.sin(radians);
 	return [1,0,0,0,0,cos,sin,0,0,-sin,cos,0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationY = function(radians) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationY = function(radians) {
 	var cos = Math.cos(radians);
 	var sin = Math.sin(radians);
 	return [cos,0,-sin,0,0,1,0,0,sin,0,cos,0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ = function(radians) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ = function(radians) {
 	var cos = Math.cos(radians);
 	var sin = Math.sin(radians);
 	return [cos,sin,0,0,-sin,cos,0,0,0,0,1,0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotation = function(rotationCenter,rotationAxis,radians) {
-	var rotationPlane = thx.geom.Plane.fromNormalAndPoint(rotationAxis,rotationCenter);
-	var orthobasis = new thx.geom.OrthoNormalBasis(rotationPlane,thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(rotationPlane.normal));
-	var transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([-rotationCenter[0],-rotationCenter[1],-rotationCenter[2]]);
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getProjectionMatrix());
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ(radians));
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getInverseProjectionMatrix());
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(rotationCenter));
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotation = function(rotationCenter,rotationAxis,radians) {
+	var rotationPlane = thx_geom_Plane.fromNormalAndPoint(rotationAxis,rotationCenter);
+	var orthobasis = new thx_geom_OrthoNormalBasis(rotationPlane,thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(rotationPlane.normal));
+	var transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([-rotationCenter[0],-rotationCenter[1],-rotationCenter[2]]);
+	transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(transformation,orthobasis.getProjectionMatrix());
+	transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(transformation,thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(radians));
+	transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(transformation,orthobasis.getInverseProjectionMatrix());
+	transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(transformation,thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(rotationCenter));
 	return transformation;
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.translation = function(vec) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation = function(vec) {
 	return [1,0,0,0,0,1,0,0,0,0,1,0,vec[0],vec[1],vec[2],1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorX = function() {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MX);
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirrorX = function() {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MX);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorY = function() {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MY);
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirrorY = function() {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MY);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorZ = function() {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MZ);
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirrorZ = function() {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MZ);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring = function(plane) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring = function(plane) {
 	var nx = plane.normal[0];
 	var ny = plane.normal[1];
 	var nz = plane.normal[2];
 	var w = plane.w;
 	return [1.0 - 2.0 * nx * nx,-2. * ny * nx,-2. * nz * nx,0,-2. * nx * ny,1.0 - 2.0 * ny * ny,-2. * nz * ny,0,-2. * nx * nz,-2. * ny * nz,1.0 - 2.0 * nz * nz,0,-2. * nx * w,-2. * ny * w,-2. * nz * w,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling = function(vec) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling = function(vec) {
 	return [vec[0],0,0,0,0,vec[1],0,0,0,0,vec[2],0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_._new = function(e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$._new = function(e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15) {
 	return [e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.toArray = function(this1) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.toArray = function(this1) {
 	return this1.slice();
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.add = function(this1,other) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.add = function(this1,other) {
 	return [this1[0] + other[0],this1[1] + other[1],this1[2] + other[2],this1[3] + other[3],this1[4] + other[4],this1[5] + other[5],this1[6] + other[6],this1[7] + other[7],this1[8] + other[8],this1[9] + other[9],this1[10] + other[10],this1[11] + other[11],this1[12] + other[12],this1[13] + other[13],this1[14] + other[14],this1[15] + other[15]];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.subtract = function(this1,other) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.subtract = function(this1,other) {
 	return [this1[0] - other[0],this1[1] - other[1],this1[2] - other[2],this1[3] - other[3],this1[4] - other[4],this1[5] - other[5],this1[6] - other[6],this1[7] - other[7],this1[8] - other[8],this1[9] - other[9],this1[10] - other[10],this1[11] - other[11],this1[12] - other[12],this1[13] - other[13],this1[14] - other[14],this1[15] - other[15]];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply = function(this1,other) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply = function(this1,other) {
 	var t0 = this1[0];
 	var t1 = this1[1];
 	var t2 = this1[2];
@@ -3341,15 +6477,14 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply = function(this1,other) {
 	var m15 = other[15];
 	return [t0 * m0 + t1 * m4 + t2 * m8 + t3 * m12,t0 * m1 + t1 * m5 + t2 * m9 + t3 * m13,t0 * m2 + t1 * m6 + t2 * m10 + t3 * m14,t0 * m3 + t1 * m7 + t2 * m11 + t3 * m15,t4 * m0 + t5 * m4 + t6 * m8 + t7 * m12,t4 * m1 + t5 * m5 + t6 * m9 + t7 * m13,t4 * m2 + t5 * m6 + t6 * m10 + t7 * m14,t4 * m3 + t5 * m7 + t6 * m11 + t7 * m15,t8 * m0 + t9 * m4 + t10 * m8 + t11 * m12,t8 * m1 + t9 * m5 + t10 * m9 + t11 * m13,t8 * m2 + t9 * m6 + t10 * m10 + t11 * m14,t8 * m3 + t9 * m7 + t10 * m11 + t11 * m15,t12 * m0 + t13 * m4 + t14 * m8 + t15 * m12,t12 * m1 + t13 * m5 + t14 * m9 + t15 * m13,t12 * m2 + t13 * m6 + t14 * m10 + t15 * m14,t12 * m3 + t13 * m7 + t14 * m11 + t15 * m15];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyPoint3D = function(this1,vector) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rightMultiplyPoint3D = function(this1,vector) {
 	var v0 = vector[0];
 	var v1 = vector[1];
 	var v2 = vector[2];
-	var v3 = 1;
-	var x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + v3 * this1[3];
-	var y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + v3 * this1[7];
-	var z = v0 * this1[8] + v1 * this1[9] + v2 * this1[10] + v3 * this1[11];
-	var w = v0 * this1[12] + v1 * this1[13] + v2 * this1[14] + v3 * this1[15];
+	var x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + this1[3];
+	var y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + this1[7];
+	var z = v0 * this1[8] + v1 * this1[9] + v2 * this1[10] + this1[11];
+	var w = v0 * this1[12] + v1 * this1[13] + v2 * this1[14] + this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
 		x *= invw;
@@ -3358,15 +6493,14 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyPoint3D = function(this1,vector
 	}
 	return [x,y,z];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D = function(this1,vector) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D = function(this1,vector) {
 	var v0 = vector[0];
 	var v1 = vector[1];
 	var v2 = vector[2];
-	var v3 = 1;
-	var x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + v3 * this1[12];
-	var y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + v3 * this1[13];
-	var z = v0 * this1[2] + v1 * this1[6] + v2 * this1[10] + v3 * this1[14];
-	var w = v0 * this1[3] + v1 * this1[7] + v2 * this1[11] + v3 * this1[15];
+	var x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + this1[12];
+	var y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + this1[13];
+	var z = v0 * this1[2] + v1 * this1[6] + v2 * this1[10] + this1[14];
+	var w = v0 * this1[3] + v1 * this1[7] + v2 * this1[11] + this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
 		x *= invw;
@@ -3375,15 +6509,13 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D = function(this1,vector)
 	}
 	return [x,y,z];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyPoint = function(this1,vector) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rightMultiplyPoint = function(this1,vector) {
 	var v0 = vector[0];
 	var v1 = vector[1];
-	var v2 = 0;
-	var v3 = 1;
-	var x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + v3 * this1[3];
-	var y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + v3 * this1[7];
-	var z = v0 * this1[8] + v1 * this1[9] + v2 * this1[10] + v3 * this1[11];
-	var w = v0 * this1[12] + v1 * this1[13] + v2 * this1[14] + v3 * this1[15];
+	var x = v0 * this1[0] + v1 * this1[1] + 0 * this1[2] + this1[3];
+	var y = v0 * this1[4] + v1 * this1[5] + 0 * this1[6] + this1[7];
+	var z = v0 * this1[8] + v1 * this1[9] + 0 * this1[10] + this1[11];
+	var w = v0 * this1[12] + v1 * this1[13] + 0 * this1[14] + this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
 		x *= invw;
@@ -3392,15 +6524,13 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyPoint = function(this1,vector) 
 	}
 	return [x,y];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint = function(this1,vector) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint = function(this1,vector) {
 	var v0 = vector[0];
 	var v1 = vector[1];
-	var v2 = 0;
-	var v3 = 1;
-	var x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + v3 * this1[12];
-	var y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + v3 * this1[13];
-	var z = v0 * this1[2] + v1 * this1[6] + v2 * this1[10] + v3 * this1[14];
-	var w = v0 * this1[3] + v1 * this1[7] + v2 * this1[11] + v3 * this1[15];
+	var x = v0 * this1[0] + v1 * this1[4] + 0 * this1[8] + this1[12];
+	var y = v0 * this1[1] + v1 * this1[5] + 0 * this1[9] + this1[13];
+	var z = v0 * this1[2] + v1 * this1[6] + 0 * this1[10] + this1[14];
+	var w = v0 * this1[3] + v1 * this1[7] + 0 * this1[11] + this1[15];
 	if(w != 1) {
 		var invw = 1.0 / w;
 		x *= invw;
@@ -3409,7 +6539,7 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint = function(this1,vector) {
 	}
 	return [x,y];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring = function(this1) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.isMirroring = function(this1) {
 	var u_0 = this1[0];
 	var u_1 = this1[4];
 	var u_2 = this1[8];
@@ -3417,11 +6547,11 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring = function(this1) {
 	var v_1 = this1[5];
 	var v_2 = this1[9];
 	var w = [this1[2],this1[6],this1[10]];
-	var mirrorvalue = thx.geom._Point3D.Point3D_Impl_.dot([u_1 * v_2 - u_2 * v_1,u_2 * v_0 - u_0 * v_2,u_0 * v_1 - u_1 * v_0],w);
+	var mirrorvalue = thx_geom__$Point3D_Point3D_$Impl_$.dot([u_1 * v_2 - u_2 * v_1,u_2 * v_0 - u_0 * v_2,u_0 * v_1 - u_1 * v_0],w);
 	var ismirror = mirrorvalue < 0;
 	return ismirror;
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.inverse = function(this1) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.inverse = function(this1) {
 	var inv_0 = this1[5] * this1[10] * this1[15] - this1[5] * this1[11] * this1[14] - this1[9] * this1[6] * this1[15] + this1[9] * this1[7] * this1[14] + this1[13] * this1[6] * this1[11] - this1[13] * this1[7] * this1[10];
 	var inv_4 = -this1[4] * this1[10] * this1[15] + this1[4] * this1[11] * this1[14] + this1[8] * this1[6] * this1[15] - this1[8] * this1[7] * this1[14] - this1[12] * this1[6] * this1[11] + this1[12] * this1[7] * this1[10];
 	var inv_8 = this1[4] * this1[9] * this1[15] - this1[4] * this1[11] * this1[13] - this1[8] * this1[5] * this1[15] + this1[8] * this1[7] * this1[13] + this1[12] * this1[5] * this1[11] - this1[12] * this1[7] * this1[9];
@@ -3442,93 +6572,106 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.inverse = function(this1) {
 	if(det == 0) return null;
 	return [inv_0,inv_1,inv_2,inv_3,inv_4,inv_5,inv_6,inv_7,inv_8,inv_9,inv_10,inv_11,inv_12,inv_13,inv_14,inv_15];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.at = function(this1,index) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.at = function(this1,index) {
 	return this1[index];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.toString = function(this1) {
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.toString = function(this1) {
 	return "Matrix(" + this1.join(",") + ")";
 };
-thx.geom.Plane = function(normal,w) {
+var thx_geom_Plane = function(normal,w) {
 	this.normal = normal;
 	this.w = w;
 };
-thx.geom.Plane.__name__ = true;
-thx.geom.Plane.fromPoint3Ds = function(a,b,c) {
-	var n;
-	var this1;
-	var this2;
+thx_geom_Plane.__name__ = ["thx","geom","Plane"];
+thx_geom_Plane.fromPoint3Ds = function(a,b,c) {
+	var tmp;
+	var tmp1;
+	var tmp2;
 	var p_0 = -a[0];
 	var p_1 = -a[1];
 	var p_2 = -a[2];
-	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var p;
+	tmp2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	var this2 = tmp2;
+	var tmp3;
 	var p_01 = -a[0];
 	var p_11 = -a[1];
 	var p_21 = -a[2];
-	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	n = [this1[0] / v,this1[1] / v,this1[2] / v];
-	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
+	tmp3 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	var p = tmp3;
+	tmp1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
+	var this1 = tmp1;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
+	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
+	var n = tmp;
+	return new thx_geom_Plane(n,thx_geom__$Point3D_Point3D_$Impl_$.dot(n,a));
 };
-thx.geom.Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
-	var v1;
+thx_geom_Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
+	var tmp;
 	var p_0 = -a[0];
 	var p_1 = -a[1];
 	var p_2 = -a[2];
-	v1 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var v2;
+	tmp = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	var v1 = tmp;
+	var tmp1;
 	var p_01 = -a[0];
 	var p_11 = -a[1];
 	var p_21 = -a[2];
-	v2 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v1,[v1[0],v1[1],v1[2]])) < 1e-5) v1 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v2);
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(v2,[v2[0],v2[1],v2[2]])) < 1e-5) v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
+	tmp1 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	var v2 = tmp1;
+	if(Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(v1,[v1[0],v1[1],v1[2]])) < 10e-10) v1 = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(v2);
+	if(Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(v2,[v2[0],v2[1],v2[2]])) < 10e-10) v2 = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(v1);
 	var normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
-	if(Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]])) < 1e-5) {
-		v2 = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(v1);
+	if(Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,[normal[0],normal[1],normal[2]])) < 10e-10) {
+		v2 = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(v1);
 		normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
 	}
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]]));
-	normal = [normal[0] / v,normal[1] / v,normal[2] / v];
-	return new thx.geom.Plane(normal,thx.geom._Point3D.Point3D_Impl_.dot(normal,a));
+	var tmp2;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,[normal[0],normal[1],normal[2]]));
+	tmp2 = [normal[0] / v,normal[1] / v,normal[2] / v];
+	normal = tmp2;
+	return new thx_geom_Plane(normal,thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,a));
 };
-thx.geom.Plane.fromPoints = function(a,b,c) {
-	var n;
-	var this1;
-	var this2;
+thx_geom_Plane.fromPoints = function(a,b,c) {
+	var tmp;
+	var tmp1;
+	var tmp2;
 	var p_0 = -a[0];
 	var p_1 = -a[1];
 	var p_2 = -a[2];
-	this2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var p;
+	tmp2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	var this2 = tmp2;
+	var tmp3;
 	var p_01 = -a[0];
 	var p_11 = -a[1];
 	var p_21 = -a[2];
-	p = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	this1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	n = [this1[0] / v,this1[1] / v,this1[2] / v];
-	return new thx.geom.Plane(n,thx.geom._Point3D.Point3D_Impl_.dot(n,a));
+	tmp3 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	var p = tmp3;
+	tmp1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
+	var this1 = tmp1;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
+	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
+	var n = tmp;
+	return new thx_geom_Plane(n,thx_geom__$Point3D_Point3D_$Impl_$.dot(n,a));
 };
-thx.geom.Plane.fromNormalAndPoint = function(normal,point) {
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(normal,[normal[0],normal[1],normal[2]]));
-	normal = [normal[0] / v,normal[1] / v,normal[2] / v];
-	return new thx.geom.Plane(normal,thx.geom._Point3D.Point3D_Impl_.dot(point,normal));
+thx_geom_Plane.fromNormalAndPoint = function(normal,point) {
+	var tmp;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,[normal[0],normal[1],normal[2]]));
+	tmp = [normal[0] / v,normal[1] / v,normal[2] / v];
+	normal = tmp;
+	return new thx_geom_Plane(normal,thx_geom__$Point3D_Point3D_$Impl_$.dot(point,normal));
 };
-thx.geom.Plane.prototype = {
-	flip: function() {
-		return new thx.geom.Plane((function($this) {
-			var $r;
-			var this1 = $this.normal;
-			$r = [-this1[0],-this1[1],-this1[2]];
-			return $r;
-		}(this)),-this.w);
+thx_geom_Plane.prototype = {
+	normal: null
+	,w: null
+	,flip: function() {
+		var tmp;
+		var this1 = this.normal;
+		tmp = [-this1[0],-this1[1],-this1[2]];
+		return new thx_geom_Plane(tmp,-this.w);
 	}
 	,splitPolygon: function(polygon,coplanarFront,coplanarBack,front,back) {
 		var polygonType = 0;
 		var types = [];
-		var t;
 		var type;
 		var f;
 		var b;
@@ -3538,19 +6681,21 @@ thx.geom.Plane.prototype = {
 		var vi;
 		var tj;
 		var vj;
-		var t1;
+		var t;
 		var v;
 		var $it0 = HxOverrides.iter(polygon.vertices);
 		while( $it0.hasNext() ) {
 			var vertex = $it0.next();
-			t1 = thx.geom._Point3D.Point3D_Impl_.dot(this.normal,vertex.position) - this.w;
-			if(t1 < -1e-05) type = 2; else if(t1 > 1e-5) type = 1; else type = 0;
+			t = thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,vertex.position) - this.w;
+			var tmp;
+			if(t < -1e-09) tmp = 2; else if(t > 10e-10) tmp = 1; else tmp = 0;
+			type = tmp;
 			polygonType |= type;
 			types.push(type);
 		}
 		switch(polygonType) {
 		case 0:
-			(thx.geom._Point3D.Point3D_Impl_.dot(this.normal,polygon.get_plane().normal) > 0?coplanarFront:coplanarBack).push(polygon);
+			(thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,polygon.get_plane().normal) > 0?coplanarFront:coplanarBack).push(polygon);
 			break;
 		case 1:
 			front.push(polygon);
@@ -3573,342 +6718,391 @@ thx.geom.Plane.prototype = {
 				if(ti != 2) f.push(vi);
 				if(ti != 1) b.push(vi);
 				if((ti | tj) == 3) {
-					t1 = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,vi.position)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,(function($this) {
-						var $r;
-						var this1 = vj.position;
-						var p = vi.position;
-						var p_0 = -p[0];
-						var p_1 = -p[1];
-						var p_2 = -p[2];
-						$r = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-						return $r;
-					}(this)));
-					v = new thx.geom.Vertex3D(thx.geom._Point3D.Point3D_Impl_.interpolate(vi.position,vj.position,t1),thx.geom._Point3D.Point3D_Impl_.interpolate(vi.normal,vj.normal,t1));
+					var tmp1;
+					var this1 = vj.position;
+					var p = vi.position;
+					var p_0 = -p[0];
+					var p_1 = -p[1];
+					var p_2 = -p[2];
+					tmp1 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+					t = (this.w - thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,vi.position)) / thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,tmp1);
+					v = new thx_geom_Vertex3D(thx_geom__$Point3D_Point3D_$Impl_$.interpolate(vi.position,vj.position,t),thx_geom__$Point3D_Point3D_$Impl_$.interpolate(vi.normal,vj.normal,t));
 					f.push(v);
 					b.push(v);
 				}
 			}
-			if(f.length >= 3) front.push(new thx.geom.Polygon(f));
-			if(b.length >= 3) back.push(new thx.geom.Polygon(b));
+			if(f.length >= 3) front.push(new thx_geom_Polygon(f));
+			if(b.length >= 3) back.push(new thx_geom_Polygon(b));
 			break;
 		}
 	}
 	,equals: function(other) {
-		return thx.geom._Point3D.Point3D_Impl_.equals(this.normal,other.normal) && this.w == other.w;
+		return thx_geom__$Point3D_Point3D_$Impl_$.equals(this.normal,other.normal)?this.w == other.w:false;
 	}
 	,transform: function(matrix) {
-		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
-		var r = thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(this.normal);
-		var u;
+		var ismirror = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.isMirroring(matrix);
+		var r = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(this.normal);
+		var tmp;
 		var this1 = this.normal;
-		u = [this1[1] * r[2] - this1[2] * r[1],this1[2] * r[0] - this1[0] * r[2],this1[0] * r[1] - this1[1] * r[0]];
-		var v;
+		tmp = [this1[1] * r[2] - this1[2] * r[1],this1[2] * r[0] - this1[0] * r[2],this1[0] * r[1] - this1[1] * r[0]];
+		var u = tmp;
+		var tmp1;
 		var this2 = this.normal;
-		v = [this2[1] * u[2] - this2[2] * u[1],this2[2] * u[0] - this2[0] * u[2],this2[0] * u[1] - this2[1] * u[0]];
-		var point1;
+		tmp1 = [this2[1] * u[2] - this2[2] * u[1],this2[2] * u[0] - this2[0] * u[2],this2[0] * u[1] - this2[1] * u[0]];
+		var v = tmp1;
+		var tmp2;
 		var this3 = this.normal;
 		var v1 = this.w;
-		point1 = [this3[0] * v1,this3[1] * v1,this3[2] * v1];
+		tmp2 = [this3[0] * v1,this3[1] * v1,this3[2] * v1];
+		var point1 = tmp2;
 		var point2 = [point1[0] + u[0],point1[1] + u[1],point1[2] + u[2]];
 		var point3 = [point1[0] + v[0],point1[1] + v[1],point1[2] + v[2]];
-		point1 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point1[0],point1[1],point1[2]]);
-		point2 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point2[0],point2[1],point2[2]]);
-		point3 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[point3[0],point3[1],point3[2]]);
-		var newplane = thx.geom.Plane.fromPoint3Ds(point1,point2,point3);
+		point1 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[point1[0],point1[1],point1[2]]);
+		point2 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[point2[0],point2[1],point2[2]]);
+		point3 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[point3[0],point3[1],point3[2]]);
+		var newplane = thx_geom_Plane.fromPoint3Ds(point1,point2,point3);
 		if(ismirror) newplane = newplane.flip();
 		return newplane;
 	}
 	,splitLineBetweenPoints: function(p1,p2) {
-		var direction;
+		var tmp;
 		var p_0 = -p1[0];
 		var p_1 = -p1[1];
 		var p_2 = -p1[2];
-		direction = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
-		var lambda = (this.w - thx.geom._Point3D.Point3D_Impl_.dot(this.normal,p1)) / thx.geom._Point3D.Point3D_Impl_.dot(this.normal,direction);
+		tmp = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
+		var direction = tmp;
+		var lambda = (this.w - thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,p1)) / thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,direction);
 		if(isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
+		var tmp1;
 		var p_01 = direction[0] * lambda;
 		var p_11 = direction[1] * lambda;
 		var p_21 = direction[2] * lambda;
-		return [p1[0] + p_01,p1[1] + p_11,p1[2] + p_21];
+		tmp1 = [p1[0] + p_01,p1[1] + p_11,p1[2] + p_21];
+		return tmp1;
 	}
 	,intersectWithLine: function(line) {
 		return line.intersectWithPlane(this);
 	}
 	,intersectWithPlane: function(plane) {
-		return thx.geom.Line3D.fromPlanes(this,plane);
+		return thx_geom_Line3D.fromPlanes(this,plane);
 	}
 	,signedDistanceToPoint: function(point) {
-		return thx.geom._Point3D.Point3D_Impl_.dot(this.normal,point) - this.w;
+		return thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,point) - this.w;
 	}
 	,toString: function() {
-		return "Plane [normal: " + (function($this) {
-			var $r;
-			var this1 = $this.normal;
-			$r = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
-			return $r;
-		}(this)) + ", w: " + this.w + "]";
+		var tmp;
+		var this1 = this.normal;
+		tmp = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+		return "Plane [normal: " + tmp + ", w: " + this.w + "]";
 	}
 	,mirrorPoint: function(point3d) {
 		var distance = this.signedDistanceToPoint(point3d);
-		var mirrored;
-		var p;
+		var tmp;
+		var tmp1;
 		var this1 = this.normal;
 		var v = distance * 2.0;
-		p = [this1[0] * v,this1[1] * v,this1[2] * v];
+		tmp1 = [this1[0] * v,this1[1] * v,this1[2] * v];
+		var p = tmp1;
 		var p_0 = -p[0];
 		var p_1 = -p[1];
 		var p_2 = -p[2];
-		mirrored = [point3d[0] + p_0,point3d[1] + p_1,point3d[2] + p_2];
+		tmp = [point3d[0] + p_0,point3d[1] + p_1,point3d[2] + p_2];
+		var mirrored = tmp;
 		return mirrored;
 	}
-	,__class__: thx.geom.Plane
+	,__class__: thx_geom_Plane
 };
-thx.geom._Point3D = {};
-thx.geom._Point3D.Point3D_Impl_ = function() { };
-thx.geom._Point3D.Point3D_Impl_.__name__ = true;
-thx.geom._Point3D.Point3D_Impl_.fromObject = function(o) {
+var thx_geom__$Point3D_Point3D_$Impl_$ = {};
+thx_geom__$Point3D_Point3D_$Impl_$.__name__ = ["thx","geom","_Point3D","Point3D_Impl_"];
+thx_geom__$Point3D_Point3D_$Impl_$.fromObject = function(o) {
 	return [o.x,o.y,o.z];
 };
-thx.geom._Point3D.Point3D_Impl_.fromArray = function(arr) {
+thx_geom__$Point3D_Point3D_$Impl_$.fromArray = function(arr) {
 	return [arr[0],arr[1],arr[2]];
 };
-thx.geom._Point3D.Point3D_Impl_._new = function(x,y,z) {
+thx_geom__$Point3D_Point3D_$Impl_$._new = function(x,y,z) {
 	return [x,y,z];
 };
-thx.geom._Point3D.Point3D_Impl_.get_x = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.get_x = function(this1) {
 	return this1[0];
 };
-thx.geom._Point3D.Point3D_Impl_.get_y = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.get_y = function(this1) {
 	return this1[1];
 };
-thx.geom._Point3D.Point3D_Impl_.get_z = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.get_z = function(this1) {
 	return this1[2];
 };
-thx.geom._Point3D.Point3D_Impl_.get_length = function(this1) {
-	return Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
+thx_geom__$Point3D_Point3D_$Impl_$.get_length = function(this1) {
+	return Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
 };
-thx.geom._Point3D.Point3D_Impl_.get_lengthSquared = function(this1) {
-	return thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]);
+thx_geom__$Point3D_Point3D_$Impl_$.get_lengthSquared = function(this1) {
+	return thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]);
 };
-thx.geom._Point3D.Point3D_Impl_.get_inst = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.get_inst = function(this1) {
 	return this1;
 };
-thx.geom._Point3D.Point3D_Impl_.addPoint3D = function(this1,p) {
+thx_geom__$Point3D_Point3D_$Impl_$.addPoint3D = function(this1,p) {
 	return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
 };
-thx.geom._Point3D.Point3D_Impl_.add = function(this1,v) {
+thx_geom__$Point3D_Point3D_$Impl_$.add = function(this1,v) {
 	return [this1[0] + v,this1[1] + v,this1[2] + v];
 };
-thx.geom._Point3D.Point3D_Impl_.negate = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.negate = function(this1) {
 	return [-this1[0],-this1[1],-this1[2]];
 };
-thx.geom._Point3D.Point3D_Impl_.subtractPoint3D = function(this1,p) {
+thx_geom__$Point3D_Point3D_$Impl_$.subtractPoint3D = function(this1,p) {
+	var tmp;
 	var p_0 = -p[0];
 	var p_1 = -p[1];
 	var p_2 = -p[2];
-	return [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+	tmp = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.subtract = function(this1,v) {
+thx_geom__$Point3D_Point3D_$Impl_$.subtract = function(this1,v) {
+	var tmp;
 	var v1 = -v;
-	return [this1[0] + v1,this1[1] + v1,this1[2] + v1];
+	tmp = [this1[0] + v1,this1[1] + v1,this1[2] + v1];
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.multiplyPoint3D = function(this1,p) {
+thx_geom__$Point3D_Point3D_$Impl_$.multiplyPoint3D = function(this1,p) {
 	return [this1[0] * p[0],this1[1] * p[1],this1[2] * p[2]];
 };
-thx.geom._Point3D.Point3D_Impl_.multiply = function(this1,v) {
+thx_geom__$Point3D_Point3D_$Impl_$.multiply = function(this1,v) {
 	return [this1[0] * v,this1[1] * v,this1[2] * v];
 };
-thx.geom._Point3D.Point3D_Impl_.dividePoint3D = function(this1,p) {
+thx_geom__$Point3D_Point3D_$Impl_$.dividePoint3D = function(this1,p) {
 	return [this1[0] / p[0],this1[1] / p[1],this1[2] / p[2]];
 };
-thx.geom._Point3D.Point3D_Impl_.divide = function(this1,v) {
+thx_geom__$Point3D_Point3D_$Impl_$.divide = function(this1,v) {
 	return [this1[0] / v,this1[1] / v,this1[2] / v];
 };
-thx.geom._Point3D.Point3D_Impl_.equals = function(this1,p) {
-	return this1[0] == p[0] && this1[1] == p[1] && this1[2] == p[2];
+thx_geom__$Point3D_Point3D_$Impl_$.equals = function(this1,p) {
+	return (this1[0] == p[0]?this1[1] == p[1]:false)?this1[2] == p[2]:false;
 };
-thx.geom._Point3D.Point3D_Impl_.notEquals = function(this1,p) {
-	return !thx.geom._Point3D.Point3D_Impl_.equals(this1,p);
+thx_geom__$Point3D_Point3D_$Impl_$.notEquals = function(this1,p) {
+	return !thx_geom__$Point3D_Point3D_$Impl_$.equals(this1,p);
 };
-thx.geom._Point3D.Point3D_Impl_.abs = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.abs = function(this1) {
+	var tmp;
 	var x = Math.abs(this1[0]);
 	var y = Math.abs(this1[1]);
 	var z = Math.abs(this1[2]);
-	return [x,y,z];
+	tmp = [x,y,z];
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.nearEquals = function(this1,p) {
-	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5 && Math.abs(this1[2] - p[2]) <= 1e-5;
+thx_geom__$Point3D_Point3D_$Impl_$.nearEquals = function(this1,p) {
+	return (Math.abs(this1[0] - p[0]) <= 10e-10?Math.abs(this1[1] - p[1]) <= 10e-10:false)?Math.abs(this1[2] - p[2]) <= 10e-10:false;
 };
-thx.geom._Point3D.Point3D_Impl_.interpolate = function(this1,p,f) {
-	var p1;
-	var this2;
+thx_geom__$Point3D_Point3D_$Impl_$.interpolate = function(this1,p,f) {
+	var tmp;
+	var tmp1;
+	var tmp2;
 	var p_0 = this1[0];
 	var p_1 = this1[1];
 	var p_2 = this1[2];
 	var p_01 = -p_0;
 	var p_11 = -p_1;
 	var p_21 = -p_2;
-	this2 = [p[0] + p_01,p[1] + p_11,p[2] + p_21];
-	p1 = [this2[0] * f,this2[1] * f,this2[2] * f];
-	return [this1[0] + p1[0],this1[1] + p1[1],this1[2] + p1[2]];
+	tmp2 = [p[0] + p_01,p[1] + p_11,p[2] + p_21];
+	var this2 = tmp2;
+	tmp1 = [this2[0] * f,this2[1] * f,this2[2] * f];
+	var p1 = tmp1;
+	tmp = [this1[0] + p1[0],this1[1] + p1[1],this1[2] + p1[2]];
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.isZero = function(this1) {
-	return thx.geom._Point3D.Point3D_Impl_.equals(this1,thx.geom._Point3D.Point3D_Impl_.zero);
+thx_geom__$Point3D_Point3D_$Impl_$.isZero = function(this1) {
+	return thx_geom__$Point3D_Point3D_$Impl_$.equals(this1,thx_geom__$Point3D_Point3D_$Impl_$.zero);
 };
-thx.geom._Point3D.Point3D_Impl_.isNearZero = function(this1) {
-	return thx.geom._Point3D.Point3D_Impl_.nearEquals(this1,thx.geom._Point3D.Point3D_Impl_.zero);
+thx_geom__$Point3D_Point3D_$Impl_$.isNearZero = function(this1) {
+	return thx_geom__$Point3D_Point3D_$Impl_$.nearEquals(this1,thx_geom__$Point3D_Point3D_$Impl_$.zero);
 };
-thx.geom._Point3D.Point3D_Impl_.dot = function(this1,prod) {
+thx_geom__$Point3D_Point3D_$Impl_$.dot = function(this1,prod) {
 	return this1[0] * prod[0] + this1[1] * prod[1] + this1[2] * prod[2];
 };
-thx.geom._Point3D.Point3D_Impl_.normalize = function(this1) {
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	return [this1[0] / v,this1[1] / v,this1[2] / v];
+thx_geom__$Point3D_Point3D_$Impl_$.normalize = function(this1) {
+	var tmp;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
+	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.distanceTo = function(this1,p) {
-	var this2;
+thx_geom__$Point3D_Point3D_$Impl_$.distanceTo = function(this1,p) {
+	var tmp;
+	var tmp1;
 	var p_0 = -p[0];
 	var p_1 = -p[1];
 	var p_2 = -p[2];
-	this2 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-	return Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this2,[this2[0],this2[1],this2[2]]));
+	tmp1 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+	var this2 = tmp1;
+	tmp = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this2,[this2[0],this2[1],this2[2]]));
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.distanceToSquared = function(this1,p) {
-	var this2;
+thx_geom__$Point3D_Point3D_$Impl_$.distanceToSquared = function(this1,p) {
+	var tmp;
+	var tmp1;
 	var p_0 = -p[0];
 	var p_1 = -p[1];
 	var p_2 = -p[2];
-	this2 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-	return thx.geom._Point3D.Point3D_Impl_.dot(this2,[this2[0],this2[1],this2[2]]);
+	tmp1 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
+	var this2 = tmp1;
+	tmp = thx_geom__$Point3D_Point3D_$Impl_$.dot(this2,[this2[0],this2[1],this2[2]]);
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.multiply4x4 = function(this1,matrix4x4) {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
+thx_geom__$Point3D_Point3D_$Impl_$.multiply4x4 = function(this1,matrix4x4) {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
 };
-thx.geom._Point3D.Point3D_Impl_.transform = function(this1,matrix4x4) {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
+thx_geom__$Point3D_Point3D_$Impl_$.transform = function(this1,matrix4x4) {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
 };
-thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector = function(this1) {
-	var a = thx.geom._Point3D.Point3D_Impl_.abs(this1);
-	if(a[0] <= a[1] && a[0] <= a[2]) return [1,0,0]; else if(a[1] <= a[0] && a[1] <= a[2]) return [0,1,0]; else return [0,0,1];
+thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector = function(this1) {
+	var a = thx_geom__$Point3D_Point3D_$Impl_$.abs(this1);
+	if(a[0] <= a[1]?a[0] <= a[2]:false) return [1,0,0]; else if(a[1] <= a[0]?a[1] <= a[2]:false) return [0,1,0]; else return [0,0,1];
 };
-thx.geom._Point3D.Point3D_Impl_.cross = function(this1,p) {
+thx_geom__$Point3D_Point3D_$Impl_$.cross = function(this1,p) {
 	return [this1[1] * p[2] - this1[2] * p[1],this1[2] * p[0] - this1[0] * p[2],this1[0] * p[1] - this1[1] * p[0]];
 };
-thx.geom._Point3D.Point3D_Impl_.min = function(this1,p) {
+thx_geom__$Point3D_Point3D_$Impl_$.min = function(this1,p) {
+	var tmp;
 	var x = Math.min(this1[0],p[0]);
 	var y = Math.min(this1[1],p[1]);
 	var z = Math.min(this1[2],p[2]);
-	return [x,y,z];
+	tmp = [x,y,z];
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.max = function(this1,p) {
+thx_geom__$Point3D_Point3D_$Impl_$.max = function(this1,p) {
+	var tmp;
 	var x = Math.max(this1[0],p[0]);
 	var y = Math.max(this1[1],p[1]);
 	var z = Math.max(this1[2],p[2]);
-	return [x,y,z];
+	tmp = [x,y,z];
+	return tmp;
 };
-thx.geom._Point3D.Point3D_Impl_.toArray = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.toArray = function(this1) {
 	return this1.slice();
 };
-thx.geom._Point3D.Point3D_Impl_.toObject = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.toObject = function(this1) {
 	return { x : this1[0], y : this1[1], z : this1[2]};
 };
-thx.geom._Point3D.Point3D_Impl_.toString = function(this1) {
+thx_geom__$Point3D_Point3D_$Impl_$.toString = function(this1) {
 	return "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
 };
-thx.geom.OrthoNormalBasis = function(plane,rightvector) {
-	var this1;
+var thx_geom_OrthoNormalBasis = function(plane,rightvector) {
+	var tmp;
+	var tmp3;
 	var this2 = plane.normal;
-	this1 = [this2[1] * rightvector[2] - this2[2] * rightvector[1],this2[2] * rightvector[0] - this2[0] * rightvector[2],this2[0] * rightvector[1] - this2[1] * rightvector[0]];
-	var v = Math.sqrt(thx.geom._Point3D.Point3D_Impl_.dot(this1,[this1[0],this1[1],this1[2]]));
-	this.v = [this1[0] / v,this1[1] / v,this1[2] / v];
+	tmp3 = [this2[1] * rightvector[2] - this2[2] * rightvector[1],this2[2] * rightvector[0] - this2[0] * rightvector[2],this2[0] * rightvector[1] - this2[1] * rightvector[0]];
+	var this1 = tmp3;
+	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
+	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
+	this.v = tmp;
+	var tmp1;
 	var this3 = this.v;
 	var p = plane.normal;
-	this.u = [this3[1] * p[2] - this3[2] * p[1],this3[2] * p[0] - this3[0] * p[2],this3[0] * p[1] - this3[1] * p[0]];
+	tmp1 = [this3[1] * p[2] - this3[2] * p[1],this3[2] * p[0] - this3[0] * p[2],this3[0] * p[1] - this3[1] * p[0]];
+	this.u = tmp1;
 	this.plane = plane;
+	var tmp2;
 	var this4 = plane.normal;
 	var v1 = plane.w;
-	this.planeOrigin = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
+	tmp2 = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
+	this.planeOrigin = tmp2;
 };
-thx.geom.OrthoNormalBasis.__name__ = true;
-thx.geom.OrthoNormalBasis.fromPlane = function(plane) {
-	return new thx.geom.OrthoNormalBasis(plane,thx.geom._Point3D.Point3D_Impl_.randomNonParallelVector(plane.normal));
+thx_geom_OrthoNormalBasis.__name__ = ["thx","geom","OrthoNormalBasis"];
+thx_geom_OrthoNormalBasis.fromPlane = function(plane) {
+	return new thx_geom_OrthoNormalBasis(plane,thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(plane.normal));
 };
-thx.geom.OrthoNormalBasis.prototype = {
-	getProjectionMatrix: function() {
+thx_geom_OrthoNormalBasis.prototype = {
+	v: null
+	,u: null
+	,plane: null
+	,planeOrigin: null
+	,getProjectionMatrix: function() {
 		return [this.u[0],this.v[0],this.plane.normal[0],0,this.u[1],this.v[1],this.plane.normal[1],0,this.u[2],this.v[2],this.plane.normal[2],0,0,0,-this.plane.w,1];
 	}
 	,getInverseProjectionMatrix: function() {
-		var p;
+		var tmp;
 		var this1 = this.plane.normal;
 		var v = this.plane.w;
-		p = [this1[0] * v,this1[1] * v,this1[2] * v];
+		tmp = [this1[0] * v,this1[1] * v,this1[2] * v];
+		var p = tmp;
 		return [this.u[0],this.u[1],this.u[2],0,this.v[0],this.v[1],this.v[2],0,this.plane.normal[0],this.plane.normal[1],this.plane.normal[2],0,p[0],p[1],p[2],1];
 	}
 	,to2D: function(vec3) {
-		var x = thx.geom._Point3D.Point3D_Impl_.dot(vec3,this.u);
-		var y = thx.geom._Point3D.Point3D_Impl_.dot(vec3,this.v);
-		return [x,y];
+		var tmp;
+		var x = thx_geom__$Point3D_Point3D_$Impl_$.dot(vec3,this.u);
+		var y = thx_geom__$Point3D_Point3D_$Impl_$.dot(vec3,this.v);
+		tmp = [x,y];
+		return tmp;
 	}
 	,to3D: function(vec2) {
-		var this1;
+		var tmp;
+		var tmp1;
 		var this2 = this.planeOrigin;
-		var p;
+		var tmp3;
 		var this3 = this.u;
 		var v = vec2[0];
-		p = [this3[0] * v,this3[1] * v,this3[2] * v];
-		this1 = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
-		var p1;
+		tmp3 = [this3[0] * v,this3[1] * v,this3[2] * v];
+		var p1 = tmp3;
+		tmp1 = [this2[0] + p1[0],this2[1] + p1[1],this2[2] + p1[2]];
+		var this1 = tmp1;
+		var tmp2;
 		var this4 = this.v;
 		var v1 = vec2[1];
-		p1 = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
-		return [this1[0] + p1[0],this1[1] + p1[1],this1[2] + p1[2]];
+		tmp2 = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
+		var p = tmp2;
+		tmp = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
+		return tmp;
 	}
 	,line3Dto2D: function(line) {
-		return thx.geom.Line.fromPoints(this.to2D(line.point),this.to2D((function($this) {
-			var $r;
-			var this1 = line.direction;
-			var p = line.point;
-			$r = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
-			return $r;
-		}(this))));
+		var tmp;
+		var this1 = line.direction;
+		var p = line.point;
+		tmp = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
+		return thx_geom_Line.fromPoints(this.to2D(line.point),this.to2D(tmp));
 	}
 	,line2Dto3D: function(line) {
 		var a = line.origin();
-		var b;
+		var tmp;
 		var this1 = line.direction();
-		b = [this1[0] + a[0],this1[1] + a[1]];
-		return thx.geom.Line3D.fromPoints(this.to3D(a),this.to3D(b));
+		tmp = [this1[0] + a[0],this1[1] + a[1]];
+		var b = tmp;
+		return thx_geom_Line3D.fromPoints(this.to3D(a),this.to3D(b));
 	}
 	,transform: function(matrix) {
 		var newplane = this.plane.transform(matrix);
-		var rightpoint_transformed;
+		var tmp;
 		var this1 = this.u;
-		rightpoint_transformed = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this1[0],this1[1],this1[2]]);
-		var origin_transformed;
-		var this_0 = 0;
-		var this_1 = 0;
-		var this_2 = 0;
-		origin_transformed = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this_0,this_1,this_2]);
-		var newrighthandvector;
+		tmp = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[this1[0],this1[1],this1[2]]);
+		var rightpoint_transformed = tmp;
+		var tmp1;
+		tmp1 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[0,0,0]);
+		var origin_transformed = tmp1;
+		var tmp2;
 		var p_0 = -origin_transformed[0];
 		var p_1 = -origin_transformed[1];
 		var p_2 = -origin_transformed[2];
-		newrighthandvector = [rightpoint_transformed[0] + p_0,rightpoint_transformed[1] + p_1,rightpoint_transformed[2] + p_2];
-		var newbasis = new thx.geom.OrthoNormalBasis(newplane,newrighthandvector);
+		tmp2 = [rightpoint_transformed[0] + p_0,rightpoint_transformed[1] + p_1,rightpoint_transformed[2] + p_2];
+		var newrighthandvector = tmp2;
+		var newbasis = new thx_geom_OrthoNormalBasis(newplane,newrighthandvector);
 		return newbasis;
 	}
-	,__class__: thx.geom.OrthoNormalBasis
+	,__class__: thx_geom_OrthoNormalBasis
 };
-thx.geom.Path = function(splines) {
+var thx_geom_Path = function(splines) {
 	this._isSelfIntersecting = false;
 	this._length = false;
 	this._area = false;
 	this._isClosed = false;
 	this.splines = splines;
 };
-thx.geom.Path.__name__ = true;
-thx.geom.Path.prototype = {
-	contains: function(p) {
+thx_geom_Path.__name__ = ["thx","geom","Path"];
+thx_geom_Path.prototype = {
+	area: null
+	,length: null
+	,isSelfIntersecting: null
+	,isClosed: null
+	,box: null
+	,splines: null
+	,contains: function(p) {
 		var _g = 0;
 		var _g1 = this.splines;
 		while(_g < _g1.length) {
@@ -3931,7 +7125,7 @@ thx.geom.Path.prototype = {
 		throw "not implemented";
 	}
 	,transform: function(matrix) {
-		return new thx.geom.Path(this.splines.map(function(spline) {
+		return new thx_geom_Path(this.splines.map(function(spline) {
 			return spline.transform(matrix);
 		}));
 	}
@@ -3940,7 +7134,7 @@ thx.geom.Path.prototype = {
 			return spline.flip();
 		});
 		s.reverse();
-		return new thx.geom.Path(s);
+		return new thx_geom_Path(s);
 	}
 	,intersectsPath: function(other) {
 		return this.intersectionsPath(other).length > 0;
@@ -3952,19 +7146,28 @@ thx.geom.Path.prototype = {
 		return this.intersectionsLine(line).length > 0;
 	}
 	,intersectionsPath: function(other) {
-		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
+		var tmp;
+		var array = this.splines.map(function(spline) {
 			return spline.intersectionsPath(other);
-		}));
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
 	}
 	,intersectionsSpline: function(other) {
-		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
+		var tmp;
+		var array = this.splines.map(function(spline) {
 			return spline.intersectionsSpline(other);
-		}));
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
 	}
 	,intersectionsLine: function(line) {
-		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
+		var tmp;
+		var array = this.splines.map(function(spline) {
 			return spline.intersectionsLine(line);
-		}));
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
 	}
 	,selfIntersections: function() {
 		var intersections = [];
@@ -3994,7 +7197,7 @@ thx.geom.Path.prototype = {
 			l = spline.get_length() / len;
 			if(value <= l) {
 				var n = spline.split(value);
-				return [new thx.geom.Path(this.splines.slice(0,i).concat([n[0]])),new thx.geom.Path([n[1]].concat(this.splines.slice(i)))];
+				return [new thx_geom_Path(this.splines.slice(0,i).concat([n[0]])),new thx_geom_Path([n[1]].concat(this.splines.slice(i)))];
 			}
 			value -= l;
 		}
@@ -4016,7 +7219,7 @@ thx.geom.Path.prototype = {
 	}
 	,asClockwise: function(clockwise) {
 		if(clockwise == null) clockwise = true;
-		return new thx.geom.Path(this.splines.map(function(spline) {
+		return new thx_geom_Path(this.splines.map(function(spline) {
 			return spline.asClockwise(clockwise);
 		}));
 	}
@@ -4027,22 +7230,26 @@ thx.geom.Path.prototype = {
 		throw "not implemented";
 	}
 	,reduce: function() {
-		return new thx.geom.Path(this.splines.map(function(spline) {
+		return new thx_geom_Path(this.splines.map(function(spline) {
 			return spline.reduce();
 		}).filter(function(spline1) {
 			return spline1.get_edges().length > 0;
 		}));
 	}
 	,toPoints: function() {
-		return thx.core.Arrays.flatten(this.splines.map(function(spline) {
+		var tmp;
+		var array = this.splines.map(function(spline) {
 			return spline.toPoints();
-		}));
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
 	}
 	,toString: function() {
 		return "Path(" + this.splines.map(function(s) {
 			return "[" + s.toString() + "]";
 		}).join(", ") + "," + Std.string(this.get_isClosed()) + ")";
 	}
+	,_isClosed: null
 	,get_isClosed: function() {
 		if(!this._isClosed) {
 			this._isClosed = true;
@@ -4060,6 +7267,7 @@ thx.geom.Path.prototype = {
 		}
 		return this.isClosed;
 	}
+	,_area: null
 	,get_area: function() {
 		if(!this._area) {
 			this._area = true;
@@ -4069,6 +7277,7 @@ thx.geom.Path.prototype = {
 		}
 		return this.area;
 	}
+	,_length: null
 	,get_length: function() {
 		if(!this._length) {
 			this._length = true;
@@ -4078,6 +7287,7 @@ thx.geom.Path.prototype = {
 		}
 		return this.length;
 	}
+	,_isSelfIntersecting: null
 	,get_isSelfIntersecting: function() {
 		if(!this._isSelfIntersecting) {
 			this._isSelfIntersecting = true;
@@ -4104,180 +7314,205 @@ thx.geom.Path.prototype = {
 			while(_g1 < _g) {
 				var i = _g1++;
 				var obox = this.splines[i].get_box();
-				this.box = thx.geom.shape._Box.Box_Impl_.expandByPoints(this.box,[obox[0],obox[1]]);
+				this.box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(this.box,[obox[0],obox[1]]);
 			}
 		}
 		return this.box;
 	}
-	,__class__: thx.geom.Path
+	,__class__: thx_geom_Path
 };
-thx.geom._Point = {};
-thx.geom._Point.Point_Impl_ = function() { };
-thx.geom._Point.Point_Impl_.__name__ = true;
-thx.geom._Point.Point_Impl_.fromObject = function(o) {
+var thx_geom__$Point_Point_$Impl_$ = {};
+thx_geom__$Point_Point_$Impl_$.__name__ = ["thx","geom","_Point","Point_Impl_"];
+thx_geom__$Point_Point_$Impl_$.fromObject = function(o) {
 	return [o.x,o.y];
 };
-thx.geom._Point.Point_Impl_.fromArray = function(arr) {
+thx_geom__$Point_Point_$Impl_$.fromArray = function(arr) {
 	return [arr[0],arr[1]];
 };
-thx.geom._Point.Point_Impl_.fromAngle = function(angle) {
+thx_geom__$Point_Point_$Impl_$.fromAngle = function(angle) {
+	var tmp;
 	var x = Math.cos(angle);
 	var y = Math.sin(angle);
+	tmp = [x,y];
+	return tmp;
+};
+thx_geom__$Point_Point_$Impl_$._new = function(x,y) {
 	return [x,y];
 };
-thx.geom._Point.Point_Impl_._new = function(x,y) {
-	return [x,y];
-};
-thx.geom._Point.Point_Impl_.get_x = function(this1) {
+thx_geom__$Point_Point_$Impl_$.get_x = function(this1) {
 	return this1[0];
 };
-thx.geom._Point.Point_Impl_.get_y = function(this1) {
+thx_geom__$Point_Point_$Impl_$.get_y = function(this1) {
 	return this1[1];
 };
-thx.geom._Point.Point_Impl_.get_length = function(this1) {
+thx_geom__$Point_Point_$Impl_$.get_length = function(this1) {
 	return Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
 };
-thx.geom._Point.Point_Impl_.get_lengthSquared = function(this1) {
+thx_geom__$Point_Point_$Impl_$.get_lengthSquared = function(this1) {
 	return this1[0] * this1[0] + this1[1] * this1[1];
 };
-thx.geom._Point.Point_Impl_.get_inst = function(this1) {
+thx_geom__$Point_Point_$Impl_$.get_inst = function(this1) {
 	return this1;
 };
-thx.geom._Point.Point_Impl_.addPoint = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.addPoint = function(this1,p) {
 	return [this1[0] + p[0],this1[1] + p[1]];
 };
-thx.geom._Point.Point_Impl_.add = function(this1,v) {
+thx_geom__$Point_Point_$Impl_$.add = function(this1,v) {
 	return [this1[0] + v,this1[1] + v];
 };
-thx.geom._Point.Point_Impl_.negate = function(this1) {
+thx_geom__$Point_Point_$Impl_$.negate = function(this1) {
 	return [-this1[0],-this1[1]];
 };
-thx.geom._Point.Point_Impl_.subtractPoint = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.subtractPoint = function(this1,p) {
+	var tmp;
 	var p_0 = -p[0];
 	var p_1 = -p[1];
-	return [this1[0] + p_0,this1[1] + p_1];
+	tmp = [this1[0] + p_0,this1[1] + p_1];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.subtract = function(this1,v) {
+thx_geom__$Point_Point_$Impl_$.subtract = function(this1,v) {
+	var tmp;
 	var v1 = -v;
-	return [this1[0] + v1,this1[1] + v1];
+	tmp = [this1[0] + v1,this1[1] + v1];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.multiplyPoint = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.multiplyPoint = function(this1,p) {
 	return [this1[0] * p[0],this1[1] * p[1]];
 };
-thx.geom._Point.Point_Impl_.multiply = function(this1,v) {
+thx_geom__$Point_Point_$Impl_$.multiply = function(this1,v) {
 	return [this1[0] * v,this1[1] * v];
 };
-thx.geom._Point.Point_Impl_.dividePoint = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.dividePoint = function(this1,p) {
 	return [this1[0] / p[0],this1[1] / p[1]];
 };
-thx.geom._Point.Point_Impl_.divide = function(this1,v) {
+thx_geom__$Point_Point_$Impl_$.divide = function(this1,v) {
 	return [this1[0] / v,this1[1] / v];
 };
-thx.geom._Point.Point_Impl_.equals = function(this1,p) {
-	return this1[0] == p[0] && this1[1] == p[1];
+thx_geom__$Point_Point_$Impl_$.equals = function(this1,p) {
+	return this1[0] == p[0]?this1[1] == p[1]:false;
 };
-thx.geom._Point.Point_Impl_.notEquals = function(this1,p) {
-	return !(this1[0] == p[0] && this1[1] == p[1]);
+thx_geom__$Point_Point_$Impl_$.notEquals = function(this1,p) {
+	return !(this1[0] == p[0]?this1[1] == p[1]:false);
 };
-thx.geom._Point.Point_Impl_.abs = function(this1) {
+thx_geom__$Point_Point_$Impl_$.abs = function(this1) {
+	var tmp;
 	var x = Math.abs(this1[0]);
 	var y = Math.abs(this1[1]);
-	return [x,y];
+	tmp = [x,y];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.nearEquals = function(this1,p) {
-	return Math.abs(this1[0] - p[0]) <= 1e-5 && Math.abs(this1[1] - p[1]) <= 1e-5;
+thx_geom__$Point_Point_$Impl_$.nearEquals = function(this1,p) {
+	return Math.abs(this1[0] - p[0]) <= 10e-10?Math.abs(this1[1] - p[1]) <= 10e-10:false;
 };
-thx.geom._Point.Point_Impl_.interpolate = function(this1,p,f) {
-	var p1;
-	var this2;
+thx_geom__$Point_Point_$Impl_$.interpolate = function(this1,p,f) {
+	var tmp;
+	var tmp1;
+	var tmp2;
 	var p2 = this1;
 	var p_0 = -p2[0];
 	var p_1 = -p2[1];
-	this2 = [p[0] + p_0,p[1] + p_1];
-	p1 = [this2[0] * f,this2[1] * f];
-	return [this1[0] + p1[0],this1[1] + p1[1]];
+	tmp2 = [p[0] + p_0,p[1] + p_1];
+	var this2 = tmp2;
+	tmp1 = [this2[0] * f,this2[1] * f];
+	var p1 = tmp1;
+	tmp = [this1[0] + p1[0],this1[1] + p1[1]];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.isZero = function(this1) {
-	var p = thx.geom._Point.Point_Impl_.zero;
-	return this1[0] == p[0] && this1[1] == p[1];
+thx_geom__$Point_Point_$Impl_$.isZero = function(this1) {
+	var tmp;
+	var p = thx_geom__$Point_Point_$Impl_$.zero;
+	if(this1[0] == p[0]) tmp = this1[1] == p[1]; else tmp = false;
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.isNearZero = function(this1) {
-	return thx.geom._Point.Point_Impl_.nearEquals(this1,thx.geom._Point.Point_Impl_.zero);
+thx_geom__$Point_Point_$Impl_$.isNearZero = function(this1) {
+	return thx_geom__$Point_Point_$Impl_$.nearEquals(this1,thx_geom__$Point_Point_$Impl_$.zero);
 };
-thx.geom._Point.Point_Impl_.dot = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.dot = function(this1,p) {
 	return this1[0] * p[0] + this1[1] * p[1];
 };
-thx.geom._Point.Point_Impl_.normal = function(this1) {
+thx_geom__$Point_Point_$Impl_$.normal = function(this1) {
 	return [this1[1],-this1[0]];
 };
-thx.geom._Point.Point_Impl_.normalize = function(this1) {
+thx_geom__$Point_Point_$Impl_$.normalize = function(this1) {
+	var tmp;
 	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-	return [this1[0] / v,this1[1] / v];
+	tmp = [this1[0] / v,this1[1] / v];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.distanceTo = function(this1,p) {
-	return Math.abs((function($this) {
-		var $r;
-		var this2;
-		{
-			var p_0 = -p[0];
-			var p_1 = -p[1];
-			this2 = [this1[0] + p_0,this1[1] + p_1];
-		}
-		$r = Math.sqrt(this2[0] * this2[0] + this2[1] * this2[1]);
-		return $r;
-	}(this)));
-};
-thx.geom._Point.Point_Impl_.distanceToSquared = function(this1,p) {
-	var this2;
+thx_geom__$Point_Point_$Impl_$.distanceTo = function(this1,p) {
+	var tmp;
+	var tmp1;
 	var p_0 = -p[0];
 	var p_1 = -p[1];
-	this2 = [this1[0] + p_0,this1[1] + p_1];
-	return this2[0] * this2[0] + this2[1] * this2[1];
+	tmp1 = [this1[0] + p_0,this1[1] + p_1];
+	var this2 = tmp1;
+	tmp = Math.sqrt(this2[0] * this2[0] + this2[1] * this2[1]);
+	return Math.abs(tmp);
 };
-thx.geom._Point.Point_Impl_.transform = function(this1,matrix) {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this1);
+thx_geom__$Point_Point_$Impl_$.distanceToSquared = function(this1,p) {
+	var tmp;
+	var tmp1;
+	var p_0 = -p[0];
+	var p_1 = -p[1];
+	tmp1 = [this1[0] + p_0,this1[1] + p_1];
+	var this2 = tmp1;
+	tmp = this2[0] * this2[0] + this2[1] * this2[1];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.cross = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.transform = function(this1,matrix) {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this1);
+};
+thx_geom__$Point_Point_$Impl_$.cross = function(this1,p) {
 	return this1[0] * p[1] - this1[1] * p[0];
 };
-thx.geom._Point.Point_Impl_.min = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.min = function(this1,p) {
+	var tmp;
 	var x = Math.min(this1[0],p[0]);
 	var y = Math.min(this1[1],p[1]);
-	return [x,y];
+	tmp = [x,y];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.max = function(this1,p) {
+thx_geom__$Point_Point_$Impl_$.max = function(this1,p) {
+	var tmp;
 	var x = Math.max(this1[0],p[0]);
 	var y = Math.max(this1[1],p[1]);
-	return [x,y];
+	tmp = [x,y];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
+thx_geom__$Point_Point_$Impl_$.pointAt = function(this1,angle,distance) {
+	var tmp;
 	var this2 = this1;
-	var p;
-	var this3;
+	var tmp1;
+	var tmp2;
 	var x = Math.cos(angle);
 	var y = Math.sin(angle);
-	this3 = [x,y];
-	p = [this3[0] * distance,this3[1] * distance];
-	return [this2[0] + p[0],this2[1] + p[1]];
+	tmp2 = [x,y];
+	var this3 = tmp2;
+	tmp1 = [this3[0] * distance,this3[1] * distance];
+	var p = tmp1;
+	tmp = [this2[0] + p[0],this2[1] + p[1]];
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.isOnLine = function(this1,line) {
-	if(line.get_isHorizontal()) return thx.math.Number.nearEquals(this1[1],line.w);
-	return thx.math.Number.nearEquals(line.xAtY(this1[1]),this1[0]);
+thx_geom__$Point_Point_$Impl_$.isOnLine = function(this1,line) {
+	if(line.get_isHorizontal()) return Math.abs(this1[1] - line.w) <= 10e-10;
+	var tmp;
+	var a = line.xAtY(this1[1]);
+	tmp = Math.abs(a - this1[0]) <= 10e-10;
+	return tmp;
 };
-thx.geom._Point.Point_Impl_.toAngle = function(this1) {
-	var angle = Math.atan2(this1[1],this1[0]);
-	return angle;
+thx_geom__$Point_Point_$Impl_$.toAngle = function(this1) {
+	return Math.atan2(this1[1],this1[0]);
 };
-thx.geom._Point.Point_Impl_.toArray = function(this1) {
+thx_geom__$Point_Point_$Impl_$.toArray = function(this1) {
 	return this1.slice();
 };
-thx.geom._Point.Point_Impl_.toObject = function(this1) {
+thx_geom__$Point_Point_$Impl_$.toObject = function(this1) {
 	return { x : this1[0], y : this1[1]};
 };
-thx.geom._Point.Point_Impl_.toString = function(this1) {
+thx_geom__$Point_Point_$Impl_$.toString = function(this1) {
 	return "Point(" + this1[0] + "," + this1[1] + ")";
 };
-thx.geom._Point.Point_Impl_.solve2Linear = function(a,b,c,d,u,v) {
+thx_geom__$Point_Point_$Impl_$.solve2Linear = function(a,b,c,d,u,v) {
 	var det = a * d - b * c;
 	if(det == 0) return null;
 	var invdet = 1.0 / det;
@@ -4285,7 +7520,7 @@ thx.geom._Point.Point_Impl_.solve2Linear = function(a,b,c,d,u,v) {
 	var y = -u * c + a * v;
 	return [x * invdet,y * invdet];
 };
-thx.geom._Point.Point_Impl_.interpolateBetween2DPointsForY = function(p1,p2,y) {
+thx_geom__$Point_Point_$Impl_$.interpolateBetween2DPointsForY = function(p1,p2,y) {
 	var f1 = y - p1[1];
 	var f2 = p2[1] - p1[1];
 	var t;
@@ -4296,29 +7531,34 @@ thx.geom._Point.Point_Impl_.interpolateBetween2DPointsForY = function(p1,p2,y) {
 	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
 	return p1[0] + t * (p2[0] - p1[0]);
 };
-thx.geom.Polygon = function(vertices) {
+var thx_geom_Polygon = function(vertices) {
 	this.vertices = vertices;
 };
-thx.geom.Polygon.__name__ = true;
-thx.geom.Polygon.fromVertices = function(vertices) {
-	if((vertices instanceof Array) && vertices.__enum__ == null) return new thx.geom.Polygon(vertices.copy()); else return new thx.geom.Polygon((function($this) {
-		var $r;
+thx_geom_Polygon.__name__ = ["thx","geom","Polygon"];
+thx_geom_Polygon.fromVertices = function(vertices) {
+	if((vertices instanceof Array)?vertices.__enum__ == null:false) return new thx_geom_Polygon(vertices.copy()); else {
+		var tmp;
 		var _g = [];
 		var $it0 = $iterator(vertices)();
 		while( $it0.hasNext() ) {
 			var v = $it0.next();
 			_g.push(v);
 		}
-		$r = _g;
-		return $r;
-	}(this)));
+		tmp = _g;
+		return new thx_geom_Polygon(tmp);
+	}
 };
-thx.geom.Polygon.prototype = {
-	flip: function() {
+thx_geom_Polygon.prototype = {
+	plane: null
+	,vertices: null
+	,flip: function() {
 		var reverse = this.vertices.slice();
 		reverse.reverse();
-		return new thx.geom.Polygon(reverse.map(function(v) {
-			return v.flip();
+		return new thx_geom_Polygon(reverse.map(function(v) {
+			var tmp;
+			var this1 = v.normal;
+			tmp = [-this1[0],-this1[1],-this1[2]];
+			return new thx_geom_Vertex3D(v.position,tmp);
 		}));
 	}
 	,iterator: function() {
@@ -4328,11 +7568,11 @@ thx.geom.Polygon.prototype = {
 		return this.vertices.slice();
 	}
 	,get_plane: function() {
-		if(null == this.plane) return this.plane = thx.geom.Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position); else return this.plane;
+		return null == this.plane?this.plane = thx_geom_Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position):this.plane;
 	}
-	,__class__: thx.geom.Polygon
+	,__class__: thx_geom_Polygon
 };
-thx.geom.Spline = function(nodes,closed) {
+var thx_geom_Spline = function(nodes,closed) {
 	if(closed == null) closed = true;
 	this._isSelfIntersecting = false;
 	this._length = false;
@@ -4341,61 +7581,67 @@ thx.geom.Spline = function(nodes,closed) {
 	this.nodes = nodes;
 	this.isClosed = closed;
 };
-thx.geom.Spline.__name__ = true;
-thx.geom.Spline.fromEdges = function(arr,closed) {
+thx_geom_Spline.__name__ = ["thx","geom","Spline"];
+thx_geom_Spline.fromEdges = function(arr,closed) {
 	var nodes = [];
-	var points;
 	if(arr.length > 0) {
 		var edge = arr[0];
-		var prev;
-		if(closed) prev = arr[arr.length - 1]; else prev = new thx.geom.EdgeLinear(thx.geom._Point.Point_Impl_.zero,thx.geom._Point.Point_Impl_.zero);
+		var prev = closed?arr[arr.length - 1]:new thx_geom_EdgeLinear(thx_geom__$Point_Point_$Impl_$.zero,thx_geom__$Point_Point_$Impl_$.zero);
 		if(arr.length == 1) {
-			nodes.push(new thx.geom.SplineNode(edge.first,edge.normalOut,null));
-			nodes.push(new thx.geom.SplineNode(edge.last,null,edge.normalIn));
+			nodes.push(new thx_geom_SplineNode(edge.first,edge.normalOut,null));
+			nodes.push(new thx_geom_SplineNode(edge.last,null,edge.normalIn));
 		} else {
 			var _g1 = 0;
 			var _g = arr.length;
 			while(_g1 < _g) {
 				var i = _g1++;
 				edge = arr[i];
-				nodes.push(new thx.geom.SplineNode(edge.first,edge.normalOut,prev.normalIn));
+				nodes.push(new thx_geom_SplineNode(edge.first,edge.normalOut,prev.normalIn));
 				prev = edge;
 			}
-			if(!closed) nodes.push(new thx.geom.SplineNode(edge.last,null,edge.normalIn));
+			if(!closed) nodes.push(new thx_geom_SplineNode(edge.last,null,edge.normalIn));
 		}
 	}
-	var spline = new thx.geom.Spline(nodes,closed);
+	var spline = new thx_geom_Spline(nodes,closed);
 	spline.edges = arr;
 	return spline;
 };
-thx.geom.Spline.fromPoints = function(arr,closed) {
+thx_geom_Spline.fromPoints = function(arr,closed) {
 	var nodes = arr.map(function(c) {
-		return new thx.geom.SplineNode(c[0],c[1],c[2]);
+		return new thx_geom_SplineNode(c[0],c[1],c[2]);
 	});
-	return new thx.geom.Spline(nodes,closed);
+	return new thx_geom_Spline(nodes,closed);
 };
-thx.geom.Spline.fromArray = function(arr,closed) {
+thx_geom_Spline.fromArray = function(arr,closed) {
 	var nodes = arr.map(function(c) {
-		return new thx.geom.SplineNode(c,null,null);
+		return new thx_geom_SplineNode(c,null,null);
 	});
-	return new thx.geom.Spline(nodes,closed);
+	return new thx_geom_Spline(nodes,closed);
 };
-thx.geom.Spline.fromCoords = function(arr,closed) {
+thx_geom_Spline.fromCoords = function(arr,closed) {
 	var nodes = arr.map(function(c) {
 		var p = [c[0],c[1]];
-		var nout;
-		if(null == c[2]) nout = thx.geom._Point.Point_Impl_.zero; else nout = [c[2],c[3]];
-		var nin;
-		if(null == c[4]) nin = thx.geom._Point.Point_Impl_.zero; else nin = [c[4],c[5]];
-		return new thx.geom.SplineNode(p,nout,nin);
+		var nout = null == c[2]?thx_geom__$Point_Point_$Impl_$.zero:[c[2],c[3]];
+		var nin = null == c[4]?thx_geom__$Point_Point_$Impl_$.zero:[c[4],c[5]];
+		return new thx_geom_SplineNode(p,nout,nin);
 	});
-	return new thx.geom.Spline(nodes,closed);
+	return new thx_geom_Spline(nodes,closed);
 };
-thx.geom.Spline.createEdge = function(a,b,nout,nin) {
-	if(null == nout && null == nin) return new thx.geom.EdgeLinear(a,b); else if(null == nout) return new thx.geom.EdgeCubic(a,a,nin,b); else if(null == nin) return new thx.geom.EdgeCubic(a,nout,b,b); else return new thx.geom.EdgeCubic(a,nout,nin,b);
+thx_geom_Spline.createEdge = function(a,b,nout,nin) {
+	if(null == nout?null == nin:false) return new thx_geom_EdgeLinear(a,b); else if(null == nout) return new thx_geom_EdgeCubic(a,a,nin,b); else if(null == nin) return new thx_geom_EdgeCubic(a,nout,b,b); else return new thx_geom_EdgeCubic(a,nout,nin,b);
 };
-thx.geom.Spline.prototype = {
-	iterator: function() {
+thx_geom_Spline.prototype = {
+	area: null
+	,length: null
+	,isSelfIntersecting: null
+	,isPolygon: null
+	,isEmpty: null
+	,isClockwise: null
+	,box: null
+	,edges: null
+	,nodes: null
+	,isClosed: null
+	,iterator: function() {
 		return HxOverrides.iter(this.nodes);
 	}
 	,iterate: function(fstart,fit) {
@@ -4424,32 +7670,32 @@ thx.geom.Spline.prototype = {
 		if(null == this.edges) {
 			this.edges = [];
 			this.iterate(null,function(a,b,nout,nin) {
-				_g.get_edges().push(thx.geom.Spline.createEdge(a,b,nout,nin));
+				_g.get_edges().push(thx_geom_Spline.createEdge(a,b,nout,nin));
 			});
 		}
 		return this.edges;
 	}
 	,transform: function(matrix) {
-		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
-		var result = new thx.geom.Spline(thx.core.Iterators.map(this.iterator(),function(node) {
+		var ismirror = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.isMirroring(matrix);
+		var result = new thx_geom_Spline(thx_core_Iterators.map(this.iterator(),function(node) {
 			return node.transform(matrix);
 		}),this.isClosed);
 		if(ismirror) result = result.flip();
 		return result;
 	}
 	,flip: function() {
-		var arr = thx.core.Iterators.map(this.iterator(),function(node) {
+		var arr = thx_core_Iterators.map(this.iterator(),function(node) {
 			return node.flip();
 		});
 		arr.reverse();
-		return new thx.geom.Spline(arr,this.isClosed);
+		return new thx_geom_Spline(arr,this.isClosed);
 	}
 	,contains: function(p) {
 		throw "not implemented";
 	}
 	,selfIntersections: function() {
 		var intersections = [];
-		thx.core.Arrays.eachPair(this.get_edges(),function(a,b) {
+		thx_core_Arrays.eachPair(this.get_edges(),function(a,b) {
 			intersections = intersections.concat(a.intersections(b));
 			return true;
 		});
@@ -4468,19 +7714,28 @@ thx.geom.Spline.prototype = {
 		return other.intersectionsSpline(this);
 	}
 	,intersectionsSpline: function(other) {
-		return thx.core.Arrays.flatten(this.get_edges().map(function(a) {
-			return thx.core.Arrays.flatten(other.get_edges().map(function(b) {
+		var tmp;
+		var array1 = this.get_edges().map(function(a) {
+			var tmp1;
+			var array = other.get_edges().map(function(b) {
 				return a.intersections(b);
-			}));
-		}));
+			});
+			tmp1 = Array.prototype.concat.apply([],array);
+			return tmp1;
+		});
+		tmp = Array.prototype.concat.apply([],array1);
+		return tmp;
 	}
 	,intersectionsLine: function(line) {
-		return thx.core.Arrays.flatten(this.get_edges().map(function(edge) {
+		var tmp;
+		var array = this.get_edges().map(function(edge) {
 			return edge.intersectionsLine(line);
-		}));
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
 	}
 	,split: function(value) {
-		if(value < 0 || value > 1) return null;
+		if(!(value < 0)?value > 1:true) return null;
 		var len = this.get_length();
 		var nor;
 		var edge;
@@ -4493,14 +7748,14 @@ thx.geom.Spline.prototype = {
 			nor = edge.get_length() / len;
 			if(value <= nor) {
 				var n = edge.split(value);
-				return [thx.geom.Spline.fromEdges(edges.slice(0,i).concat([n[0]]),this.isClosed),thx.geom.Spline.fromEdges([n[1]].concat(edges.slice(i + 1)),this.isClosed)];
+				return [thx_geom_Spline.fromEdges(edges.slice(0,i).concat([n[0]]),this.isClosed),thx_geom_Spline.fromEdges([n[1]].concat(edges.slice(i + 1)),this.isClosed)];
 			}
 			value -= nor;
 		}
 		return [];
 	}
 	,interpolate: function(value) {
-		if(value < 0 || value > 1) return null;
+		if(!(value < 0)?value > 1:true) return null;
 		var len = this.get_length();
 		var nor;
 		var _g = 0;
@@ -4525,8 +7780,9 @@ thx.geom.Spline.prototype = {
 			if(edge.get_isLinear()) edge = edge.toLinear();
 			result.unshift(edge);
 		}
-		return thx.geom.Spline.fromEdges(result,this.isClosed);
+		return thx_geom_Spline.fromEdges(result,this.isClosed);
 	}
+	,_isClockwise: null
 	,get_isClockwise: function() {
 		if(!this._isClockwise) {
 			this._isClockwise = true;
@@ -4547,13 +7803,16 @@ thx.geom.Spline.prototype = {
 		}
 	}
 	,toLinear: function() {
-		var edges = thx.core.Arrays.flatten(this.get_edges().map(function(edge) {
+		var tmp;
+		var array = this.get_edges().map(function(edge) {
 			return edge.get_linearSegments();
-		}));
-		return thx.geom.Spline.fromEdges(edges,this.isClosed);
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		var edges = tmp;
+		return thx_geom_Spline.fromEdges(edges,this.isClosed);
 	}
 	,toPath: function() {
-		return new thx.geom.Path([this]);
+		return new thx_geom_Path([this]);
 	}
 	,toPoints: function() {
 		return this.nodes.map(function(node) {
@@ -4565,6 +7824,7 @@ thx.geom.Spline.prototype = {
 			return "[" + n.toStringValues() + "]";
 		}).join(", ") + "," + Std.string(this.isClosed) + ")";
 	}
+	,_area: null
 	,get_area: function() {
 		var _g = this;
 		if(!this._area) {
@@ -4576,6 +7836,7 @@ thx.geom.Spline.prototype = {
 		}
 		return this.area;
 	}
+	,_length: null
 	,get_length: function() {
 		var _g = this;
 		if(!this._length) {
@@ -4587,13 +7848,14 @@ thx.geom.Spline.prototype = {
 		}
 		return this.length;
 	}
+	,_isSelfIntersecting: null
 	,get_isSelfIntersecting: function() {
 		var _g = this;
 		if(!this._isSelfIntersecting) {
 			this._isSelfIntersecting = true;
 			var edges = this.get_edges();
 			this.isSelfIntersecting = false;
-			thx.core.Arrays.eachPair(edges,function(a,b) {
+			thx_core_Arrays.eachPair(edges,function(a,b) {
 				return !(_g.isSelfIntersecting = a.intersects(b));
 			});
 		}
@@ -4605,17 +7867,19 @@ thx.geom.Spline.prototype = {
 		while(_g < _g1.length) {
 			var node = _g1[_g];
 			++_g;
-			if((function($this) {
-				var $r;
-				var this1 = node.normalIn;
-				$r = !(this1[0] == null[0] && this1[1] == null[1]);
-				return $r;
-			}(this)) || (function($this) {
-				var $r;
+			var tmp;
+			var this1 = node.normalIn;
+			var tmp2;
+			if(this1[0] == null[0]) tmp2 = this1[1] == null[1]; else tmp2 = false;
+			tmp = !tmp2;
+			var tmp1;
+			if(!tmp) {
 				var this2 = node.normalOut;
-				$r = !(this2[0] == null[0] && this2[1] == null[1]);
-				return $r;
-			}(this))) return false;
+				var tmp3;
+				if(this2[0] == null[0]) tmp3 = this2[1] == null[1]; else tmp3 = false;
+				tmp1 = !tmp3;
+			} else tmp1 = true;
+			if(tmp1) return false;
 		}
 		return true;
 	}
@@ -4628,389 +7892,1946 @@ thx.geom.Spline.prototype = {
 			if(this.nodes.length > 0) {
 				this.box = [this.nodes[0].position,this.nodes[0].position];
 				this.iterate(null,function(a,b,nout,nin) {
-					_g.box = thx.geom.shape._Box.Box_Impl_.expandByPoints(_g.get_box(),[a,b,nout,nin]);
+					_g.box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(_g.get_box(),[a,b,nout,nin]);
 				});
 			}
 		}
 		return this.box;
 	}
-	,__class__: thx.geom.Spline
+	,__class__: thx_geom_Spline
 };
-thx.geom.SplineNode = function(position,normalout,normalin) {
+var thx_geom_SplineNode = function(position,normalout,normalin) {
 	this.position = position;
-	if(null == normalout || thx.geom._Point.Point_Impl_.nearEquals(normalout,position)) this.normalOut = null; else this.normalOut = normalout;
-	if(null == normalin || thx.geom._Point.Point_Impl_.nearEquals(normalin,position)) this.normalIn = null; else this.normalIn = normalin;
+	this.normalOut = (!(null == normalout)?thx_geom__$Point_Point_$Impl_$.nearEquals(normalout,position):true)?null:normalout;
+	this.normalIn = (!(null == normalin)?thx_geom__$Point_Point_$Impl_$.nearEquals(normalin,position):true)?null:normalin;
 };
-thx.geom.SplineNode.__name__ = true;
-thx.geom.SplineNode.prototype = {
-	transform: function(matrix) {
-		return new thx.geom.SplineNode(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.position),null != this.normalOut?thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalOut):null,null != this.normalIn?thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normalIn):null);
+thx_geom_SplineNode.__name__ = ["thx","geom","SplineNode"];
+thx_geom_SplineNode.prototype = {
+	position: null
+	,normalIn: null
+	,normalOut: null
+	,transform: function(matrix) {
+		return new thx_geom_SplineNode(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.position),null != this.normalOut?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normalOut):null,null != this.normalIn?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normalIn):null);
 	}
 	,flip: function() {
-		return new thx.geom.SplineNode(this.position,this.normalIn,this.normalOut);
+		return new thx_geom_SplineNode(this.position,this.normalIn,this.normalOut);
 	}
 	,toStringValues: function() {
-		var nout;
-		if(null == this.normalOut) nout = "null"; else nout = "" + this.normalOut[1] + "," + this.normalOut[1];
-		var nin;
-		if(null == this.normalIn) nin = "null"; else nin = "" + this.normalIn[1] + "," + this.normalIn[1];
+		var nout = null == this.normalOut?"null":"" + this.normalOut[1] + "," + this.normalOut[1];
+		var nin = null == this.normalIn?"null":"" + this.normalIn[1] + "," + this.normalIn[1];
 		return "" + this.position[0] + "," + this.position[1] + "," + nout + "," + nin;
 	}
 	,toString: function() {
 		return "SplineNode(" + this.toStringValues() + ")";
 	}
-	,__class__: thx.geom.SplineNode
+	,__class__: thx_geom_SplineNode
 };
-thx.geom.Transformables = function() { };
-thx.geom.Transformables.__name__ = true;
-thx.geom.Transformables.mirror = function(t,plane) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(plane));
+var thx_geom_Transformables = function() { };
+thx_geom_Transformables.__name__ = ["thx","geom","Transformables"];
+thx_geom_Transformables.mirror = function(t,plane) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(plane));
 };
-thx.geom.Transformables.mirrorX = function(t) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MX));
+thx_geom_Transformables.mirrorX = function(t) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MX));
 };
-thx.geom.Transformables.mirrorY = function(t) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MY));
+thx_geom_Transformables.mirrorY = function(t) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MY));
 };
-thx.geom.Transformables.mirrorZ = function(t) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MZ));
+thx_geom_Transformables.mirrorZ = function(t) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MZ));
 };
-thx.geom.Transformables.translate = function(t,v) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(v));
+thx_geom_Transformables.translate = function(t,v) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(v));
 };
-thx.geom.Transformables.translateX = function(t,x) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([x,0,0]));
+thx_geom_Transformables.translateX = function(t,x) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([x,0,0]));
 };
-thx.geom.Transformables.translateY = function(t,y) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([0,y,0]));
+thx_geom_Transformables.translateY = function(t,y) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,y,0]));
 };
-thx.geom.Transformables.translateZ = function(t,z) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation([0,0,z]));
+thx_geom_Transformables.translateZ = function(t,z) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,0,z]));
 };
-thx.geom.Transformables.scale = function(t,f) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling(f));
+thx_geom_Transformables.scale = function(t,f) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling(f));
 };
-thx.geom.Transformables.rotateX = function(t,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationX(angle));
+thx_geom_Transformables.rotateX = function(t,angle) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationX(angle));
 };
-thx.geom.Transformables.rotateY = function(t,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationY(angle));
+thx_geom_Transformables.rotateY = function(t,angle) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationY(angle));
 };
-thx.geom.Transformables.rotateZ = function(t,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ(angle));
+thx_geom_Transformables.rotateZ = function(t,angle) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(angle));
 };
-thx.geom.Transformables.rotateOnAxis = function(t,center,axis,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotation(center,axis,angle));
+thx_geom_Transformables.rotateOnAxis = function(t,center,axis,angle) {
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotation(center,axis,angle));
 };
-thx.geom.Vertex3D = function(position,normal) {
+var thx_geom_Vertex3D = function(position,normal) {
 	this.position = position;
 	this.normal = normal;
 };
-thx.geom.Vertex3D.__name__ = true;
-thx.geom.Vertex3D.prototype = {
-	flip: function() {
-		return new thx.geom.Vertex3D(this.position,(function($this) {
-			var $r;
-			var this1 = $this.normal;
-			$r = [-this1[0],-this1[1],-this1[2]];
-			return $r;
-		}(this)));
+thx_geom_Vertex3D.__name__ = ["thx","geom","Vertex3D"];
+thx_geom_Vertex3D.prototype = {
+	position: null
+	,normal: null
+	,flip: function() {
+		var tmp;
+		var this1 = this.normal;
+		tmp = [-this1[0],-this1[1],-this1[2]];
+		return new thx_geom_Vertex3D(this.position,tmp);
 	}
 	,interpolate: function(other,t) {
-		return new thx.geom.Vertex3D(thx.geom._Point3D.Point3D_Impl_.interpolate(this.position,other.position,t),thx.geom._Point3D.Point3D_Impl_.interpolate(this.normal,other.normal,t));
+		return new thx_geom_Vertex3D(thx_geom__$Point3D_Point3D_$Impl_$.interpolate(this.position,other.position,t),thx_geom__$Point3D_Point3D_$Impl_$.interpolate(this.normal,other.normal,t));
 	}
 	,transform: function(matrix) {
-		return new thx.geom.Vertex3D((function($this) {
-			var $r;
-			var this1 = $this.position;
-			$r = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this1[0],this1[1],this1[2]]);
-			return $r;
-		}(this)),(function($this) {
-			var $r;
-			var this2 = $this.normal;
-			$r = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,[this2[0],this2[1],this2[2]]);
-			return $r;
-		}(this)));
+		var tmp;
+		var this1 = this.position;
+		tmp = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[this1[0],this1[1],this1[2]]);
+		var tmp1;
+		var this2 = this.normal;
+		tmp1 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[this2[0],this2[1],this2[2]]);
+		return new thx_geom_Vertex3D(tmp,tmp1);
 	}
 	,toString: function() {
-		return "Vertex3D " + (function($this) {
-			var $r;
-			var this1 = $this.position;
-			$r = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
-			return $r;
-		}(this)) + ", " + (function($this) {
-			var $r;
-			var this2 = $this.normal;
-			$r = "Point3D(" + this2[0] + "," + this2[1] + "," + this2[2] + ")";
-			return $r;
-		}(this));
+		var tmp;
+		var this1 = this.position;
+		tmp = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+		var tmp1;
+		var this2 = this.normal;
+		tmp1 = "Point3D(" + this2[0] + "," + this2[1] + "," + this2[2] + ")";
+		return "Vertex3D " + tmp + ", " + tmp1;
 	}
-	,__class__: thx.geom.Vertex3D
+	,__class__: thx_geom_Vertex3D
 };
-thx.geom.shape = {};
-thx.geom.shape._Box = {};
-thx.geom.shape._Box.Box_Impl_ = function() { };
-thx.geom.shape._Box.Box_Impl_.__name__ = true;
-thx.geom.shape._Box.Box_Impl_.fromPoints = function(a,b) {
-	var bottomLeft;
+var thx_geom_shape__$Box_Box_$Impl_$ = {};
+thx_geom_shape__$Box_Box_$Impl_$.__name__ = ["thx","geom","shape","_Box","Box_Impl_"];
+thx_geom_shape__$Box_Box_$Impl_$.fromPoints = function(a,b) {
+	var tmp;
+	var tmp1;
 	var x = Math.min(a[0],b[0]);
 	var y = Math.min(a[1],b[1]);
-	bottomLeft = [x,y];
-	var topRight;
+	tmp1 = [x,y];
+	var bottomLeft = tmp1;
+	var tmp2;
 	var x1 = Math.max(a[0],b[0]);
 	var y1 = Math.max(a[1],b[1]);
-	topRight = [x1,y1];
+	tmp2 = [x1,y1];
+	var topRight = tmp2;
+	tmp = [bottomLeft,topRight];
+	return tmp;
+};
+thx_geom_shape__$Box_Box_$Impl_$._new = function(bottomLeft,topRight) {
 	return [bottomLeft,topRight];
 };
-thx.geom.shape._Box.Box_Impl_._new = function(bottomLeft,topRight) {
-	return [bottomLeft,topRight];
+thx_geom_shape__$Box_Box_$Impl_$.transform = function(this1,matrix) {
+	return thx_geom_shape__$Box_Box_$Impl_$.fromPoints(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this1[0]),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this1[1]));
 };
-thx.geom.shape._Box.Box_Impl_.transform = function(this1,matrix) {
-	return thx.geom.shape._Box.Box_Impl_.fromPoints(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this1[0]),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this1[1]));
-};
-thx.geom.shape._Box.Box_Impl_.get_topLeft = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_topLeft = function(this1) {
 	return [this1[0][0],this1[1][1]];
 };
-thx.geom.shape._Box.Box_Impl_.get_topRight = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_topRight = function(this1) {
 	return this1[1];
 };
-thx.geom.shape._Box.Box_Impl_.get_bottomLeft = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_bottomLeft = function(this1) {
 	return this1[0];
 };
-thx.geom.shape._Box.Box_Impl_.get_bottomRight = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_bottomRight = function(this1) {
 	return [this1[1][0],this1[0][1]];
 };
-thx.geom.shape._Box.Box_Impl_.get_center = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_center = function(this1) {
 	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[1][1] + (this1[1][1] - this1[0][1]) / 2];
 };
-thx.geom.shape._Box.Box_Impl_.get_left = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_left = function(this1) {
 	return this1[0][0];
 };
-thx.geom.shape._Box.Box_Impl_.get_right = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_right = function(this1) {
 	return this1[1][0];
 };
-thx.geom.shape._Box.Box_Impl_.get_top = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_top = function(this1) {
 	return this1[1][1];
 };
-thx.geom.shape._Box.Box_Impl_.get_bottom = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_bottom = function(this1) {
 	return this1[0][1];
 };
-thx.geom.shape._Box.Box_Impl_.get_width = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_width = function(this1) {
 	return this1[1][0] - this1[0][0];
 };
-thx.geom.shape._Box.Box_Impl_.get_height = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.get_height = function(this1) {
 	return this1[1][1] - this1[0][1];
 };
-thx.geom.shape._Box.Box_Impl_.expandByPoint = function(this1,point) {
-	var bottomLeft;
+thx_geom_shape__$Box_Box_$Impl_$.expandByPoint = function(this1,point) {
+	var tmp;
+	var tmp1;
 	var this2 = this1[0];
 	var x = Math.min(this2[0],point[0]);
 	var y = Math.min(this2[1],point[1]);
-	bottomLeft = [x,y];
-	var topRight;
+	tmp1 = [x,y];
+	var bottomLeft = tmp1;
+	var tmp2;
 	var this3 = this1[1];
 	var x1 = Math.max(this3[0],point[0]);
 	var y1 = Math.max(this3[1],point[1]);
-	topRight = [x1,y1];
-	return [bottomLeft,topRight];
+	tmp2 = [x1,y1];
+	var topRight = tmp2;
+	tmp = [bottomLeft,topRight];
+	return tmp;
 };
-thx.geom.shape._Box.Box_Impl_.expandByPoints = function(this1,points) {
+thx_geom_shape__$Box_Box_$Impl_$.expandByPoints = function(this1,points) {
 	var min = this1[0];
 	var max = this1[1];
 	var $it0 = $iterator(points)();
 	while( $it0.hasNext() ) {
 		var point = $it0.next();
+		var tmp;
 		var x = Math.min(min[0],point[0]);
 		var y = Math.min(min[1],point[1]);
-		min = [x,y];
+		tmp = [x,y];
+		min = tmp;
+		var tmp1;
 		var x1 = Math.max(max[0],point[0]);
 		var y1 = Math.max(max[1],point[1]);
-		max = [x1,y1];
+		tmp1 = [x1,y1];
+		max = tmp1;
 	}
 	return [min,max];
 };
-thx.geom.shape._Box.Box_Impl_.intersects = function(this1,other) {
-	return this1[1][0] >= other[0][0] && this1[0][0] <= other[1][0] || this1[0][1] >= other[1][1] && this1[1][1] <= other[0][1];
+thx_geom_shape__$Box_Box_$Impl_$.intersects = function(this1,other) {
+	var tmp;
+	if(!(this1[1][0] >= other[0][0]?this1[0][0] <= other[1][0]:false)) {
+		if(this1[0][1] >= other[1][1]) tmp = this1[1][1] <= other[0][1]; else tmp = false;
+	} else tmp = true;
+	return tmp;
 };
-thx.geom.shape._Box.Box_Impl_.contains = function(this1,point) {
-	return this1[0][0] <= point[0] && this1[1][0] >= point[0] && this1[1][1] >= point[1] && this1[0][1] <= point[1];
+thx_geom_shape__$Box_Box_$Impl_$.contains = function(this1,point) {
+	return ((this1[0][0] <= point[0]?this1[1][0] >= point[0]:false)?this1[1][1] >= point[1]:false)?this1[0][1] <= point[1]:false;
 };
-thx.geom.shape._Box.Box_Impl_.equals = function(this1,other) {
-	return (function($this) {
-		var $r;
-		var this2 = this1[0];
-		var p = other[0];
-		$r = this2[0] == p[0] && this2[1] == p[1];
-		return $r;
-	}(this)) && (function($this) {
-		var $r;
+thx_geom_shape__$Box_Box_$Impl_$.equals = function(this1,other) {
+	var tmp;
+	var this2 = this1[0];
+	var p = other[0];
+	if(this2[0] == p[0]) tmp = this2[1] == p[1]; else tmp = false;
+	var tmp1;
+	if(tmp) {
 		var this3 = this1[1];
 		var p1 = other[1];
-		$r = this3[0] == p1[0] && this3[1] == p1[1];
-		return $r;
-	}(this));
+		if(this3[0] == p1[0]) tmp1 = this3[1] == p1[1]; else tmp1 = false;
+	} else tmp1 = false;
+	return tmp1;
 };
-thx.geom.shape._Box.Box_Impl_.toString = function(this1) {
+thx_geom_shape__$Box_Box_$Impl_$.toString = function(this1) {
 	return "Box(x:" + this1[0][0] + ",y:" + this1[1][1] + ",w:" + (this1[1][0] - this1[0][0]) + ",h:" + (this1[1][1] - this1[0][1]) + ")";
 };
-thx.geom.shape._Box.Box_Impl_.toSpline = function(this1) {
-	return thx.geom.Spline.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
+thx_geom_shape__$Box_Box_$Impl_$.toSpline = function(this1) {
+	return thx_geom_Spline.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
 };
-thx.geom.shape._Box.Box_Impl_.toPath = function(this1) {
-	return new thx.geom.Path([thx.geom.shape._Box.Box_Impl_.toSpline(this1)]);
+thx_geom_shape__$Box_Box_$Impl_$.toPath = function(this1) {
+	return new thx_geom_Path([thx_geom_shape__$Box_Box_$Impl_$.toSpline(this1)]);
 };
-thx.geom.shape._Circle = {};
-thx.geom.shape._Circle.Circle_Impl_ = function() { };
-thx.geom.shape._Circle.Circle_Impl_.__name__ = true;
-thx.geom.shape._Circle.Circle_Impl_._new = function(center,radius) {
+var thx_geom_shape__$Circle_Circle_$Impl_$ = {};
+thx_geom_shape__$Circle_Circle_$Impl_$.__name__ = ["thx","geom","shape","_Circle","Circle_Impl_"];
+thx_geom_shape__$Circle_Circle_$Impl_$._new = function(center,radius) {
 	return { center : center, radius : radius};
 };
-thx.geom.shape._Circle.Circle_Impl_.get_center = function(this1) {
+thx_geom_shape__$Circle_Circle_$Impl_$.get_center = function(this1) {
 	return this1.center;
 };
-thx.geom.shape._Circle.Circle_Impl_.get_radius = function(this1) {
+thx_geom_shape__$Circle_Circle_$Impl_$.get_radius = function(this1) {
 	return this1.radius;
 };
-thx.geom.shape._Circle.Circle_Impl_.toString = function(this1) {
+thx_geom_shape__$Circle_Circle_$Impl_$.toString = function(this1) {
 	return "Circle(" + this1.center[0] + "," + this1.center[1] + "," + this1.radius + ")";
 };
-thx.geom.shape._Circle.Circle_Impl_.toSpline = function(this1) {
-	return thx.geom.Transformables.translate(thx.geom.shape._Circle.Circle_Impl_.unitaryCircle.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling([this1.radius,this1.radius,1])),[this1.center[0],this1.center[1],0]);
+thx_geom_shape__$Circle_Circle_$Impl_$.toSpline = function(this1) {
+	var tmp;
+	var t = thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([this1.radius,this1.radius,1]));
+	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([this1.center[0],this1.center[1],0]));
+	return tmp;
 };
-thx.math = {};
-thx.math.Number = function() { };
-thx.math.Number.__name__ = true;
-thx.math.Number.isNearZero = function(n) {
-	return Math.abs(n) <= 10e-10;
+var thx_math_Const = function() { };
+thx_math_Const.__name__ = ["thx","math","Const"];
+var thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$ = {};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.__name__ = ["thx","unit","angle","_BinaryDegree","BinaryDegree_Impl_"];
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.pointToBinaryDegree = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 40.7436654315252);
+	return tmp;
 };
-thx.math.Number.nearEquals = function(a,b) {
-	return Math.abs(a - b) <= 10e-10;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.floatToBinaryDegree = function(value) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(value);
 };
-thx.math.Number.integrate = function(f,a,b,n) {
-	var x = thx.math.Number.abscissas[n - 2];
-	var w = thx.math.Number.weights[n - 2];
-	var A = 0.5 * (b - a);
-	var B = A + a;
-	var i = 0;
-	var m = n + 1 >> 1;
-	var sum;
-	if((n & 1) == 1) sum = w[i++] * f(B); else sum = 0;
-	var Ax;
-	while(i < m) {
-		Ax = A * x[i];
-		sum += w[i++] * (f(B + Ax) + f(B - Ax));
-	}
-	return A * sum;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new = function(value) {
+	return value;
 };
-thx.unit = {};
-thx.unit.angle = {};
-thx.unit.angle.Const = function() { };
-thx.unit.angle.Const.__name__ = true;
-thx.unit.angle._Degree = {};
-thx.unit.angle._Degree.Degree_Impl_ = function() { };
-thx.unit.angle._Degree.Degree_Impl_.__name__ = true;
-thx.unit.angle._Degree.Degree_Impl_.fromFloat = function(angle) {
-	return angle;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.0245436926061703);
+	tmp = Math.cos(this2);
+	return tmp;
 };
-thx.unit.angle._Degree.Degree_Impl_._new = function(degrees) {
-	return degrees;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.0245436926061703);
+	tmp = Math.sin(this2);
+	return tmp;
 };
-thx.unit.angle._Degree.Degree_Impl_.cos = function(this1) {
-	return Math.cos(this1 / thx.unit.angle.Const.TO_DEGREE);
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(value);
+	return tmp;
 };
-thx.unit.angle._Degree.Degree_Impl_.sin = function(this1) {
-	return Math.sin(this1 / thx.unit.angle.Const.TO_DEGREE);
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(value);
+	return tmp;
 };
-thx.unit.angle._Degree.Degree_Impl_.toString = function(this1) {
-	return "" + this1 + "º";
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(value);
+	return tmp;
 };
-thx.unit.angle._Degree.Degree_Impl_.toRadians = function(this1) {
-	return this1 / thx.unit.angle.Const.TO_DEGREE;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(a);
+		tmp = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(a);
+	return tmp;
 };
-thx.unit.angle._Degree.Degree_Impl_.toFloat = function(this1) {
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(a - thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.turn):a;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(-this1);
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toFloat = function(this1) {
 	return this1;
 };
-thx.unit.angle._Degree.Degree_Impl_.negate = function(this1) {
-	return -this1;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 1.40625);
 };
-thx.unit.angle._Degree.Degree_Impl_.multiply = function(this1,v) {
-	return this1 * v;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 1.5625);
 };
-thx.unit.angle._Degree.Degree_Impl_.divide = function(this1,v) {
-	return this1 / v;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 0.09375);
 };
-thx.unit.angle._Degree.Degree_Impl_.add = function(this1,r) {
-	return this1 + r;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 84.375);
 };
-thx.unit.angle._Degree.Degree_Impl_.addFloat = function(this1,v) {
-	return this1 + v;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 0.125);
 };
-thx.unit.angle._Degree.Degree_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.015625);
 };
-thx.unit.angle._Degree.Degree_Impl_.subtractFloat = function(this1,v) {
-	return this1 + -v;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.0245436926061703);
 };
-thx.unit.angle._Degree.Degree_Impl_.equals = function(this1,v) {
-	return this1 == v;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.00390625);
 };
-thx.unit.angle.FloatDegree = function() { };
-thx.unit.angle.FloatDegree.__name__ = true;
-thx.unit.angle.FloatDegree.toDegrees = function(v) {
-	return v;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 5062.5);
 };
-thx.unit.angle._Radian = {};
-thx.unit.angle._Radian.Radian_Impl_ = function() { };
-thx.unit.angle._Radian.Radian_Impl_.__name__ = true;
-thx.unit.angle._Radian.Radian_Impl_.fromFloat = function(angle) {
-	return angle;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.0234375);
 };
-thx.unit.angle._Radian.Radian_Impl_._new = function(radians) {
-	return radians;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.00390625);
 };
-thx.unit.angle._Radian.Radian_Impl_.cos = function(this1) {
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.toString = function(this1) {
+	return this1 + "binary degree";
+};
+var thx_unit_angle__$Degree_Degree_$Impl_$ = {};
+thx_unit_angle__$Degree_Degree_$Impl_$.__name__ = ["thx","unit","angle","_Degree","Degree_Impl_"];
+thx_unit_angle__$Degree_Degree_$Impl_$.pointToDegree = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 57.2957795130823);
+	return tmp;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.floatToDegree = function(value) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(value);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.0174532925199433);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.0174532925199433);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Degree_Degree_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Degree_Degree_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Degree_Degree_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Degree_Degree_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Degree_Degree_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Degree_Degree_$Impl_$._new(thx_unit_angle__$Degree_Degree_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Degree_Degree_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Degree_Degree_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Degree_Degree_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Degree_Degree_$Impl_$._new(a - thx_unit_angle__$Degree_Degree_$Impl_$.turn):a;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 0.711111111111111);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 1.11111111111111);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 0.0666666666666667);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 60);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 0.0888888888888889);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.0111111111111111);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.0174532925199433);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.00277777777777778);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 3600);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.0166666666666667);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.00277777777777778);
+};
+thx_unit_angle__$Degree_Degree_$Impl_$.toString = function(this1) {
+	return this1 + "°";
+};
+var thx_unit_angle__$Grad_Grad_$Impl_$ = {};
+thx_unit_angle__$Grad_Grad_$Impl_$.__name__ = ["thx","unit","angle","_Grad","Grad_Impl_"];
+thx_unit_angle__$Grad_Grad_$Impl_$.pointToGrad = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 63.6619772367581);
+	return tmp;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.floatToGrad = function(value) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(value);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.015707963267949);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.015707963267949);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Grad_Grad_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Grad_Grad_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Grad_Grad_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Grad_Grad_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Grad_Grad_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Grad_Grad_$Impl_$._new(thx_unit_angle__$Grad_Grad_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Grad_Grad_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Grad_Grad_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Grad_Grad_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Grad_Grad_$Impl_$._new(a - thx_unit_angle__$Grad_Grad_$Impl_$.turn):a;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 0.64);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 0.9);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 0.06);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 54);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 0.08);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.01);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.015707963267949);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.0025);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 3240);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.015);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.0025);
+};
+thx_unit_angle__$Grad_Grad_$Impl_$.toString = function(this1) {
+	return this1 + "grad";
+};
+var thx_unit_angle__$HourAngle_HourAngle_$Impl_$ = {};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.__name__ = ["thx","unit","angle","_HourAngle","HourAngle_Impl_"];
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.pointToHourAngle = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 3.81971863420549);
+	return tmp;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.floatToHourAngle = function(value) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(value);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.261799387799149);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.261799387799149);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$HourAngle_HourAngle_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(a);
+		tmp = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(thx_unit_angle__$HourAngle_HourAngle_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$HourAngle_HourAngle_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(a - thx_unit_angle__$HourAngle_HourAngle_$Impl_$.turn):a;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(-this1);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 10.6666666666667);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 15);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 16.6666666666667);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 900);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 1.33333333333333);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.166666666666667);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.261799387799149);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.0416666666666667);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 54000);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.25);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.0416666666666667);
+};
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.toString = function(this1) {
+	return this1 + "hour";
+};
+var thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$ = {};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.__name__ = ["thx","unit","angle","_MinuteOfArc","MinuteOfArc_Impl_"];
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.pointToMinuteOfArc = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 3437.74677078494);
+	return tmp;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.floatToMinuteOfArc = function(value) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(value);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.000290888208665722);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.000290888208665722);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(a);
+		tmp = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(a - thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.turn):a;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(-this1);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 0.0118518518518519);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 0.0166666666666667);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 0.0185185185185185);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 0.00111111111111111);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 0.00148148148148148);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.000185185185185185);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.000290888208665722);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 4.62962962962963e-05);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 60);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.000277777777777778);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 4.62962962962963e-05);
+};
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.toString = function(this1) {
+	return this1 + "′";
+};
+var thx_unit_angle__$Point_Point_$Impl_$ = {};
+thx_unit_angle__$Point_Point_$Impl_$.__name__ = ["thx","unit","angle","_Point","Point_Impl_"];
+thx_unit_angle__$Point_Point_$Impl_$.pointToPoint = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 5.09295817894065);
+	return tmp;
+};
+thx_unit_angle__$Point_Point_$Impl_$.floatToPoint = function(value) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(value);
+};
+thx_unit_angle__$Point_Point_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Point_Point_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.196349540849362);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$Point_Point_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.196349540849362);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$Point_Point_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Point_Point_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Point_Point_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Point_Point_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Point_Point_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Point_Point_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Point_Point_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Point_Point_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Point_Point_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Point_Point_$Impl_$._new(thx_unit_angle__$Point_Point_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Point_Point_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Point_Point_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Point_Point_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Point_Point_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Point_Point_$Impl_$._new(a - thx_unit_angle__$Point_Point_$Impl_$.turn):a;
+};
+thx_unit_angle__$Point_Point_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Point_Point_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Point_Point_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Point_Point_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Point_Point_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Point_Point_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Point_Point_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Point_Point_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Point_Point_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Point_Point_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Point_Point_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Point_Point_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Point_Point_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Point_Point_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$Point_Point_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 8);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 11.25);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 12.5);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 0.75);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 675);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.125);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 0.196349540849362);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.03125);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 40500);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.1875);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.03125);
+};
+thx_unit_angle__$Point_Point_$Impl_$.toString = function(this1) {
+	return this1 + "point";
+};
+var thx_unit_angle__$Quadrant_Quadrant_$Impl_$ = {};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.__name__ = ["thx","unit","angle","_Quadrant","Quadrant_Impl_"];
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.pointToQuadrant = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.636619772367581);
+	return tmp;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.floatToQuadrant = function(value) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(value);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 1.5707963267949);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 1.5707963267949);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Quadrant_Quadrant_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(thx_unit_angle__$Quadrant_Quadrant_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Quadrant_Quadrant_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(a - thx_unit_angle__$Quadrant_Quadrant_$Impl_$.turn):a;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 64);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 90);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 100);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 6);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 5400);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 8);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 1.5707963267949);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.25);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 324000);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 1.5);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.25);
+};
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.toString = function(this1) {
+	return this1 + "quad.";
+};
+var thx_unit_angle__$Radian_Radian_$Impl_$ = {};
+thx_unit_angle__$Radian_Radian_$Impl_$.__name__ = ["thx","unit","angle","_Radian","Radian_Impl_"];
+thx_unit_angle__$Radian_Radian_$Impl_$.pointToRadian = function(x,y) {
+	var tmp;
+	var value = Math.atan2(y,x);
+	tmp = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.floatToRadian = function(value) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.cos = function(this1) {
 	return Math.cos(this1);
 };
-thx.unit.angle._Radian.Radian_Impl_.sin = function(this1) {
+thx_unit_angle__$Radian_Radian_$Impl_$.sin = function(this1) {
 	return Math.sin(this1);
 };
-thx.unit.angle._Radian.Radian_Impl_.toString = function(this1) {
-	return "" + this1 + "rad";
+thx_unit_angle__$Radian_Radian_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	return tmp;
 };
-thx.unit.angle._Radian.Radian_Impl_.toDegrees = function(this1) {
-	return this1 * thx.unit.angle.Const.TO_DEGREE;
+thx_unit_angle__$Radian_Radian_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	return tmp;
 };
-thx.unit.angle._Radian.Radian_Impl_.toFloat = function(this1) {
+thx_unit_angle__$Radian_Radian_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Radian_Radian_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Radian_Radian_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Radian_Radian_$Impl_$._new(thx_unit_angle__$Radian_Radian_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Radian_Radian_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Radian_Radian_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Radian_Radian_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Radian_Radian_$Impl_$._new(a - thx_unit_angle__$Radian_Radian_$Impl_$.turn):a;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.toFloat = function(this1) {
 	return this1;
 };
-thx.unit.angle._Radian.Radian_Impl_.negate = function(this1) {
-	return -this1;
+thx_unit_angle__$Radian_Radian_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 40.7436654315252);
 };
-thx.unit.angle._Radian.Radian_Impl_.multiply = function(this1,v) {
-	return this1 * v;
+thx_unit_angle__$Radian_Radian_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 57.2957795130823);
 };
-thx.unit.angle._Radian.Radian_Impl_.divide = function(this1,v) {
-	return this1 / v;
+thx_unit_angle__$Radian_Radian_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 63.6619772367581);
 };
-thx.unit.angle._Radian.Radian_Impl_.add = function(this1,r) {
-	return this1 + r;
+thx_unit_angle__$Radian_Radian_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 3.81971863420549);
 };
-thx.unit.angle._Radian.Radian_Impl_.addFloat = function(this1,v) {
-	return this1 + v;
+thx_unit_angle__$Radian_Radian_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 3437.74677078494);
 };
-thx.unit.angle._Radian.Radian_Impl_.subtract = function(this1,r) {
-	return this1 + -r;
+thx_unit_angle__$Radian_Radian_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 5.09295817894065);
 };
-thx.unit.angle._Radian.Radian_Impl_.subtractFloat = function(this1,v) {
-	return this1 + -v;
+thx_unit_angle__$Radian_Radian_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.636619772367581);
 };
-thx.unit.angle._Radian.Radian_Impl_.equals = function(this1,v) {
-	return this1 == v;
+thx_unit_angle__$Radian_Radian_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.159154943091895);
 };
-thx.unit.angle.FloatRadian = function() { };
-thx.unit.angle.FloatRadian.__name__ = true;
-thx.unit.angle.FloatRadian.toRadians = function(v) {
-	return v;
+thx_unit_angle__$Radian_Radian_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 206264.806247096);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.954929658551372);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.159154943091895);
+};
+thx_unit_angle__$Radian_Radian_$Impl_$.toString = function(this1) {
+	return this1 + "rad";
+};
+var thx_unit_angle__$Revolution_Revolution_$Impl_$ = {};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.__name__ = ["thx","unit","angle","_Revolution","Revolution_Impl_"];
+thx_unit_angle__$Revolution_Revolution_$Impl_$.pointToRevolution = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.159154943091895);
+	return tmp;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.floatToRevolution = function(value) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(value);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 6.28318530717959);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 6.28318530717959);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Revolution_Revolution_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(thx_unit_angle__$Revolution_Revolution_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Revolution_Revolution_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Revolution_Revolution_$Impl_$._new(a - thx_unit_angle__$Revolution_Revolution_$Impl_$.turn):a;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 256);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 360);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 400);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 24);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 21600);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 32);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 4);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 6.28318530717959);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 1296000);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 6);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1);
+};
+thx_unit_angle__$Revolution_Revolution_$Impl_$.toString = function(this1) {
+	return this1 + "r";
+};
+var thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$ = {};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.__name__ = ["thx","unit","angle","_SecondOfArc","SecondOfArc_Impl_"];
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.pointToSecondOfArc = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 206264.806247096);
+	return tmp;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.floatToSecondOfArc = function(value) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(value);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 4.84813681109536e-06);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 4.84813681109536e-06);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(a);
+		tmp = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(a - thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.turn):a;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(-this1);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 0.000197530864197531);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 0.000277777777777778);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 0.000308641975308642);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 1.85185185185185e-05);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 0.0166666666666667);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 2.46913580246914e-05);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 3.08641975308642e-06);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 4.84813681109536e-06);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 7.71604938271605e-07);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 4.62962962962963e-06);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 7.71604938271605e-07);
+};
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.toString = function(this1) {
+	return this1 + "″";
+};
+var thx_unit_angle__$Sextant_Sextant_$Impl_$ = {};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.__name__ = ["thx","unit","angle","_Sextant","Sextant_Impl_"];
+thx_unit_angle__$Sextant_Sextant_$Impl_$.pointToSextant = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 0.954929658551372);
+	return tmp;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.floatToSextant = function(value) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(value);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 1.0471975511966);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 1.0471975511966);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Sextant_Sextant_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(thx_unit_angle__$Sextant_Sextant_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Sextant_Sextant_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Sextant_Sextant_$Impl_$._new(a - thx_unit_angle__$Sextant_Sextant_$Impl_$.turn):a;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 42.6666666666667);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 60);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 66.6666666666667);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 4);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 3600);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 5.33333333333333);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 0.666666666666667);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 1.0471975511966);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1 * 0.166666666666667);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 216000);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toTurn = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.166666666666667);
+};
+thx_unit_angle__$Sextant_Sextant_$Impl_$.toString = function(this1) {
+	return this1 + "sextant";
+};
+var thx_unit_angle__$Turn_Turn_$Impl_$ = {};
+thx_unit_angle__$Turn_Turn_$Impl_$.__name__ = ["thx","unit","angle","_Turn","Turn_Impl_"];
+thx_unit_angle__$Turn_Turn_$Impl_$.pointToTurn = function(x,y) {
+	var tmp;
+	var tmp1;
+	var value = Math.atan2(y,x);
+	tmp1 = thx_unit_angle__$Radian_Radian_$Impl_$._new(value);
+	var this1 = tmp1;
+	tmp = thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * 0.159154943091895);
+	return tmp;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.floatToTurn = function(value) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(value);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$._new = function(value) {
+	return value;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.cos = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 6.28318530717959);
+	tmp = Math.cos(this2);
+	return tmp;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.sin = function(this1) {
+	var tmp;
+	var this2 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 6.28318530717959);
+	tmp = Math.sin(this2);
+	return tmp;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.abs = function(this1) {
+	var tmp;
+	var value = Math.abs(this1);
+	tmp = thx_unit_angle__$Turn_Turn_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.min = function(this1,other) {
+	var tmp;
+	var value = Math.min(this1,other);
+	tmp = thx_unit_angle__$Turn_Turn_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.max = function(this1,other) {
+	var tmp;
+	var value = Math.max(this1,other);
+	tmp = thx_unit_angle__$Turn_Turn_$Impl_$._new(value);
+	return tmp;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.normalize = function(this1) {
+	var a = this1 % thx_unit_angle__$Turn_Turn_$Impl_$.turn;
+	var tmp;
+	if(a < 0) {
+		var other = thx_unit_angle__$Turn_Turn_$Impl_$._new(a);
+		tmp = thx_unit_angle__$Turn_Turn_$Impl_$._new(thx_unit_angle__$Turn_Turn_$Impl_$.turn + other);
+	} else tmp = thx_unit_angle__$Turn_Turn_$Impl_$._new(a);
+	return tmp;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.normalizeDirection = function(this1) {
+	var a = thx_unit_angle__$Turn_Turn_$Impl_$.normalize(this1);
+	var tmp;
+	var other = thx_unit_angle__$Turn_Turn_$Impl_$._new(180);
+	tmp = a > other;
+	return tmp?thx_unit_angle__$Turn_Turn_$Impl_$._new(a - thx_unit_angle__$Turn_Turn_$Impl_$.turn):a;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.negate = function(this1) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(-this1);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.add = function(this1,other) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 + other);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.subtract = function(this1,other) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 - other);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.multiply = function(this1,other) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 * other);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.divide = function(this1,other) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 / other);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.modulo = function(this1,other) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1 % other);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.equal = function(this1,other) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1) == other;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.nearEquals = function(this1,other) {
+	return Math.abs(this1 - other) <= 10e-10;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.notEqual = function(this1,other) {
+	return thx_unit_angle__$Turn_Turn_$Impl_$._new(this1) != other;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.less = function(this1,other) {
+	return this1 < other;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.lessEqual = function(this1,other) {
+	return this1 <= other;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.more = function(this1,other) {
+	return this1 > other;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.moreEqual = function(this1,other) {
+	return this1 >= other;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toFloat = function(this1) {
+	return this1;
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toBinaryDegree = function(this1) {
+	return thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(this1 * 256);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toDegree = function(this1) {
+	return thx_unit_angle__$Degree_Degree_$Impl_$._new(this1 * 360);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toGrad = function(this1) {
+	return thx_unit_angle__$Grad_Grad_$Impl_$._new(this1 * 400);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toHourAngle = function(this1) {
+	return thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(this1 * 24);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toMinuteOfArc = function(this1) {
+	return thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(this1 * 21600);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toPoint = function(this1) {
+	return thx_unit_angle__$Point_Point_$Impl_$._new(this1 * 32);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toQuadrant = function(this1) {
+	return thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(this1 * 4);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toRadian = function(this1) {
+	return thx_unit_angle__$Radian_Radian_$Impl_$._new(this1 * 6.28318530717959);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toRevolution = function(this1) {
+	return thx_unit_angle__$Revolution_Revolution_$Impl_$._new(this1);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toSecondOfArc = function(this1) {
+	return thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(this1 * 1296000);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toSextant = function(this1) {
+	return thx_unit_angle__$Sextant_Sextant_$Impl_$._new(this1 * 6);
+};
+thx_unit_angle__$Turn_Turn_$Impl_$.toString = function(this1) {
+	return this1 + "τ";
 };
 function $iterator(o) { if( o instanceof Array ) return function() { return HxOverrides.iter(o); }; return typeof(o.iterator) == 'function' ? $bind(o,o.iterator) : o.iterator; }
 var $_, $fid = 0;
@@ -5019,8 +9840,8 @@ if(Array.prototype.indexOf) HxOverrides.indexOf = function(a,o,i) {
 	return Array.prototype.indexOf.call(a,o,i);
 };
 String.prototype.__class__ = String;
-String.__name__ = true;
-Array.__name__ = true;
+String.__name__ = ["String"];
+Array.__name__ = ["Array"];
 var Int = { __name__ : ["Int"]};
 var Dynamic = { __name__ : ["Dynamic"]};
 var Float = Number;
@@ -5050,436 +9871,493 @@ if(Array.prototype.filter == null) Array.prototype.filter = function(f1) {
 	}
 	return a1;
 };
-thx.color.Color.names = new haxe.ds.StringMap();
-var value = thx.color.Color.aliceblue = 15792383;
-thx.color.Color.names.set("aliceblue",value);
-thx.color.Color.names.set("alice blue",thx.color.Color.aliceblue);
-var value1 = thx.color.Color.antiquewhite = 16444375;
-thx.color.Color.names.set("antiquewhite",value1);
-thx.color.Color.names.set("antique white",thx.color.Color.antiquewhite);
-var value2 = thx.color.Color.aqua = 65535;
-thx.color.Color.names.set("aqua",value2);
-var value3 = thx.color.Color.aquamarine = 8388564;
-thx.color.Color.names.set("aquamarine",value3);
-var value4 = thx.color.Color.azure = 15794175;
-thx.color.Color.names.set("azure",value4);
-var value5 = thx.color.Color.beige = 16119260;
-thx.color.Color.names.set("beige",value5);
-var value6 = thx.color.Color.bisque = 16770244;
-thx.color.Color.names.set("bisque",value6);
-var value7 = thx.color.Color.black = 0;
-thx.color.Color.names.set("black",value7);
-var value8 = thx.color.Color.blanchedalmond = 16772045;
-thx.color.Color.names.set("blanchedalmond",value8);
-thx.color.Color.names.set("blanched almond",thx.color.Color.blanchedalmond);
-var value9 = thx.color.Color.blue = 255;
-thx.color.Color.names.set("blue",value9);
-var value10 = thx.color.Color.blueviolet = 9055202;
-thx.color.Color.names.set("blueviolet",value10);
-thx.color.Color.names.set("blue violet",thx.color.Color.blueviolet);
-var value11 = thx.color.Color.brown = 10824234;
-thx.color.Color.names.set("brown",value11);
-var value12 = thx.color.Color.burlywood = 14596231;
-thx.color.Color.names.set("burlywood",value12);
-thx.color.Color.names.set("burly wood",thx.color.Color.burlywood);
-var value13 = thx.color.Color.cadetblue = 6266528;
-thx.color.Color.names.set("cadetblue",value13);
-thx.color.Color.names.set("cadet blue",thx.color.Color.cadetblue);
-var value14 = thx.color.Color.chartreuse = 8388352;
-thx.color.Color.names.set("chartreuse",value14);
-thx.color.Color.names.set("chart reuse",thx.color.Color.chartreuse);
-var value15 = thx.color.Color.chocolate = 13789470;
-thx.color.Color.names.set("chocolate",value15);
-var value16 = thx.color.Color.coral = 16744272;
-thx.color.Color.names.set("coral",value16);
-var value17 = thx.color.Color.cornflowerblue = 6591981;
-thx.color.Color.names.set("cornflowerblue",value17);
-thx.color.Color.names.set("corn flower blue",thx.color.Color.cornflowerblue);
-var value18 = thx.color.Color.cornsilk = 16775388;
-thx.color.Color.names.set("cornsilk",value18);
-thx.color.Color.names.set("corn silk",thx.color.Color.cornsilk);
-var value19 = thx.color.Color.crimson = 14423100;
-thx.color.Color.names.set("crimson",value19);
-var value20 = thx.color.Color.cyan = 65535;
-thx.color.Color.names.set("cyan",value20);
-var value21 = thx.color.Color.darkblue = 139;
-thx.color.Color.names.set("darkblue",value21);
-thx.color.Color.names.set("dark blue",thx.color.Color.darkblue);
-var value22 = thx.color.Color.darkcyan = 35723;
-thx.color.Color.names.set("darkcyan",value22);
-thx.color.Color.names.set("dark cyan",thx.color.Color.darkcyan);
-var value23 = thx.color.Color.darkgoldenrod = 12092939;
-thx.color.Color.names.set("darkgoldenrod",value23);
-thx.color.Color.names.set("dark golden rod",thx.color.Color.darkgoldenrod);
-var value24 = thx.color.Color.darkgray = thx.color.Color.darkgrey = 11119017;
-thx.color.Color.names.set("darkgray",value24);
-thx.color.Color.names.set("dark gray",thx.color.Color.darkgray);
-thx.color.Color.names.set("darkgrey",thx.color.Color.darkgrey);
-thx.color.Color.names.set("dark grey",thx.color.Color.darkgrey);
-var value25 = thx.color.Color.darkgreen = 25600;
-thx.color.Color.names.set("darkgreen",value25);
-thx.color.Color.names.set("dark green",thx.color.Color.darkgreen);
-var value26 = thx.color.Color.darkkhaki = 12433259;
-thx.color.Color.names.set("darkkhaki",value26);
-thx.color.Color.names.set("dark khaki",thx.color.Color.darkkhaki);
-var value27 = thx.color.Color.darkmagenta = 9109643;
-thx.color.Color.names.set("darkmagenta",value27);
-thx.color.Color.names.set("dark magenta",thx.color.Color.darkmagenta);
-var value28 = thx.color.Color.darkolivegreen = 5597999;
-thx.color.Color.names.set("darkolivegreen",value28);
-thx.color.Color.names.set("dark olive green",thx.color.Color.darkolivegreen);
-var value29 = thx.color.Color.darkorange = 16747520;
-thx.color.Color.names.set("darkorange",value29);
-thx.color.Color.names.set("dark orange",thx.color.Color.darkorange);
-var value30 = thx.color.Color.darkorchid = 10040012;
-thx.color.Color.names.set("darkorchid",value30);
-thx.color.Color.names.set("dark orchid",thx.color.Color.darkorchid);
-var value31 = thx.color.Color.darkred = 9109504;
-thx.color.Color.names.set("darkred",value31);
-thx.color.Color.names.set("dark red",thx.color.Color.darkred);
-var value32 = thx.color.Color.darksalmon = 15308410;
-thx.color.Color.names.set("darksalmon",value32);
-thx.color.Color.names.set("dark salmon",thx.color.Color.darksalmon);
-var value33 = thx.color.Color.darkseagreen = 9419919;
-thx.color.Color.names.set("darkseagreen",value33);
-thx.color.Color.names.set("dark sea green",thx.color.Color.darkseagreen);
-var value34 = thx.color.Color.darkslateblue = 4734347;
-thx.color.Color.names.set("darkslateblue",value34);
-thx.color.Color.names.set("dark slate blue",thx.color.Color.darkslateblue);
-var value35 = thx.color.Color.darkslategray = thx.color.Color.darkslategrey = 3100495;
-thx.color.Color.names.set("darkslategray",value35);
-thx.color.Color.names.set("dark slate gray",thx.color.Color.darkslategray);
-thx.color.Color.names.set("darkslategrey",thx.color.Color.darkslategrey);
-thx.color.Color.names.set("dark slate grey",thx.color.Color.darkslategrey);
-var value36 = thx.color.Color.darkturquoise = 52945;
-thx.color.Color.names.set("darkturquoise",value36);
-thx.color.Color.names.set("dark turquoise",thx.color.Color.darkturquoise);
-var value37 = thx.color.Color.darkviolet = 9699539;
-thx.color.Color.names.set("darkviolet",value37);
-thx.color.Color.names.set("dark violet",thx.color.Color.darkviolet);
-var value38 = thx.color.Color.deeppink = 16716947;
-thx.color.Color.names.set("deeppink",value38);
-thx.color.Color.names.set("deep pink",thx.color.Color.deeppink);
-var value39 = thx.color.Color.deepskyblue = 49151;
-thx.color.Color.names.set("deepskyblue",value39);
-thx.color.Color.names.set("deep sky blue",thx.color.Color.deepskyblue);
-var value40 = thx.color.Color.dimgray = thx.color.Color.dimgrey = 6908265;
-thx.color.Color.names.set("dimgray",value40);
-thx.color.Color.names.set("dim gray",thx.color.Color.dimgray);
-thx.color.Color.names.set("dimgrey",thx.color.Color.dimgrey);
-thx.color.Color.names.set("dim grey",thx.color.Color.dimgrey);
-var value41 = thx.color.Color.dodgerblue = 2003199;
-thx.color.Color.names.set("dodgerblue",value41);
-thx.color.Color.names.set("dodger blue",thx.color.Color.dodgerblue);
-var value42 = thx.color.Color.firebrick = 11674146;
-thx.color.Color.names.set("firebrick",value42);
-thx.color.Color.names.set("fire brick",thx.color.Color.firebrick);
-var value43 = thx.color.Color.floralwhite = 16775920;
-thx.color.Color.names.set("floralwhite",value43);
-thx.color.Color.names.set("floral white",thx.color.Color.floralwhite);
-var value44 = thx.color.Color.forestgreen = 2263842;
-thx.color.Color.names.set("forestgreen",value44);
-thx.color.Color.names.set("forest green",thx.color.Color.forestgreen);
-var value45 = thx.color.Color.fuchsia = 16711935;
-thx.color.Color.names.set("fuchsia",value45);
-var value46 = thx.color.Color.gainsboro = 14474460;
-thx.color.Color.names.set("gainsboro",value46);
-var value47 = thx.color.Color.ghostwhite = 16316671;
-thx.color.Color.names.set("ghostwhite",value47);
-thx.color.Color.names.set("ghost white",thx.color.Color.ghostwhite);
-var value48 = thx.color.Color.gold = 16766720;
-thx.color.Color.names.set("gold",value48);
-var value49 = thx.color.Color.goldenrod = 14329120;
-thx.color.Color.names.set("goldenrod",value49);
-thx.color.Color.names.set("golden rod",thx.color.Color.goldenrod);
-var value50 = thx.color.Color.gray = thx.color.Color.grey = 8421504;
-thx.color.Color.names.set("gray",value50);
-thx.color.Color.names.set("grey",thx.color.Color.grey);
-var value51 = thx.color.Color.green = 32768;
-thx.color.Color.names.set("green",value51);
-var value52 = thx.color.Color.greenyellow = 11403055;
-thx.color.Color.names.set("greenyellow",value52);
-thx.color.Color.names.set("green yellow",thx.color.Color.greenyellow);
-var value53 = thx.color.Color.honeydew = 15794160;
-thx.color.Color.names.set("honeydew",value53);
-thx.color.Color.names.set("honey dew",thx.color.Color.honeydew);
-var value54 = thx.color.Color.hotpink = 16738740;
-thx.color.Color.names.set("hotpink",value54);
-thx.color.Color.names.set("hot pink",thx.color.Color.hotpink);
-var value55 = thx.color.Color.indianred = 13458524;
-thx.color.Color.names.set("indianred",value55);
-thx.color.Color.names.set("indian red",thx.color.Color.indianred);
-var value56 = thx.color.Color.indigo = 4915330;
-thx.color.Color.names.set("indigo",value56);
-var value57 = thx.color.Color.ivory = 16777200;
-thx.color.Color.names.set("ivory",value57);
-var value58 = thx.color.Color.khaki = 15787660;
-thx.color.Color.names.set("khaki",value58);
-var value59 = thx.color.Color.lavender = 15132410;
-thx.color.Color.names.set("lavender",value59);
-var value60 = thx.color.Color.lavenderblush = 16773365;
-thx.color.Color.names.set("lavenderblush",value60);
-thx.color.Color.names.set("lavender blush",thx.color.Color.lavenderblush);
-var value61 = thx.color.Color.lawngreen = 8190976;
-thx.color.Color.names.set("lawngreen",value61);
-thx.color.Color.names.set("lawn green",thx.color.Color.lawngreen);
-var value62 = thx.color.Color.lemonchiffon = 16775885;
-thx.color.Color.names.set("lemonchiffon",value62);
-thx.color.Color.names.set("lemon chiffon",thx.color.Color.lemonchiffon);
-var value63 = thx.color.Color.lightblue = 11393254;
-thx.color.Color.names.set("lightblue",value63);
-thx.color.Color.names.set("light blue",thx.color.Color.lightblue);
-var value64 = thx.color.Color.lightcoral = 15761536;
-thx.color.Color.names.set("lightcoral",value64);
-thx.color.Color.names.set("light coral",thx.color.Color.lightcoral);
-var value65 = thx.color.Color.lightcyan = 14745599;
-thx.color.Color.names.set("lightcyan",value65);
-thx.color.Color.names.set("light cyan",thx.color.Color.lightcyan);
-var value66 = thx.color.Color.lightgoldenrodyellow = 16448210;
-thx.color.Color.names.set("lightgoldenrodyellow",value66);
-thx.color.Color.names.set("light golden rod yellow",thx.color.Color.lightgoldenrodyellow);
-var value67 = thx.color.Color.lightgray = thx.color.Color.lightgrey = 13882323;
-thx.color.Color.names.set("lightgray",value67);
-thx.color.Color.names.set("light gray",thx.color.Color.lightgray);
-thx.color.Color.names.set("lightgrey",thx.color.Color.lightgrey);
-thx.color.Color.names.set("light grey",thx.color.Color.lightgrey);
-var value68 = thx.color.Color.lightgreen = 9498256;
-thx.color.Color.names.set("lightgreen",value68);
-thx.color.Color.names.set("light green",thx.color.Color.lightgreen);
-var value69 = thx.color.Color.lightpink = 16758465;
-thx.color.Color.names.set("lightpink",value69);
-thx.color.Color.names.set("light pink",thx.color.Color.lightpink);
-var value70 = thx.color.Color.lightsalmon = 16752762;
-thx.color.Color.names.set("lightsalmon",value70);
-thx.color.Color.names.set("light salmon",thx.color.Color.lightsalmon);
-var value71 = thx.color.Color.lightseagreen = 2142890;
-thx.color.Color.names.set("lightseagreen",value71);
-thx.color.Color.names.set("light sea green",thx.color.Color.lightseagreen);
-var value72 = thx.color.Color.lightskyblue = 8900346;
-thx.color.Color.names.set("lightskyblue",value72);
-thx.color.Color.names.set("light sky blue",thx.color.Color.lightskyblue);
-var value73 = thx.color.Color.lightslategray = thx.color.Color.lightslategrey = 7833753;
-thx.color.Color.names.set("lightslategray",value73);
-thx.color.Color.names.set("light slate gray",thx.color.Color.lightslategray);
-thx.color.Color.names.set("lightslategrey",thx.color.Color.lightslategrey);
-thx.color.Color.names.set("light slate grey",thx.color.Color.lightslategrey);
-var value74 = thx.color.Color.lightsteelblue = 11584734;
-thx.color.Color.names.set("lightsteelblue",value74);
-thx.color.Color.names.set("light steel blue",thx.color.Color.lightsteelblue);
-var value75 = thx.color.Color.lightyellow = 16777184;
-thx.color.Color.names.set("lightyellow",value75);
-thx.color.Color.names.set("light yellow",thx.color.Color.lightyellow);
-var value76 = thx.color.Color.lime = 65280;
-thx.color.Color.names.set("lime",value76);
-var value77 = thx.color.Color.limegreen = 3329330;
-thx.color.Color.names.set("limegreen",value77);
-thx.color.Color.names.set("lime green",thx.color.Color.limegreen);
-var value78 = thx.color.Color.linen = 16445670;
-thx.color.Color.names.set("linen",value78);
-var value79 = thx.color.Color.magenta = 16711935;
-thx.color.Color.names.set("magenta",value79);
-var value80 = thx.color.Color.maroon = 8388608;
-thx.color.Color.names.set("maroon",value80);
-var value81 = thx.color.Color.mediumaquamarine = 6737322;
-thx.color.Color.names.set("mediumaquamarine",value81);
-thx.color.Color.names.set("mediuma quamarine",thx.color.Color.mediumaquamarine);
-var value82 = thx.color.Color.mediumblue = 205;
-thx.color.Color.names.set("mediumblue",value82);
-thx.color.Color.names.set("medium blue",thx.color.Color.mediumblue);
-var value83 = thx.color.Color.mediumorchid = 12211667;
-thx.color.Color.names.set("mediumorchid",value83);
-thx.color.Color.names.set("medium orchid",thx.color.Color.mediumorchid);
-var value84 = thx.color.Color.mediumpurple = 9662683;
-thx.color.Color.names.set("mediumpurple",value84);
-thx.color.Color.names.set("medium purple",thx.color.Color.mediumpurple);
-var value85 = thx.color.Color.mediumseagreen = 3978097;
-thx.color.Color.names.set("mediumseagreen",value85);
-thx.color.Color.names.set("medium sea green",thx.color.Color.mediumseagreen);
-var value86 = thx.color.Color.mediumslateblue = 8087790;
-thx.color.Color.names.set("mediumslateblue",value86);
-thx.color.Color.names.set("medium slate blue",thx.color.Color.mediumslateblue);
-var value87 = thx.color.Color.mediumspringgreen = 64154;
-thx.color.Color.names.set("mediumspringgreen",value87);
-thx.color.Color.names.set("medium spring green",thx.color.Color.mediumspringgreen);
-var value88 = thx.color.Color.mediumturquoise = 4772300;
-thx.color.Color.names.set("mediumturquoise",value88);
-thx.color.Color.names.set("medium turquoise",thx.color.Color.mediumturquoise);
-var value89 = thx.color.Color.mediumvioletred = 13047173;
-thx.color.Color.names.set("mediumvioletred",value89);
-thx.color.Color.names.set("medium violet red",thx.color.Color.mediumvioletred);
-var value90 = thx.color.Color.midnightblue = 1644912;
-thx.color.Color.names.set("midnightblue",value90);
-thx.color.Color.names.set("midnight blue",thx.color.Color.midnightblue);
-var value91 = thx.color.Color.mintcream = 16121850;
-thx.color.Color.names.set("mintcream",value91);
-thx.color.Color.names.set("mint cream",thx.color.Color.mintcream);
-var value92 = thx.color.Color.mistyrose = 16770273;
-thx.color.Color.names.set("mistyrose",value92);
-thx.color.Color.names.set("misty rose",thx.color.Color.mistyrose);
-var value93 = thx.color.Color.moccasin = 16770229;
-thx.color.Color.names.set("moccasin",value93);
-var value94 = thx.color.Color.navajowhite = 16768685;
-thx.color.Color.names.set("navajowhite",value94);
-thx.color.Color.names.set("navajo white",thx.color.Color.navajowhite);
-var value95 = thx.color.Color.navy = 128;
-thx.color.Color.names.set("navy",value95);
-var value96 = thx.color.Color.oldlace = 16643558;
-thx.color.Color.names.set("oldlace",value96);
-thx.color.Color.names.set("old lace",thx.color.Color.oldlace);
-var value97 = thx.color.Color.olive = 8421376;
-thx.color.Color.names.set("olive",value97);
-var value98 = thx.color.Color.olivedrab = 7048739;
-thx.color.Color.names.set("olivedrab",value98);
-thx.color.Color.names.set("olive drab",thx.color.Color.olivedrab);
-var value99 = thx.color.Color.orange = 16753920;
-thx.color.Color.names.set("orange",value99);
-var value100 = thx.color.Color.orangered = 16729344;
-thx.color.Color.names.set("orangered",value100);
-thx.color.Color.names.set("orange red",thx.color.Color.orangered);
-var value101 = thx.color.Color.orchid = 14315734;
-thx.color.Color.names.set("orchid",value101);
-var value102 = thx.color.Color.palegoldenrod = 15657130;
-thx.color.Color.names.set("palegoldenrod",value102);
-thx.color.Color.names.set("pale golden rod",thx.color.Color.palegoldenrod);
-var value103 = thx.color.Color.palegreen = 10025880;
-thx.color.Color.names.set("palegreen",value103);
-thx.color.Color.names.set("pale green",thx.color.Color.palegreen);
-var value104 = thx.color.Color.paleturquoise = 11529966;
-thx.color.Color.names.set("paleturquoise",value104);
-thx.color.Color.names.set("pale turquoise",thx.color.Color.paleturquoise);
-var value105 = thx.color.Color.palevioletred = 14381203;
-thx.color.Color.names.set("palevioletred",value105);
-thx.color.Color.names.set("pale violet red",thx.color.Color.palevioletred);
-var value106 = thx.color.Color.papayawhip = 16773077;
-thx.color.Color.names.set("papayawhip",value106);
-thx.color.Color.names.set("papaya whip",thx.color.Color.papayawhip);
-var value107 = thx.color.Color.peachpuff = 16767673;
-thx.color.Color.names.set("peachpuff",value107);
-thx.color.Color.names.set("peach puff",thx.color.Color.peachpuff);
-var value108 = thx.color.Color.peru = 13468991;
-thx.color.Color.names.set("peru",value108);
-var value109 = thx.color.Color.pink = 16761035;
-thx.color.Color.names.set("pink",value109);
-var value110 = thx.color.Color.plum = 14524637;
-thx.color.Color.names.set("plum",value110);
-var value111 = thx.color.Color.powderblue = 11591910;
-thx.color.Color.names.set("powderblue",value111);
-thx.color.Color.names.set("powder blue",thx.color.Color.powderblue);
-var value112 = thx.color.Color.purple = 8388736;
-thx.color.Color.names.set("purple",value112);
-var value113 = thx.color.Color.red = 16711680;
-thx.color.Color.names.set("red",value113);
-var value114 = thx.color.Color.rosybrown = 12357519;
-thx.color.Color.names.set("rosybrown",value114);
-thx.color.Color.names.set("rosy brown",thx.color.Color.rosybrown);
-var value115 = thx.color.Color.royalblue = 4286945;
-thx.color.Color.names.set("royalblue",value115);
-thx.color.Color.names.set("royal blue",thx.color.Color.royalblue);
-var value116 = thx.color.Color.saddlebrown = 9127187;
-thx.color.Color.names.set("saddlebrown",value116);
-thx.color.Color.names.set("saddle brown",thx.color.Color.saddlebrown);
-var value117 = thx.color.Color.salmon = 16416882;
-thx.color.Color.names.set("salmon",value117);
-var value118 = thx.color.Color.sandybrown = 16032864;
-thx.color.Color.names.set("sandybrown",value118);
-thx.color.Color.names.set("sandy brown",thx.color.Color.sandybrown);
-var value119 = thx.color.Color.seagreen = 3050327;
-thx.color.Color.names.set("seagreen",value119);
-thx.color.Color.names.set("sea green",thx.color.Color.seagreen);
-var value120 = thx.color.Color.seashell = 16774638;
-thx.color.Color.names.set("seashell",value120);
-thx.color.Color.names.set("sea shell",thx.color.Color.seashell);
-var value121 = thx.color.Color.sienna = 10506797;
-thx.color.Color.names.set("sienna",value121);
-var value122 = thx.color.Color.silver = 12632256;
-thx.color.Color.names.set("silver",value122);
-var value123 = thx.color.Color.skyblue = 8900331;
-thx.color.Color.names.set("skyblue",value123);
-thx.color.Color.names.set("sky blue",thx.color.Color.skyblue);
-var value124 = thx.color.Color.slateblue = 6970061;
-thx.color.Color.names.set("slateblue",value124);
-thx.color.Color.names.set("slate blue",thx.color.Color.slateblue);
-var value125 = thx.color.Color.slategray = thx.color.Color.slategrey = 7372944;
-thx.color.Color.names.set("slategray",value125);
-thx.color.Color.names.set("slate gray",thx.color.Color.slategray);
-thx.color.Color.names.set("slategrey",thx.color.Color.slategrey);
-thx.color.Color.names.set("slate grey",thx.color.Color.slategrey);
-var value126 = thx.color.Color.snow = 16775930;
-thx.color.Color.names.set("snow",value126);
-var value127 = thx.color.Color.springgreen = 65407;
-thx.color.Color.names.set("springgreen",value127);
-thx.color.Color.names.set("spring green",thx.color.Color.springgreen);
-var value128 = thx.color.Color.steelblue = 4620980;
-thx.color.Color.names.set("steelblue",value128);
-thx.color.Color.names.set("steel blue",thx.color.Color.steelblue);
-var value129 = thx.color.Color.tan = 13808780;
-thx.color.Color.names.set("tan",value129);
-var value130 = thx.color.Color.teal = 32896;
-thx.color.Color.names.set("teal",value130);
-var value131 = thx.color.Color.thistle = 14204888;
-thx.color.Color.names.set("thistle",value131);
-var value132 = thx.color.Color.tomato = 16737095;
-thx.color.Color.names.set("tomato",value132);
-var value133 = thx.color.Color.turquoise = 4251856;
-thx.color.Color.names.set("turquoise",value133);
-var value134 = thx.color.Color.violet = 15631086;
-thx.color.Color.names.set("violet",value134);
-var value135 = thx.color.Color.wheat = 16113331;
-thx.color.Color.names.set("wheat",value135);
-var value136 = thx.color.Color.white = 16777215;
-thx.color.Color.names.set("white",value136);
-var value137 = thx.color.Color.whitesmoke = 16119285;
-thx.color.Color.names.set("whitesmoke",value137);
-thx.color.Color.names.set("white smoke",thx.color.Color.whitesmoke);
-var value138 = thx.color.Color.yellow = 16776960;
-thx.color.Color.names.set("yellow",value138);
-var value139 = thx.color.Color.yellowgreen = 10145074;
-thx.color.Color.names.set("yellowgreen",value139);
-thx.color.Color.names.set("yellow green",thx.color.Color.yellowgreen);
-chad.render._Cap.Cap_Impl_.butt = "butt";
-chad.render._Cap.Cap_Impl_.round = "round";
-chad.render._Cap.Cap_Impl_.square = "square";
-chad.render._Join.Join_Impl_.miter = "miter";
-chad.render._Join.Join_Impl_.round = "round";
-chad.render._Join.Join_Impl_.bevel = "bevel";
-chad.render.LineStyle.defaultColor = -16777216;
-thx.color._Grey.Grey_Impl_.black = (function($this) {
-	var $r;
-	var this1;
-	this1 = 0;
-	$r = this1;
-	return $r;
-}(this));
-thx.color._Grey.Grey_Impl_.white = (function($this) {
-	var $r;
-	var this1;
-	this1 = 1;
-	$r = this1;
-	return $r;
-}(this));
-thx.color.parse.ColorParser.parser = new thx.color.parse.ColorParser();
-thx.color.parse.ColorParser.isPureHex = new EReg("^([0-9a-f]{2}){3,4}$","i");
-thx.core.Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
-thx.core.Ints.pattern_parse = new EReg("^[+-]?(\\d+|0x[0-9A-F]+)$","i");
-thx.geom.Const.EPSILON = 1e-5;
-thx.geom.Const.KAPPA = 0.5522847498307936;
-thx.geom.EdgeCubic.NEAR_FLAT = 1.001;
-thx.geom._Matrix4x4.Matrix4x4_Impl_.identity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
-thx.geom.Plane.COPLANAR = 0;
-thx.geom.Plane.FRONT = 1;
-thx.geom.Plane.BACK = 2;
-thx.geom.Plane.SPANNING = 3;
-thx.geom._Point3D.Point3D_Impl_.zero = [0,0,0];
-thx.geom.OrthoNormalBasis.z0Plane = new thx.geom.OrthoNormalBasis(new thx.geom.Plane([0,0,1],0),[1,0,0]);
-thx.geom._Point.Point_Impl_.zero = [0,0];
-thx.geom.Transformables.MX = new thx.geom.Plane([1,0,0],0);
-thx.geom.Transformables.MY = new thx.geom.Plane([0,1,0],0);
-thx.geom.Transformables.MZ = new thx.geom.Plane([0,0,1],0);
-thx.geom.shape._Circle.Circle_Impl_.unitaryCircle = new thx.geom.Spline([new thx.geom.SplineNode([1,0],[1,-0.552284749830793564],[1,0.5522847498307936]),new thx.geom.SplineNode([0,-1],[-0.552284749830793564,-1],[0.5522847498307936,-1]),new thx.geom.SplineNode([-1,0],[-1,0.5522847498307936],[-1,-0.552284749830793564]),new thx.geom.SplineNode([0,1],[0.5522847498307936,1],[-0.552284749830793564,1])],true);
-thx.math.Number.TOLERANCE = 10e-5;
-thx.math.Number.EPSILON = 10e-10;
-thx.math.Number.abscissas = [[0.5773502691896257645091488],[0,0.7745966692414833770358531],[0.3399810435848562648026658,0.8611363115940525752239465],[0,0.5384693101056830910363144,0.9061798459386639927976269],[0.2386191860831969086305017,0.6612093864662645136613996,0.9324695142031520278123016],[0,0.4058451513773971669066064,0.7415311855993944398638648,0.9491079123427585245261897],[0.1834346424956498049394761,0.5255324099163289858177390,0.7966664774136267395915539,0.9602898564975362316835609],[0,0.3242534234038089290385380,0.6133714327005903973087020,0.8360311073266357942994298,0.9681602395076260898355762],[0.1488743389816312108848260,0.4333953941292471907992659,0.6794095682990244062343274,0.8650633666889845107320967,0.9739065285171717200779640],[0,0.2695431559523449723315320,0.5190961292068118159257257,0.7301520055740493240934163,0.8870625997680952990751578,0.9782286581460569928039380],[0.1252334085114689154724414,0.3678314989981801937526915,0.5873179542866174472967024,0.7699026741943046870368938,0.9041172563704748566784659,0.9815606342467192506905491],[0,0.2304583159551347940655281,0.4484927510364468528779129,0.6423493394403402206439846,0.8015780907333099127942065,0.9175983992229779652065478,0.9841830547185881494728294],[0.1080549487073436620662447,0.3191123689278897604356718,0.5152486363581540919652907,0.6872929048116854701480198,0.8272013150697649931897947,0.9284348836635735173363911,0.9862838086968123388415973],[0,0.2011940939974345223006283,0.3941513470775633698972074,0.5709721726085388475372267,0.7244177313601700474161861,0.8482065834104272162006483,0.9372733924007059043077589,0.9879925180204854284895657],[0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]];
-thx.math.Number.weights = [[1.0],[0.8888888888888888888888889,0.5555555555555555555555556],[0.6521451548625461426269361,0.3478548451374538573730639],[0.5688888888888888888888889,0.4786286704993664680412915,0.2369268850561890875142640],[0.4679139345726910473898703,0.3607615730481386075698335,0.1713244923791703450402961],[0.4179591836734693877551020,0.3818300505051189449503698,0.2797053914892766679014678,0.1294849661688696932706114],[0.3626837833783619829651504,0.3137066458778872873379622,0.2223810344533744705443560,0.1012285362903762591525314],[0.3302393550012597631645251,0.3123470770400028400686304,0.2606106964029354623187429,0.1806481606948574040584720,0.0812743883615744119718922],[0.2955242247147528701738930,0.2692667193099963550912269,0.2190863625159820439955349,0.1494513491505805931457763,0.0666713443086881375935688],[0.2729250867779006307144835,0.2628045445102466621806889,0.2331937645919904799185237,0.1862902109277342514260976,0.1255803694649046246346943,0.0556685671161736664827537],[0.2491470458134027850005624,0.2334925365383548087608499,0.2031674267230659217490645,0.1600783285433462263346525,0.1069393259953184309602547,0.0471753363865118271946160],[0.2325515532308739101945895,0.2262831802628972384120902,0.2078160475368885023125232,0.1781459807619457382800467,0.1388735102197872384636018,0.0921214998377284479144218,0.0404840047653158795200216],[0.2152638534631577901958764,0.2051984637212956039659241,0.1855383974779378137417166,0.1572031671581935345696019,0.1215185706879031846894148,0.0801580871597602098056333,0.0351194603317518630318329],[0.2025782419255612728806202,0.1984314853271115764561183,0.1861610000155622110268006,0.1662692058169939335532009,0.1395706779261543144478048,0.1071592204671719350118695,0.0703660474881081247092674,0.0307532419961172683546284],[0.1894506104550684962853967,0.1826034150449235888667637,0.1691565193950025381893121,0.1495959888165767320815017,0.1246289712555338720524763,0.0951585116824927848099251,0.0622535239386478928628438,0.0271524594117540948517806]];
-thx.unit.angle.Const.TO_DEGREE = 180 / Math.PI;
+thx_color_Color.names = new haxe_ds_StringMap();
+var value = thx_color_Color.aliceblue = 15792383;
+thx_color_Color.names.h["$" + "aliceblue"] = value;
+thx_color_Color.names.h["$" + "alice blue"] = thx_color_Color.aliceblue;
+var value1 = thx_color_Color.antiquewhite = 16444375;
+thx_color_Color.names.h["$" + "antiquewhite"] = value1;
+thx_color_Color.names.h["$" + "antique white"] = thx_color_Color.antiquewhite;
+var value2 = thx_color_Color.aqua = 65535;
+thx_color_Color.names.h["$" + "aqua"] = value2;
+var value3 = thx_color_Color.aquamarine = 8388564;
+thx_color_Color.names.h["$" + "aquamarine"] = value3;
+var value4 = thx_color_Color.azure = 15794175;
+thx_color_Color.names.h["$" + "azure"] = value4;
+var value5 = thx_color_Color.beige = 16119260;
+thx_color_Color.names.h["$" + "beige"] = value5;
+var value6 = thx_color_Color.bisque = 16770244;
+thx_color_Color.names.h["$" + "bisque"] = value6;
+var value7 = thx_color_Color.black = 0;
+thx_color_Color.names.h["$" + "black"] = value7;
+var value8 = thx_color_Color.blanchedalmond = 16772045;
+thx_color_Color.names.h["$" + "blanchedalmond"] = value8;
+thx_color_Color.names.h["$" + "blanched almond"] = thx_color_Color.blanchedalmond;
+var value9 = thx_color_Color.blue = 255;
+thx_color_Color.names.h["$" + "blue"] = value9;
+var value10 = thx_color_Color.blueviolet = 9055202;
+thx_color_Color.names.h["$" + "blueviolet"] = value10;
+thx_color_Color.names.h["$" + "blue violet"] = thx_color_Color.blueviolet;
+var value11 = thx_color_Color.brown = 10824234;
+thx_color_Color.names.h["$" + "brown"] = value11;
+var value12 = thx_color_Color.burlywood = 14596231;
+thx_color_Color.names.h["$" + "burlywood"] = value12;
+thx_color_Color.names.h["$" + "burly wood"] = thx_color_Color.burlywood;
+var value13 = thx_color_Color.cadetblue = 6266528;
+thx_color_Color.names.h["$" + "cadetblue"] = value13;
+thx_color_Color.names.h["$" + "cadet blue"] = thx_color_Color.cadetblue;
+var value14 = thx_color_Color.chartreuse = 8388352;
+thx_color_Color.names.h["$" + "chartreuse"] = value14;
+thx_color_Color.names.h["$" + "chart reuse"] = thx_color_Color.chartreuse;
+var value15 = thx_color_Color.chocolate = 13789470;
+thx_color_Color.names.h["$" + "chocolate"] = value15;
+var value16 = thx_color_Color.coral = 16744272;
+thx_color_Color.names.h["$" + "coral"] = value16;
+var value17 = thx_color_Color.cornflowerblue = 6591981;
+thx_color_Color.names.h["$" + "cornflowerblue"] = value17;
+thx_color_Color.names.h["$" + "corn flower blue"] = thx_color_Color.cornflowerblue;
+var value18 = thx_color_Color.cornsilk = 16775388;
+thx_color_Color.names.h["$" + "cornsilk"] = value18;
+thx_color_Color.names.h["$" + "corn silk"] = thx_color_Color.cornsilk;
+var value19 = thx_color_Color.crimson = 14423100;
+thx_color_Color.names.h["$" + "crimson"] = value19;
+var value20 = thx_color_Color.cyan = 65535;
+thx_color_Color.names.h["$" + "cyan"] = value20;
+var value21 = thx_color_Color.darkblue = 139;
+thx_color_Color.names.h["$" + "darkblue"] = value21;
+thx_color_Color.names.h["$" + "dark blue"] = thx_color_Color.darkblue;
+var value22 = thx_color_Color.darkcyan = 35723;
+thx_color_Color.names.h["$" + "darkcyan"] = value22;
+thx_color_Color.names.h["$" + "dark cyan"] = thx_color_Color.darkcyan;
+var value23 = thx_color_Color.darkgoldenrod = 12092939;
+thx_color_Color.names.h["$" + "darkgoldenrod"] = value23;
+thx_color_Color.names.h["$" + "dark golden rod"] = thx_color_Color.darkgoldenrod;
+var value24 = thx_color_Color.darkgray = thx_color_Color.darkgrey = 11119017;
+thx_color_Color.names.h["$" + "darkgray"] = value24;
+thx_color_Color.names.h["$" + "dark gray"] = thx_color_Color.darkgray;
+thx_color_Color.names.h["$" + "darkgrey"] = thx_color_Color.darkgrey;
+thx_color_Color.names.h["$" + "dark grey"] = thx_color_Color.darkgrey;
+var value25 = thx_color_Color.darkgreen = 25600;
+thx_color_Color.names.h["$" + "darkgreen"] = value25;
+thx_color_Color.names.h["$" + "dark green"] = thx_color_Color.darkgreen;
+var value26 = thx_color_Color.darkkhaki = 12433259;
+thx_color_Color.names.h["$" + "darkkhaki"] = value26;
+thx_color_Color.names.h["$" + "dark khaki"] = thx_color_Color.darkkhaki;
+var value27 = thx_color_Color.darkmagenta = 9109643;
+thx_color_Color.names.h["$" + "darkmagenta"] = value27;
+thx_color_Color.names.h["$" + "dark magenta"] = thx_color_Color.darkmagenta;
+var value28 = thx_color_Color.darkolivegreen = 5597999;
+thx_color_Color.names.h["$" + "darkolivegreen"] = value28;
+thx_color_Color.names.h["$" + "dark olive green"] = thx_color_Color.darkolivegreen;
+var value29 = thx_color_Color.darkorange = 16747520;
+thx_color_Color.names.h["$" + "darkorange"] = value29;
+thx_color_Color.names.h["$" + "dark orange"] = thx_color_Color.darkorange;
+var value30 = thx_color_Color.darkorchid = 10040012;
+thx_color_Color.names.h["$" + "darkorchid"] = value30;
+thx_color_Color.names.h["$" + "dark orchid"] = thx_color_Color.darkorchid;
+var value31 = thx_color_Color.darkred = 9109504;
+thx_color_Color.names.h["$" + "darkred"] = value31;
+thx_color_Color.names.h["$" + "dark red"] = thx_color_Color.darkred;
+var value32 = thx_color_Color.darksalmon = 15308410;
+thx_color_Color.names.h["$" + "darksalmon"] = value32;
+thx_color_Color.names.h["$" + "dark salmon"] = thx_color_Color.darksalmon;
+var value33 = thx_color_Color.darkseagreen = 9419919;
+thx_color_Color.names.h["$" + "darkseagreen"] = value33;
+thx_color_Color.names.h["$" + "dark sea green"] = thx_color_Color.darkseagreen;
+var value34 = thx_color_Color.darkslateblue = 4734347;
+thx_color_Color.names.h["$" + "darkslateblue"] = value34;
+thx_color_Color.names.h["$" + "dark slate blue"] = thx_color_Color.darkslateblue;
+var value35 = thx_color_Color.darkslategray = thx_color_Color.darkslategrey = 3100495;
+thx_color_Color.names.h["$" + "darkslategray"] = value35;
+thx_color_Color.names.h["$" + "dark slate gray"] = thx_color_Color.darkslategray;
+thx_color_Color.names.h["$" + "darkslategrey"] = thx_color_Color.darkslategrey;
+thx_color_Color.names.h["$" + "dark slate grey"] = thx_color_Color.darkslategrey;
+var value36 = thx_color_Color.darkturquoise = 52945;
+thx_color_Color.names.h["$" + "darkturquoise"] = value36;
+thx_color_Color.names.h["$" + "dark turquoise"] = thx_color_Color.darkturquoise;
+var value37 = thx_color_Color.darkviolet = 9699539;
+thx_color_Color.names.h["$" + "darkviolet"] = value37;
+thx_color_Color.names.h["$" + "dark violet"] = thx_color_Color.darkviolet;
+var value38 = thx_color_Color.deeppink = 16716947;
+thx_color_Color.names.h["$" + "deeppink"] = value38;
+thx_color_Color.names.h["$" + "deep pink"] = thx_color_Color.deeppink;
+var value39 = thx_color_Color.deepskyblue = 49151;
+thx_color_Color.names.h["$" + "deepskyblue"] = value39;
+thx_color_Color.names.h["$" + "deep sky blue"] = thx_color_Color.deepskyblue;
+var value40 = thx_color_Color.dimgray = thx_color_Color.dimgrey = 6908265;
+thx_color_Color.names.h["$" + "dimgray"] = value40;
+thx_color_Color.names.h["$" + "dim gray"] = thx_color_Color.dimgray;
+thx_color_Color.names.h["$" + "dimgrey"] = thx_color_Color.dimgrey;
+thx_color_Color.names.h["$" + "dim grey"] = thx_color_Color.dimgrey;
+var value41 = thx_color_Color.dodgerblue = 2003199;
+thx_color_Color.names.h["$" + "dodgerblue"] = value41;
+thx_color_Color.names.h["$" + "dodger blue"] = thx_color_Color.dodgerblue;
+var value42 = thx_color_Color.firebrick = 11674146;
+thx_color_Color.names.h["$" + "firebrick"] = value42;
+thx_color_Color.names.h["$" + "fire brick"] = thx_color_Color.firebrick;
+var value43 = thx_color_Color.floralwhite = 16775920;
+thx_color_Color.names.h["$" + "floralwhite"] = value43;
+thx_color_Color.names.h["$" + "floral white"] = thx_color_Color.floralwhite;
+var value44 = thx_color_Color.forestgreen = 2263842;
+thx_color_Color.names.h["$" + "forestgreen"] = value44;
+thx_color_Color.names.h["$" + "forest green"] = thx_color_Color.forestgreen;
+var value45 = thx_color_Color.fuchsia = 16711935;
+thx_color_Color.names.h["$" + "fuchsia"] = value45;
+var value46 = thx_color_Color.gainsboro = 14474460;
+thx_color_Color.names.h["$" + "gainsboro"] = value46;
+var value47 = thx_color_Color.ghostwhite = 16316671;
+thx_color_Color.names.h["$" + "ghostwhite"] = value47;
+thx_color_Color.names.h["$" + "ghost white"] = thx_color_Color.ghostwhite;
+var value48 = thx_color_Color.gold = 16766720;
+thx_color_Color.names.h["$" + "gold"] = value48;
+var value49 = thx_color_Color.goldenrod = 14329120;
+thx_color_Color.names.h["$" + "goldenrod"] = value49;
+thx_color_Color.names.h["$" + "golden rod"] = thx_color_Color.goldenrod;
+var value50 = thx_color_Color.gray = thx_color_Color.grey = 8421504;
+thx_color_Color.names.h["$" + "gray"] = value50;
+thx_color_Color.names.h["$" + "grey"] = thx_color_Color.grey;
+var value51 = thx_color_Color.green = 32768;
+thx_color_Color.names.h["$" + "green"] = value51;
+var value52 = thx_color_Color.greenyellow = 11403055;
+thx_color_Color.names.h["$" + "greenyellow"] = value52;
+thx_color_Color.names.h["$" + "green yellow"] = thx_color_Color.greenyellow;
+var value53 = thx_color_Color.honeydew = 15794160;
+thx_color_Color.names.h["$" + "honeydew"] = value53;
+thx_color_Color.names.h["$" + "honey dew"] = thx_color_Color.honeydew;
+var value54 = thx_color_Color.hotpink = 16738740;
+thx_color_Color.names.h["$" + "hotpink"] = value54;
+thx_color_Color.names.h["$" + "hot pink"] = thx_color_Color.hotpink;
+var value55 = thx_color_Color.indianred = 13458524;
+thx_color_Color.names.h["$" + "indianred"] = value55;
+thx_color_Color.names.h["$" + "indian red"] = thx_color_Color.indianred;
+var value56 = thx_color_Color.indigo = 4915330;
+thx_color_Color.names.h["$" + "indigo"] = value56;
+var value57 = thx_color_Color.ivory = 16777200;
+thx_color_Color.names.h["$" + "ivory"] = value57;
+var value58 = thx_color_Color.khaki = 15787660;
+thx_color_Color.names.h["$" + "khaki"] = value58;
+var value59 = thx_color_Color.lavender = 15132410;
+thx_color_Color.names.h["$" + "lavender"] = value59;
+var value60 = thx_color_Color.lavenderblush = 16773365;
+thx_color_Color.names.h["$" + "lavenderblush"] = value60;
+thx_color_Color.names.h["$" + "lavender blush"] = thx_color_Color.lavenderblush;
+var value61 = thx_color_Color.lawngreen = 8190976;
+thx_color_Color.names.h["$" + "lawngreen"] = value61;
+thx_color_Color.names.h["$" + "lawn green"] = thx_color_Color.lawngreen;
+var value62 = thx_color_Color.lemonchiffon = 16775885;
+thx_color_Color.names.h["$" + "lemonchiffon"] = value62;
+thx_color_Color.names.h["$" + "lemon chiffon"] = thx_color_Color.lemonchiffon;
+var value63 = thx_color_Color.lightblue = 11393254;
+thx_color_Color.names.h["$" + "lightblue"] = value63;
+thx_color_Color.names.h["$" + "light blue"] = thx_color_Color.lightblue;
+var value64 = thx_color_Color.lightcoral = 15761536;
+thx_color_Color.names.h["$" + "lightcoral"] = value64;
+thx_color_Color.names.h["$" + "light coral"] = thx_color_Color.lightcoral;
+var value65 = thx_color_Color.lightcyan = 14745599;
+thx_color_Color.names.h["$" + "lightcyan"] = value65;
+thx_color_Color.names.h["$" + "light cyan"] = thx_color_Color.lightcyan;
+var value66 = thx_color_Color.lightgoldenrodyellow = 16448210;
+thx_color_Color.names.h["$" + "lightgoldenrodyellow"] = value66;
+thx_color_Color.names.h["$" + "light golden rod yellow"] = thx_color_Color.lightgoldenrodyellow;
+var value67 = thx_color_Color.lightgray = thx_color_Color.lightgrey = 13882323;
+thx_color_Color.names.h["$" + "lightgray"] = value67;
+thx_color_Color.names.h["$" + "light gray"] = thx_color_Color.lightgray;
+thx_color_Color.names.h["$" + "lightgrey"] = thx_color_Color.lightgrey;
+thx_color_Color.names.h["$" + "light grey"] = thx_color_Color.lightgrey;
+var value68 = thx_color_Color.lightgreen = 9498256;
+thx_color_Color.names.h["$" + "lightgreen"] = value68;
+thx_color_Color.names.h["$" + "light green"] = thx_color_Color.lightgreen;
+var value69 = thx_color_Color.lightpink = 16758465;
+thx_color_Color.names.h["$" + "lightpink"] = value69;
+thx_color_Color.names.h["$" + "light pink"] = thx_color_Color.lightpink;
+var value70 = thx_color_Color.lightsalmon = 16752762;
+thx_color_Color.names.h["$" + "lightsalmon"] = value70;
+thx_color_Color.names.h["$" + "light salmon"] = thx_color_Color.lightsalmon;
+var value71 = thx_color_Color.lightseagreen = 2142890;
+thx_color_Color.names.h["$" + "lightseagreen"] = value71;
+thx_color_Color.names.h["$" + "light sea green"] = thx_color_Color.lightseagreen;
+var value72 = thx_color_Color.lightskyblue = 8900346;
+thx_color_Color.names.h["$" + "lightskyblue"] = value72;
+thx_color_Color.names.h["$" + "light sky blue"] = thx_color_Color.lightskyblue;
+var value73 = thx_color_Color.lightslategray = thx_color_Color.lightslategrey = 7833753;
+thx_color_Color.names.h["$" + "lightslategray"] = value73;
+thx_color_Color.names.h["$" + "light slate gray"] = thx_color_Color.lightslategray;
+thx_color_Color.names.h["$" + "lightslategrey"] = thx_color_Color.lightslategrey;
+thx_color_Color.names.h["$" + "light slate grey"] = thx_color_Color.lightslategrey;
+var value74 = thx_color_Color.lightsteelblue = 11584734;
+thx_color_Color.names.h["$" + "lightsteelblue"] = value74;
+thx_color_Color.names.h["$" + "light steel blue"] = thx_color_Color.lightsteelblue;
+var value75 = thx_color_Color.lightyellow = 16777184;
+thx_color_Color.names.h["$" + "lightyellow"] = value75;
+thx_color_Color.names.h["$" + "light yellow"] = thx_color_Color.lightyellow;
+var value76 = thx_color_Color.lime = 65280;
+thx_color_Color.names.h["$" + "lime"] = value76;
+var value77 = thx_color_Color.limegreen = 3329330;
+thx_color_Color.names.h["$" + "limegreen"] = value77;
+thx_color_Color.names.h["$" + "lime green"] = thx_color_Color.limegreen;
+var value78 = thx_color_Color.linen = 16445670;
+thx_color_Color.names.h["$" + "linen"] = value78;
+var value79 = thx_color_Color.magenta = 16711935;
+thx_color_Color.names.h["$" + "magenta"] = value79;
+var value80 = thx_color_Color.maroon = 8388608;
+thx_color_Color.names.h["$" + "maroon"] = value80;
+var value81 = thx_color_Color.mediumaquamarine = 6737322;
+thx_color_Color.names.h["$" + "mediumaquamarine"] = value81;
+thx_color_Color.names.h["$" + "mediuma quamarine"] = thx_color_Color.mediumaquamarine;
+var value82 = thx_color_Color.mediumblue = 205;
+thx_color_Color.names.h["$" + "mediumblue"] = value82;
+thx_color_Color.names.h["$" + "medium blue"] = thx_color_Color.mediumblue;
+var value83 = thx_color_Color.mediumorchid = 12211667;
+thx_color_Color.names.h["$" + "mediumorchid"] = value83;
+thx_color_Color.names.h["$" + "medium orchid"] = thx_color_Color.mediumorchid;
+var value84 = thx_color_Color.mediumpurple = 9662683;
+thx_color_Color.names.h["$" + "mediumpurple"] = value84;
+thx_color_Color.names.h["$" + "medium purple"] = thx_color_Color.mediumpurple;
+var value85 = thx_color_Color.mediumseagreen = 3978097;
+thx_color_Color.names.h["$" + "mediumseagreen"] = value85;
+thx_color_Color.names.h["$" + "medium sea green"] = thx_color_Color.mediumseagreen;
+var value86 = thx_color_Color.mediumslateblue = 8087790;
+thx_color_Color.names.h["$" + "mediumslateblue"] = value86;
+thx_color_Color.names.h["$" + "medium slate blue"] = thx_color_Color.mediumslateblue;
+var value87 = thx_color_Color.mediumspringgreen = 64154;
+thx_color_Color.names.h["$" + "mediumspringgreen"] = value87;
+thx_color_Color.names.h["$" + "medium spring green"] = thx_color_Color.mediumspringgreen;
+var value88 = thx_color_Color.mediumturquoise = 4772300;
+thx_color_Color.names.h["$" + "mediumturquoise"] = value88;
+thx_color_Color.names.h["$" + "medium turquoise"] = thx_color_Color.mediumturquoise;
+var value89 = thx_color_Color.mediumvioletred = 13047173;
+thx_color_Color.names.h["$" + "mediumvioletred"] = value89;
+thx_color_Color.names.h["$" + "medium violet red"] = thx_color_Color.mediumvioletred;
+var value90 = thx_color_Color.midnightblue = 1644912;
+thx_color_Color.names.h["$" + "midnightblue"] = value90;
+thx_color_Color.names.h["$" + "midnight blue"] = thx_color_Color.midnightblue;
+var value91 = thx_color_Color.mintcream = 16121850;
+thx_color_Color.names.h["$" + "mintcream"] = value91;
+thx_color_Color.names.h["$" + "mint cream"] = thx_color_Color.mintcream;
+var value92 = thx_color_Color.mistyrose = 16770273;
+thx_color_Color.names.h["$" + "mistyrose"] = value92;
+thx_color_Color.names.h["$" + "misty rose"] = thx_color_Color.mistyrose;
+var value93 = thx_color_Color.moccasin = 16770229;
+thx_color_Color.names.h["$" + "moccasin"] = value93;
+var value94 = thx_color_Color.navajowhite = 16768685;
+thx_color_Color.names.h["$" + "navajowhite"] = value94;
+thx_color_Color.names.h["$" + "navajo white"] = thx_color_Color.navajowhite;
+var value95 = thx_color_Color.navy = 128;
+thx_color_Color.names.h["$" + "navy"] = value95;
+var value96 = thx_color_Color.oldlace = 16643558;
+thx_color_Color.names.h["$" + "oldlace"] = value96;
+thx_color_Color.names.h["$" + "old lace"] = thx_color_Color.oldlace;
+var value97 = thx_color_Color.olive = 8421376;
+thx_color_Color.names.h["$" + "olive"] = value97;
+var value98 = thx_color_Color.olivedrab = 7048739;
+thx_color_Color.names.h["$" + "olivedrab"] = value98;
+thx_color_Color.names.h["$" + "olive drab"] = thx_color_Color.olivedrab;
+var value99 = thx_color_Color.orange = 16753920;
+thx_color_Color.names.h["$" + "orange"] = value99;
+var value100 = thx_color_Color.orangered = 16729344;
+thx_color_Color.names.h["$" + "orangered"] = value100;
+thx_color_Color.names.h["$" + "orange red"] = thx_color_Color.orangered;
+var value101 = thx_color_Color.orchid = 14315734;
+thx_color_Color.names.h["$" + "orchid"] = value101;
+var value102 = thx_color_Color.palegoldenrod = 15657130;
+thx_color_Color.names.h["$" + "palegoldenrod"] = value102;
+thx_color_Color.names.h["$" + "pale golden rod"] = thx_color_Color.palegoldenrod;
+var value103 = thx_color_Color.palegreen = 10025880;
+thx_color_Color.names.h["$" + "palegreen"] = value103;
+thx_color_Color.names.h["$" + "pale green"] = thx_color_Color.palegreen;
+var value104 = thx_color_Color.paleturquoise = 11529966;
+thx_color_Color.names.h["$" + "paleturquoise"] = value104;
+thx_color_Color.names.h["$" + "pale turquoise"] = thx_color_Color.paleturquoise;
+var value105 = thx_color_Color.palevioletred = 14381203;
+thx_color_Color.names.h["$" + "palevioletred"] = value105;
+thx_color_Color.names.h["$" + "pale violet red"] = thx_color_Color.palevioletred;
+var value106 = thx_color_Color.papayawhip = 16773077;
+thx_color_Color.names.h["$" + "papayawhip"] = value106;
+thx_color_Color.names.h["$" + "papaya whip"] = thx_color_Color.papayawhip;
+var value107 = thx_color_Color.peachpuff = 16767673;
+thx_color_Color.names.h["$" + "peachpuff"] = value107;
+thx_color_Color.names.h["$" + "peach puff"] = thx_color_Color.peachpuff;
+var value108 = thx_color_Color.peru = 13468991;
+thx_color_Color.names.h["$" + "peru"] = value108;
+var value109 = thx_color_Color.pink = 16761035;
+thx_color_Color.names.h["$" + "pink"] = value109;
+var value110 = thx_color_Color.plum = 14524637;
+thx_color_Color.names.h["$" + "plum"] = value110;
+var value111 = thx_color_Color.powderblue = 11591910;
+thx_color_Color.names.h["$" + "powderblue"] = value111;
+thx_color_Color.names.h["$" + "powder blue"] = thx_color_Color.powderblue;
+var value112 = thx_color_Color.purple = 8388736;
+thx_color_Color.names.h["$" + "purple"] = value112;
+var value113 = thx_color_Color.red = 16711680;
+thx_color_Color.names.h["$" + "red"] = value113;
+var value114 = thx_color_Color.rosybrown = 12357519;
+thx_color_Color.names.h["$" + "rosybrown"] = value114;
+thx_color_Color.names.h["$" + "rosy brown"] = thx_color_Color.rosybrown;
+var value115 = thx_color_Color.royalblue = 4286945;
+thx_color_Color.names.h["$" + "royalblue"] = value115;
+thx_color_Color.names.h["$" + "royal blue"] = thx_color_Color.royalblue;
+var value116 = thx_color_Color.saddlebrown = 9127187;
+thx_color_Color.names.h["$" + "saddlebrown"] = value116;
+thx_color_Color.names.h["$" + "saddle brown"] = thx_color_Color.saddlebrown;
+var value117 = thx_color_Color.salmon = 16416882;
+thx_color_Color.names.h["$" + "salmon"] = value117;
+var value118 = thx_color_Color.sandybrown = 16032864;
+thx_color_Color.names.h["$" + "sandybrown"] = value118;
+thx_color_Color.names.h["$" + "sandy brown"] = thx_color_Color.sandybrown;
+var value119 = thx_color_Color.seagreen = 3050327;
+thx_color_Color.names.h["$" + "seagreen"] = value119;
+thx_color_Color.names.h["$" + "sea green"] = thx_color_Color.seagreen;
+var value120 = thx_color_Color.seashell = 16774638;
+thx_color_Color.names.h["$" + "seashell"] = value120;
+thx_color_Color.names.h["$" + "sea shell"] = thx_color_Color.seashell;
+var value121 = thx_color_Color.sienna = 10506797;
+thx_color_Color.names.h["$" + "sienna"] = value121;
+var value122 = thx_color_Color.silver = 12632256;
+thx_color_Color.names.h["$" + "silver"] = value122;
+var value123 = thx_color_Color.skyblue = 8900331;
+thx_color_Color.names.h["$" + "skyblue"] = value123;
+thx_color_Color.names.h["$" + "sky blue"] = thx_color_Color.skyblue;
+var value124 = thx_color_Color.slateblue = 6970061;
+thx_color_Color.names.h["$" + "slateblue"] = value124;
+thx_color_Color.names.h["$" + "slate blue"] = thx_color_Color.slateblue;
+var value125 = thx_color_Color.slategray = thx_color_Color.slategrey = 7372944;
+thx_color_Color.names.h["$" + "slategray"] = value125;
+thx_color_Color.names.h["$" + "slate gray"] = thx_color_Color.slategray;
+thx_color_Color.names.h["$" + "slategrey"] = thx_color_Color.slategrey;
+thx_color_Color.names.h["$" + "slate grey"] = thx_color_Color.slategrey;
+var value126 = thx_color_Color.snow = 16775930;
+thx_color_Color.names.h["$" + "snow"] = value126;
+var value127 = thx_color_Color.springgreen = 65407;
+thx_color_Color.names.h["$" + "springgreen"] = value127;
+thx_color_Color.names.h["$" + "spring green"] = thx_color_Color.springgreen;
+var value128 = thx_color_Color.steelblue = 4620980;
+thx_color_Color.names.h["$" + "steelblue"] = value128;
+thx_color_Color.names.h["$" + "steel blue"] = thx_color_Color.steelblue;
+var value129 = thx_color_Color.tan = 13808780;
+thx_color_Color.names.h["$" + "tan"] = value129;
+var value130 = thx_color_Color.teal = 32896;
+thx_color_Color.names.h["$" + "teal"] = value130;
+var value131 = thx_color_Color.thistle = 14204888;
+thx_color_Color.names.h["$" + "thistle"] = value131;
+var value132 = thx_color_Color.tomato = 16737095;
+thx_color_Color.names.h["$" + "tomato"] = value132;
+var value133 = thx_color_Color.turquoise = 4251856;
+thx_color_Color.names.h["$" + "turquoise"] = value133;
+var value134 = thx_color_Color.violet = 15631086;
+thx_color_Color.names.h["$" + "violet"] = value134;
+var value135 = thx_color_Color.wheat = 16113331;
+thx_color_Color.names.h["$" + "wheat"] = value135;
+var value136 = thx_color_Color.white = 16777215;
+thx_color_Color.names.h["$" + "white"] = value136;
+var value137 = thx_color_Color.whitesmoke = 16119285;
+thx_color_Color.names.h["$" + "whitesmoke"] = value137;
+thx_color_Color.names.h["$" + "white smoke"] = thx_color_Color.whitesmoke;
+var value138 = thx_color_Color.yellow = 16776960;
+thx_color_Color.names.h["$" + "yellow"] = value138;
+var value139 = thx_color_Color.yellowgreen = 10145074;
+thx_color_Color.names.h["$" + "yellowgreen"] = value139;
+thx_color_Color.names.h["$" + "yellow green"] = thx_color_Color.yellowgreen;
+
+      // Production steps of ECMA-262, Edition 5, 15.4.4.21
+      // Reference: http://es5.github.io/#x15.4.4.21
+      if (!Array.prototype.reduce) {
+        Array.prototype.reduce = function(callback /*, initialValue*/) {
+          'use strict';
+          if (this == null) {
+            throw new TypeError('Array.prototype.reduce called on null or undefined');
+          }
+          if (typeof callback !== 'function') {
+            throw new TypeError(callback + ' is not a function');
+          }
+          var t = Object(this), len = t.length >>> 0, k = 0, value;
+          if (arguments.length == 2) {
+            value = arguments[1];
+          } else {
+            while (k < len && ! k in t) {
+              k++;
+            }
+            if (k >= len) {
+              throw new TypeError('Reduce of empty array with no initial value');
+            }
+            value = t[k++];
+          }
+          for (; k < len; k++) {
+            if (k in t) {
+              value = callback(value, t[k], k, t);
+            }
+          }
+          return value;
+        };
+      }
+    ;
+chad_render_LineStyle.defaultColor = -16777216;
+js_Boot.__toStr = {}.toString;
+thx_color__$Grey_Grey_$Impl_$.black = 0;
+thx_color__$Grey_Grey_$Impl_$.white = 1;
+thx_color_parse_ColorParser.parser = new thx_color_parse_ColorParser();
+thx_color_parse_ColorParser.isPureHex = new EReg("^([0-9a-f]{2}){3,4}$","i");
+thx_core_Floats.TOLERANCE = 10e-5;
+thx_core_Floats.EPSILON = 10e-10;
+thx_core_Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
+thx_core_Ints.pattern_parse = new EReg("^[+-]?(\\d+|0x[0-9A-F]+)$","i");
+thx_core_Ints.BASE = "0123456789abcdefghijklmnopqrstuvwxyz";
+thx_core_Strings.UCWORDS = new EReg("[^a-zA-Z]([a-z])","g");
+thx_core_Strings.UCWORDSWS = new EReg("\\s[a-z]","g");
+thx_core_Strings.ALPHANUM = new EReg("^[a-z0-9]+$","i");
+thx_core_Strings.DIGITS = new EReg("^[0-9]+$","");
+thx_core_Strings.STRIPTAGS = new EReg("</?[a-z]+[^>]*?/?>","gi");
+thx_core_Strings.WSG = new EReg("\\s+","g");
+thx_core_Strings.SPLIT_LINES = new EReg("\r\n|\n\r|\n|\r","g");
+thx_geom_EdgeCubic.NEAR_FLAT = 1.000000001;
+thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.identity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
+thx_geom_Plane.COPLANAR = 0;
+thx_geom_Plane.FRONT = 1;
+thx_geom_Plane.BACK = 2;
+thx_geom_Plane.SPANNING = 3;
+thx_geom__$Point3D_Point3D_$Impl_$.zero = [0,0,0];
+thx_geom_OrthoNormalBasis.z0Plane = new thx_geom_OrthoNormalBasis(new thx_geom_Plane([0,0,1],0),[1,0,0]);
+thx_geom__$Point_Point_$Impl_$.zero = [0,0];
+thx_geom_Transformables.MX = new thx_geom_Plane([1,0,0],0);
+thx_geom_Transformables.MY = new thx_geom_Plane([0,1,0],0);
+thx_geom_Transformables.MZ = new thx_geom_Plane([0,0,1],0);
+thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle = new thx_geom_Spline([new thx_geom_SplineNode([1,0],[1,-0.552284749830793564],[1,0.5522847498307936]),new thx_geom_SplineNode([0,-1],[-0.552284749830793564,-1],[0.5522847498307936,-1]),new thx_geom_SplineNode([-1,0],[-1,0.5522847498307936],[-1,-0.552284749830793564]),new thx_geom_SplineNode([0,1],[0.5522847498307936,1],[-0.552284749830793564,1])],true);
+thx_math_Const.TWO_PI = 6.283185307179586477;
+thx_math_Const.PI = 3.141592653589793238;
+thx_math_Const.HALF_PI = 1.570796326794896619;
+thx_math_Const.TO_DEGREE = 57.29577951308232088;
+thx_math_Const.TO_RADIAN = 0.01745329251994329577;
+thx_math_Const.LN10 = 2.302585092994046;
+thx_math_Const.E = 2.71828182845904523536;
+thx_math_Const.GOLDEN_RATIO = 1.6180339887498948482;
+thx_math_Const.EULER = 0.5772156649015329;
+thx_math_Const.KAPPA = 0.5522847498307936;
+thx_math_Const.INT16_MAX = 32767;
+thx_math_Const.INT16_MIN = -32768;
+thx_math_Const.INT32_MAX = 2147483647;
+thx_math_Const.INT32_MIN = -2147483648;
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.turn = thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$._new(256);
+thx_unit_angle__$BinaryDegree_BinaryDegree_$Impl_$.symbol = "binary degree";
+thx_unit_angle__$Degree_Degree_$Impl_$.turn = thx_unit_angle__$Degree_Degree_$Impl_$._new(360);
+thx_unit_angle__$Degree_Degree_$Impl_$.symbol = "°";
+thx_unit_angle__$Grad_Grad_$Impl_$.turn = thx_unit_angle__$Grad_Grad_$Impl_$._new(400);
+thx_unit_angle__$Grad_Grad_$Impl_$.symbol = "grad";
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.turn = thx_unit_angle__$HourAngle_HourAngle_$Impl_$._new(24);
+thx_unit_angle__$HourAngle_HourAngle_$Impl_$.symbol = "hour";
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.turn = thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$._new(21600);
+thx_unit_angle__$MinuteOfArc_MinuteOfArc_$Impl_$.symbol = "′";
+thx_unit_angle__$Point_Point_$Impl_$.turn = thx_unit_angle__$Point_Point_$Impl_$._new(32);
+thx_unit_angle__$Point_Point_$Impl_$.symbol = "point";
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.turn = thx_unit_angle__$Quadrant_Quadrant_$Impl_$._new(4);
+thx_unit_angle__$Quadrant_Quadrant_$Impl_$.symbol = "quad.";
+thx_unit_angle__$Radian_Radian_$Impl_$.turn = thx_unit_angle__$Radian_Radian_$Impl_$._new(6.28318530717959);
+thx_unit_angle__$Radian_Radian_$Impl_$.symbol = "rad";
+thx_unit_angle__$Revolution_Revolution_$Impl_$.turn = thx_unit_angle__$Revolution_Revolution_$Impl_$._new(1);
+thx_unit_angle__$Revolution_Revolution_$Impl_$.symbol = "r";
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.turn = thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$._new(1296000);
+thx_unit_angle__$SecondOfArc_SecondOfArc_$Impl_$.symbol = "″";
+thx_unit_angle__$Sextant_Sextant_$Impl_$.turn = thx_unit_angle__$Sextant_Sextant_$Impl_$._new(6);
+thx_unit_angle__$Sextant_Sextant_$Impl_$.symbol = "sextant";
+thx_unit_angle__$Turn_Turn_$Impl_$.turn = thx_unit_angle__$Turn_Turn_$Impl_$._new(1);
+thx_unit_angle__$Turn_Turn_$Impl_$.symbol = "τ";
 Canvas.main();
 })();

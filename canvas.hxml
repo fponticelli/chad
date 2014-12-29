@@ -5,5 +5,8 @@
 -lib thx.core
 -lib thx.color
 -lib thx.geom
+-lib thx.math
 -lib thx.unit
 -D thx_unit
+-D js-flatten
+-D analyzer
