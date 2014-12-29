@@ -56,7 +56,7 @@ class CanvasGraphics implements IGraphics {
       applyFillStyle(fill);
     f();
     if(null != fill)
-    ctx.fill();
+      ctx.fill();
     if(null != stroke || null == fill)
       ctx.stroke();
     if(hasStyle)
