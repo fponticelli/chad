@@ -20,7 +20,8 @@ class Boolean {
               .rotateZ((45 : Degree).toRadian())
               .translateX(30)
               .toPath()
-          ));
+          )
+      );
     });
   }
 
