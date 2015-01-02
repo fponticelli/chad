@@ -1,4 +1,4 @@
-import thx.geom.*;
+import thx.geom.d2.*;
 import thx.geom.shape.*;
 using thx.geom.Transformable;
 import thx.math.Const;
@@ -10,8 +10,8 @@ import thx.color.*;
 class Boolean {
   public static function main() {
     create("squares", 120, 120, function(render) {
-      var sq1 = new Box(new Point(10, 10), new Point(100, 100)),
-          sq2 = new Box(new Point(0, 0), new Point(70, 70));
+      var sq1 = new Box(Point.create(10, 10), Point.create(100, 100)),
+          sq2 = new Box(Point.create(0, 0), Point.create(70, 70));
 
       render.drawPath(
         sq1.toPath()

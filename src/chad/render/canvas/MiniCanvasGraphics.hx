@@ -4,8 +4,8 @@ import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 
 import thx.geom.Matrix4x4;
-import thx.geom.Point;
-import thx.geom.Point3D;
+import thx.geom.d2.Point;
+import thx.geom.d3.Point in Point3D;
 import thx.geom.shape.Box;
 
 class MiniCanvasGraphics implements IGraphics {
@@ -18,9 +18,9 @@ class MiniCanvasGraphics implements IGraphics {
     this.weightScale = null == weightScale ? function(x) return x : weightScale;
     this.mini = mini;
     this.ctx = mini.ctx;
-    var halfPixel  = Matrix4x4.translation(new Point3D(0.5, 0.5, 1)),
+    var halfPixel  = Matrix4x4.translation(Point3D.create(0.5, 0.5, 1)),
         mirror     = Matrix4x4.mirrorY(),
-        translateY = Matrix4x4.translation(new Point3D(0, mini.height, 0)),
+        translateY = Matrix4x4.translation(Point3D.create(0, mini.height, 0)),
         correctionMatrix = Matrix4x4.identity
           .multiply(halfPixel)
           .multiply(mirror)
@@ -98,7 +98,7 @@ class MiniCanvasGraphics implements IGraphics {
     if(null == reverseCoords) {
       var inverted = matrix.inverse();
       if(null == inverted) throw "unable to inverse coords matrix";
-      reverseCoords = new Box(Point.zero, new Point(mini.width, mini.height)).transform(inverted);
+      reverseCoords = new Box(Point.zero, Point.create(mini.width, mini.height)).transform(inverted);
     }
     return reverseCoords;
   }

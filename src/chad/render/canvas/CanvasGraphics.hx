@@ -4,13 +4,13 @@ import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 
 import thx.geom.Matrix4x4;
-import thx.geom.Point;
-import thx.geom.Point3D;
+import thx.geom.d2.Point;
+import thx.geom.d3.Point in Point3D;
 import thx.geom.shape.Box;
 
 class CanvasGraphics implements IGraphics {
   public static function scaled(canvas : CanvasElement, scale : Float)
-    return new CanvasGraphics(canvas, Matrix4x4.scaling(new Point3D(scale, scale, 1)), function(v) return v / scale);
+    return new CanvasGraphics(canvas, Matrix4x4.scaling(Point3D.create(scale, scale, 1)), function(v) return v / scale);
 
   var ctx : CanvasRenderingContext2D;
   var matrix : Matrix4x4;
@@ -25,9 +25,9 @@ class CanvasGraphics implements IGraphics {
 
     this.weightScale = null == weightScale ? function(v) return v : weightScale;
 
-    var halfPixel  = Matrix4x4.translation(new Point3D(0.5, 0.5, 1)),
+    var halfPixel  = Matrix4x4.translation(Point3D.create(0.5, 0.5, 1)),
         mirror     = Matrix4x4.mirrorY(),
-        translateY = Matrix4x4.translation(new Point3D(0, height, 0)),
+        translateY = Matrix4x4.translation(Point3D.create(0, height, 0)),
         correctionMatrix = Matrix4x4.identity
           .multiply(halfPixel)
           .multiply(mirror)
@@ -104,7 +104,7 @@ class CanvasGraphics implements IGraphics {
     if(null == reverseCoords) {
       var inverted = matrix.inverse();
       if(null == inverted) throw "unable to inverse coords matrix";
-      reverseCoords = new Box(Point.zero, new Point(width, height)).transform(inverted);
+      reverseCoords = new Box(Point.zero, Point.create(width, height)).transform(inverted);
     }
     return reverseCoords;
   }

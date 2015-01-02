@@ -1,6 +1,6 @@
 package chad.csg;
 
-import thx.geom.Polygon;
+import thx.geom.d3.Polygon;
 
 abstract Solid(Array<Polygon>) {
   function new(polygons : Array<Polygon>)

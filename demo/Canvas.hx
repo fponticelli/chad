@@ -1,4 +1,4 @@
-import thx.geom.*;
+import thx.geom.d2.*;
 import thx.geom.shape.*;
 using thx.geom.Transformable;
 import thx.math.Const;
@@ -11,10 +11,10 @@ class Canvas {
   public static function draw(r : Render) {
     /*
     var len = 800,
-        xp = Spline.fromArray([new Point(0, 0), new Point(len, 0)], false),
-        xn = Spline.fromArray([new Point(0, 0), new Point(-len, 0)], false),
-        yp = Spline.fromArray([new Point(0, 0), new Point(0, len)], false),
-        yn = Spline.fromArray([new Point(0, 0), new Point(0, -len)], false);
+        xp = Spline.fromArray([Point.create(0, 0), Point.create(len, 0)], false),
+        xn = Spline.fromArray([Point.create(0, 0), Point.create(-len, 0)], false),
+        yp = Spline.fromArray([Point.create(0, 0), Point.create(0, len)], false),
+        yn = Spline.fromArray([Point.create(0, 0), Point.create(0, -len)], false);
 
     var red = new LineStyle(2, "#f00"),
         green = new LineStyle(2, "#0f0");
@@ -25,24 +25,24 @@ class Canvas {
     r.drawSpline(yp, StrokeLine(green));
     r.drawSpline(yn, StrokeDash([8, 8], red));
 
-    var line = Line.fromPoints(new Point(0, 500), new Point(500, 0));
+    var line = Line.fromPoints(Point.create(0, 500), Point.create(500, 0));
     for(i in 0...10) {
       r.drawLine(line.offset(i * 10), StrokeDash([3, 4]));
       if(i != 0)
         r.drawLine(line.offset(-i * 10), StrokeDot(3));
     }
 
-    line = Line.fromPoints(new Point(0, 120), new Point(500, 120));
+    line = Line.fromPoints(Point.create(0, 120), Point.create(500, 120));
     r.drawLine(line, StrokeLine(new LineStyle(2)));
-    line = Line.fromPoints(new Point(120, 0), new Point(120, 100));
+    line = Line.fromPoints(Point.create(120, 0), Point.create(120, 100));
     r.drawLine(line, StrokeLine(new LineStyle(3)));
-    line = Line.fromPoints(new Point(0, 100), new Point(500, 200));
+    line = Line.fromPoints(Point.create(0, 100), Point.create(500, 200));
     r.drawLine(line, StrokeLine(new LineStyle(4)));
 */
-    var rect = new Box(new Point(50, 100), new Point(250, 300)).toSpline();
+    var rect = new Box(Point.create(50, 100), Point.create(250, 300)).toSpline();
 //    r.drawSpline(rect);
 
-    var rect2 = new Box(new Point(200, 150), new Point(400, 350))
+    var rect2 = new Box(Point.create(200, 150), Point.create(400, 350))
       .toSpline()
       .rotateZ((30 : Degree).toRadian())
       .translateX(20)
@@ -54,11 +54,11 @@ class Canvas {
     intersection.map(function(p) r.drawDot(p, 4));
 
     var arc = new EdgeCubic(
-      new Point(0, 0),
-      new Point(0, Const.KAPPA),
-      new Point(1-Const.KAPPA, 1),
-      new Point(1, 1)
-    ).scale(new Point3D(200, 200, 1)).translateX(50).translateY(50);
+      Point.create(0, 0),
+      Point.create(0, Const.KAPPA),
+      Point.create(1-Const.KAPPA, 1),
+      Point.create(1, 1)
+    ).scale(Point3D.create(200, 200, 1)).translateX(50).translateY(50);
     //r.drawSpline(Spline.fromEdges([arc], false), StrokeLine(new LineStyle(3)));
     var s = arc.subdivide();
     s[1] = s[1].translateX(2);
@@ -71,25 +71,25 @@ class Canvas {
 
     var e = [
         new EdgeCubic(
-          new Point(0, 0),
-          new Point(0, Const.KAPPA),
-          new Point(1-Const.KAPPA, 1),
-          new Point(1, 1)
-        ).scale(new Point3D(200, 200, 1)).translate(new Point3D(40, 40, 0)),
+          Point.create(0, 0),
+          Point.create(0, Const.KAPPA),
+          Point.create(1-Const.KAPPA, 1),
+          Point.create(1, 1)
+        ).scale(Point3D.create(200, 200, 1)).translate(Point3D.create(40, 40, 0)),
         new EdgeCubic(
-          new Point(1, 1),
-          new Point(1+Const.KAPPA, 1),
-          new Point(2, Const.KAPPA),
-          new Point(2, 0)
-        ).scale(new Point3D(200, 200, 1)).translate(new Point3D(40, 40, 0))
+          Point.create(1, 1),
+          Point.create(1+Const.KAPPA, 1),
+          Point.create(2, Const.KAPPA),
+          Point.create(2, 0)
+        ).scale(Point3D.create(200, 200, 1)).translate(Point3D.create(40, 40, 0))
       ],
-      c = Spline.fromEdges(cast e, false).scale(new Point3D(0.4,0.4,1));
+      c = Spline.fromEdges(cast e, false).scale(Point3D.create(0.4,0.4,1));
 
     r.drawSpline(c, StrokeLine(new LineStyle(8, Color.red)));
     r.drawSpline(c.toLinear(), StrokeDash([5,5], new LineStyle(4, Color.lime)));
     r.drawSpline(e[0].toSpline().toLinear(), StrokeDash([8,4], new LineStyle(4, Color.orange)));
 
-    var circle1 = new Circle(new Point(300, 250), 100);
+    var circle1 = new Circle(Point.create(300, 250), 100);
     r.drawSpline(circle1.toSpline().toLinear());
 
 
@@ -99,13 +99,13 @@ class Canvas {
       .intersectionsSpline(rect)
       .map(function(point) r.drawDot(point, FillColor("#aa3300"), 6));
 */
-    var circle1 = new Circle(new Point(200, 250), 100);
+    var circle1 = new Circle(Point.create(200, 250), 100);
     r.drawSpline(circle1.toSpline());
 
-    var circle2 = new Circle(new Point(200, 200), 80);
+    var circle2 = new Circle(Point.create(200, 200), 80);
     r.drawSpline(circle2, StrokeDash([4, 4, 8, 4]), FillColor("rgba(0,255,155,0.1)"));
 
-    var circle3 = new Circle(new Point(240, 280), 60);
+    var circle3 = new Circle(Point.create(240, 280), 60);
     r.drawSpline(circle3, StrokeDot(4), FillColor("rgba(100,255,155,0.5)"));
 
     var p = rect2.toPath()

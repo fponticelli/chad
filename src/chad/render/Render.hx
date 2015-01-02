@@ -1,12 +1,12 @@
 package chad.render;
 
 using thx.core.Iterables;
-import thx.geom.Line;
-import thx.geom.Point;
-import thx.geom.Point3D;
-import thx.geom.Path;
+import thx.geom.d2.Line;
+import thx.geom.d2.Point;
+import thx.geom.d3.Point in Point3D;
+import thx.geom.d2.Path;
 import thx.geom.shape.Circle;
-import thx.geom.Spline;
+import thx.geom.d2.Spline;
 using thx.geom.Transformable;
 
 class Render {
@@ -21,8 +21,8 @@ class Render {
   public function drawDot(point : Point, ?fill : FillStyle, ?stroke : StrokeStyle, ?size : Float = 2) {
     size = g.weightScale(size);
     var spline = Circle.unitaryCircle
-      .scale(new Point3D(size, size, 1))
-      .translate(new Point3D(point.x, point.y, 1));
+      .scale(Point3D.create(size, size, 1))
+      .translate(Point3D.create(point.x, point.y, 1));
     drawSpline(spline, stroke, fill);
   }
 
@@ -38,12 +38,12 @@ class Render {
       a, b;
     if(deg < Math.PI / 4) {
       // vert
-      a = line.intersectionLine(new Line(new Point(0, 1), box.top));
-      b = line.intersectionLine(new Line(new Point(0, 1), box.bottom));
+      a = line.intersectionLine(new Line(Point.create(0, 1), box.top));
+      b = line.intersectionLine(new Line(Point.create(0, 1), box.bottom));
     } else {
       // horiz
-      a = line.intersectionLine(new Line(new Point(1, 0), box.left));
-      b = line.intersectionLine(new Line(new Point(1, 0), box.right));
+      a = line.intersectionLine(new Line(Point.create(1, 0), box.left));
+      b = line.intersectionLine(new Line(Point.create(1, 0), box.right));
     }
     drawSegment(a, b, style);
   }

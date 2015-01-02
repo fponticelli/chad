@@ -1,8 +1,8 @@
 package chad.export;
 
 import chad.csg.Solid;
-import thx.geom.Point3D;
-import thx.geom.Vertex3D;
+import thx.geom.d3.Point in Point3D;
+import thx.geom.d3.Vertex in Vertex3D;
 
 class ThreeJS {
   static function getVertices(vertices : Map<String, { index : Int, Vertex3D : Vertex3D }>){

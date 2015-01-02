@@ -1,7 +1,7 @@
 package chad.csg;
 
-import thx.geom.Polygon;
-import thx.geom.Plane;
+import thx.geom.d3.Polygon;
+import thx.geom.d3.Plane;
 
 class Node {
   var polygons : Array<Polygon>;

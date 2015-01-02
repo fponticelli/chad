@@ -1,8 +1,8 @@
 package chad.csg;
 
-import thx.geom.Point3D;
-import thx.geom.Polygon;
-import thx.geom.Vertex3D;
+import thx.geom.d3.Point in Point3D;
+import thx.geom.d3.Polygon;
+import thx.geom.d3.Vertex in Vertex3D;
 
 class Solids {
   static var baseCube = [
@@ -20,7 +20,7 @@ class Solids {
     return Solid.fromPolygons(
       baseCube.map(function(info) {
         return new Polygon(info.p.map(function(i) {
-          var pos = new Point3D(
+          var pos = Point3D.create(
             position.x + size.x * ((i & 1 != 0) ? 1 : 0),
             position.y + size.y * ((i & 2 != 0) ? 1 : 0),
             position.z + size.z * ((i & 4 != 0) ? 1 : 0)
@@ -35,10 +35,10 @@ class Solids {
     if(null == resolution)
       resolution = getResolution;
     var slices   = resolution(radius),
-        ray      = end.subtractPoint3D(start),
+        ray      = end.subtractPoint(start),
         axisZ    = ray.normalize(),
         isY      = (Math.abs(axisZ.y) > 0.5),
-        axisX    = new Point3D(isY ? 1 : 0, isY ? 0 : 1, 0).cross(axisZ).normalize(),
+        axisX    = Point3D.create(isY ? 1 : 0, isY ? 0 : 1, 0).cross(axisZ).normalize(),
         axisY    = axisX.cross(axisZ).normalize(),
         s        = new Vertex3D(start, axisZ.negate()),
         e        = new Vertex3D(end, axisZ.normalize()),
@@ -46,9 +46,9 @@ class Solids {
         t0, t1;
     function point(stack, slice : Float, normalBlend) {
       var angle = slice * Math.PI * 2,
-          out = axisX.multiply(Math.cos(angle)).addPoint3D(axisY.multiply(Math.sin(angle))),
-          pos = start.addPoint3D(ray.multiply(stack)).addPoint3D(out.multiply(radius)),
-          normal = out.multiply(1 - Math.abs(normalBlend)).addPoint3D(axisZ.multiply(normalBlend));
+          out = axisX.multiply(Math.cos(angle)).addPoint(axisY.multiply(Math.sin(angle))),
+          pos = start.addPoint(ray.multiply(stack)).addPoint(out.multiply(radius)),
+          normal = out.multiply(1 - Math.abs(normalBlend)).addPoint(axisZ.multiply(normalBlend));
       return new Vertex3D(pos, normal);
     }
     for (i in 0...slices) {
@@ -75,12 +75,12 @@ class Solids {
     function vertex(theta : Float, phi : Float) {
       theta *= Math.PI * 2;
       phi *= Math.PI;
-      var dir = new Point3D(
+      var dir = Point3D.create(
         Math.cos(theta) * Math.sin(phi),
         Math.cos(phi),
         Math.sin(theta) * Math.sin(phi)
       );
-      vertices.push(new Vertex3D(position.addPoint3D(dir.multiply(radius)), dir));
+      vertices.push(new Vertex3D(position.addPoint(dir.multiply(radius)), dir));
     }
 
     for (i in 0...slices) {

@@ -9,38 +9,55 @@ function $extend(from, fields) {
 var Canvas = function() { };
 Canvas.__name__ = ["Canvas"];
 Canvas.draw = function(r) {
-	var rect = thx_geom_shape__$Box_Box_$Impl_$.toSpline([[50,100],[250,300]]);
 	var tmp;
-	var tmp3;
-	var tmp4;
-	var t2 = thx_geom_shape__$Box_Box_$Impl_$.toSpline([[200,150],[400,350]]);
-	var tmp5;
-	var tmp6;
-	var this11 = thx_unit_angle__$Degree_Degree_$Impl_$._new(30);
-	tmp6 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this11 * 0.0174532925199433);
-	var this1 = tmp6;
-	tmp5 = this1;
-	var angle = tmp5;
-	tmp4 = t2.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(angle));
-	var t1 = tmp4;
-	tmp3 = t1.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([20,0,0]));
-	var t = tmp3;
-	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,-140,0]));
-	var rect2 = tmp;
-	var circle1 = { center : [200,250], radius : 100};
+	var bottomLeft = new thx_geom_d2_xy_PointXY(50,100);
+	var topRight = new thx_geom_d2_xy_PointXY(250,300);
+	tmp = [bottomLeft,topRight];
+	var rect = thx_geom_shape__$Box_Box_$Impl_$.toSpline(tmp);
+	var tmp1;
+	var tmp7;
+	var tmp8;
+	var tmp9;
+	var bottomLeft1 = new thx_geom_d2_xy_PointXY(200,150);
+	var topRight1 = new thx_geom_d2_xy_PointXY(400,350);
+	tmp9 = [bottomLeft1,topRight1];
+	var t2 = thx_geom_shape__$Box_Box_$Impl_$.toSpline(tmp9);
+	var tmp10;
+	var tmp11;
+	var this2 = thx_unit_angle__$Degree_Degree_$Impl_$._new(30);
+	tmp11 = thx_unit_angle__$Radian_Radian_$Impl_$._new(this2 * 0.0174532925199433);
+	var this1 = tmp11;
+	tmp10 = this1;
+	var angle = tmp10;
+	tmp8 = t2.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(angle));
+	var t1 = tmp8;
+	tmp7 = t1.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(new thx_geom_d3_xyz_PointXYZ(20,0,0)));
+	var t = tmp7;
+	tmp1 = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(new thx_geom_d3_xyz_PointXYZ(0,-140,0)));
+	var rect2 = tmp1;
+	var tmp2;
+	var center = new thx_geom_d2_xy_PointXY(200,250);
+	tmp2 = { center : center, radius : 100};
+	var circle1 = tmp2;
 	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle1));
-	var circle2 = { center : [200,200], radius : 80};
+	var tmp3;
+	var center1 = new thx_geom_d2_xy_PointXY(200,200);
+	tmp3 = { center : center1, radius : 80};
+	var circle2 = tmp3;
 	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle2),chad_render_StrokeStyle.StrokeDash([4,4,8,4]),chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("rgba(0,255,155,0.1)")));
-	var circle3 = { center : [240,280], radius : 60};
+	var tmp4;
+	var center2 = new thx_geom_d2_xy_PointXY(240,280);
+	tmp4 = { center : center2, radius : 60};
+	var circle3 = tmp4;
 	r.drawSpline(thx_geom_shape__$Circle_Circle_$Impl_$.toSpline(circle3),chad_render_StrokeStyle.StrokeDot(4),chad_render_FillStyle.FillColor(thx_color__$RGBA_RGBA_$Impl_$.fromString("rgba(100,255,155,0.5)")));
 	var p = rect2.toPath().intersection(rect.toPath()).union(thx_geom_shape__$Circle_Circle_$Impl_$.toPath(circle1));
-	var tmp1;
-	var this12 = thx_color_Color.darkblue;
-	tmp1 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this12 >> 16 & 255,this12 >> 8 & 255,this12 & 255,255]);
-	var tmp2;
-	var this13 = thx_color_Color.lightblue;
-	tmp2 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this13 >> 16 & 255,this13 >> 8 & 255,this13 & 255,255]);
-	r.drawPath(p,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(6,tmp1)),chad_render_FillStyle.FillColor(tmp2));
+	var tmp5;
+	var this3 = thx_color_Color.darkblue;
+	tmp5 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this3 >> 16 & 255,this3 >> 8 & 255,this3 & 255,255]);
+	var tmp6;
+	var this4 = thx_color_Color.lightblue;
+	tmp6 = thx_color__$RGBA_RGBA_$Impl_$.fromInts([this4 >> 16 & 255,this4 >> 8 & 255,this4 & 255,255]);
+	r.drawPath(p,chad_render_StrokeStyle.StrokeLine(new chad_render_LineStyle(6,tmp5)),chad_render_FillStyle.FillColor(tmp6));
 };
 Canvas.main = function() {
 	var canvas = window.document.querySelector("canvas");
@@ -424,8 +441,16 @@ chad_render_Render.prototype = {
 		if(size == null) size = 2;
 		size = this.g.weightScale(size);
 		var tmp;
-		var t = thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([size,size,1]));
-		tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([point[0],point[1],1]));
+		var tmp1;
+		var f = new thx_geom_d3_xyz_PointXYZ(size,size,1);
+		tmp1 = thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling(f));
+		var t = tmp1;
+		var tmp2;
+		var x = point.get_x();
+		var y = point.get_y();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x,y,1);
+		var v = tmp2;
+		tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(v));
 		var spline = tmp;
 		this.drawSpline(spline,stroke,fill);
 	}
@@ -440,16 +465,16 @@ chad_render_Render.prototype = {
 		var box = this.g.get_reverseCoords();
 		var tmp;
 		var this1 = line.normal;
-		tmp = Math.atan2(this1[1],this1[0]);
+		tmp = Math.atan2(this1.get_y(),this1.get_x());
 		var deg = tmp % Math.PI;
 		var a;
 		var b;
 		if(deg < Math.PI / 4) {
-			a = line.intersectionLine(new thx_geom_Line([0,1],box[1][1]));
-			b = line.intersectionLine(new thx_geom_Line([0,1],box[0][1]));
+			a = line.intersectionLine(new thx_geom_d2_Line(new thx_geom_d2_xy_PointXY(0,1),box[1].get_y()));
+			b = line.intersectionLine(new thx_geom_d2_Line(new thx_geom_d2_xy_PointXY(0,1),box[0].get_y()));
 		} else {
-			a = line.intersectionLine(new thx_geom_Line([1,0],box[0][0]));
-			b = line.intersectionLine(new thx_geom_Line([1,0],box[1][0]));
+			a = line.intersectionLine(new thx_geom_d2_Line(new thx_geom_d2_xy_PointXY(1,0),box[0].get_x()));
+			b = line.intersectionLine(new thx_geom_d2_Line(new thx_geom_d2_xy_PointXY(1,0),box[1].get_x()));
 		}
 		this.drawSegment(a,b,style);
 	}
@@ -500,9 +525,9 @@ var chad_render_canvas_CanvasGraphics = function(canvas,matrix,weightScale) {
 	this.weightScale = null == weightScale?function(v) {
 		return v;
 	}:weightScale;
-	var halfPixel = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0.5,0.5,1]);
+	var halfPixel = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(new thx_geom_d3_xyz_PointXYZ(0.5,0.5,1));
 	var mirror = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MY);
-	var translateY = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,this.height,0]);
+	var translateY = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(new thx_geom_d3_xyz_PointXYZ(0,this.height,0));
 	var correctionMatrix = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.identity,halfPixel),mirror),translateY);
 	this.matrix = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(null == matrix?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.identity:matrix,correctionMatrix);
 	this.ctx.transform(this.matrix[0],this.matrix[1],this.matrix[4],this.matrix[5],this.matrix[12],this.matrix[13]);
@@ -510,7 +535,7 @@ var chad_render_canvas_CanvasGraphics = function(canvas,matrix,weightScale) {
 chad_render_canvas_CanvasGraphics.__name__ = ["chad","render","canvas","CanvasGraphics"];
 chad_render_canvas_CanvasGraphics.__interfaces__ = [chad_render_IGraphics];
 chad_render_canvas_CanvasGraphics.scaled = function(canvas,scale) {
-	return new chad_render_canvas_CanvasGraphics(canvas,thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([scale,scale,1]),function(v) {
+	return new chad_render_canvas_CanvasGraphics(canvas,thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling(new thx_geom_d3_xyz_PointXYZ(scale,scale,1)),function(v) {
 		return v / scale;
 	});
 };
@@ -533,13 +558,13 @@ chad_render_canvas_CanvasGraphics.prototype = {
 		if(hasStyle) this.ctx.restore();
 	}
 	,lineTo: function(point) {
-		this.ctx.lineTo(point[0],point[1]);
+		this.ctx.lineTo(point.get_x(),point.get_y());
 	}
 	,curveTo: function(point,cout,cin) {
-		this.ctx.bezierCurveTo(cout[0],cout[1],cin[0],cin[1],point[0],point[1]);
+		this.ctx.bezierCurveTo(cout.get_x(),cout.get_y(),cin.get_x(),cin.get_y(),point.get_x(),point.get_y());
 	}
 	,moveTo: function(point) {
-		this.ctx.moveTo(point[0],point[1]);
+		this.ctx.moveTo(point.get_x(),point.get_y());
 	}
 	,applyLineStyle: function(style) {
 		if(null == style) return;
@@ -582,7 +607,10 @@ chad_render_canvas_CanvasGraphics.prototype = {
 		if(null == this.reverseCoords) {
 			var inverted = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.inverse(this.matrix);
 			if(null == inverted) throw "unable to inverse coords matrix";
-			this.reverseCoords = thx_geom_shape__$Box_Box_$Impl_$.transform([thx_geom__$Point_Point_$Impl_$.zero,[this.width,this.height]],inverted);
+			var tmp;
+			var topRight = new thx_geom_d2_xy_PointXY(this.width,this.height);
+			tmp = [thx_geom_d2__$Point_Point_$Impl_$.zero,topRight];
+			this.reverseCoords = thx_geom_shape__$Box_Box_$Impl_$.transform(tmp,inverted);
 		}
 		return this.reverseCoords;
 	}
@@ -983,6 +1011,21 @@ thx_color__$CIELCh_CIELCh_$Impl_$.toRGB = function(this1) {
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
 	return tmp;
 };
+thx_color__$CIELCh_CIELCh_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var this4 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
+	tmp2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this4));
+	var this3 = tmp2;
+	var tmp3;
+	var channels = this3.concat([1.0]);
+	tmp3 = channels;
+	tmp1 = tmp3;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
+};
 thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX = function(this1) {
 	var tmp;
 	var this2 = thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1);
@@ -1130,6 +1173,18 @@ thx_color__$CIELab_CIELab_$Impl_$.toRGB = function(this1) {
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
 	return tmp;
 };
+thx_color__$CIELab_CIELab_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var this3 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+	var tmp2;
+	var channels = this3.concat([1.0]);
+	tmp2 = channels;
+	tmp1 = tmp2;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
+};
 thx_color__$CIELab_CIELab_$Impl_$.toRGBX = function(this1) {
 	return thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
 };
@@ -1261,6 +1316,15 @@ thx_color__$CMY_CMY_$Impl_$.toRGB = function(this1) {
 	var this_1 = 1 - this1[1];
 	var this_2 = 1 - this1[2];
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this_0,this_1,this_2);
+	return tmp;
+};
+thx_color__$CMY_CMY_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [1 - this1[0],1 - this1[1],1 - this1[2]].concat([1.0]);
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
 	return tmp;
 };
 thx_color__$CMY_CMY_$Impl_$.toRGBX = function(this1) {
@@ -1399,6 +1463,15 @@ thx_color__$CMYK_CMYK_$Impl_$.toRGB = function(this1) {
 	var this_1 = (1 - this1[3]) * (1 - this1[1]);
 	var this_2 = (1 - this1[3]) * (1 - this1[2]);
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this_0,this_1,this_2);
+	return tmp;
+};
+thx_color__$CMYK_CMYK_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])].concat([1.0]);
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
 	return tmp;
 };
 thx_color__$CMYK_CMYK_$Impl_$.toRGBX = function(this1) {
@@ -1711,6 +1784,15 @@ thx_color__$Grey_Grey_$Impl_$.toRGB = function(this1) {
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this_0,this_1,this_2);
 	return tmp;
 };
+thx_color__$Grey_Grey_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [this1,this1,this1].concat([1.0]);
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
+};
 thx_color__$Grey_Grey_$Impl_$.toRGBX = function(this1) {
 	return [this1,this1,this1];
 };
@@ -1907,6 +1989,21 @@ thx_color__$HSL_HSL_$Impl_$.toRGB = function(this1) {
 	tmp1 = channels;
 	var this2 = tmp1;
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$HSL_HSL_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+	tmp2 = channels;
+	var this3 = tmp2;
+	var tmp3;
+	var channels1 = this3.concat([1.0]);
+	tmp3 = channels1;
+	tmp1 = tmp3;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
 	return tmp;
 };
 thx_color__$HSL_HSL_$Impl_$.toRGBX = function(this1) {
@@ -2120,6 +2217,15 @@ thx_color__$HSLA_HSLA_$Impl_$.toRGB = function(this1) {
 	tmp2 = channels1;
 	var this3 = tmp2;
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this3[0],this3[1],this3[2]);
+	return tmp;
+};
+thx_color__$HSLA_HSLA_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var channels = [thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] - 120,this1[1],this1[2]),this1[3]];
+	tmp1 = channels;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
 	return tmp;
 };
 thx_color__$HSLA_HSLA_$Impl_$.toRGBXA = function(this1) {
@@ -2645,6 +2751,67 @@ thx_color__$HSV_HSV_$Impl_$.toRGB = function(this1) {
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
 	return tmp;
 };
+thx_color__$HSV_HSV_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	if(this1[1] == 0) tmp2 = [this1[2],this1[2],this1[2]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp2 = [r,g,b];
+	}
+	var this3 = tmp2;
+	var tmp3;
+	var channels = this3.concat([1.0]);
+	tmp3 = channels;
+	tmp1 = tmp3;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
+};
 thx_color__$HSV_HSV_$Impl_$.toRGBX = function(this1) {
 	if(this1[1] == 0) return [this1[2],this1[2],this1[2]];
 	var r;
@@ -3102,6 +3269,61 @@ thx_color__$HSVA_HSVA_$Impl_$.toRGB = function(this1) {
 	tmp2 = channels;
 	var this3 = tmp2;
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this3[0],this3[1],this3[2]);
+	return tmp;
+};
+thx_color__$HSVA_HSVA_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	if(this1[1] == 0) tmp1 = [this1[2],this1[2],this1[2],this1[3]]; else {
+		var r;
+		var g;
+		var b;
+		var i;
+		var f;
+		var p;
+		var q;
+		var t;
+		var h = this1[0] / 60;
+		i = Math.floor(h);
+		f = h - i;
+		p = this1[2] * (1 - this1[1]);
+		q = this1[2] * (1 - f * this1[1]);
+		t = this1[2] * (1 - (1 - f) * this1[1]);
+		switch(i) {
+		case 0:
+			r = this1[2];
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = this1[2];
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = this1[2];
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = this1[2];
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = this1[2];
+			break;
+		default:
+			r = this1[2];
+			g = p;
+			b = q;
+		}
+		tmp1 = [r,g,b,this1[3]];
+	}
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
 	return tmp;
 };
 thx_color__$HSVA_HSVA_$Impl_$.toRGBXA = function(this1) {
@@ -3925,6 +4147,18 @@ thx_color__$XYZ_XYZ_$Impl_$.toRGB = function(this1) {
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
 	return tmp;
 };
+thx_color__$XYZ_XYZ_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var this3 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1);
+	var tmp2;
+	var channels = this3.concat([1.0]);
+	tmp2 = channels;
+	tmp1 = tmp2;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
+	return tmp;
+};
 thx_color__$XYZ_XYZ_$Impl_$.toRGBX = function(this1) {
 	var x = this1[0] / 100;
 	var y = this1[1] / 100;
@@ -4039,6 +4273,18 @@ thx_color__$Yxy_Yxy_$Impl_$.toRGB = function(this1) {
 	var tmp;
 	var this2 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
 	tmp = thx_color__$RGB_RGB_$Impl_$.createf(this2[0],this2[1],this2[2]);
+	return tmp;
+};
+thx_color__$Yxy_Yxy_$Impl_$.toRGBA = function(this1) {
+	var tmp;
+	var tmp1;
+	var this3 = thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+	var tmp2;
+	var channels = this3.concat([1.0]);
+	tmp2 = channels;
+	tmp1 = tmp2;
+	var this2 = tmp1;
+	tmp = thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this2[0],this2[1],this2[2],this2[3]]);
 	return tmp;
 };
 thx_color__$Yxy_Yxy_$Impl_$.toRGBX = function(this1) {
@@ -4501,6 +4747,23 @@ thx_core_Arrays.take = function(arr,n) {
 };
 thx_core_Arrays.takeLast = function(arr,n) {
 	return arr.slice(arr.length - n);
+};
+thx_core_Arrays.rotate = function(arr) {
+	var result = [];
+	var _g1 = 0;
+	var _g = arr[0].length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		var row = [];
+		result.push(row);
+		var _g3 = 0;
+		var _g2 = arr.length;
+		while(_g3 < _g2) {
+			var j = _g3++;
+			row.push(arr[j][i]);
+		}
+	}
+	return result;
 };
 thx_core_Arrays.zip = function(array1,array2) {
 	var tmp;
@@ -5621,769 +5884,6 @@ thx_core_error_NullArgument.__super__ = thx_core_Error;
 thx_core_error_NullArgument.prototype = $extend(thx_core_Error.prototype,{
 	__class__: thx_core_error_NullArgument
 });
-var thx_geom_Edge = function() { };
-thx_geom_Edge.__name__ = ["thx","geom","Edge"];
-thx_geom_Edge.prototype = {
-	get_box: null
-	,get_area: null
-	,get_length: null
-	,get_lengthSquared: null
-	,get_isLinear: null
-	,get_linearSegments: null
-	,get_linearSpline: null
-	,box: null
-	,area: null
-	,length: null
-	,lengthSquared: null
-	,isLinear: null
-	,first: null
-	,last: null
-	,normalIn: null
-	,normalOut: null
-	,linearSegments: null
-	,linearSpline: null
-	,equals: null
-	,matches: null
-	,transform: null
-	,flip: null
-	,direction: null
-	,intersects: null
-	,intersections: null
-	,intersectsLine: null
-	,intersectionsLine: null
-	,split: null
-	,interpolate: null
-	,interpolateNode: null
-	,toArray: null
-	,toLinear: null
-	,toString: null
-	,toSpline: null
-	,__class__: thx_geom_Edge
-};
-var thx_geom_EdgeCubic = function(p0,p1,p2,p3) {
-	this._lengthSquared = false;
-	this._length = false;
-	this._isLinear = false;
-	this._area = false;
-	this.first = this.p0 = p0;
-	this.normalOut = this.p1 = p1;
-	this.normalIn = this.p2 = p2;
-	this.last = this.p3 = p3;
-};
-thx_geom_EdgeCubic.__name__ = ["thx","geom","EdgeCubic"];
-thx_geom_EdgeCubic.__interfaces__ = [thx_geom_Edge];
-thx_geom_EdgeCubic.prototype = {
-	box: null
-	,area: null
-	,length: null
-	,lengthSquared: null
-	,linearSegments: null
-	,linearSpline: null
-	,isLinear: null
-	,p0: null
-	,p1: null
-	,p2: null
-	,p3: null
-	,first: null
-	,last: null
-	,normalIn: null
-	,normalOut: null
-	,equals: function(other) {
-		if(!js_Boot.__instanceof(other,thx_geom_EdgeCubic)) return false;
-		var t = other;
-		return ((thx_geom__$Point_Point_$Impl_$.nearEquals(this.p0,t.p0)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p1,t.p1):false)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p2,t.p2):false)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p3,t.p3):false;
-	}
-	,matches: function(other) {
-		return thx_geom__$Point_Point_$Impl_$.nearEquals(this.first,other.first)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.last,other.last):false;
-	}
-	,transform: function(matrix) {
-		return new thx_geom_EdgeCubic(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p0),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p1),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p2),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p3));
-	}
-	,flip: function() {
-		return new thx_geom_EdgeCubic(this.p3,this.p2,this.p1,this.p0);
-	}
-	,direction: function() {
-		var tmp;
-		var this1 = this.last;
-		var p = this.first;
-		var tmp1;
-		var p_0 = -p[0];
-		var p_1 = -p[1];
-		tmp1 = [this1[0] + p_0,this1[1] + p_1];
-		tmp = tmp1;
-		return tmp;
-	}
-	,intersects: function(other) {
-		return this.intersections(other).length > 0;
-	}
-	,intersections: function(other) {
-		return js_Boot.__instanceof(other,thx_geom_EdgeLinear)?this.intersectionsEdgeLinear(other):this.intersectionsEdgeCubic(other);
-	}
-	,intersectionsEdgeLinear: function(other) {
-		var tmp;
-		var array = this.get_linearSegments().map(function(edge) {
-			return edge.intersectionsEdgeLinear(other);
-		});
-		tmp = Array.prototype.concat.apply([],array);
-		return tmp;
-	}
-	,intersectionsEdgeCubic: function(other) {
-		return this.get_linearSpline().intersectionsSpline(other.get_linearSpline());
-	}
-	,intersectsLine: function(line) {
-		return this.intersectionsLine(line).length > 0;
-	}
-	,intersectionsLine: function(line) {
-		return this.get_linearSpline().intersectionsLine(line);
-	}
-	,split: function(v) {
-		var node = this.interpolateNode(v);
-		if(null == node) return [];
-		return [new thx_geom_EdgeCubic(this.p0,this.p1,node.normalIn,node.position),new thx_geom_EdgeCubic(node.position,node.normalOut,this.p2,this.p3)];
-	}
-	,interpolate: function(v) {
-		var n = this.interpolateNode(v);
-		if(null == n) return null;
-		return n.position;
-	}
-	,interpolateNode: function(v) {
-		var edges = this.subdivide(v);
-		return new thx_geom_SplineNode(edges[0].last,edges[1].normalOut,edges[0].normalIn);
-	}
-	,toLinear: function() {
-		return new thx_geom_EdgeLinear(this.first,this.last);
-	}
-	,toArray: function() {
-		return [this.p0,this.p1,this.p2,this.p3];
-	}
-	,toString: function() {
-		var tmp;
-		var this1 = this.p0;
-		tmp = "Point(" + this1[0] + "," + this1[1] + ")";
-		var tmp1;
-		var this11 = this.p1;
-		tmp1 = "Point(" + this11[0] + "," + this11[1] + ")";
-		var tmp2;
-		var this12 = this.p2;
-		tmp2 = "Point(" + this12[0] + "," + this12[1] + ")";
-		var tmp3;
-		var this13 = this.p3;
-		tmp3 = "Point(" + this13[0] + "," + this13[1] + ")";
-		return "Edge(" + tmp + "," + tmp1 + "," + tmp2 + "," + tmp3 + ")";
-	}
-	,toSpline: function() {
-		return thx_geom_Spline.fromEdges([this],false);
-	}
-	,isNearFlat: function() {
-		var sum = thx_geom__$Point_Point_$Impl_$.distanceTo(this.p0,this.p1) + thx_geom__$Point_Point_$Impl_$.distanceTo(this.p1,this.p2) + thx_geom__$Point_Point_$Impl_$.distanceTo(this.p2,this.p3);
-		var len = thx_geom__$Point_Point_$Impl_$.distanceTo(this.p0,this.p3);
-		return sum / len <= thx_geom_EdgeCubic.NEAR_FLAT;
-	}
-	,subdivide: function(v) {
-		if(v == null) v = 0.5;
-		var tmp;
-		var this1 = this.p0;
-		var tmp6;
-		var tmp7;
-		var this12 = this.p1;
-		var p1 = this.p0;
-		var tmp8;
-		var p_0 = -p1[0];
-		var p_1 = -p1[1];
-		tmp8 = [this12[0] + p_0,this12[1] + p_1];
-		tmp7 = tmp8;
-		var this11 = tmp7;
-		tmp6 = [this11[0] * v,this11[1] * v];
-		var p = tmp6;
-		tmp = [this1[0] + p[0],this1[1] + p[1]];
-		var l1 = tmp;
-		var tmp1;
-		var this13 = this.p1;
-		var tmp9;
-		var tmp10;
-		var this15 = this.p2;
-		var p3 = this.p1;
-		var tmp11;
-		var p_01 = -p3[0];
-		var p_11 = -p3[1];
-		tmp11 = [this15[0] + p_01,this15[1] + p_11];
-		tmp10 = tmp11;
-		var this14 = tmp10;
-		tmp9 = [this14[0] * v,this14[1] * v];
-		var p2 = tmp9;
-		tmp1 = [this13[0] + p2[0],this13[1] + p2[1]];
-		var m = tmp1;
-		var tmp2;
-		var this16 = this.p2;
-		var tmp12;
-		var tmp13;
-		var this18 = this.p3;
-		var p5 = this.p2;
-		var tmp14;
-		var p_02 = -p5[0];
-		var p_12 = -p5[1];
-		tmp14 = [this18[0] + p_02,this18[1] + p_12];
-		tmp13 = tmp14;
-		var this17 = tmp13;
-		tmp12 = [this17[0] * v,this17[1] * v];
-		var p4 = tmp12;
-		tmp2 = [this16[0] + p4[0],this16[1] + p4[1]];
-		var r2 = tmp2;
-		var tmp3;
-		var tmp15;
-		var tmp16;
-		var tmp17;
-		var p_03 = -l1[0];
-		var p_13 = -l1[1];
-		tmp17 = [m[0] + p_03,m[1] + p_13];
-		tmp16 = tmp17;
-		var this19 = tmp16;
-		tmp15 = [this19[0] * v,this19[1] * v];
-		var p6 = tmp15;
-		tmp3 = [l1[0] + p6[0],l1[1] + p6[1]];
-		var l2 = tmp3;
-		var tmp4;
-		var tmp18;
-		var tmp19;
-		var tmp20;
-		var p_04 = -m[0];
-		var p_14 = -m[1];
-		tmp20 = [r2[0] + p_04,r2[1] + p_14];
-		tmp19 = tmp20;
-		var this110 = tmp19;
-		tmp18 = [this110[0] * v,this110[1] * v];
-		var p7 = tmp18;
-		tmp4 = [m[0] + p7[0],m[1] + p7[1]];
-		var r1 = tmp4;
-		var tmp5;
-		var tmp21;
-		var tmp22;
-		var tmp23;
-		var p_05 = -l2[0];
-		var p_15 = -l2[1];
-		tmp23 = [r1[0] + p_05,r1[1] + p_15];
-		tmp22 = tmp23;
-		var this111 = tmp22;
-		tmp21 = [this111[0] * v,this111[1] * v];
-		var p8 = tmp21;
-		tmp5 = [l2[0] + p8[0],l2[1] + p8[1]];
-		var l3 = tmp5;
-		return [new thx_geom_EdgeCubic(this.p0,l1,l2,l3),new thx_geom_EdgeCubic(l3,r1,r2,this.p3)];
-	}
-	,_area: null
-	,get_area: function() {
-		if(!this._area) {
-			this._area = true;
-			var tmp;
-			var array = this.get_linearSegments();
-			tmp = array.reduce(function(acc,edge) {
-				return acc + edge.get_area();
-			},0);
-			this.area = tmp;
-		}
-		return this.area;
-	}
-	,get_box: function() {
-		if(null == this.box) this.box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p1),[this.p2,this.p3]);
-		return this.box;
-	}
-	,_isLinear: null
-	,get_isLinear: function() {
-		if(!this._isLinear) {
-			this._isLinear = true;
-			var line = thx_geom_Line.fromPoints(this.p0,this.p3);
-			if(!(!thx_geom__$Point_Point_$Impl_$.isOnLine(this.p1,line))?!thx_geom__$Point_Point_$Impl_$.isOnLine(this.p0,line):true) this.isLinear = false; else {
-				var box = thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p3);
-				this.isLinear = thx_geom_shape__$Box_Box_$Impl_$.contains(box,this.p1)?thx_geom_shape__$Box_Box_$Impl_$.contains(box,this.p2):false;
-			}
-		}
-		return this.isLinear;
-	}
-	,_length: null
-	,get_length: function() {
-		if(!this._length) {
-			this._length = true;
-			var tmp;
-			var array = this.get_linearSegments();
-			tmp = array.reduce(function(acc,edge) {
-				return acc + edge.get_length();
-			},0);
-			this.length = tmp;
-		}
-		return this.length;
-	}
-	,_lengthSquared: null
-	,get_lengthSquared: function() {
-		if(!this._lengthSquared) {
-			this._lengthSquared = true;
-			var tmp;
-			var array = this.get_linearSegments();
-			tmp = array.reduce(function(acc,edge) {
-				return acc + edge.get_lengthSquared();
-			},0);
-			this.lengthSquared = tmp;
-		}
-		return this.lengthSquared;
-	}
-	,get_linearSegments: function() {
-		if(null == this.linearSegments) {
-			var tosplit = [this];
-			var edge;
-			this.linearSegments = [];
-			while(tosplit.length > 0) {
-				edge = tosplit.shift();
-				if(edge.isNearFlat()) this.linearSegments.push(edge.toLinear()); else tosplit = edge.subdivide().concat(tosplit);
-			}
-		}
-		return this.linearSegments;
-	}
-	,get_linearSpline: function() {
-		if(null == this.linearSpline) this.linearSpline = thx_geom_Spline.fromEdges(this.get_linearSegments(),false);
-		return this.linearSpline;
-	}
-	,__class__: thx_geom_EdgeCubic
-};
-var thx_geom_EdgeLinear = function(p0,p1) {
-	this._lengthSquared = false;
-	this._length = false;
-	this._area = false;
-	this.first = this.p0 = p0;
-	this.last = this.p1 = p1;
-	this.normalIn = this.normalOut = null;
-};
-thx_geom_EdgeLinear.__name__ = ["thx","geom","EdgeLinear"];
-thx_geom_EdgeLinear.__interfaces__ = [thx_geom_Edge];
-thx_geom_EdgeLinear.prototype = {
-	area: null
-	,box: null
-	,length: null
-	,lengthSquared: null
-	,line: null
-	,linearSegments: null
-	,linearSpline: null
-	,isLinear: null
-	,p0: null
-	,p1: null
-	,first: null
-	,last: null
-	,normalIn: null
-	,normalOut: null
-	,equals: function(other) {
-		if(!js_Boot.__instanceof(other,thx_geom_EdgeLinear)) return false;
-		var t = other;
-		return thx_geom__$Point_Point_$Impl_$.nearEquals(this.p0,t.p0)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.p1,t.p1):false;
-	}
-	,matches: function(other) {
-		return thx_geom__$Point_Point_$Impl_$.nearEquals(this.first,other.first)?thx_geom__$Point_Point_$Impl_$.nearEquals(this.last,other.last):false;
-	}
-	,transform: function(matrix) {
-		return new thx_geom_EdgeLinear(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p0),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p1));
-	}
-	,flip: function() {
-		return new thx_geom_EdgeLinear(this.p1,this.p0);
-	}
-	,direction: function() {
-		var tmp;
-		var this1 = this.last;
-		var p = this.first;
-		var tmp1;
-		var p_0 = -p[0];
-		var p_1 = -p[1];
-		tmp1 = [this1[0] + p_0,this1[1] + p_1];
-		tmp = tmp1;
-		return tmp;
-	}
-	,intersects: function(other) {
-		return this.intersections(other).length > 0;
-	}
-	,intersections: function(other) {
-		if(!thx_geom_shape__$Box_Box_$Impl_$.intersects(this.get_box(),other.get_box())) return [];
-		if(js_Boot.__instanceof(other,thx_geom_EdgeLinear)) return this.intersectionsEdgeLinear(other); else return this.intersectionsEdgeCubic(other);
-	}
-	,intersectionsEdgeLinear: function(other) {
-		var ps = this.intersectionsLine(other.get_line());
-		if(!(ps.length == 0)?other.intersectsLine(this.get_line()):true) return ps; else return [];
-	}
-	,intersectionsEdgeCubic: function(other) {
-		return other.intersectionsEdgeLinear(this);
-	}
-	,intersectsLine: function(line) {
-		return this.intersectionsLine(line).length > 0;
-	}
-	,intersectionsLine: function(line) {
-		var l = thx_geom_Line.fromPoints(this.p0,this.p1);
-		var p = l.intersectionLine(line);
-		if(null != p) {
-			if(this.p0[0] == this.p1[0]) {
-				var tmp;
-				var tmp2;
-				var this11 = this.p0;
-				var p1 = this.p1;
-				var tmp3;
-				var x = Math.min(this11[0],p1[0]);
-				var y = Math.min(this11[1],p1[1]);
-				tmp3 = [x,y];
-				tmp2 = tmp3;
-				var this1 = tmp2;
-				tmp = this1[1];
-				var tmp1;
-				if(p[1] >= tmp) {
-					var tmp4;
-					var tmp5;
-					var this13 = this.p0;
-					var p2 = this.p1;
-					var tmp6;
-					var x1 = Math.max(this13[0],p2[0]);
-					var y1 = Math.max(this13[1],p2[1]);
-					tmp6 = [x1,y1];
-					tmp5 = tmp6;
-					var this12 = tmp5;
-					tmp4 = this12[1];
-					tmp1 = p[1] <= tmp4;
-				} else tmp1 = false;
-				if(tmp1) return [p];
-			} else {
-				var tmp7;
-				var tmp9;
-				var this15 = this.p0;
-				var p3 = this.p1;
-				var tmp10;
-				var x2 = Math.min(this15[0],p3[0]);
-				var y2 = Math.min(this15[1],p3[1]);
-				tmp10 = [x2,y2];
-				tmp9 = tmp10;
-				var this14 = tmp9;
-				tmp7 = this14[0];
-				var tmp8;
-				if(p[0] >= tmp7) {
-					var tmp11;
-					var tmp12;
-					var this17 = this.p0;
-					var p4 = this.p1;
-					var tmp13;
-					var x3 = Math.max(this17[0],p4[0]);
-					var y3 = Math.max(this17[1],p4[1]);
-					tmp13 = [x3,y3];
-					tmp12 = tmp13;
-					var this16 = tmp12;
-					tmp11 = this16[0];
-					tmp8 = p[0] <= tmp11;
-				} else tmp8 = false;
-				if(tmp8) return [p];
-			}
-		}
-		return [];
-	}
-	,split: function(v) {
-		var mid = this.interpolate(v);
-		return [new thx_geom_EdgeLinear(this.p0,mid),new thx_geom_EdgeLinear(mid,this.p1)];
-	}
-	,interpolate: function(v) {
-		return thx_geom__$Point_Point_$Impl_$.interpolate(this.p0,this.p1,v);
-	}
-	,interpolateNode: function(v) {
-		var p = this.interpolate(v);
-		if(null == p) return null;
-		return new thx_geom_SplineNode(p,null,null);
-	}
-	,toLinear: function() {
-		return this;
-	}
-	,toArray: function() {
-		return [this.p0,this.p1];
-	}
-	,toString: function() {
-		var tmp;
-		var this1 = this.p0;
-		tmp = "Point(" + this1[0] + "," + this1[1] + ")";
-		var tmp1;
-		var this11 = this.p1;
-		tmp1 = "Point(" + this11[0] + "," + this11[1] + ")";
-		return "Edge(" + tmp + "," + tmp1 + ")";
-	}
-	,toSpline: function() {
-		return thx_geom_Spline.fromEdges([this],false);
-	}
-	,_area: null
-	,get_area: function() {
-		if(!this._area) {
-			this._area = true;
-			var tmp;
-			var this1 = this.p1;
-			var p1 = this.p0;
-			var tmp1;
-			var p_0 = -p1[0];
-			var p_1 = -p1[1];
-			tmp1 = [this1[0] + p_0,this1[1] + p_1];
-			tmp = tmp1;
-			var p = tmp;
-			this.area = this.p0[1] * (this.p1[0] - this.p0[0]) + p[0] * p[1] / 2;
-		}
-		return this.area;
-	}
-	,get_box: function() {
-		if(null == this.box) this.box = thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p1);
-		return this.box;
-	}
-	,get_isLinear: function() {
-		return true;
-	}
-	,_length: null
-	,get_length: function() {
-		if(!this._length) {
-			this._length = true;
-			this.length = Math.sqrt(this.get_lengthSquared());
-		}
-		return this.length;
-	}
-	,_lengthSquared: null
-	,get_lengthSquared: function() {
-		if(!this._lengthSquared) {
-			this._lengthSquared = true;
-			var tmp;
-			var tmp1;
-			var this11 = this.p1;
-			var p = this.p0;
-			var tmp2;
-			var p_0 = -p[0];
-			var p_1 = -p[1];
-			tmp2 = [this11[0] + p_0,this11[1] + p_1];
-			tmp1 = tmp2;
-			var this1 = tmp1;
-			tmp = this1[0] * this1[0] + this1[1] * this1[1];
-			this.lengthSquared = tmp;
-		}
-		return this.lengthSquared;
-	}
-	,get_line: function() {
-		if(null == this.line) this.line = thx_geom_Line.fromPoints(this.p0,this.p1);
-		return this.line;
-	}
-	,get_linearSegments: function() {
-		return [this];
-	}
-	,get_linearSpline: function() {
-		return this.linearSpline = thx_geom_Spline.fromEdges([this],false);
-	}
-	,__class__: thx_geom_EdgeLinear
-};
-var thx_geom_Line = function(normal,w) {
-	var l = Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1]);
-	this.w = w * l;
-	this.normal = [normal[0] / l,normal[1] / l];
-};
-thx_geom_Line.__name__ = ["thx","geom","Line"];
-thx_geom_Line.fromPoints = function(p1,p2) {
-	var tmp;
-	var p_0 = -p1[0];
-	var p_1 = -p1[1];
-	tmp = [p2[0] + p_0,p2[1] + p_1];
-	var direction = tmp;
-	var tmp1;
-	var tmp2;
-	var this_0 = direction[1];
-	var this_1 = -direction[0];
-	tmp2 = [-this_0,-this_1];
-	var this1 = tmp2;
-	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-	tmp1 = [this1[0] / v,this1[1] / v];
-	var normal = tmp1;
-	var w = p1[0] * normal[0] + p1[1] * normal[1];
-	return new thx_geom_Line(normal,w);
-};
-thx_geom_Line.prototype = {
-	normal: null
-	,w: null
-	,isHorizontal: null
-	,isVertical: null
-	,offset: function(value) {
-		return new thx_geom_Line(this.normal,this.w + value);
-	}
-	,reverse: function() {
-		var tmp;
-		var this1 = this.normal;
-		tmp = [-this1[0],-this1[1]];
-		return new thx_geom_Line(tmp,-this.w);
-	}
-	,equals: function(other) {
-		var tmp;
-		var this1 = this.normal;
-		var p = other.normal;
-		if(this1[0] == p[0]) tmp = this1[1] == p[1]; else tmp = false;
-		return tmp?this.w == other.w:false;
-	}
-	,origin: function() {
-		var tmp;
-		var this1 = this.normal;
-		var v = this.w;
-		tmp = [this1[0] * v,this1[1] * v];
-		return tmp;
-	}
-	,direction: function() {
-		var tmp;
-		var this1 = this.normal;
-		tmp = [this1[1],-this1[0]];
-		return tmp;
-	}
-	,xAtY: function(y) {
-		return (this.w - this.normal[1] * y) / this.normal[0];
-	}
-	,absDistanceToPoint: function(point) {
-		var tmp;
-		var p = this.normal;
-		tmp = point[0] * p[0] + point[1] * p[1];
-		return Math.abs(tmp - this.w);
-	}
-	,intersectionLine: function(line) {
-		return thx_geom__$Point_Point_$Impl_$.solve2Linear(this.normal[0],this.normal[1],line.normal[0],line.normal[1],this.w,line.w);
-	}
-	,transform: function(matrix) {
-		var origin = [0,0];
-		var tmp;
-		var this1 = this.normal;
-		var v = this.w;
-		tmp = [this1[0] * v,this1[1] * v];
-		var pointOnPlane = tmp;
-		var neworigin = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,origin);
-		var neworiginPlusNormal = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normal);
-		var tmp1;
-		var p_0 = -neworigin[0];
-		var p_1 = -neworigin[1];
-		tmp1 = [neworiginPlusNormal[0] + p_0,neworiginPlusNormal[1] + p_1];
-		var newnormal = tmp1;
-		var newpointOnPlane = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,pointOnPlane);
-		var neww = newnormal[0] * newpointOnPlane[0] + newnormal[1] * newpointOnPlane[1];
-		return new thx_geom_Line(newnormal,neww);
-	}
-	,get_isHorizontal: function() {
-		return this.normal[0] == 0;
-	}
-	,get_isVertical: function() {
-		return this.normal[1] == 0;
-	}
-	,toString: function() {
-		return "Line(" + this.normal[0] + "," + this.normal[1] + ",w:" + this.w + ")";
-	}
-	,__class__: thx_geom_Line
-};
-var thx_geom_Line3D = function(point,direction) {
-	this.point = point;
-	var tmp;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(direction,[direction[0],direction[1],direction[2]]));
-	tmp = [direction[0] / v,direction[1] / v,direction[2] / v];
-	this.direction = tmp;
-};
-thx_geom_Line3D.__name__ = ["thx","geom","Line3D"];
-thx_geom_Line3D.fromPoints = function(p1,p2) {
-	var tmp;
-	var tmp1;
-	var p_0 = -p1[0];
-	var p_1 = -p1[1];
-	var p_2 = -p1[2];
-	tmp1 = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
-	var this1 = tmp1;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
-	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
-	return new thx_geom_Line3D(p1,tmp);
-};
-thx_geom_Line3D.fromPlanes = function(p1,p2) {
-	var tmp;
-	var this1 = p1.normal;
-	var p = p2.normal;
-	tmp = [this1[1] * p[2] - this1[2] * p[1],this1[2] * p[0] - this1[0] * p[2],this1[0] * p[1] - this1[1] * p[0]];
-	var direction = tmp;
-	var l = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(direction,[direction[0],direction[1],direction[2]]));
-	if(l < 1e-10) throw "Parallel planes";
-	var tmp1;
-	var v = 1.0 / l;
-	tmp1 = [direction[0] * v,direction[1] * v,direction[2] * v];
-	direction = tmp1;
-	var mabsx = Math.abs(direction[0]);
-	var mabsy = Math.abs(direction[1]);
-	var mabsz = Math.abs(direction[2]);
-	var origin;
-	if(mabsx >= mabsy?mabsx >= mabsz:false) {
-		var r = thx_geom__$Point_Point_$Impl_$.solve2Linear(p1.normal[1],p1.normal[2],p2.normal[1],p2.normal[2],p1.w,p2.w);
-		origin = [0,r[0],r[1]];
-	} else if(mabsy >= mabsx?mabsy >= mabsz:false) {
-		var r1 = thx_geom__$Point_Point_$Impl_$.solve2Linear(p1.normal[0],p1.normal[2],p2.normal[0],p2.normal[2],p1.w,p2.w);
-		origin = [r1[0],0,r1[1]];
-	} else {
-		var r2 = thx_geom__$Point_Point_$Impl_$.solve2Linear(p1.normal[0],p1.normal[1],p2.normal[0],p2.normal[1],p1.w,p2.w);
-		origin = [r2[0],r2[1],0];
-	}
-	return new thx_geom_Line3D(origin,direction);
-};
-thx_geom_Line3D.prototype = {
-	point: null
-	,direction: null
-	,intersectWithPlane: function(plane) {
-		var lambda = (plane.w - thx_geom__$Point3D_Point3D_$Impl_$.dot(plane.normal,this.point)) / thx_geom__$Point3D_Point3D_$Impl_$.dot(plane.normal,this.direction);
-		var tmp;
-		var this1 = this.point;
-		var tmp1;
-		var this2 = this.direction;
-		tmp1 = [this2[0] * lambda,this2[1] * lambda,this2[2] * lambda];
-		var p = tmp1;
-		tmp = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
-		return tmp;
-	}
-	,reverse: function() {
-		var tmp;
-		var this1 = this.direction;
-		tmp = [-this1[0],-this1[1],-this1[2]];
-		return new thx_geom_Line3D(this.point,tmp);
-	}
-	,transform: function(matrix4x4) {
-		var tmp;
-		var this1 = this.point;
-		tmp = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
-		var newpoint = tmp;
-		var tmp1;
-		var this2 = this.point;
-		var p = this.direction;
-		tmp1 = [this2[0] + p[0],this2[1] + p[1],this2[2] + p[2]];
-		var pointaddDirection = tmp1;
-		var newPointaddDirection = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[pointaddDirection[0],pointaddDirection[1],pointaddDirection[2]]);
-		var tmp2;
-		var p_0 = -newpoint[0];
-		var p_1 = -newpoint[1];
-		var p_2 = -newpoint[2];
-		tmp2 = [newPointaddDirection[0] + p_0,newPointaddDirection[1] + p_1,newPointaddDirection[2] + p_2];
-		var newdirection = tmp2;
-		return new thx_geom_Line3D(newpoint,newdirection);
-	}
-	,closestPointOnLine: function(point) {
-		var tmp;
-		var p_0 = -point[0];
-		var p_1 = -point[1];
-		var p_2 = -point[2];
-		tmp = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
-		var t = thx_geom__$Point3D_Point3D_$Impl_$.dot(tmp,this.direction) / thx_geom__$Point3D_Point3D_$Impl_$.dot(this.direction,this.direction);
-		var tmp1;
-		var tmp2;
-		var this1 = this.direction;
-		tmp2 = [this1[0] * t,this1[1] * t,this1[2] * t];
-		var p = tmp2;
-		tmp1 = [point[0] + p[0],point[1] + p[1],point[2] + p[2]];
-		return tmp1;
-	}
-	,distanceToPoint: function(point) {
-		var closestpoint = this.closestPointOnLine(point);
-		var tmp;
-		var p_0 = -closestpoint[0];
-		var p_1 = -closestpoint[1];
-		var p_2 = -closestpoint[2];
-		tmp = [point[0] + p_0,point[1] + p_1,point[2] + p_2];
-		var distancevector = tmp;
-		return Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(distancevector,[distancevector[0],distancevector[1],distancevector[2]]));
-	}
-	,equals: function(line) {
-		if(!thx_geom__$Point3D_Point3D_$Impl_$.equals(this.direction,line.direction)) return false;
-		return this.distanceToPoint(line.point) <= 1e-8;
-	}
-	,__class__: thx_geom_Line3D
-};
 var thx_geom__$Matrix4x4_Matrix4x4_$Impl_$ = {};
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.__name__ = ["thx","geom","_Matrix4x4","Matrix4x4_Impl_"];
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.fromArray = function(e) {
@@ -6406,9 +5906,14 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ = function(radians) {
 	return [cos,sin,0,0,-sin,cos,0,0,0,0,1,0,0,0,0,1];
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotation = function(rotationCenter,rotationAxis,radians) {
-	var rotationPlane = thx_geom_Plane.fromNormalAndPoint(rotationAxis,rotationCenter);
-	var orthobasis = new thx_geom_OrthoNormalBasis(rotationPlane,thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(rotationPlane.normal));
-	var transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([-rotationCenter[0],-rotationCenter[1],-rotationCenter[2]]);
+	var rotationPlane = thx_geom_d3_Plane.fromNormalAndPoint(rotationAxis,rotationCenter);
+	var orthobasis = new thx_geom_d3_OrthoNormalBasis(rotationPlane,thx_geom_d3__$Point_Point_$Impl_$.randomNonParallelVector(rotationPlane.normal));
+	var tmp;
+	var x = -rotationCenter.get_x();
+	var y = -rotationCenter.get_y();
+	var z = -rotationCenter.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	var transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(tmp);
 	transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(transformation,orthobasis.getProjectionMatrix());
 	transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(transformation,thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotationZ(radians));
 	transformation = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply(transformation,orthobasis.getInverseProjectionMatrix());
@@ -6416,7 +5921,12 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotation = function(rotationCenter,rotati
 	return transformation;
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation = function(vec) {
-	return [1,0,0,0,0,1,0,0,0,0,1,0,vec[0],vec[1],vec[2],1];
+	var tmp;
+	var e12 = vec.get_x();
+	var e13 = vec.get_y();
+	var e14 = vec.get_z();
+	tmp = [1,0,0,0,0,1,0,0,0,0,1,0,e12,e13,e14,1];
+	return tmp;
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirrorX = function() {
 	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MX);
@@ -6428,14 +5938,19 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirrorZ = function() {
 	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring(thx_geom_Transformables.MZ);
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.mirroring = function(plane) {
-	var nx = plane.normal[0];
-	var ny = plane.normal[1];
-	var nz = plane.normal[2];
+	var nx = plane.normal.get_x();
+	var ny = plane.normal.get_y();
+	var nz = plane.normal.get_z();
 	var w = plane.w;
 	return [1.0 - 2.0 * nx * nx,-2. * ny * nx,-2. * nz * nx,0,-2. * nx * ny,1.0 - 2.0 * ny * ny,-2. * nz * ny,0,-2. * nx * nz,-2. * ny * nz,1.0 - 2.0 * nz * nz,0,-2. * nx * w,-2. * ny * w,-2. * nz * w,1];
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling = function(vec) {
-	return [vec[0],0,0,0,0,vec[1],0,0,0,0,vec[2],0,0,0,0,1];
+	var tmp;
+	var e0 = vec.get_x();
+	var e5 = vec.get_y();
+	var e10 = vec.get_z();
+	tmp = [e0,0,0,0,0,e5,0,0,0,0,e10,0,0,0,0,1];
+	return tmp;
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$._new = function(e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15) {
 	return [e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15];
@@ -6485,9 +6000,9 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.multiply = function(this1,other) {
 	return [t0 * m0 + t1 * m4 + t2 * m8 + t3 * m12,t0 * m1 + t1 * m5 + t2 * m9 + t3 * m13,t0 * m2 + t1 * m6 + t2 * m10 + t3 * m14,t0 * m3 + t1 * m7 + t2 * m11 + t3 * m15,t4 * m0 + t5 * m4 + t6 * m8 + t7 * m12,t4 * m1 + t5 * m5 + t6 * m9 + t7 * m13,t4 * m2 + t5 * m6 + t6 * m10 + t7 * m14,t4 * m3 + t5 * m7 + t6 * m11 + t7 * m15,t8 * m0 + t9 * m4 + t10 * m8 + t11 * m12,t8 * m1 + t9 * m5 + t10 * m9 + t11 * m13,t8 * m2 + t9 * m6 + t10 * m10 + t11 * m14,t8 * m3 + t9 * m7 + t10 * m11 + t11 * m15,t12 * m0 + t13 * m4 + t14 * m8 + t15 * m12,t12 * m1 + t13 * m5 + t14 * m9 + t15 * m13,t12 * m2 + t13 * m6 + t14 * m10 + t15 * m14,t12 * m3 + t13 * m7 + t14 * m11 + t15 * m15];
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rightMultiplyPoint3D = function(this1,vector) {
-	var v0 = vector[0];
-	var v1 = vector[1];
-	var v2 = vector[2];
+	var v0 = vector.get_x();
+	var v1 = vector.get_y();
+	var v2 = vector.get_z();
 	var x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + this1[3];
 	var y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + this1[7];
 	var z = v0 * this1[8] + v1 * this1[9] + v2 * this1[10] + this1[11];
@@ -6498,12 +6013,12 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rightMultiplyPoint3D = function(this1,vec
 		y *= invw;
 		z *= invw;
 	}
-	return [x,y,z];
+	return new thx_geom_d3_xyz_PointXYZ(x,y,z);
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D = function(this1,vector) {
-	var v0 = vector[0];
-	var v1 = vector[1];
-	var v2 = vector[2];
+	var v0 = vector.get_x();
+	var v1 = vector.get_y();
+	var v2 = vector.get_z();
 	var x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + this1[12];
 	var y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + this1[13];
 	var z = v0 * this1[2] + v1 * this1[6] + v2 * this1[10] + this1[14];
@@ -6514,11 +6029,11 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D = function(this1,vect
 		y *= invw;
 		z *= invw;
 	}
-	return [x,y,z];
+	return new thx_geom_d3_xyz_PointXYZ(x,y,z);
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rightMultiplyPoint = function(this1,vector) {
-	var v0 = vector[0];
-	var v1 = vector[1];
+	var v0 = vector.get_x();
+	var v1 = vector.get_y();
 	var x = v0 * this1[0] + v1 * this1[1] + 0 * this1[2] + this1[3];
 	var y = v0 * this1[4] + v1 * this1[5] + 0 * this1[6] + this1[7];
 	var z = v0 * this1[8] + v1 * this1[9] + 0 * this1[10] + this1[11];
@@ -6529,11 +6044,11 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rightMultiplyPoint = function(this1,vecto
 		y *= invw;
 		z *= invw;
 	}
-	return [x,y];
+	return new thx_geom_d2_xy_PointXY(x,y);
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint = function(this1,vector) {
-	var v0 = vector[0];
-	var v1 = vector[1];
+	var v0 = vector.get_x();
+	var v1 = vector.get_y();
 	var x = v0 * this1[0] + v1 * this1[4] + 0 * this1[8] + this1[12];
 	var y = v0 * this1[1] + v1 * this1[5] + 0 * this1[9] + this1[13];
 	var z = v0 * this1[2] + v1 * this1[6] + 0 * this1[10] + this1[14];
@@ -6544,17 +6059,16 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint = function(this1,vector
 		y *= invw;
 		z *= invw;
 	}
-	return [x,y];
+	return new thx_geom_d2_xy_PointXY(x,y);
 };
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.isMirroring = function(this1) {
-	var u_0 = this1[0];
-	var u_1 = this1[4];
-	var u_2 = this1[8];
-	var v_0 = this1[1];
-	var v_1 = this1[5];
-	var v_2 = this1[9];
-	var w = [this1[2],this1[6],this1[10]];
-	var mirrorvalue = thx_geom__$Point3D_Point3D_$Impl_$.dot([u_1 * v_2 - u_2 * v_1,u_2 * v_0 - u_0 * v_2,u_0 * v_1 - u_1 * v_0],w);
+	var u = new thx_geom_d3_xyz_PointXYZ(this1[0],this1[4],this1[8]);
+	var v = new thx_geom_d3_xyz_PointXYZ(this1[1],this1[5],this1[9]);
+	var w = new thx_geom_d3_xyz_PointXYZ(this1[2],this1[6],this1[10]);
+	var tmp;
+	var this2 = thx_geom_d3__$Point_Point_$Impl_$.cross(u,v);
+	tmp = this2.get_x() * w.get_x() + this2.get_y() * w.get_y() + this2.get_z() * w.get_z();
+	var mirrorvalue = tmp;
 	var ismirror = mirrorvalue < 0;
 	return ismirror;
 };
@@ -6585,96 +6099,154 @@ thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.at = function(this1,index) {
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.toString = function(this1) {
 	return "Matrix(" + this1.join(",") + ")";
 };
-var thx_geom_Plane = function(normal,w) {
+var thx_geom_d2_xy_XY = function() { };
+thx_geom_d2_xy_XY.__name__ = ["thx","geom","d2","xy","XY"];
+thx_geom_d2_xy_XY.prototype = {
+	get_x: null
+	,set_x: null
+	,get_y: null
+	,set_y: null
+	,__class__: thx_geom_d2_xy_XY
+};
+var thx_geom_d3_xyz_XYZ = function() { };
+thx_geom_d3_xyz_XYZ.__name__ = ["thx","geom","d3","xyz","XYZ"];
+thx_geom_d3_xyz_XYZ.__interfaces__ = [thx_geom_d2_xy_XY];
+thx_geom_d3_xyz_XYZ.prototype = {
+	get_z: null
+	,set_z: null
+	,__class__: thx_geom_d3_xyz_XYZ
+};
+var thx_geom_d3_xyz_PointXYZ = function(x,y,z) {
+	this._x = x;
+	this._y = y;
+	this._z = z;
+};
+thx_geom_d3_xyz_PointXYZ.__name__ = ["thx","geom","d3","xyz","PointXYZ"];
+thx_geom_d3_xyz_PointXYZ.__interfaces__ = [thx_geom_d3_xyz_XYZ];
+thx_geom_d3_xyz_PointXYZ.prototype = {
+	_x: null
+	,_y: null
+	,_z: null
+	,get_x: function() {
+		return this._x;
+	}
+	,get_y: function() {
+		return this._y;
+	}
+	,get_z: function() {
+		return this._z;
+	}
+	,set_x: function(v) {
+		return this._x = v;
+	}
+	,set_y: function(v) {
+		return this._y = v;
+	}
+	,set_z: function(v) {
+		return this._z = v;
+	}
+	,__class__: thx_geom_d3_xyz_PointXYZ
+};
+var thx_geom_d3_Plane = function(normal,w) {
 	this.normal = normal;
 	this.w = w;
 };
-thx_geom_Plane.__name__ = ["thx","geom","Plane"];
-thx_geom_Plane.fromPoint3Ds = function(a,b,c) {
+thx_geom_d3_Plane.__name__ = ["thx","geom","d3","Plane"];
+thx_geom_d3_Plane.fromPoints = function(a,b,c) {
 	var tmp;
 	var tmp1;
-	var tmp2;
-	var p_0 = -a[0];
-	var p_1 = -a[1];
-	var p_2 = -a[2];
-	tmp2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var this2 = tmp2;
 	var tmp3;
-	var p_01 = -a[0];
-	var p_11 = -a[1];
-	var p_21 = -a[2];
-	tmp3 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	var x2 = -a.get_x();
+	var y2 = -a.get_y();
+	var z2 = -a.get_z();
+	tmp3 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
 	var p = tmp3;
-	tmp1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
-	var this1 = tmp1;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
-	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
+	var x1 = b.get_x() + p.get_x();
+	var y1 = b.get_y() + p.get_y();
+	var z1 = b.get_z() + p.get_z();
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	var tmp2;
+	var tmp4;
+	var x4 = -a.get_x();
+	var y4 = -a.get_y();
+	var z4 = -a.get_z();
+	tmp4 = new thx_geom_d3_xyz_PointXYZ(x4,y4,z4);
+	var p1 = tmp4;
+	var x3 = c.get_x() + p1.get_x();
+	var y3 = c.get_y() + p1.get_y();
+	var z3 = c.get_z() + p1.get_z();
+	tmp2 = new thx_geom_d3_xyz_PointXYZ(x3,y3,z3);
+	var this1 = thx_geom_d3__$Point_Point_$Impl_$.cross(tmp1,tmp2);
+	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z());
+	var x = this1.get_x() / v;
+	var y = this1.get_y() / v;
+	var z = this1.get_z() / v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
 	var n = tmp;
-	return new thx_geom_Plane(n,thx_geom__$Point3D_Point3D_$Impl_$.dot(n,a));
+	return new thx_geom_d3_Plane(n,n.get_x() * a.get_x() + n.get_y() * a.get_y() + n.get_z() * a.get_z());
 };
-thx_geom_Plane.anyPlaneFromPoint3Ds = function(a,b,c) {
+thx_geom_d3_Plane.anyPlaneFromPoints = function(a,b,c) {
 	var tmp;
-	var p_0 = -a[0];
-	var p_1 = -a[1];
-	var p_2 = -a[2];
-	tmp = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
+	var tmp3;
+	var x1 = -a.get_x();
+	var y1 = -a.get_y();
+	var z1 = -a.get_z();
+	tmp3 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	var p = tmp3;
+	var x = b.get_x() + p.get_x();
+	var y = b.get_y() + p.get_y();
+	var z = b.get_z() + p.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
 	var v1 = tmp;
 	var tmp1;
-	var p_01 = -a[0];
-	var p_11 = -a[1];
-	var p_21 = -a[2];
-	tmp1 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
+	var tmp4;
+	var x3 = -a.get_x();
+	var y3 = -a.get_y();
+	var z3 = -a.get_z();
+	tmp4 = new thx_geom_d3_xyz_PointXYZ(x3,y3,z3);
+	var p1 = tmp4;
+	var x2 = c.get_x() + p1.get_x();
+	var y2 = c.get_y() + p1.get_y();
+	var z2 = c.get_z() + p1.get_z();
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
 	var v2 = tmp1;
-	if(Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(v1,[v1[0],v1[1],v1[2]])) < 10e-10) v1 = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(v2);
-	if(Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(v2,[v2[0],v2[1],v2[2]])) < 10e-10) v2 = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(v1);
-	var normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
-	if(Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,[normal[0],normal[1],normal[2]])) < 10e-10) {
-		v2 = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(v1);
-		normal = [v1[1] * v2[2] - v1[2] * v2[1],v1[2] * v2[0] - v1[0] * v2[2],v1[0] * v2[1] - v1[1] * v2[0]];
+	if(Math.sqrt(v1.get_x() * v1.get_x() + v1.get_y() * v1.get_y() + v1.get_z() * v1.get_z()) < 10e-10) v1 = thx_geom_d3__$Point_Point_$Impl_$.randomNonParallelVector(v2);
+	if(Math.sqrt(v2.get_x() * v2.get_x() + v2.get_y() * v2.get_y() + v2.get_z() * v2.get_z()) < 10e-10) v2 = thx_geom_d3__$Point_Point_$Impl_$.randomNonParallelVector(v1);
+	var normal = thx_geom_d3__$Point_Point_$Impl_$.cross(v1,v2);
+	if(Math.sqrt(normal.get_x() * normal.get_x() + normal.get_y() * normal.get_y() + normal.get_z() * normal.get_z()) < 10e-10) {
+		v2 = thx_geom_d3__$Point_Point_$Impl_$.randomNonParallelVector(v1);
+		normal = thx_geom_d3__$Point_Point_$Impl_$.cross(v1,v2);
 	}
 	var tmp2;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,[normal[0],normal[1],normal[2]]));
-	tmp2 = [normal[0] / v,normal[1] / v,normal[2] / v];
+	var v = Math.sqrt(normal.get_x() * normal.get_x() + normal.get_y() * normal.get_y() + normal.get_z() * normal.get_z());
+	var x4 = normal.get_x() / v;
+	var y4 = normal.get_y() / v;
+	var z4 = normal.get_z() / v;
+	tmp2 = new thx_geom_d3_xyz_PointXYZ(x4,y4,z4);
 	normal = tmp2;
-	return new thx_geom_Plane(normal,thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,a));
+	return new thx_geom_d3_Plane(normal,normal.get_x() * a.get_x() + normal.get_y() * a.get_y() + normal.get_z() * a.get_z());
 };
-thx_geom_Plane.fromPoints = function(a,b,c) {
+thx_geom_d3_Plane.fromNormalAndPoint = function(normal,point) {
 	var tmp;
-	var tmp1;
-	var tmp2;
-	var p_0 = -a[0];
-	var p_1 = -a[1];
-	var p_2 = -a[2];
-	tmp2 = [b[0] + p_0,b[1] + p_1,b[2] + p_2];
-	var this2 = tmp2;
-	var tmp3;
-	var p_01 = -a[0];
-	var p_11 = -a[1];
-	var p_21 = -a[2];
-	tmp3 = [c[0] + p_01,c[1] + p_11,c[2] + p_21];
-	var p = tmp3;
-	tmp1 = [this2[1] * p[2] - this2[2] * p[1],this2[2] * p[0] - this2[0] * p[2],this2[0] * p[1] - this2[1] * p[0]];
-	var this1 = tmp1;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
-	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
-	var n = tmp;
-	return new thx_geom_Plane(n,thx_geom__$Point3D_Point3D_$Impl_$.dot(n,a));
-};
-thx_geom_Plane.fromNormalAndPoint = function(normal,point) {
-	var tmp;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(normal,[normal[0],normal[1],normal[2]]));
-	tmp = [normal[0] / v,normal[1] / v,normal[2] / v];
+	var v = Math.sqrt(normal.get_x() * normal.get_x() + normal.get_y() * normal.get_y() + normal.get_z() * normal.get_z());
+	var x = normal.get_x() / v;
+	var y = normal.get_y() / v;
+	var z = normal.get_z() / v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
 	normal = tmp;
-	return new thx_geom_Plane(normal,thx_geom__$Point3D_Point3D_$Impl_$.dot(point,normal));
+	return new thx_geom_d3_Plane(normal,point.get_x() * normal.get_x() + point.get_y() * normal.get_y() + point.get_z() * normal.get_z());
 };
-thx_geom_Plane.prototype = {
+thx_geom_d3_Plane.prototype = {
 	normal: null
 	,w: null
 	,flip: function() {
 		var tmp;
 		var this1 = this.normal;
-		tmp = [-this1[0],-this1[1],-this1[2]];
-		return new thx_geom_Plane(tmp,-this.w);
+		var x = -this1.get_x();
+		var y = -this1.get_y();
+		var z = -this1.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		return new thx_geom_d3_Plane(tmp,-this.w);
 	}
 	,splitPolygon: function(polygon,coplanarFront,coplanarBack,front,back) {
 		var polygonType = 0;
@@ -6693,16 +6265,24 @@ thx_geom_Plane.prototype = {
 		var $it0 = HxOverrides.iter(polygon.vertices);
 		while( $it0.hasNext() ) {
 			var vertex = $it0.next();
-			t = thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,vertex.position) - this.w;
 			var tmp;
-			if(t < -1e-09) tmp = 2; else if(t > 10e-10) tmp = 1; else tmp = 0;
-			type = tmp;
+			var this1 = this.normal;
+			var p = vertex.position;
+			tmp = this1.get_x() * p.get_x() + this1.get_y() * p.get_y() + this1.get_z() * p.get_z();
+			t = tmp - this.w;
+			var tmp1;
+			if(t < -1e-09) tmp1 = 2; else if(t > 10e-10) tmp1 = 1; else tmp1 = 0;
+			type = tmp1;
 			polygonType |= type;
 			types.push(type);
 		}
 		switch(polygonType) {
 		case 0:
-			(thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,polygon.get_plane().normal) > 0?coplanarFront:coplanarBack).push(polygon);
+			var tmp2;
+			var this2 = this.normal;
+			var p1 = polygon.get_plane().normal;
+			tmp2 = this2.get_x() * p1.get_x() + this2.get_y() * p1.get_y() + this2.get_z() * p1.get_z();
+			(tmp2 > 0?coplanarFront:coplanarBack).push(polygon);
 			break;
 		case 1:
 			front.push(polygon);
@@ -6725,81 +6305,129 @@ thx_geom_Plane.prototype = {
 				if(ti != 2) f.push(vi);
 				if(ti != 1) b.push(vi);
 				if((ti | tj) == 3) {
-					var tmp1;
-					var this1 = vj.position;
-					var p = vi.position;
-					var p_0 = -p[0];
-					var p_1 = -p[1];
-					var p_2 = -p[2];
-					tmp1 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-					t = (this.w - thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,vi.position)) / thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,tmp1);
-					v = new thx_geom_Vertex3D(thx_geom__$Point3D_Point3D_$Impl_$.interpolate(vi.position,vj.position,t),thx_geom__$Point3D_Point3D_$Impl_$.interpolate(vi.normal,vj.normal,t));
+					var tmp3;
+					var this3 = this.normal;
+					var p2 = vi.position;
+					tmp3 = this3.get_x() * p2.get_x() + this3.get_y() * p2.get_y() + this3.get_z() * p2.get_z();
+					var tmp4;
+					var this4 = this.normal;
+					var tmp5;
+					var this5 = vj.position;
+					var p4 = vi.position;
+					var tmp6;
+					var x1 = -p4.get_x();
+					var y1 = -p4.get_y();
+					var z1 = -p4.get_z();
+					tmp6 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+					var p5 = tmp6;
+					var x = this5.get_x() + p5.get_x();
+					var y = this5.get_y() + p5.get_y();
+					var z = this5.get_z() + p5.get_z();
+					tmp5 = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+					var p3 = tmp5;
+					tmp4 = this4.get_x() * p3.get_x() + this4.get_y() * p3.get_y() + this4.get_z() * p3.get_z();
+					t = (this.w - tmp3) / tmp4;
+					v = new thx_geom_d3_Vertex(thx_geom_d3__$Point_Point_$Impl_$.interpolate(vi.position,vj.position,t),thx_geom_d3__$Point_Point_$Impl_$.interpolate(vi.normal,vj.normal,t));
 					f.push(v);
 					b.push(v);
 				}
 			}
-			if(f.length >= 3) front.push(new thx_geom_Polygon(f));
-			if(b.length >= 3) back.push(new thx_geom_Polygon(b));
+			if(f.length >= 3) front.push(new thx_geom_d3_Polygon(f));
+			if(b.length >= 3) back.push(new thx_geom_d3_Polygon(b));
 			break;
 		}
 	}
 	,equals: function(other) {
-		return thx_geom__$Point3D_Point3D_$Impl_$.equals(this.normal,other.normal)?this.w == other.w:false;
+		var tmp;
+		var this1 = this.normal;
+		var p = other.normal;
+		var tmp1;
+		if(this1.get_x() == p.get_x()) tmp1 = this1.get_y() == p.get_y(); else tmp1 = false;
+		if(tmp1) tmp = this1.get_z() == p.get_z(); else tmp = false;
+		return tmp?this.w == other.w:false;
 	}
 	,transform: function(matrix) {
 		var ismirror = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.isMirroring(matrix);
-		var r = thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(this.normal);
+		var r = thx_geom_d3__$Point_Point_$Impl_$.randomNonParallelVector(this.normal);
+		var u = thx_geom_d3__$Point_Point_$Impl_$.cross(this.normal,r);
+		var v = thx_geom_d3__$Point_Point_$Impl_$.cross(this.normal,u);
 		var tmp;
 		var this1 = this.normal;
-		tmp = [this1[1] * r[2] - this1[2] * r[1],this1[2] * r[0] - this1[0] * r[2],this1[0] * r[1] - this1[1] * r[0]];
-		var u = tmp;
-		var tmp1;
-		var this2 = this.normal;
-		tmp1 = [this2[1] * u[2] - this2[2] * u[1],this2[2] * u[0] - this2[0] * u[2],this2[0] * u[1] - this2[1] * u[0]];
-		var v = tmp1;
-		var tmp2;
-		var this3 = this.normal;
 		var v1 = this.w;
-		tmp2 = [this3[0] * v1,this3[1] * v1,this3[2] * v1];
-		var point1 = tmp2;
-		var point2 = [point1[0] + u[0],point1[1] + u[1],point1[2] + u[2]];
-		var point3 = [point1[0] + v[0],point1[1] + v[1],point1[2] + v[2]];
-		point1 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[point1[0],point1[1],point1[2]]);
-		point2 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[point2[0],point2[1],point2[2]]);
-		point3 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[point3[0],point3[1],point3[2]]);
-		var newplane = thx_geom_Plane.fromPoint3Ds(point1,point2,point3);
+		var x = this1.get_x() * v1;
+		var y = this1.get_y() * v1;
+		var z = this1.get_z() * v1;
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		var point1 = tmp;
+		var tmp1;
+		var x1 = point1.get_x() + u.get_x();
+		var y1 = point1.get_y() + u.get_y();
+		var z1 = point1.get_z() + u.get_z();
+		tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var point2 = tmp1;
+		var tmp2;
+		var x2 = point1.get_x() + v.get_x();
+		var y2 = point1.get_y() + v.get_y();
+		var z2 = point1.get_z() + v.get_z();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+		var point3 = tmp2;
+		point1 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,point1);
+		point2 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,point2);
+		point3 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,point3);
+		var newplane = thx_geom_d3_Plane.fromPoints(point1,point2,point3);
 		if(ismirror) newplane = newplane.flip();
 		return newplane;
 	}
 	,splitLineBetweenPoints: function(p1,p2) {
 		var tmp;
-		var p_0 = -p1[0];
-		var p_1 = -p1[1];
-		var p_2 = -p1[2];
-		tmp = [p2[0] + p_0,p2[1] + p_1,p2[2] + p_2];
+		var tmp4;
+		var x1 = -p1.get_x();
+		var y1 = -p1.get_y();
+		var z1 = -p1.get_z();
+		tmp4 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var p = tmp4;
+		var x = p2.get_x() + p.get_x();
+		var y = p2.get_y() + p.get_y();
+		var z = p2.get_z() + p.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
 		var direction = tmp;
-		var lambda = (this.w - thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,p1)) / thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,direction);
-		if(isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
 		var tmp1;
-		var p_01 = direction[0] * lambda;
-		var p_11 = direction[1] * lambda;
-		var p_21 = direction[2] * lambda;
-		tmp1 = [p1[0] + p_01,p1[1] + p_11,p1[2] + p_21];
-		return tmp1;
+		var this1 = this.normal;
+		tmp1 = this1.get_x() * p1.get_x() + this1.get_y() * p1.get_y() + this1.get_z() * p1.get_z();
+		var tmp2;
+		var this2 = this.normal;
+		tmp2 = this2.get_x() * direction.get_x() + this2.get_y() * direction.get_y() + this2.get_z() * direction.get_z();
+		var lambda = (this.w - tmp1) / tmp2;
+		if(isNaN(lambda)) lambda = 0; else if(lambda > 1) lambda = 1; else if(lambda < 0) lambda = 0;
+		var tmp3;
+		var tmp5;
+		var x3 = direction.get_x() * lambda;
+		var y3 = direction.get_y() * lambda;
+		var z3 = direction.get_z() * lambda;
+		tmp5 = new thx_geom_d3_xyz_PointXYZ(x3,y3,z3);
+		var p3 = tmp5;
+		var x2 = p1.get_x() + p3.get_x();
+		var y2 = p1.get_y() + p3.get_y();
+		var z2 = p1.get_z() + p3.get_z();
+		tmp3 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+		return tmp3;
 	}
 	,intersectWithLine: function(line) {
 		return line.intersectWithPlane(this);
 	}
 	,intersectWithPlane: function(plane) {
-		return thx_geom_Line3D.fromPlanes(this,plane);
+		return thx_geom_d3_Line.fromPlanes(this,plane);
 	}
 	,signedDistanceToPoint: function(point) {
-		return thx_geom__$Point3D_Point3D_$Impl_$.dot(this.normal,point) - this.w;
+		var tmp;
+		var this1 = this.normal;
+		tmp = this1.get_x() * point.get_x() + this1.get_y() * point.get_y() + this1.get_z() * point.get_z();
+		return tmp - this.w;
 	}
 	,toString: function() {
 		var tmp;
 		var this1 = this.normal;
-		tmp = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+		tmp = "Point(" + this1.get_x() + "," + this1.get_y() + "," + this1.get_z() + ")";
 		return "Plane [normal: " + tmp + ", w: " + this.w + "]";
 	}
 	,mirrorPoint: function(point3d) {
@@ -6808,1196 +6436,25 @@ thx_geom_Plane.prototype = {
 		var tmp1;
 		var this1 = this.normal;
 		var v = distance * 2.0;
-		tmp1 = [this1[0] * v,this1[1] * v,this1[2] * v];
+		var x1 = this1.get_x() * v;
+		var y1 = this1.get_y() * v;
+		var z1 = this1.get_z() * v;
+		tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
 		var p = tmp1;
-		var p_0 = -p[0];
-		var p_1 = -p[1];
-		var p_2 = -p[2];
-		tmp = [point3d[0] + p_0,point3d[1] + p_1,point3d[2] + p_2];
+		var tmp2;
+		var x2 = -p.get_x();
+		var y2 = -p.get_y();
+		var z2 = -p.get_z();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+		var p1 = tmp2;
+		var x = point3d.get_x() + p1.get_x();
+		var y = point3d.get_y() + p1.get_y();
+		var z = point3d.get_z() + p1.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
 		var mirrored = tmp;
 		return mirrored;
 	}
-	,__class__: thx_geom_Plane
-};
-var thx_geom__$Point3D_Point3D_$Impl_$ = {};
-thx_geom__$Point3D_Point3D_$Impl_$.__name__ = ["thx","geom","_Point3D","Point3D_Impl_"];
-thx_geom__$Point3D_Point3D_$Impl_$.fromObject = function(o) {
-	return [o.x,o.y,o.z];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.fromArray = function(arr) {
-	return [arr[0],arr[1],arr[2]];
-};
-thx_geom__$Point3D_Point3D_$Impl_$._new = function(x,y,z) {
-	return [x,y,z];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.get_x = function(this1) {
-	return this1[0];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.get_y = function(this1) {
-	return this1[1];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.get_z = function(this1) {
-	return this1[2];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.get_length = function(this1) {
-	return Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
-};
-thx_geom__$Point3D_Point3D_$Impl_$.get_lengthSquared = function(this1) {
-	return thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]);
-};
-thx_geom__$Point3D_Point3D_$Impl_$.get_inst = function(this1) {
-	return this1;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.addPoint3D = function(this1,p) {
-	return [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.add = function(this1,v) {
-	return [this1[0] + v,this1[1] + v,this1[2] + v];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.negate = function(this1) {
-	return [-this1[0],-this1[1],-this1[2]];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.subtractPoint3D = function(this1,p) {
-	var tmp;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	var p_2 = -p[2];
-	tmp = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.subtract = function(this1,v) {
-	var tmp;
-	var v1 = -v;
-	tmp = [this1[0] + v1,this1[1] + v1,this1[2] + v1];
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.multiplyPoint3D = function(this1,p) {
-	return [this1[0] * p[0],this1[1] * p[1],this1[2] * p[2]];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.multiply = function(this1,v) {
-	return [this1[0] * v,this1[1] * v,this1[2] * v];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.dividePoint3D = function(this1,p) {
-	return [this1[0] / p[0],this1[1] / p[1],this1[2] / p[2]];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.divide = function(this1,v) {
-	return [this1[0] / v,this1[1] / v,this1[2] / v];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.equals = function(this1,p) {
-	return (this1[0] == p[0]?this1[1] == p[1]:false)?this1[2] == p[2]:false;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.notEquals = function(this1,p) {
-	return !thx_geom__$Point3D_Point3D_$Impl_$.equals(this1,p);
-};
-thx_geom__$Point3D_Point3D_$Impl_$.abs = function(this1) {
-	var tmp;
-	var x = Math.abs(this1[0]);
-	var y = Math.abs(this1[1]);
-	var z = Math.abs(this1[2]);
-	tmp = [x,y,z];
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.nearEquals = function(this1,p) {
-	return (Math.abs(this1[0] - p[0]) <= 10e-10?Math.abs(this1[1] - p[1]) <= 10e-10:false)?Math.abs(this1[2] - p[2]) <= 10e-10:false;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.interpolate = function(this1,p,f) {
-	var tmp;
-	var tmp1;
-	var tmp2;
-	var p_0 = this1[0];
-	var p_1 = this1[1];
-	var p_2 = this1[2];
-	var p_01 = -p_0;
-	var p_11 = -p_1;
-	var p_21 = -p_2;
-	tmp2 = [p[0] + p_01,p[1] + p_11,p[2] + p_21];
-	var this2 = tmp2;
-	tmp1 = [this2[0] * f,this2[1] * f,this2[2] * f];
-	var p1 = tmp1;
-	tmp = [this1[0] + p1[0],this1[1] + p1[1],this1[2] + p1[2]];
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.isZero = function(this1) {
-	return thx_geom__$Point3D_Point3D_$Impl_$.equals(this1,thx_geom__$Point3D_Point3D_$Impl_$.zero);
-};
-thx_geom__$Point3D_Point3D_$Impl_$.isNearZero = function(this1) {
-	return thx_geom__$Point3D_Point3D_$Impl_$.nearEquals(this1,thx_geom__$Point3D_Point3D_$Impl_$.zero);
-};
-thx_geom__$Point3D_Point3D_$Impl_$.dot = function(this1,prod) {
-	return this1[0] * prod[0] + this1[1] * prod[1] + this1[2] * prod[2];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.normalize = function(this1) {
-	var tmp;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
-	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.distanceTo = function(this1,p) {
-	var tmp;
-	var tmp1;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	var p_2 = -p[2];
-	tmp1 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-	var this2 = tmp1;
-	tmp = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this2,[this2[0],this2[1],this2[2]]));
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.distanceToSquared = function(this1,p) {
-	var tmp;
-	var tmp1;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	var p_2 = -p[2];
-	tmp1 = [this1[0] + p_0,this1[1] + p_1,this1[2] + p_2];
-	var this2 = tmp1;
-	tmp = thx_geom__$Point3D_Point3D_$Impl_$.dot(this2,[this2[0],this2[1],this2[2]]);
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.multiply4x4 = function(this1,matrix4x4) {
-	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
-};
-thx_geom__$Point3D_Point3D_$Impl_$.transform = function(this1,matrix4x4) {
-	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,[this1[0],this1[1],this1[2]]);
-};
-thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector = function(this1) {
-	var a = thx_geom__$Point3D_Point3D_$Impl_$.abs(this1);
-	if(a[0] <= a[1]?a[0] <= a[2]:false) return [1,0,0]; else if(a[1] <= a[0]?a[1] <= a[2]:false) return [0,1,0]; else return [0,0,1];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.cross = function(this1,p) {
-	return [this1[1] * p[2] - this1[2] * p[1],this1[2] * p[0] - this1[0] * p[2],this1[0] * p[1] - this1[1] * p[0]];
-};
-thx_geom__$Point3D_Point3D_$Impl_$.min = function(this1,p) {
-	var tmp;
-	var x = Math.min(this1[0],p[0]);
-	var y = Math.min(this1[1],p[1]);
-	var z = Math.min(this1[2],p[2]);
-	tmp = [x,y,z];
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.max = function(this1,p) {
-	var tmp;
-	var x = Math.max(this1[0],p[0]);
-	var y = Math.max(this1[1],p[1]);
-	var z = Math.max(this1[2],p[2]);
-	tmp = [x,y,z];
-	return tmp;
-};
-thx_geom__$Point3D_Point3D_$Impl_$.toArray = function(this1) {
-	return this1.slice();
-};
-thx_geom__$Point3D_Point3D_$Impl_$.toObject = function(this1) {
-	return { x : this1[0], y : this1[1], z : this1[2]};
-};
-thx_geom__$Point3D_Point3D_$Impl_$.toString = function(this1) {
-	return "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
-};
-var thx_geom_OrthoNormalBasis = function(plane,rightvector) {
-	var tmp;
-	var tmp3;
-	var this2 = plane.normal;
-	tmp3 = [this2[1] * rightvector[2] - this2[2] * rightvector[1],this2[2] * rightvector[0] - this2[0] * rightvector[2],this2[0] * rightvector[1] - this2[1] * rightvector[0]];
-	var this1 = tmp3;
-	var v = Math.sqrt(thx_geom__$Point3D_Point3D_$Impl_$.dot(this1,[this1[0],this1[1],this1[2]]));
-	tmp = [this1[0] / v,this1[1] / v,this1[2] / v];
-	this.v = tmp;
-	var tmp1;
-	var this3 = this.v;
-	var p = plane.normal;
-	tmp1 = [this3[1] * p[2] - this3[2] * p[1],this3[2] * p[0] - this3[0] * p[2],this3[0] * p[1] - this3[1] * p[0]];
-	this.u = tmp1;
-	this.plane = plane;
-	var tmp2;
-	var this4 = plane.normal;
-	var v1 = plane.w;
-	tmp2 = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
-	this.planeOrigin = tmp2;
-};
-thx_geom_OrthoNormalBasis.__name__ = ["thx","geom","OrthoNormalBasis"];
-thx_geom_OrthoNormalBasis.fromPlane = function(plane) {
-	return new thx_geom_OrthoNormalBasis(plane,thx_geom__$Point3D_Point3D_$Impl_$.randomNonParallelVector(plane.normal));
-};
-thx_geom_OrthoNormalBasis.prototype = {
-	v: null
-	,u: null
-	,plane: null
-	,planeOrigin: null
-	,getProjectionMatrix: function() {
-		return [this.u[0],this.v[0],this.plane.normal[0],0,this.u[1],this.v[1],this.plane.normal[1],0,this.u[2],this.v[2],this.plane.normal[2],0,0,0,-this.plane.w,1];
-	}
-	,getInverseProjectionMatrix: function() {
-		var tmp;
-		var this1 = this.plane.normal;
-		var v = this.plane.w;
-		tmp = [this1[0] * v,this1[1] * v,this1[2] * v];
-		var p = tmp;
-		return [this.u[0],this.u[1],this.u[2],0,this.v[0],this.v[1],this.v[2],0,this.plane.normal[0],this.plane.normal[1],this.plane.normal[2],0,p[0],p[1],p[2],1];
-	}
-	,to2D: function(vec3) {
-		var tmp;
-		var x = thx_geom__$Point3D_Point3D_$Impl_$.dot(vec3,this.u);
-		var y = thx_geom__$Point3D_Point3D_$Impl_$.dot(vec3,this.v);
-		tmp = [x,y];
-		return tmp;
-	}
-	,to3D: function(vec2) {
-		var tmp;
-		var tmp1;
-		var this2 = this.planeOrigin;
-		var tmp3;
-		var this3 = this.u;
-		var v = vec2[0];
-		tmp3 = [this3[0] * v,this3[1] * v,this3[2] * v];
-		var p1 = tmp3;
-		tmp1 = [this2[0] + p1[0],this2[1] + p1[1],this2[2] + p1[2]];
-		var this1 = tmp1;
-		var tmp2;
-		var this4 = this.v;
-		var v1 = vec2[1];
-		tmp2 = [this4[0] * v1,this4[1] * v1,this4[2] * v1];
-		var p = tmp2;
-		tmp = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
-		return tmp;
-	}
-	,line3Dto2D: function(line) {
-		var tmp;
-		var this1 = line.direction;
-		var p = line.point;
-		tmp = [this1[0] + p[0],this1[1] + p[1],this1[2] + p[2]];
-		return thx_geom_Line.fromPoints(this.to2D(line.point),this.to2D(tmp));
-	}
-	,line2Dto3D: function(line) {
-		var a = line.origin();
-		var tmp;
-		var this1 = line.direction();
-		tmp = [this1[0] + a[0],this1[1] + a[1]];
-		var b = tmp;
-		return thx_geom_Line3D.fromPoints(this.to3D(a),this.to3D(b));
-	}
-	,transform: function(matrix) {
-		var newplane = this.plane.transform(matrix);
-		var tmp;
-		var this1 = this.u;
-		tmp = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[this1[0],this1[1],this1[2]]);
-		var rightpoint_transformed = tmp;
-		var tmp1;
-		tmp1 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[0,0,0]);
-		var origin_transformed = tmp1;
-		var tmp2;
-		var p_0 = -origin_transformed[0];
-		var p_1 = -origin_transformed[1];
-		var p_2 = -origin_transformed[2];
-		tmp2 = [rightpoint_transformed[0] + p_0,rightpoint_transformed[1] + p_1,rightpoint_transformed[2] + p_2];
-		var newrighthandvector = tmp2;
-		var newbasis = new thx_geom_OrthoNormalBasis(newplane,newrighthandvector);
-		return newbasis;
-	}
-	,__class__: thx_geom_OrthoNormalBasis
-};
-var thx_geom_Path = function(splines) {
-	this._isSelfIntersecting = false;
-	this._length = false;
-	this._area = false;
-	this._isClosed = false;
-	this.splines = splines;
-};
-thx_geom_Path.__name__ = ["thx","geom","Path"];
-thx_geom_Path.prototype = {
-	area: null
-	,length: null
-	,isSelfIntersecting: null
-	,isClosed: null
-	,box: null
-	,splines: null
-	,contains: function(p) {
-		var _g = 0;
-		var _g1 = this.splines;
-		while(_g < _g1.length) {
-			var spline = _g1[_g];
-			++_g;
-			if(spline.contains(p)) return true;
-		}
-		return false;
-	}
-	,union: function(other) {
-		var result = [];
-		var _g = 0;
-		var _g1 = this.splines;
-		while(_g < _g1.length) {
-			var spline = _g1[_g];
-			++_g;
-			var _g2 = 0;
-			var _g3 = other.splines;
-			while(_g2 < _g3.length) {
-				var ospline = _g3[_g2];
-				++_g2;
-				result = result.concat(spline.union(ospline));
-			}
-		}
-		if(result.length == 0) result = this.splines;
-		return new thx_geom_Path(result);
-	}
-	,difference: function(other) {
-		var result = [];
-		var _g = 0;
-		var _g1 = this.splines;
-		while(_g < _g1.length) {
-			var spline = _g1[_g];
-			++_g;
-			var _g2 = 0;
-			var _g3 = other.splines;
-			while(_g2 < _g3.length) {
-				var ospline = _g3[_g2];
-				++_g2;
-				result = result.concat(spline.difference(ospline));
-			}
-		}
-		if(result.length == 0) result = this.splines;
-		return new thx_geom_Path(result);
-	}
-	,intersection: function(other) {
-		var result = [];
-		var _g = 0;
-		var _g1 = this.splines;
-		while(_g < _g1.length) {
-			var spline = _g1[_g];
-			++_g;
-			var _g2 = 0;
-			var _g3 = other.splines;
-			while(_g2 < _g3.length) {
-				var ospline = _g3[_g2];
-				++_g2;
-				result = result.concat(spline.intersection(ospline));
-			}
-		}
-		if(result.length == 0) result = this.splines;
-		return new thx_geom_Path(result);
-	}
-	,intersections: function(other) {
-		throw "not implemented";
-	}
-	,transform: function(matrix) {
-		return new thx_geom_Path(this.splines.map(function(spline) {
-			return spline.transform(matrix);
-		}));
-	}
-	,flip: function() {
-		var s = this.splines.map(function(spline) {
-			return spline.flip();
-		});
-		s.reverse();
-		return new thx_geom_Path(s);
-	}
-	,intersectsPath: function(other) {
-		return this.intersectionsPath(other).length > 0;
-	}
-	,intersectsSpline: function(other) {
-		return this.intersectionsSpline(other).length > 0;
-	}
-	,intersectsLine: function(line) {
-		return this.intersectionsLine(line).length > 0;
-	}
-	,intersectionsPath: function(other) {
-		var tmp;
-		var array = this.splines.map(function(spline) {
-			return spline.intersectionsPath(other);
-		});
-		tmp = Array.prototype.concat.apply([],array);
-		return tmp;
-	}
-	,intersectionsSpline: function(other) {
-		var tmp;
-		var array = this.splines.map(function(spline) {
-			return spline.intersectionsSpline(other);
-		});
-		tmp = Array.prototype.concat.apply([],array);
-		return tmp;
-	}
-	,intersectionsLine: function(line) {
-		var tmp;
-		var array = this.splines.map(function(spline) {
-			return spline.intersectionsLine(line);
-		});
-		tmp = Array.prototype.concat.apply([],array);
-		return tmp;
-	}
-	,iterator: function() {
-		return HxOverrides.iter(this.splines);
-	}
-	,selfIntersections: function() {
-		var intersections = [];
-		var _g1 = 0;
-		var _g = this.splines.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			intersections = intersections.concat(this.splines[i].selfIntersections());
-			var _g3 = i;
-			var _g2 = this.splines.length;
-			while(_g3 < _g2) {
-				var j = _g3++;
-				intersections = intersections.concat(this.splines[i].intersectionsSpline(this.splines[j]));
-			}
-		}
-		return intersections;
-	}
-	,split: function(value) {
-		var len = this.get_length();
-		var l;
-		var spline;
-		var _g1 = 0;
-		var _g = this.splines.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			spline = this.splines[i];
-			l = spline.get_length() / len;
-			if(value <= l) {
-				var n = spline.split(value);
-				return [new thx_geom_Path(this.splines.slice(0,i).concat([n[0]])),new thx_geom_Path([n[1]].concat(this.splines.slice(i)))];
-			}
-			value -= l;
-		}
-		return [];
-	}
-	,interpolate: function(value) {
-		var len = this.get_length();
-		var l;
-		var _g = 0;
-		var _g1 = this.splines;
-		while(_g < _g1.length) {
-			var spline = _g1[_g];
-			++_g;
-			l = spline.get_length() / len;
-			if(value <= l) return spline.interpolate(value);
-			value -= l;
-		}
-		return null;
-	}
-	,asClockwise: function(clockwise) {
-		if(clockwise == null) clockwise = true;
-		return new thx_geom_Path(this.splines.map(function(spline) {
-			return spline.asClockwise(clockwise);
-		}));
-	}
-	,hull: function(other) {
-		throw "not implemented";
-	}
-	,minkowsky: function(other) {
-		throw "not implemented";
-	}
-	,reduce: function() {
-		return new thx_geom_Path(this.splines.map(function(spline) {
-			return spline.reduce();
-		}).filter(function(spline1) {
-			return spline1.get_edges().length > 0;
-		}));
-	}
-	,toPoints: function() {
-		var tmp;
-		var array = this.splines.map(function(spline) {
-			return spline.toPoints();
-		});
-		tmp = Array.prototype.concat.apply([],array);
-		return tmp;
-	}
-	,toString: function() {
-		return "Path(" + this.splines.map(function(s) {
-			return "[" + s.toString() + "]";
-		}).join(", ") + "," + Std.string(this.get_isClosed()) + ")";
-	}
-	,_isClosed: null
-	,get_isClosed: function() {
-		if(!this._isClosed) {
-			this._isClosed = true;
-			this.isClosed = true;
-			var _g = 0;
-			var _g1 = this.splines;
-			while(_g < _g1.length) {
-				var spline = _g1[_g];
-				++_g;
-				if(!spline.isClosed) {
-					this.isClosed = false;
-					break;
-				}
-			}
-		}
-		return this.isClosed;
-	}
-	,_area: null
-	,get_area: function() {
-		if(!this._area) {
-			this._area = true;
-			this.area = this.splines.reduce(function(acc,spline) {
-				return acc + spline.get_area();
-			},0);
-		}
-		return this.area;
-	}
-	,_length: null
-	,get_length: function() {
-		if(!this._length) {
-			this._length = true;
-			this.length = this.splines.reduce(function(acc,spline) {
-				return acc + spline.get_length();
-			},0);
-		}
-		return this.length;
-	}
-	,_isSelfIntersecting: null
-	,get_isSelfIntersecting: function() {
-		if(!this._isSelfIntersecting) {
-			this._isSelfIntersecting = true;
-			this.isSelfIntersecting = false;
-			var _g = 0;
-			var _g1 = this.splines;
-			while(_g < _g1.length) {
-				var spline = _g1[_g];
-				++_g;
-				if(spline.get_isSelfIntersecting()) {
-					this.isSelfIntersecting = true;
-					break;
-				}
-			}
-		}
-		return this.isSelfIntersecting;
-	}
-	,get_box: function() {
-		if(null == this.box) {
-			if(this.splines.length == 0) return null;
-			this.box = this.splines[0].get_box();
-			var _g1 = 1;
-			var _g = this.splines.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				var obox = this.splines[i].get_box();
-				this.box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(this.box,[obox[0],obox[1]]);
-			}
-		}
-		return this.box;
-	}
-	,__class__: thx_geom_Path
-};
-var thx_geom__$Point_Point_$Impl_$ = {};
-thx_geom__$Point_Point_$Impl_$.__name__ = ["thx","geom","_Point","Point_Impl_"];
-thx_geom__$Point_Point_$Impl_$.fromObject = function(o) {
-	return [o.x,o.y];
-};
-thx_geom__$Point_Point_$Impl_$.fromArray = function(arr) {
-	return [arr[0],arr[1]];
-};
-thx_geom__$Point_Point_$Impl_$.fromAngle = function(angle) {
-	var tmp;
-	var x = Math.cos(angle);
-	var y = Math.sin(angle);
-	tmp = [x,y];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$._new = function(x,y) {
-	return [x,y];
-};
-thx_geom__$Point_Point_$Impl_$.get_x = function(this1) {
-	return this1[0];
-};
-thx_geom__$Point_Point_$Impl_$.get_y = function(this1) {
-	return this1[1];
-};
-thx_geom__$Point_Point_$Impl_$.get_length = function(this1) {
-	return Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-};
-thx_geom__$Point_Point_$Impl_$.get_lengthSquared = function(this1) {
-	return this1[0] * this1[0] + this1[1] * this1[1];
-};
-thx_geom__$Point_Point_$Impl_$.get_inst = function(this1) {
-	return this1;
-};
-thx_geom__$Point_Point_$Impl_$.addPoint = function(this1,p) {
-	return [this1[0] + p[0],this1[1] + p[1]];
-};
-thx_geom__$Point_Point_$Impl_$.add = function(this1,v) {
-	return [this1[0] + v,this1[1] + v];
-};
-thx_geom__$Point_Point_$Impl_$.negate = function(this1) {
-	return [-this1[0],-this1[1]];
-};
-thx_geom__$Point_Point_$Impl_$.subtractPoint = function(this1,p) {
-	var tmp;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	tmp = [this1[0] + p_0,this1[1] + p_1];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.subtract = function(this1,v) {
-	var tmp;
-	var v1 = -v;
-	tmp = [this1[0] + v1,this1[1] + v1];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.multiplyPoint = function(this1,p) {
-	return [this1[0] * p[0],this1[1] * p[1]];
-};
-thx_geom__$Point_Point_$Impl_$.multiply = function(this1,v) {
-	return [this1[0] * v,this1[1] * v];
-};
-thx_geom__$Point_Point_$Impl_$.dividePoint = function(this1,p) {
-	return [this1[0] / p[0],this1[1] / p[1]];
-};
-thx_geom__$Point_Point_$Impl_$.divide = function(this1,v) {
-	return [this1[0] / v,this1[1] / v];
-};
-thx_geom__$Point_Point_$Impl_$.equals = function(this1,p) {
-	return this1[0] == p[0]?this1[1] == p[1]:false;
-};
-thx_geom__$Point_Point_$Impl_$.notEquals = function(this1,p) {
-	return !(this1[0] == p[0]?this1[1] == p[1]:false);
-};
-thx_geom__$Point_Point_$Impl_$.abs = function(this1) {
-	var tmp;
-	var x = Math.abs(this1[0]);
-	var y = Math.abs(this1[1]);
-	tmp = [x,y];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.nearEquals = function(this1,p) {
-	return Math.abs(this1[0] - p[0]) <= 10e-10?Math.abs(this1[1] - p[1]) <= 10e-10:false;
-};
-thx_geom__$Point_Point_$Impl_$.interpolate = function(this1,p,f) {
-	var tmp;
-	var tmp1;
-	var tmp2;
-	var p2 = this1;
-	var p_0 = -p2[0];
-	var p_1 = -p2[1];
-	tmp2 = [p[0] + p_0,p[1] + p_1];
-	var this2 = tmp2;
-	tmp1 = [this2[0] * f,this2[1] * f];
-	var p1 = tmp1;
-	tmp = [this1[0] + p1[0],this1[1] + p1[1]];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.isZero = function(this1) {
-	var tmp;
-	var p = thx_geom__$Point_Point_$Impl_$.zero;
-	if(this1[0] == p[0]) tmp = this1[1] == p[1]; else tmp = false;
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.isNearZero = function(this1) {
-	return thx_geom__$Point_Point_$Impl_$.nearEquals(this1,thx_geom__$Point_Point_$Impl_$.zero);
-};
-thx_geom__$Point_Point_$Impl_$.dot = function(this1,p) {
-	return this1[0] * p[0] + this1[1] * p[1];
-};
-thx_geom__$Point_Point_$Impl_$.normal = function(this1) {
-	return [this1[1],-this1[0]];
-};
-thx_geom__$Point_Point_$Impl_$.normalize = function(this1) {
-	var tmp;
-	var v = Math.sqrt(this1[0] * this1[0] + this1[1] * this1[1]);
-	tmp = [this1[0] / v,this1[1] / v];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.distanceTo = function(this1,p) {
-	var tmp;
-	var tmp1;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	tmp1 = [this1[0] + p_0,this1[1] + p_1];
-	var this2 = tmp1;
-	tmp = Math.sqrt(this2[0] * this2[0] + this2[1] * this2[1]);
-	return Math.abs(tmp);
-};
-thx_geom__$Point_Point_$Impl_$.distanceToSquared = function(this1,p) {
-	var tmp;
-	var tmp1;
-	var p_0 = -p[0];
-	var p_1 = -p[1];
-	tmp1 = [this1[0] + p_0,this1[1] + p_1];
-	var this2 = tmp1;
-	tmp = this2[0] * this2[0] + this2[1] * this2[1];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.transform = function(this1,matrix) {
-	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this1);
-};
-thx_geom__$Point_Point_$Impl_$.cross = function(this1,p) {
-	return this1[0] * p[1] - this1[1] * p[0];
-};
-thx_geom__$Point_Point_$Impl_$.min = function(this1,p) {
-	var tmp;
-	var x = Math.min(this1[0],p[0]);
-	var y = Math.min(this1[1],p[1]);
-	tmp = [x,y];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.max = function(this1,p) {
-	var tmp;
-	var x = Math.max(this1[0],p[0]);
-	var y = Math.max(this1[1],p[1]);
-	tmp = [x,y];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.pointAt = function(this1,angle,distance) {
-	var tmp;
-	var this2 = this1;
-	var tmp1;
-	var tmp2;
-	var x = Math.cos(angle);
-	var y = Math.sin(angle);
-	tmp2 = [x,y];
-	var this3 = tmp2;
-	tmp1 = [this3[0] * distance,this3[1] * distance];
-	var p = tmp1;
-	tmp = [this2[0] + p[0],this2[1] + p[1]];
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.isOnLine = function(this1,line) {
-	if(line.get_isHorizontal()) return Math.abs(this1[1] - line.w) <= 10e-10;
-	var tmp;
-	var a = line.xAtY(this1[1]);
-	tmp = Math.abs(a - this1[0]) <= 10e-10;
-	return tmp;
-};
-thx_geom__$Point_Point_$Impl_$.toAngle = function(this1) {
-	return Math.atan2(this1[1],this1[0]);
-};
-thx_geom__$Point_Point_$Impl_$.toArray = function(this1) {
-	return this1.slice();
-};
-thx_geom__$Point_Point_$Impl_$.toObject = function(this1) {
-	return { x : this1[0], y : this1[1]};
-};
-thx_geom__$Point_Point_$Impl_$.toString = function(this1) {
-	return "Point(" + this1[0] + "," + this1[1] + ")";
-};
-thx_geom__$Point_Point_$Impl_$.solve2Linear = function(a,b,c,d,u,v) {
-	var det = a * d - b * c;
-	if(det == 0) return null;
-	var invdet = 1.0 / det;
-	var x = u * d - b * v;
-	var y = -u * c + a * v;
-	return [x * invdet,y * invdet];
-};
-thx_geom__$Point_Point_$Impl_$.interpolateBetween2DPointsForY = function(p1,p2,y) {
-	var f1 = y - p1[1];
-	var f2 = p2[1] - p1[1];
-	var t;
-	if(f2 < 0) {
-		f1 = -f1;
-		f2 = -f2;
-	}
-	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
-	return p1[0] + t * (p2[0] - p1[0]);
-};
-var thx_geom_Polygon = function(vertices) {
-	this.vertices = vertices;
-};
-thx_geom_Polygon.__name__ = ["thx","geom","Polygon"];
-thx_geom_Polygon.fromVertices = function(vertices) {
-	if((vertices instanceof Array)?vertices.__enum__ == null:false) return new thx_geom_Polygon(vertices.copy()); else {
-		var tmp;
-		var _g = [];
-		var $it0 = $iterator(vertices)();
-		while( $it0.hasNext() ) {
-			var v = $it0.next();
-			_g.push(v);
-		}
-		tmp = _g;
-		return new thx_geom_Polygon(tmp);
-	}
-};
-thx_geom_Polygon.prototype = {
-	plane: null
-	,vertices: null
-	,flip: function() {
-		var reverse = this.vertices.slice();
-		reverse.reverse();
-		return new thx_geom_Polygon(reverse.map(function(v) {
-			var tmp;
-			var this1 = v.normal;
-			tmp = [-this1[0],-this1[1],-this1[2]];
-			return new thx_geom_Vertex3D(v.position,tmp);
-		}));
-	}
-	,iterator: function() {
-		return HxOverrides.iter(this.vertices);
-	}
-	,all: function() {
-		return this.vertices.slice();
-	}
-	,get_plane: function() {
-		return null == this.plane?this.plane = thx_geom_Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position):this.plane;
-	}
-	,__class__: thx_geom_Polygon
-};
-var thx_geom_Spline = function(nodes,closed) {
-	if(closed == null) closed = true;
-	this._isSelfIntersecting = false;
-	this._length = false;
-	this._area = false;
-	this._isClockwise = false;
-	this.nodes = nodes;
-	this.isClosed = closed;
-};
-thx_geom_Spline.__name__ = ["thx","geom","Spline"];
-thx_geom_Spline.fromEdges = function(arr,closed) {
-	var nodes = [];
-	if(arr.length > 0) {
-		var edge = arr[0];
-		var prev = closed?arr[arr.length - 1]:new thx_geom_EdgeLinear(thx_geom__$Point_Point_$Impl_$.zero,thx_geom__$Point_Point_$Impl_$.zero);
-		if(arr.length == 1) {
-			nodes.push(new thx_geom_SplineNode(edge.first,edge.normalOut,null));
-			nodes.push(new thx_geom_SplineNode(edge.last,null,edge.normalIn));
-		} else {
-			var _g1 = 0;
-			var _g = arr.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				edge = arr[i];
-				nodes.push(new thx_geom_SplineNode(edge.first,edge.normalOut,prev.normalIn));
-				prev = edge;
-			}
-			if(!closed) nodes.push(new thx_geom_SplineNode(edge.last,null,edge.normalIn));
-		}
-	}
-	var spline = new thx_geom_Spline(nodes,closed);
-	spline.edges = arr;
-	return spline;
-};
-thx_geom_Spline.fromPoints = function(arr,closed) {
-	var nodes = arr.map(function(c) {
-		return new thx_geom_SplineNode(c[0],c[1],c[2]);
-	});
-	return new thx_geom_Spline(nodes,closed);
-};
-thx_geom_Spline.fromArray = function(arr,closed) {
-	var nodes = arr.map(function(c) {
-		return new thx_geom_SplineNode(c,null,null);
-	});
-	return new thx_geom_Spline(nodes,closed);
-};
-thx_geom_Spline.fromCoords = function(arr,closed) {
-	var nodes = arr.map(function(c) {
-		var p = [c[0],c[1]];
-		var nout = null == c[2]?thx_geom__$Point_Point_$Impl_$.zero:[c[2],c[3]];
-		var nin = null == c[4]?thx_geom__$Point_Point_$Impl_$.zero:[c[4],c[5]];
-		return new thx_geom_SplineNode(p,nout,nin);
-	});
-	return new thx_geom_Spline(nodes,closed);
-};
-thx_geom_Spline.createEdge = function(a,b,nout,nin) {
-	if(null == nout?null == nin:false) return new thx_geom_EdgeLinear(a,b); else if(null == nout) return new thx_geom_EdgeCubic(a,a,nin,b); else if(null == nin) return new thx_geom_EdgeCubic(a,nout,b,b); else return new thx_geom_EdgeCubic(a,nout,nin,b);
-};
-thx_geom_Spline.prototype = {
-	area: null
-	,length: null
-	,isSelfIntersecting: null
-	,isPolygon: null
-	,isEmpty: null
-	,isClockwise: null
-	,box: null
-	,edges: null
-	,nodes: null
-	,isClosed: null
-	,iterator: function() {
-		return HxOverrides.iter(this.nodes);
-	}
-	,iterate: function(fstart,fit) {
-		var a;
-		var b;
-		if(null != fstart) fstart(this.nodes[0].position);
-		var _g1 = 0;
-		var _g = this.nodes.length - 1;
-		while(_g1 < _g) {
-			var i = _g1++;
-			a = this.nodes[i];
-			b = this.nodes[i + 1];
-			fit(a.position,b.position,a.normalOut,b.normalIn);
-		}
-		if(this.isClosed) {
-			a = this.nodes[this.nodes.length - 1];
-			b = this.nodes[0];
-			fit(a.position,b.position,a.normalOut,b.normalIn);
-		}
-	}
-	,iterateEdges: function(f) {
-		this.get_edges().map(f);
-	}
-	,get_edges: function() {
-		var _g = this;
-		if(null == this.edges) {
-			this.edges = [];
-			this.iterate(null,function(a,b,nout,nin) {
-				_g.get_edges().push(thx_geom_Spline.createEdge(a,b,nout,nin));
-			});
-		}
-		return this.edges;
-	}
-	,transform: function(matrix) {
-		var ismirror = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.isMirroring(matrix);
-		var result = new thx_geom_Spline(thx_core_Iterators.map(this.iterator(),function(node) {
-			return node.transform(matrix);
-		}),this.isClosed);
-		if(ismirror) result = result.flip();
-		return result;
-	}
-	,flip: function() {
-		var arr = thx_core_Iterators.map(this.iterator(),function(node) {
-			return node.flip();
-		});
-		arr.reverse();
-		return new thx_geom_Spline(arr,this.isClosed);
-	}
-	,contains: function(p) {
-		throw "not implemented";
-	}
-	,selfIntersections: function() {
-		var intersections = [];
-		thx_core_Arrays.eachPair(this.get_edges(),function(a,b) {
-			intersections = intersections.concat(a.intersections(b));
-			return true;
-		});
-		return intersections;
-	}
-	,intersectsPath: function(other) {
-		return this.intersectionsPath(other).length > 0;
-	}
-	,intersectsSpline: function(other) {
-		return this.intersectionsSpline(other).length > 0;
-	}
-	,intersectsLine: function(line) {
-		return this.intersectionsLine(line).length > 0;
-	}
-	,intersectionsPath: function(other) {
-		return other.intersectionsSpline(this);
-	}
-	,intersectionsSpline: function(other) {
-		var tmp;
-		var array1 = this.get_edges().map(function(a) {
-			var tmp1;
-			var array = other.get_edges().map(function(b) {
-				return a.intersections(b);
-			});
-			tmp1 = Array.prototype.concat.apply([],array);
-			return tmp1;
-		});
-		tmp = Array.prototype.concat.apply([],array1);
-		return tmp;
-	}
-	,intersectionsLine: function(line) {
-		var tmp;
-		var array = this.get_edges().map(function(edge) {
-			return edge.intersectionsLine(line);
-		});
-		tmp = Array.prototype.concat.apply([],array);
-		return tmp;
-	}
-	,split: function(value) {
-		if(!(value < 0)?value > 1:true) return null;
-		var len = this.get_length();
-		var nor;
-		var edge;
-		var edges = this.get_edges();
-		var _g1 = 0;
-		var _g = edges.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			edge = edges[i];
-			nor = edge.get_length() / len;
-			if(value <= nor) {
-				var n = edge.split(value);
-				return [thx_geom_Spline.fromEdges(edges.slice(0,i).concat([n[0]]),this.isClosed),thx_geom_Spline.fromEdges([n[1]].concat(edges.slice(i + 1)),this.isClosed)];
-			}
-			value -= nor;
-		}
-		return [];
-	}
-	,interpolate: function(value) {
-		if(!(value < 0)?value > 1:true) return null;
-		var len = this.get_length();
-		var nor;
-		var _g = 0;
-		var _g1 = this.get_edges();
-		while(_g < _g1.length) {
-			var edge = _g1[_g];
-			++_g;
-			nor = edge.get_length() / len;
-			if(value <= nor) return edge.interpolate(value);
-			value -= nor;
-		}
-		return null;
-	}
-	,reduce: function() {
-		var edges = this.get_edges();
-		var i = edges.length;
-		var result = [];
-		var edge;
-		while(--i >= 0) {
-			edge = edges[i];
-			if(edge.get_length() == 0) continue;
-			if(edge.get_isLinear()) edge = edge.toLinear();
-			result.unshift(edge);
-		}
-		return thx_geom_Spline.fromEdges(result,this.isClosed);
-	}
-	,_isClockwise: null
-	,get_isClockwise: function() {
-		if(!this._isClockwise) {
-			this._isClockwise = true;
-			var sum = 0.0;
-			this.iterateEdges(function(edge) {
-				sum += (edge.last[0] - edge.first[0]) * (edge.last[1] + edge.first[1]);
-			});
-			this.isClockwise = sum > 0;
-		}
-		return this.isClockwise;
-	}
-	,asClockwise: function(clockwise) {
-		if(clockwise == null) clockwise = true;
-		if(this.get_isClockwise() == clockwise) return this; else {
-			var counter = this.flip();
-			counter.isClockwise = !clockwise;
-			return counter;
-		}
-	}
-	,toLinear: function() {
-		var tmp;
-		var array = this.get_edges().map(function(edge) {
-			return edge.get_linearSegments();
-		});
-		tmp = Array.prototype.concat.apply([],array);
-		var edges = tmp;
-		return thx_geom_Spline.fromEdges(edges,this.isClosed);
-	}
-	,union: function(other) {
-		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).union(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
-			return _.toSpline();
-		});
-	}
-	,difference: function(other) {
-		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).difference(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
-			return _.toSpline();
-		});
-	}
-	,intersection: function(other) {
-		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).intersection(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
-			return _.toSpline();
-		});
-	}
-	,intersections: function(other) {
-		throw "not implemented";
-	}
-	,toPath: function() {
-		return new thx_geom_Path([this]);
-	}
-	,toPoints: function() {
-		return this.nodes.map(function(node) {
-			return node.position;
-		});
-	}
-	,toString: function() {
-		return "Spline(" + this.nodes.map(function(n) {
-			return "[" + n.toStringValues() + "]";
-		}).join(", ") + "," + Std.string(this.isClosed) + ")";
-	}
-	,_area: null
-	,get_area: function() {
-		var _g = this;
-		if(!this._area) {
-			this._area = true;
-			this.area = 0;
-			this.iterateEdges(function(edge) {
-				_g.area += edge.get_area();
-			});
-		}
-		return this.area;
-	}
-	,_length: null
-	,get_length: function() {
-		var _g = this;
-		if(!this._length) {
-			this._length = true;
-			this.length = 0;
-			this.iterateEdges(function(edge) {
-				_g.length += edge.get_length();
-			});
-		}
-		return this.length;
-	}
-	,_isSelfIntersecting: null
-	,get_isSelfIntersecting: function() {
-		var _g = this;
-		if(!this._isSelfIntersecting) {
-			this._isSelfIntersecting = true;
-			var edges = this.get_edges();
-			this.isSelfIntersecting = false;
-			thx_core_Arrays.eachPair(edges,function(a,b) {
-				return !(_g.isSelfIntersecting = a.intersects(b));
-			});
-		}
-		return this.isSelfIntersecting;
-	}
-	,get_isPolygon: function() {
-		var _g = 0;
-		var _g1 = this.nodes;
-		while(_g < _g1.length) {
-			var node = _g1[_g];
-			++_g;
-			var tmp;
-			var this1 = node.normalIn;
-			var tmp2;
-			if(this1[0] == null[0]) tmp2 = this1[1] == null[1]; else tmp2 = false;
-			tmp = !tmp2;
-			var tmp1;
-			if(!tmp) {
-				var this11 = node.normalOut;
-				var tmp3;
-				if(this11[0] == null[0]) tmp3 = this11[1] == null[1]; else tmp3 = false;
-				tmp1 = !tmp3;
-			} else tmp1 = true;
-			if(tmp1) return false;
-		}
-		return true;
-	}
-	,get_isEmpty: function() {
-		return this.nodes.length > 1;
-	}
-	,get_box: function() {
-		var _g = this;
-		if(null == this.box) {
-			if(this.nodes.length > 0) {
-				this.box = [this.nodes[0].position,this.nodes[0].position];
-				this.iterate(null,function(a,b,nout,nin) {
-					_g.box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(_g.get_box(),[a,b,nout,nin]);
-				});
-			}
-		}
-		return this.box;
-	}
-	,__class__: thx_geom_Spline
-};
-var thx_geom_SplineNode = function(position,normalout,normalin) {
-	this.position = position;
-	this.normalOut = (!(null == normalout)?thx_geom__$Point_Point_$Impl_$.nearEquals(normalout,position):true)?null:normalout;
-	this.normalIn = (!(null == normalin)?thx_geom__$Point_Point_$Impl_$.nearEquals(normalin,position):true)?null:normalin;
-};
-thx_geom_SplineNode.__name__ = ["thx","geom","SplineNode"];
-thx_geom_SplineNode.prototype = {
-	position: null
-	,normalIn: null
-	,normalOut: null
-	,transform: function(matrix) {
-		return new thx_geom_SplineNode(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.position),null != this.normalOut?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normalOut):null,null != this.normalIn?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normalIn):null);
-	}
-	,flip: function() {
-		return new thx_geom_SplineNode(this.position,this.normalIn,this.normalOut);
-	}
-	,toStringValues: function() {
-		var nout = null == this.normalOut?"null":"" + this.normalOut[1] + "," + this.normalOut[1];
-		var nin = null == this.normalIn?"null":"" + this.normalIn[1] + "," + this.normalIn[1];
-		return "" + this.position[0] + "," + this.position[1] + "," + nout + "," + nin;
-	}
-	,toString: function() {
-		return "SplineNode(" + this.toStringValues() + ")";
-	}
-	,__class__: thx_geom_SplineNode
+	,__class__: thx_geom_d3_Plane
 };
 var thx_geom_Transformables = function() { };
 thx_geom_Transformables.__name__ = ["thx","geom","Transformables"];
@@ -8017,13 +6474,13 @@ thx_geom_Transformables.translate = function(t,v) {
 	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(v));
 };
 thx_geom_Transformables.translateX = function(t,x) {
-	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([x,0,0]));
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(new thx_geom_d3_xyz_PointXYZ(x,0,0)));
 };
 thx_geom_Transformables.translateY = function(t,y) {
-	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,y,0]));
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(new thx_geom_d3_xyz_PointXYZ(0,y,0)));
 };
 thx_geom_Transformables.translateZ = function(t,z) {
-	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([0,0,z]));
+	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(new thx_geom_d3_xyz_PointXYZ(0,0,z)));
 };
 thx_geom_Transformables.scale = function(t,f) {
 	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling(f));
@@ -8039,43 +6496,6 @@ thx_geom_Transformables.rotateZ = function(t,angle) {
 };
 thx_geom_Transformables.rotateOnAxis = function(t,center,axis,angle) {
 	return t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.rotation(center,axis,angle));
-};
-var thx_geom_Vertex3D = function(position,normal) {
-	this.position = position;
-	this.normal = normal;
-};
-thx_geom_Vertex3D.__name__ = ["thx","geom","Vertex3D"];
-thx_geom_Vertex3D.prototype = {
-	position: null
-	,normal: null
-	,flip: function() {
-		var tmp;
-		var this1 = this.normal;
-		tmp = [-this1[0],-this1[1],-this1[2]];
-		return new thx_geom_Vertex3D(this.position,tmp);
-	}
-	,interpolate: function(other,t) {
-		return new thx_geom_Vertex3D(thx_geom__$Point3D_Point3D_$Impl_$.interpolate(this.position,other.position,t),thx_geom__$Point3D_Point3D_$Impl_$.interpolate(this.normal,other.normal,t));
-	}
-	,transform: function(matrix) {
-		var tmp;
-		var this1 = this.position;
-		tmp = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[this1[0],this1[1],this1[2]]);
-		var tmp1;
-		var this2 = this.normal;
-		tmp1 = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,[this2[0],this2[1],this2[2]]);
-		return new thx_geom_Vertex3D(tmp,tmp1);
-	}
-	,toString: function() {
-		var tmp;
-		var this1 = this.position;
-		tmp = "Point3D(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
-		var tmp1;
-		var this2 = this.normal;
-		tmp1 = "Point3D(" + this2[0] + "," + this2[1] + "," + this2[2] + ")";
-		return "Vertex3D " + tmp + ", " + tmp1;
-	}
-	,__class__: thx_geom_Vertex3D
 };
 var thx_geom_bool_Polygon = function(points) {
 	this.vertices = 0;
@@ -8213,10 +6633,10 @@ thx_geom_bool_Polygon.prototype = {
 		var nodes = [];
 		var vertex = this.first;
 		do {
-			nodes.push(new thx_geom_SplineNode(vertex.point));
+			nodes.push(new thx_geom_d2_SplineNode(vertex.point));
 			vertex = vertex.next;
 		} while(vertex != this.first);
-		return new thx_geom_Spline(nodes,true);
+		return new thx_geom_d2_Spline(nodes,true);
 	}
 	,__class__: thx_geom_bool_Polygon
 };
@@ -8255,7 +6675,8 @@ thx_geom_bool_PolygonVertex.prototype = {
 		var windings = 0;
 		var tmp;
 		var x = Infinity;
-		tmp = [x,this.point[1]];
+		var y = this.point.get_y();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
 		var boundary = new thx_geom_bool_PolygonVertex(tmp);
 		var q = polygon.first;
 		do {
@@ -8267,11 +6688,17 @@ thx_geom_bool_PolygonVertex.prototype = {
 	,__class__: thx_geom_bool_PolygonVertex
 };
 var thx_geom_bool_Intersection = function(s1,s2,c1,c2) {
-	var den = (c2.point[1] - c1.point[1]) * (s2.point[0] - s1.point[0]) - (c2.point[0] - c1.point[0]) * (s2.point[1] - s1.point[1]);
+	var den = (c2.point.get_y() - c1.point.get_y()) * (s2.point.get_x() - s1.point.get_x()) - (c2.point.get_x() - c1.point.get_x()) * (s2.point.get_y() - s1.point.get_y());
 	if(den == 0.0) return;
-	this.uSubject = ((c2.point[0] - c1.point[0]) * (s1.point[1] - c1.point[1]) - (c2.point[1] - c1.point[1]) * (s1.point[0] - c1.point[0])) / den;
-	this.uClipper = ((s2.point[0] - s1.point[0]) * (s1.point[1] - c1.point[1]) - (s2.point[1] - s1.point[1]) * (s1.point[0] - c1.point[0])) / den;
-	if(this.test()) this.point = [s1.point[0] + this.uSubject * (s2.point[0] - s1.point[0]),s1.point[1] + this.uSubject * (s2.point[1] - s1.point[1])];
+	this.uSubject = ((c2.point.get_x() - c1.point.get_x()) * (s1.point.get_y() - c1.point.get_y()) - (c2.point.get_y() - c1.point.get_y()) * (s1.point.get_x() - c1.point.get_x())) / den;
+	this.uClipper = ((s2.point.get_x() - s1.point.get_x()) * (s1.point.get_y() - c1.point.get_y()) - (s2.point.get_y() - s1.point.get_y()) * (s1.point.get_x() - c1.point.get_x())) / den;
+	if(this.test()) {
+		var tmp;
+		var x = s1.point.get_x() + this.uSubject * (s2.point.get_x() - s1.point.get_x());
+		var y = s1.point.get_y() + this.uSubject * (s2.point.get_y() - s1.point.get_y());
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		this.point = tmp;
+	}
 };
 thx_geom_bool_Intersection.__name__ = ["thx","geom","bool","Intersection"];
 thx_geom_bool_Intersection.prototype = {
@@ -8287,23 +6714,2515 @@ thx_geom_bool_Intersection.prototype = {
 	}
 	,__class__: thx_geom_bool_Intersection
 };
+var thx_geom_d2_Edge = function() { };
+thx_geom_d2_Edge.__name__ = ["thx","geom","d2","Edge"];
+thx_geom_d2_Edge.prototype = {
+	get_box: null
+	,get_area: null
+	,get_length: null
+	,get_lengthSquared: null
+	,get_isLinear: null
+	,get_linearSegments: null
+	,get_linearSpline: null
+	,box: null
+	,area: null
+	,length: null
+	,lengthSquared: null
+	,isLinear: null
+	,first: null
+	,last: null
+	,normalIn: null
+	,normalOut: null
+	,linearSegments: null
+	,linearSpline: null
+	,equals: null
+	,matches: null
+	,transform: null
+	,flip: null
+	,direction: null
+	,intersects: null
+	,intersections: null
+	,intersectsLine: null
+	,intersectionsLine: null
+	,split: null
+	,interpolate: null
+	,interpolateNode: null
+	,toArray: null
+	,toLinear: null
+	,toString: null
+	,toSpline: null
+	,__class__: thx_geom_d2_Edge
+};
+var thx_geom_d2_EdgeCubic = function(p0,p1,p2,p3) {
+	this.first = this.p0 = p0;
+	this.normalOut = this.p1 = p1;
+	this.normalIn = this.p2 = p2;
+	this.last = this.p3 = p3;
+};
+thx_geom_d2_EdgeCubic.__name__ = ["thx","geom","d2","EdgeCubic"];
+thx_geom_d2_EdgeCubic.__interfaces__ = [thx_geom_d2_Edge];
+thx_geom_d2_EdgeCubic.prototype = {
+	box: null
+	,area: null
+	,length: null
+	,lengthSquared: null
+	,linearSegments: null
+	,linearSpline: null
+	,isLinear: null
+	,p0: null
+	,p1: null
+	,p2: null
+	,p3: null
+	,first: null
+	,last: null
+	,normalIn: null
+	,normalOut: null
+	,equals: function(other) {
+		if(this.get_isLinear()?other.get_isLinear():false) return this.matches(other);
+		var t = other;
+		return ((thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.p0,t.p0)?thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.p1,t.p1):false)?thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.p2,t.p2):false)?thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.p3,t.p3):false;
+	}
+	,matches: function(other) {
+		return thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.first,other.first)?thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.last,other.last):false;
+	}
+	,transform: function(matrix) {
+		return new thx_geom_d2_EdgeCubic(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p0),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p1),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p2),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p3));
+	}
+	,flip: function() {
+		return new thx_geom_d2_EdgeCubic(this.p3,this.p2,this.p1,this.p0);
+	}
+	,direction: function() {
+		var tmp;
+		var this1 = this.last;
+		var p = this.first;
+		var tmp1;
+		var x1 = -p.get_x();
+		var y1 = -p.get_y();
+		tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+		var p1 = tmp1;
+		var x = this1.get_x() + p1.get_x();
+		var y = this1.get_y() + p1.get_y();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		return tmp;
+	}
+	,intersects: function(other) {
+		return this.intersections(other).length > 0;
+	}
+	,intersections: function(other) {
+		return js_Boot.__instanceof(other,thx_geom_d2_EdgeLinear)?this.intersectionsEdgeLinear(other):this.intersectionsEdgeCubic(other);
+	}
+	,intersectionsEdgeLinear: function(other) {
+		var tmp;
+		var array = this.get_linearSegments().map(function(edge) {
+			return edge.intersectionsEdgeLinear(other);
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
+	}
+	,intersectionsEdgeCubic: function(other) {
+		return this.get_linearSpline().intersectionsSpline(other.get_linearSpline());
+	}
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsLine: function(line) {
+		return this.get_linearSpline().intersectionsLine(line);
+	}
+	,split: function(v) {
+		var node = this.interpolateNode(v);
+		if(null == node) return [];
+		return [new thx_geom_d2_EdgeCubic(this.p0,this.p1,node.normalIn,node.position),new thx_geom_d2_EdgeCubic(node.position,node.normalOut,this.p2,this.p3)];
+	}
+	,interpolate: function(v) {
+		var n = this.interpolateNode(v);
+		if(null == n) return null;
+		return n.position;
+	}
+	,interpolateNode: function(v) {
+		var edges = this.subdivide(v);
+		return new thx_geom_d2_SplineNode(edges[0].last,edges[1].normalOut,edges[0].normalIn);
+	}
+	,toLinear: function() {
+		return new thx_geom_d2_EdgeLinear(this.first,this.last);
+	}
+	,toArray: function() {
+		return [this.p0,this.p1,this.p2,this.p3];
+	}
+	,toString: function() {
+		var tmp;
+		var this1 = this.p0;
+		tmp = "Point(" + this1.get_x() + "," + this1.get_y() + ")";
+		var tmp1;
+		var this2 = this.p1;
+		tmp1 = "Point(" + this2.get_x() + "," + this2.get_y() + ")";
+		var tmp2;
+		var this3 = this.p2;
+		tmp2 = "Point(" + this3.get_x() + "," + this3.get_y() + ")";
+		var tmp3;
+		var this4 = this.p3;
+		tmp3 = "Point(" + this4.get_x() + "," + this4.get_y() + ")";
+		return "Edge(" + tmp + "," + tmp1 + "," + tmp2 + "," + tmp3 + ")";
+	}
+	,toSpline: function() {
+		return thx_geom_d2_Spline.fromEdges([this],false);
+	}
+	,isNearLinear: function() {
+		var sum = thx_geom_d2__$Point_Point_$Impl_$.distanceTo(this.p0,this.p1) + thx_geom_d2__$Point_Point_$Impl_$.distanceTo(this.p1,this.p2) + thx_geom_d2__$Point_Point_$Impl_$.distanceTo(this.p2,this.p3);
+		var len = thx_geom_d2__$Point_Point_$Impl_$.distanceTo(this.p0,this.p3);
+		return sum / len <= thx_geom_d2_EdgeCubic.NEAR_FLAT;
+	}
+	,subdivide: function(v) {
+		if(v == null) v = 0.5;
+		var tmp;
+		var this1 = this.p0;
+		var tmp6;
+		var tmp7;
+		var this3 = this.p1;
+		var p2 = this.p0;
+		var tmp8;
+		var x3 = -p2.get_x();
+		var y3 = -p2.get_y();
+		tmp8 = new thx_geom_d2_xy_PointXY(x3,y3);
+		var p3 = tmp8;
+		var x2 = this3.get_x() + p3.get_x();
+		var y2 = this3.get_y() + p3.get_y();
+		tmp7 = new thx_geom_d2_xy_PointXY(x2,y2);
+		var this2 = tmp7;
+		var p1 = thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(v),Math.sin(v));
+		var x1 = this2.get_x() * p1.get_x();
+		var y1 = this2.get_y() * p1.get_y();
+		tmp6 = new thx_geom_d2_xy_PointXY(x1,y1);
+		var p = tmp6;
+		var x = this1.get_x() + p.get_x();
+		var y = this1.get_y() + p.get_y();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		var l1 = tmp;
+		var tmp1;
+		var this4 = this.p1;
+		var tmp9;
+		var tmp10;
+		var this6 = this.p2;
+		var p6 = this.p1;
+		var tmp11;
+		var x7 = -p6.get_x();
+		var y7 = -p6.get_y();
+		tmp11 = new thx_geom_d2_xy_PointXY(x7,y7);
+		var p7 = tmp11;
+		var x6 = this6.get_x() + p7.get_x();
+		var y6 = this6.get_y() + p7.get_y();
+		tmp10 = new thx_geom_d2_xy_PointXY(x6,y6);
+		var this5 = tmp10;
+		var p5 = thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(v),Math.sin(v));
+		var x5 = this5.get_x() * p5.get_x();
+		var y5 = this5.get_y() * p5.get_y();
+		tmp9 = new thx_geom_d2_xy_PointXY(x5,y5);
+		var p4 = tmp9;
+		var x4 = this4.get_x() + p4.get_x();
+		var y4 = this4.get_y() + p4.get_y();
+		tmp1 = new thx_geom_d2_xy_PointXY(x4,y4);
+		var m = tmp1;
+		var tmp2;
+		var this7 = this.p2;
+		var tmp12;
+		var tmp13;
+		var this9 = this.p3;
+		var p10 = this.p2;
+		var tmp14;
+		var x11 = -p10.get_x();
+		var y11 = -p10.get_y();
+		tmp14 = new thx_geom_d2_xy_PointXY(x11,y11);
+		var p11 = tmp14;
+		var x10 = this9.get_x() + p11.get_x();
+		var y10 = this9.get_y() + p11.get_y();
+		tmp13 = new thx_geom_d2_xy_PointXY(x10,y10);
+		var this8 = tmp13;
+		var p9 = thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(v),Math.sin(v));
+		var x9 = this8.get_x() * p9.get_x();
+		var y9 = this8.get_y() * p9.get_y();
+		tmp12 = new thx_geom_d2_xy_PointXY(x9,y9);
+		var p8 = tmp12;
+		var x8 = this7.get_x() + p8.get_x();
+		var y8 = this7.get_y() + p8.get_y();
+		tmp2 = new thx_geom_d2_xy_PointXY(x8,y8);
+		var r2 = tmp2;
+		var tmp3;
+		var tmp15;
+		var tmp16;
+		var tmp17;
+		var x15 = -l1.get_x();
+		var y15 = -l1.get_y();
+		tmp17 = new thx_geom_d2_xy_PointXY(x15,y15);
+		var p14 = tmp17;
+		var x14 = m.get_x() + p14.get_x();
+		var y14 = m.get_y() + p14.get_y();
+		tmp16 = new thx_geom_d2_xy_PointXY(x14,y14);
+		var this10 = tmp16;
+		var p13 = thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(v),Math.sin(v));
+		var x13 = this10.get_x() * p13.get_x();
+		var y13 = this10.get_y() * p13.get_y();
+		tmp15 = new thx_geom_d2_xy_PointXY(x13,y13);
+		var p12 = tmp15;
+		var x12 = l1.get_x() + p12.get_x();
+		var y12 = l1.get_y() + p12.get_y();
+		tmp3 = new thx_geom_d2_xy_PointXY(x12,y12);
+		var l2 = tmp3;
+		var tmp4;
+		var tmp18;
+		var tmp19;
+		var tmp20;
+		var x19 = -m.get_x();
+		var y19 = -m.get_y();
+		tmp20 = new thx_geom_d2_xy_PointXY(x19,y19);
+		var p17 = tmp20;
+		var x18 = r2.get_x() + p17.get_x();
+		var y18 = r2.get_y() + p17.get_y();
+		tmp19 = new thx_geom_d2_xy_PointXY(x18,y18);
+		var this11 = tmp19;
+		var p16 = thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(v),Math.sin(v));
+		var x17 = this11.get_x() * p16.get_x();
+		var y17 = this11.get_y() * p16.get_y();
+		tmp18 = new thx_geom_d2_xy_PointXY(x17,y17);
+		var p15 = tmp18;
+		var x16 = m.get_x() + p15.get_x();
+		var y16 = m.get_y() + p15.get_y();
+		tmp4 = new thx_geom_d2_xy_PointXY(x16,y16);
+		var r1 = tmp4;
+		var tmp5;
+		var tmp21;
+		var tmp22;
+		var tmp23;
+		var x23 = -l2.get_x();
+		var y23 = -l2.get_y();
+		tmp23 = new thx_geom_d2_xy_PointXY(x23,y23);
+		var p20 = tmp23;
+		var x22 = r1.get_x() + p20.get_x();
+		var y22 = r1.get_y() + p20.get_y();
+		tmp22 = new thx_geom_d2_xy_PointXY(x22,y22);
+		var this12 = tmp22;
+		var p19 = thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(v),Math.sin(v));
+		var x21 = this12.get_x() * p19.get_x();
+		var y21 = this12.get_y() * p19.get_y();
+		tmp21 = new thx_geom_d2_xy_PointXY(x21,y21);
+		var p18 = tmp21;
+		var x20 = l2.get_x() + p18.get_x();
+		var y20 = l2.get_y() + p18.get_y();
+		tmp5 = new thx_geom_d2_xy_PointXY(x20,y20);
+		var l3 = tmp5;
+		return [new thx_geom_d2_EdgeCubic(this.p0,l1,l2,l3),new thx_geom_d2_EdgeCubic(l3,r1,r2,this.p3)];
+	}
+	,get_area: function() {
+		var tmp;
+		var array = this.get_linearSegments();
+		tmp = array.reduce(function(acc,edge) {
+			return acc + edge.get_area();
+		},0);
+		return tmp;
+	}
+	,get_box: function() {
+		return thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p1),[this.p2,this.p3]);
+	}
+	,get_isLinear: function() {
+		var line = thx_geom_d2_Line.fromPoints(this.p0,this.p3);
+		if(!(!thx_geom_d2__$Point_Point_$Impl_$.isOnLine(this.p1,line))?!thx_geom_d2__$Point_Point_$Impl_$.isOnLine(this.p2,line):true) return false; else {
+			var box = thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p3);
+			return thx_geom_shape__$Box_Box_$Impl_$.contains(box,this.p1)?thx_geom_shape__$Box_Box_$Impl_$.contains(box,this.p2):false;
+		}
+	}
+	,get_length: function() {
+		var tmp;
+		var array = this.get_linearSegments();
+		tmp = array.reduce(function(acc,edge) {
+			return acc + edge.get_length();
+		},0);
+		return tmp;
+	}
+	,get_lengthSquared: function() {
+		var tmp;
+		var array = this.get_linearSegments();
+		tmp = array.reduce(function(acc,edge) {
+			return acc + edge.get_lengthSquared();
+		},0);
+		return tmp;
+	}
+	,get_linearSegments: function() {
+		var tosplit = [this];
+		var linearSegments = [];
+		var edge;
+		while(tosplit.length > 0) {
+			edge = tosplit.shift();
+			if(edge.isNearLinear()) linearSegments.push(edge.toLinear()); else tosplit = edge.subdivide().concat(tosplit);
+		}
+		return linearSegments;
+	}
+	,get_linearSpline: function() {
+		return thx_geom_d2_Spline.fromEdges(this.get_linearSegments(),false);
+	}
+	,__class__: thx_geom_d2_EdgeCubic
+};
+var thx_geom_d2_EdgeLinear = function(p0,p1) {
+	this.first = this.p0 = p0;
+	this.last = this.p1 = p1;
+	this.normalIn = this.normalOut = null;
+};
+thx_geom_d2_EdgeLinear.__name__ = ["thx","geom","d2","EdgeLinear"];
+thx_geom_d2_EdgeLinear.__interfaces__ = [thx_geom_d2_Edge];
+thx_geom_d2_EdgeLinear.prototype = {
+	area: null
+	,box: null
+	,length: null
+	,lengthSquared: null
+	,line: null
+	,linearSegments: null
+	,linearSpline: null
+	,isLinear: null
+	,p0: null
+	,p1: null
+	,first: null
+	,last: null
+	,normalIn: null
+	,normalOut: null
+	,equals: function(other) {
+		return other.get_isLinear()?this.matches(other):false;
+	}
+	,matches: function(other) {
+		return thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.first,other.first)?thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.last,other.last):false;
+	}
+	,transform: function(matrix) {
+		return new thx_geom_d2_EdgeLinear(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p0),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.p1));
+	}
+	,flip: function() {
+		return new thx_geom_d2_EdgeLinear(this.p1,this.p0);
+	}
+	,direction: function() {
+		var tmp;
+		var this1 = this.last;
+		var p = this.first;
+		var tmp1;
+		var x1 = -p.get_x();
+		var y1 = -p.get_y();
+		tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+		var p1 = tmp1;
+		var x = this1.get_x() + p1.get_x();
+		var y = this1.get_y() + p1.get_y();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		return tmp;
+	}
+	,intersects: function(other) {
+		return this.intersections(other).length > 0;
+	}
+	,intersections: function(other) {
+		if(!thx_geom_shape__$Box_Box_$Impl_$.intersects(this.get_box(),other.get_box())) return [];
+		if(js_Boot.__instanceof(other,thx_geom_d2_EdgeLinear)) return this.intersectionsEdgeLinear(other); else return this.intersectionsEdgeCubic(other);
+	}
+	,intersectionsEdgeLinear: function(other) {
+		var ps = this.intersectionsLine(other.get_line());
+		if(!(ps.length == 0)?other.intersectsLine(this.get_line()):true) return ps; else return [];
+	}
+	,intersectionsEdgeCubic: function(other) {
+		return other.intersectionsEdgeLinear(this);
+	}
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsLine: function(line) {
+		var l = thx_geom_d2_Line.fromPoints(this.p0,this.p1);
+		var p = l.intersectionLine(line);
+		if(null != p) {
+			if(this.p0.get_x() == this.p1.get_x()) {
+				var tmp;
+				var tmp2;
+				var this2 = this.p0;
+				var p1 = this.p1;
+				var x = Math.min(this2.get_x(),p1.get_x());
+				var y = Math.min(this2.get_y(),p1.get_y());
+				tmp2 = new thx_geom_d2_xy_PointXY(x,y);
+				var this1 = tmp2;
+				tmp = this1.get_y();
+				var tmp1;
+				if(p.get_y() >= tmp) {
+					var tmp3;
+					var tmp4;
+					var this4 = this.p0;
+					var p2 = this.p1;
+					var x1 = Math.max(this4.get_x(),p2.get_x());
+					var y1 = Math.max(this4.get_y(),p2.get_y());
+					tmp4 = new thx_geom_d2_xy_PointXY(x1,y1);
+					var this3 = tmp4;
+					tmp3 = this3.get_y();
+					tmp1 = p.get_y() <= tmp3;
+				} else tmp1 = false;
+				if(tmp1) return [p];
+			} else {
+				var tmp5;
+				var tmp7;
+				var this6 = this.p0;
+				var p3 = this.p1;
+				var x2 = Math.min(this6.get_x(),p3.get_x());
+				var y2 = Math.min(this6.get_y(),p3.get_y());
+				tmp7 = new thx_geom_d2_xy_PointXY(x2,y2);
+				var this5 = tmp7;
+				tmp5 = this5.get_x();
+				var tmp6;
+				if(p.get_x() >= tmp5) {
+					var tmp8;
+					var tmp9;
+					var this8 = this.p0;
+					var p4 = this.p1;
+					var x3 = Math.max(this8.get_x(),p4.get_x());
+					var y3 = Math.max(this8.get_y(),p4.get_y());
+					tmp9 = new thx_geom_d2_xy_PointXY(x3,y3);
+					var this7 = tmp9;
+					tmp8 = this7.get_x();
+					tmp6 = p.get_x() <= tmp8;
+				} else tmp6 = false;
+				if(tmp6) return [p];
+			}
+		}
+		return [];
+	}
+	,split: function(v) {
+		var mid = this.interpolate(v);
+		return [new thx_geom_d2_EdgeLinear(this.p0,mid),new thx_geom_d2_EdgeLinear(mid,this.p1)];
+	}
+	,interpolate: function(v) {
+		return thx_geom_d2__$Point_Point_$Impl_$.interpolate(this.p0,this.p1,v);
+	}
+	,interpolateNode: function(v) {
+		var p = this.interpolate(v);
+		if(null == p) return null;
+		return new thx_geom_d2_SplineNode(p,null,null);
+	}
+	,toLinear: function() {
+		return this;
+	}
+	,toArray: function() {
+		return [this.p0,this.p1];
+	}
+	,toString: function() {
+		var tmp;
+		var this1 = this.p0;
+		tmp = "Point(" + this1.get_x() + "," + this1.get_y() + ")";
+		var tmp1;
+		var this2 = this.p1;
+		tmp1 = "Point(" + this2.get_x() + "," + this2.get_y() + ")";
+		return "Edge(" + tmp + "," + tmp1 + ")";
+	}
+	,toSpline: function() {
+		return thx_geom_d2_Spline.fromEdges([this],false);
+	}
+	,get_area: function() {
+		var tmp;
+		var this1 = this.p1;
+		var p1 = this.p0;
+		var tmp1;
+		var x1 = -p1.get_x();
+		var y1 = -p1.get_y();
+		tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+		var p2 = tmp1;
+		var x = this1.get_x() + p2.get_x();
+		var y = this1.get_y() + p2.get_y();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		var p = tmp;
+		return this.p0.get_y() * (this.p1.get_x() - this.p0.get_x()) + p.get_x() * p.get_y() / 2;
+	}
+	,get_box: function() {
+		return thx_geom_shape__$Box_Box_$Impl_$.fromPoints(this.p0,this.p1);
+	}
+	,get_isLinear: function() {
+		return true;
+	}
+	,get_length: function() {
+		return Math.sqrt(this.get_lengthSquared());
+	}
+	,get_lengthSquared: function() {
+		var tmp;
+		var tmp1;
+		var this2 = this.p1;
+		var p = this.p0;
+		var tmp2;
+		var x1 = -p.get_x();
+		var y1 = -p.get_y();
+		tmp2 = new thx_geom_d2_xy_PointXY(x1,y1);
+		var p1 = tmp2;
+		var x = this2.get_x() + p1.get_x();
+		var y = this2.get_y() + p1.get_y();
+		tmp1 = new thx_geom_d2_xy_PointXY(x,y);
+		var this1 = tmp1;
+		tmp = this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y();
+		return tmp;
+	}
+	,get_line: function() {
+		return thx_geom_d2_Line.fromPoints(this.p0,this.p1);
+	}
+	,get_linearSegments: function() {
+		return [this];
+	}
+	,get_linearSpline: function() {
+		return thx_geom_d2_Spline.fromEdges([this],false);
+	}
+	,__class__: thx_geom_d2_EdgeLinear
+};
+var thx_geom_d2_Line = function(normal,w) {
+	var l = Math.sqrt(normal.get_x() * normal.get_x() + normal.get_y() * normal.get_y());
+	this.w = w * l;
+	var tmp;
+	var x = normal.get_x() / l;
+	var y = normal.get_y() / l;
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	this.normal = tmp;
+};
+thx_geom_d2_Line.__name__ = ["thx","geom","d2","Line"];
+thx_geom_d2_Line.fromPoints = function(p1,p2) {
+	var tmp;
+	var tmp2;
+	var x1 = -p1.get_x();
+	var y1 = -p1.get_y();
+	tmp2 = new thx_geom_d2_xy_PointXY(x1,y1);
+	var p = tmp2;
+	var x = p2.get_x() + p.get_x();
+	var y = p2.get_y() + p.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	var direction = tmp;
+	var tmp1;
+	var tmp3;
+	var tmp4;
+	var x4 = direction.get_y();
+	var y4 = -direction.get_x();
+	tmp4 = new thx_geom_d2_xy_PointXY(x4,y4);
+	var this2 = tmp4;
+	var x3 = -this2.get_x();
+	var y3 = -this2.get_y();
+	tmp3 = new thx_geom_d2_xy_PointXY(x3,y3);
+	var this1 = tmp3;
+	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y());
+	var x2 = this1.get_x() / v;
+	var y2 = this1.get_y() / v;
+	tmp1 = new thx_geom_d2_xy_PointXY(x2,y2);
+	var normal = tmp1;
+	var w = p1.get_x() * normal.get_x() + p1.get_y() * normal.get_y();
+	return new thx_geom_d2_Line(normal,w);
+};
+thx_geom_d2_Line.prototype = {
+	normal: null
+	,w: null
+	,isHorizontal: null
+	,isVertical: null
+	,offset: function(value) {
+		return new thx_geom_d2_Line(this.normal,this.w + value);
+	}
+	,reverse: function() {
+		var tmp;
+		var this1 = this.normal;
+		var x = -this1.get_x();
+		var y = -this1.get_y();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		return new thx_geom_d2_Line(tmp,-this.w);
+	}
+	,equals: function(other) {
+		var tmp;
+		var this1 = this.normal;
+		var p = other.normal;
+		if(this1.get_x() == p.get_x()) tmp = this1.get_y() == p.get_y(); else tmp = false;
+		return tmp?this.w == other.w:false;
+	}
+	,origin: function() {
+		var tmp;
+		var this1 = this.normal;
+		var v = this.w;
+		var x = this1.get_x() * v;
+		var y = this1.get_y() * v;
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		return tmp;
+	}
+	,direction: function() {
+		var tmp;
+		var this1 = this.normal;
+		var x = this1.get_y();
+		var y = -this1.get_x();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		return tmp;
+	}
+	,xAtY: function(y) {
+		return (this.w - this.normal.get_y() * y) / this.normal.get_x();
+	}
+	,absDistanceToPoint: function(point) {
+		var tmp;
+		var p = this.normal;
+		tmp = point.get_x() * p.get_x() + point.get_y() * p.get_y();
+		return Math.abs(tmp - this.w);
+	}
+	,intersectionLine: function(line) {
+		return thx_geom_d2__$Point_Point_$Impl_$.solve2Linear(this.normal.get_x(),this.normal.get_y(),line.normal.get_x(),line.normal.get_y(),this.w,line.w);
+	}
+	,transform: function(matrix) {
+		var origin = new thx_geom_d2_xy_PointXY(0,0);
+		var tmp;
+		var this1 = this.normal;
+		var v = this.w;
+		var x = this1.get_x() * v;
+		var y = this1.get_y() * v;
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		var pointOnPlane = tmp;
+		var neworigin = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,origin);
+		var neworiginPlusNormal = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normal);
+		var tmp1;
+		var tmp2;
+		var x2 = -neworigin.get_x();
+		var y2 = -neworigin.get_y();
+		tmp2 = new thx_geom_d2_xy_PointXY(x2,y2);
+		var p = tmp2;
+		var x1 = neworiginPlusNormal.get_x() + p.get_x();
+		var y1 = neworiginPlusNormal.get_y() + p.get_y();
+		tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+		var newnormal = tmp1;
+		var newpointOnPlane = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,pointOnPlane);
+		var neww = newnormal.get_x() * newpointOnPlane.get_x() + newnormal.get_y() * newpointOnPlane.get_y();
+		return new thx_geom_d2_Line(newnormal,neww);
+	}
+	,get_isHorizontal: function() {
+		return this.normal.get_x() == 0;
+	}
+	,get_isVertical: function() {
+		return this.normal.get_y() == 0;
+	}
+	,toString: function() {
+		return "Line(" + this.normal.get_x() + "," + this.normal.get_y() + ",w:" + this.w + ")";
+	}
+	,__class__: thx_geom_d2_Line
+};
+var thx_geom_d2_Path = function(splines) {
+	this.splines = splines;
+};
+thx_geom_d2_Path.__name__ = ["thx","geom","d2","Path"];
+thx_geom_d2_Path.prototype = {
+	area: null
+	,length: null
+	,isSelfIntersecting: null
+	,isClosed: null
+	,box: null
+	,splines: null
+	,contains: function(p) {
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			if(spline.contains(p)) return true;
+		}
+		return false;
+	}
+	,union: function(other) {
+		var result = [];
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			var _g2 = 0;
+			var _g3 = other.splines;
+			while(_g2 < _g3.length) {
+				var ospline = _g3[_g2];
+				++_g2;
+				result = result.concat(spline.union(ospline));
+			}
+		}
+		if(result.length == 0) result = this.splines;
+		return new thx_geom_d2_Path(result);
+	}
+	,difference: function(other) {
+		var result = [];
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			var _g2 = 0;
+			var _g3 = other.splines;
+			while(_g2 < _g3.length) {
+				var ospline = _g3[_g2];
+				++_g2;
+				result = result.concat(spline.difference(ospline));
+			}
+		}
+		if(result.length == 0) result = this.splines;
+		return new thx_geom_d2_Path(result);
+	}
+	,intersection: function(other) {
+		var result = [];
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			var _g2 = 0;
+			var _g3 = other.splines;
+			while(_g2 < _g3.length) {
+				var ospline = _g3[_g2];
+				++_g2;
+				result = result.concat(spline.intersection(ospline));
+			}
+		}
+		if(result.length == 0) result = this.splines;
+		return new thx_geom_d2_Path(result);
+	}
+	,intersections: function(other) {
+		throw "not implemented";
+	}
+	,transform: function(matrix) {
+		return new thx_geom_d2_Path(this.splines.map(function(spline) {
+			return spline.transform(matrix);
+		}));
+	}
+	,flip: function() {
+		var s = this.splines.map(function(spline) {
+			return spline.flip();
+		});
+		s.reverse();
+		return new thx_geom_d2_Path(s);
+	}
+	,intersectsPath: function(other) {
+		return this.intersectionsPath(other).length > 0;
+	}
+	,intersectsSpline: function(other) {
+		return this.intersectionsSpline(other).length > 0;
+	}
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsPath: function(other) {
+		var tmp;
+		var array = this.splines.map(function(spline) {
+			return spline.intersectionsPath(other);
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
+	}
+	,intersectionsSpline: function(other) {
+		var tmp;
+		var array = this.splines.map(function(spline) {
+			return spline.intersectionsSpline(other);
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
+	}
+	,intersectionsLine: function(line) {
+		var tmp;
+		var array = this.splines.map(function(spline) {
+			return spline.intersectionsLine(line);
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
+	}
+	,iterator: function() {
+		return HxOverrides.iter(this.splines);
+	}
+	,selfIntersections: function() {
+		var intersections = [];
+		var _g1 = 0;
+		var _g = this.splines.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			intersections = intersections.concat(this.splines[i].selfIntersections());
+			var _g3 = i;
+			var _g2 = this.splines.length;
+			while(_g3 < _g2) {
+				var j = _g3++;
+				intersections = intersections.concat(this.splines[i].intersectionsSpline(this.splines[j]));
+			}
+		}
+		return intersections;
+	}
+	,split: function(value) {
+		var len = this.get_length();
+		var l;
+		var spline;
+		var _g1 = 0;
+		var _g = this.splines.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			spline = this.splines[i];
+			l = spline.get_length() / len;
+			if(value <= l) {
+				var n = spline.split(value);
+				return [new thx_geom_d2_Path(this.splines.slice(0,i).concat([n[0]])),new thx_geom_d2_Path([n[1]].concat(this.splines.slice(i)))];
+			}
+			value -= l;
+		}
+		return [];
+	}
+	,interpolate: function(value) {
+		var len = this.get_length();
+		var l;
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			l = spline.get_length() / len;
+			if(value <= l) return spline.interpolate(value);
+			value -= l;
+		}
+		return null;
+	}
+	,asClockwise: function(clockwise) {
+		if(clockwise == null) clockwise = true;
+		return new thx_geom_d2_Path(this.splines.map(function(spline) {
+			return spline.asClockwise(clockwise);
+		}));
+	}
+	,hull: function(other) {
+		throw "not implemented";
+	}
+	,minkowsky: function(other) {
+		throw "not implemented";
+	}
+	,reduce: function() {
+		return new thx_geom_d2_Path(this.splines.map(function(spline) {
+			return spline.reduce();
+		}).filter(function(spline1) {
+			return spline1.get_edges().length > 0;
+		}));
+	}
+	,toPoints: function() {
+		var tmp;
+		var array = this.splines.map(function(spline) {
+			return spline.toPoints();
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
+	}
+	,toString: function() {
+		return "Path(" + this.splines.map(function(s) {
+			return "[" + s.toString() + "]";
+		}).join(", ") + "," + Std.string(this.get_isClosed()) + ")";
+	}
+	,get_isClosed: function() {
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			if(!spline.isClosed) return false;
+		}
+		return true;
+	}
+	,get_area: function() {
+		return this.splines.reduce(function(acc,spline) {
+			return acc + spline.get_area();
+		},0);
+	}
+	,get_length: function() {
+		return this.splines.reduce(function(acc,spline) {
+			return acc + spline.get_length();
+		},0);
+	}
+	,get_isSelfIntersecting: function() {
+		var _g = 0;
+		var _g1 = this.splines;
+		while(_g < _g1.length) {
+			var spline = _g1[_g];
+			++_g;
+			if(spline.get_isSelfIntersecting()) return true;
+		}
+		return false;
+	}
+	,get_box: function() {
+		if(this.splines.length == 0) return null;
+		var box = this.splines[0].get_box();
+		var _g1 = 1;
+		var _g = this.splines.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var obox = this.splines[i].get_box();
+			box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(box,[obox[0],obox[1]]);
+		}
+		return box;
+	}
+	,__class__: thx_geom_d2_Path
+};
+var thx_geom_d2_xy_ImmutableXY = function(x,y) {
+	this._x = x;
+	this._y = y;
+};
+thx_geom_d2_xy_ImmutableXY.__name__ = ["thx","geom","d2","xy","ImmutableXY"];
+thx_geom_d2_xy_ImmutableXY.__interfaces__ = [thx_geom_d2_xy_XY];
+thx_geom_d2_xy_ImmutableXY.prototype = {
+	_x: null
+	,_y: null
+	,get_x: function() {
+		return this._x;
+	}
+	,get_y: function() {
+		return this._y;
+	}
+	,set_x: function(v) {
+		throw "this instance of Point cannot be modified";
+	}
+	,set_y: function(v) {
+		throw "this instance of Point cannot be modified";
+	}
+	,__class__: thx_geom_d2_xy_ImmutableXY
+};
+var thx_geom_d2__$Point_Point_$Impl_$ = {};
+thx_geom_d2__$Point_Point_$Impl_$.__name__ = ["thx","geom","d2","_Point","Point_Impl_"];
+thx_geom_d2__$Point_Point_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,2,0);
+	return new thx_geom_d2_xy_PointXY(arr[0],arr[1]);
+};
+thx_geom_d2__$Point_Point_$Impl_$.fromObject = function(o) {
+	return thx_geom_d2__$Point_Point_$Impl_$.create(o.x,o.y);
+};
+thx_geom_d2__$Point_Point_$Impl_$.fromAngle = function(angle) {
+	return thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(angle),Math.sin(angle));
+};
+thx_geom_d2__$Point_Point_$Impl_$.create = function(x,y) {
+	return new thx_geom_d2_xy_PointXY(x,y);
+};
+thx_geom_d2__$Point_Point_$Impl_$.linked = function(getX,getY,setX,setY) {
+	return new thx_geom_d2_xy_LinkedXY(getX,getY,setX,setY);
+};
+thx_geom_d2__$Point_Point_$Impl_$.immutable = function(x,y) {
+	return new thx_geom_d2_xy_ImmutableXY(x,y);
+};
+thx_geom_d2__$Point_Point_$Impl_$._new = function(xy) {
+	return xy;
+};
+thx_geom_d2__$Point_Point_$Impl_$.addPointAssign = function(this1,p) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() + p.get_x(),this1.get_y() + p.get_y());
+};
+thx_geom_d2__$Point_Point_$Impl_$.addPoint = function(this1,p) {
+	var tmp;
+	var x = this1.get_x() + p.get_x();
+	var y = this1.get_y() + p.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.addAssign = function(this1,v) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() + v,this1.get_y() + v);
+};
+thx_geom_d2__$Point_Point_$Impl_$.add = function(this1,v) {
+	var tmp;
+	var x = this1.get_x() + v;
+	var y = this1.get_y() + v;
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.negate = function(this1) {
+	var tmp;
+	var x = -this1.get_x();
+	var y = -this1.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.subtractPointAssign = function(this1,p) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() - p.get_x(),this1.get_y() - p.get_y());
+};
+thx_geom_d2__$Point_Point_$Impl_$.subtractPoint = function(this1,p) {
+	var tmp;
+	var tmp1;
+	var x1 = -p.get_x();
+	var y1 = -p.get_y();
+	tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+	var p1 = tmp1;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.subtractAssign = function(this1,v) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() - v,this1.get_y() - v);
+};
+thx_geom_d2__$Point_Point_$Impl_$.subtract = function(this1,v) {
+	var tmp;
+	var v1 = -v;
+	var x = this1.get_x() + v1;
+	var y = this1.get_y() + v1;
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.multiplyPointAssign = function(this1,p) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() * p.get_x(),this1.get_y() * p.get_y());
+};
+thx_geom_d2__$Point_Point_$Impl_$.multiplyPoint = function(this1,p) {
+	var tmp;
+	var x = this1.get_x() * p.get_x();
+	var y = this1.get_y() * p.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.multiplyAssign = function(this1,v) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() * v,this1.get_y() * v);
+};
+thx_geom_d2__$Point_Point_$Impl_$.multiply = function(this1,v) {
+	var tmp;
+	var x = this1.get_x() * v;
+	var y = this1.get_y() * v;
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.dividePointAssign = function(this1,p) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() / p.get_x(),this1.get_y() / p.get_y());
+};
+thx_geom_d2__$Point_Point_$Impl_$.dividePoint = function(this1,p) {
+	var tmp;
+	var x = this1.get_x() / p.get_x();
+	var y = this1.get_y() / p.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.divideAssign = function(this1,v) {
+	return thx_geom_d2__$Point_Point_$Impl_$.set(this1,this1.get_x() / v,this1.get_y() / v);
+};
+thx_geom_d2__$Point_Point_$Impl_$.divide = function(this1,v) {
+	var tmp;
+	var x = this1.get_x() / v;
+	var y = this1.get_y() / v;
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.equals = function(this1,p) {
+	return this1.get_x() == p.get_x()?this1.get_y() == p.get_y():false;
+};
+thx_geom_d2__$Point_Point_$Impl_$.notEquals = function(this1,p) {
+	return !(this1.get_x() == p.get_x()?this1.get_y() == p.get_y():false);
+};
+thx_geom_d2__$Point_Point_$Impl_$.abs = function(this1) {
+	var tmp;
+	var x = Math.abs(this1.get_x());
+	var y = Math.abs(this1.get_y());
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.nearEquals = function(this1,p) {
+	return Math.abs(this1.get_x() - p.get_x()) <= 10e-10?Math.abs(this1.get_y() - p.get_y()) <= 10e-10:false;
+};
+thx_geom_d2__$Point_Point_$Impl_$.notNearEquals = function(this1,p) {
+	return !thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this1,p);
+};
+thx_geom_d2__$Point_Point_$Impl_$.interpolate = function(this1,p,f) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var tmp3;
+	var x3 = -this1.get_x();
+	var y3 = -this1.get_y();
+	tmp3 = new thx_geom_d2_xy_PointXY(x3,y3);
+	var p2 = tmp3;
+	var x2 = p.get_x() + p2.get_x();
+	var y2 = p.get_y() + p2.get_y();
+	tmp2 = new thx_geom_d2_xy_PointXY(x2,y2);
+	var this2 = tmp2;
+	var x1 = this2.get_x() * f;
+	var y1 = this2.get_y() * f;
+	tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+	var p1 = tmp1;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.isZero = function(this1) {
+	var tmp;
+	var p = thx_geom_d2__$Point_Point_$Impl_$.zero;
+	if(this1.get_x() == p.get_x()) tmp = this1.get_y() == p.get_y(); else tmp = false;
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.isNearZero = function(this1) {
+	return thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this1,thx_geom_d2__$Point_Point_$Impl_$.zero);
+};
+thx_geom_d2__$Point_Point_$Impl_$.dot = function(this1,p) {
+	return this1.get_x() * p.get_x() + this1.get_y() * p.get_y();
+};
+thx_geom_d2__$Point_Point_$Impl_$.normal = function(this1) {
+	var tmp;
+	var x = this1.get_y();
+	var y = -this1.get_x();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.normalize = function(this1) {
+	var tmp;
+	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y());
+	var x = this1.get_x() / v;
+	var y = this1.get_y() / v;
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.distanceTo = function(this1,p) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var x1 = -p.get_x();
+	var y1 = -p.get_y();
+	tmp2 = new thx_geom_d2_xy_PointXY(x1,y1);
+	var p1 = tmp2;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	tmp1 = new thx_geom_d2_xy_PointXY(x,y);
+	var this2 = tmp1;
+	tmp = Math.sqrt(this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y());
+	return Math.abs(tmp);
+};
+thx_geom_d2__$Point_Point_$Impl_$.distanceToSquared = function(this1,p) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var x1 = -p.get_x();
+	var y1 = -p.get_y();
+	tmp2 = new thx_geom_d2_xy_PointXY(x1,y1);
+	var p1 = tmp2;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	tmp1 = new thx_geom_d2_xy_PointXY(x,y);
+	var this2 = tmp1;
+	tmp = this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y();
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.transform = function(this1,matrix) {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this1);
+};
+thx_geom_d2__$Point_Point_$Impl_$.cross = function(this1,p) {
+	return this1.get_x() * p.get_y() - this1.get_y() * p.get_x();
+};
+thx_geom_d2__$Point_Point_$Impl_$.min = function(this1,p) {
+	var tmp;
+	var x = Math.min(this1.get_x(),p.get_x());
+	var y = Math.min(this1.get_y(),p.get_y());
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.minX = function(this1,p) {
+	var tmp;
+	var x = Math.min(this1.get_x(),p.get_x());
+	var y = this1.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.minY = function(this1,p) {
+	var tmp;
+	var x = this1.get_x();
+	var y = Math.min(this1.get_y(),p.get_y());
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.max = function(this1,p) {
+	var tmp;
+	var x = Math.max(this1.get_x(),p.get_x());
+	var y = Math.max(this1.get_y(),p.get_y());
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.maxX = function(this1,p) {
+	var tmp;
+	var x = Math.max(this1.get_x(),p.get_x());
+	var y = this1.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.maxY = function(this1,p) {
+	var tmp;
+	var x = this1.get_x();
+	var y = Math.max(this1.get_y(),p.get_y());
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.pointAt = function(this1,angle,distance) {
+	var tmp;
+	var this2 = this1;
+	var tmp1;
+	var this3 = thx_geom_d2__$Point_Point_$Impl_$.create(Math.cos(angle),Math.sin(angle));
+	var x1 = this3.get_x() * distance;
+	var y1 = this3.get_y() * distance;
+	tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+	var p = tmp1;
+	var x = this2.get_x() + p.get_x();
+	var y = this2.get_y() + p.get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.isOnLine = function(this1,line) {
+	if(line.get_isHorizontal()) {
+		var tmp1;
+		var a = this1.get_y();
+		tmp1 = Math.abs(a - line.w) <= 10e-10;
+		return tmp1;
+	}
+	var tmp;
+	var a1 = line.xAtY(this1.get_y());
+	var b = this1.get_x();
+	tmp = Math.abs(a1 - b) <= 10e-10;
+	return tmp;
+};
+thx_geom_d2__$Point_Point_$Impl_$.set = function(this1,nx,ny) {
+	this1.set_x(nx);
+	this1.set_y(ny);
+	return this1;
+};
+thx_geom_d2__$Point_Point_$Impl_$.toAngle = function(this1) {
+	return Math.atan2(this1.get_y(),this1.get_x());
+};
+thx_geom_d2__$Point_Point_$Impl_$.toArray = function(this1) {
+	return [this1.get_x(),this1.get_y()];
+};
+thx_geom_d2__$Point_Point_$Impl_$.toObject = function(this1) {
+	return { x : this1.get_x(), y : this1.get_y()};
+};
+thx_geom_d2__$Point_Point_$Impl_$.toString = function(this1) {
+	return "Point(" + this1.get_x() + "," + this1.get_y() + ")";
+};
+thx_geom_d2__$Point_Point_$Impl_$.solve2Linear = function(a,b,c,d,u,v) {
+	var det = a * d - b * c;
+	if(det == 0) return null;
+	var invdet = 1.0 / det;
+	var x = u * d - b * v;
+	var y = -u * c + a * v;
+	return new thx_geom_d2_xy_PointXY(x * invdet,y * invdet);
+};
+thx_geom_d2__$Point_Point_$Impl_$.interpolateBetween2DPointsForY = function(p1,p2,y) {
+	var f1 = y - p1.get_y();
+	var f2 = p2.get_y() - p1.get_y();
+	var t;
+	if(f2 < 0) {
+		f1 = -f1;
+		f2 = -f2;
+	}
+	if(f1 <= 0) t = 0.0; else if(f1 >= f2) t = 1.0; else if(f2 < 1e-10) t = 0.5; else t = f1 / f2;
+	return p1.get_x() + t * (p2.get_x() - p1.get_x());
+};
+thx_geom_d2__$Point_Point_$Impl_$.get_x = function(this1) {
+	return this1.get_x();
+};
+thx_geom_d2__$Point_Point_$Impl_$.get_y = function(this1) {
+	return this1.get_y();
+};
+thx_geom_d2__$Point_Point_$Impl_$.set_x = function(this1,v) {
+	return this1.set_x(v);
+};
+thx_geom_d2__$Point_Point_$Impl_$.set_y = function(this1,v) {
+	return this1.set_y(v);
+};
+thx_geom_d2__$Point_Point_$Impl_$.get_length = function(this1) {
+	return Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y());
+};
+thx_geom_d2__$Point_Point_$Impl_$.get_lengthSquared = function(this1) {
+	return this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y();
+};
+var thx_geom_d2_Spline = function(nodes,closed) {
+	if(closed == null) closed = true;
+	this._isClockwise = false;
+	this.nodes = nodes;
+	this.isClosed = closed;
+};
+thx_geom_d2_Spline.__name__ = ["thx","geom","d2","Spline"];
+thx_geom_d2_Spline.fromEdges = function(arr,closed) {
+	var nodes = [];
+	if(arr.length > 0) {
+		var edge = arr[0];
+		var prev = closed?arr[arr.length - 1]:new thx_geom_d2_EdgeLinear(thx_geom_d2__$Point_Point_$Impl_$.zero,thx_geom_d2__$Point_Point_$Impl_$.zero);
+		if(arr.length == 1) {
+			nodes.push(new thx_geom_d2_SplineNode(edge.first,edge.normalOut,null));
+			nodes.push(new thx_geom_d2_SplineNode(edge.last,null,edge.normalIn));
+		} else {
+			var _g1 = 0;
+			var _g = arr.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				edge = arr[i];
+				nodes.push(new thx_geom_d2_SplineNode(edge.first,edge.normalOut,prev.normalIn));
+				prev = edge;
+			}
+			if(!closed) nodes.push(new thx_geom_d2_SplineNode(edge.last,null,edge.normalIn));
+		}
+	}
+	var spline = new thx_geom_d2_Spline(nodes,closed);
+	spline.edges = arr;
+	return spline;
+};
+thx_geom_d2_Spline.fromPoints = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		return new thx_geom_d2_SplineNode(c[0],c[1],c[2]);
+	});
+	return new thx_geom_d2_Spline(nodes,closed);
+};
+thx_geom_d2_Spline.fromArray = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		return new thx_geom_d2_SplineNode(c,null,null);
+	});
+	return new thx_geom_d2_Spline(nodes,closed);
+};
+thx_geom_d2_Spline.fromCoords = function(arr,closed) {
+	var nodes = arr.map(function(c) {
+		var p = new thx_geom_d2_xy_PointXY(c[0],c[1]);
+		var nout = null == c[2]?thx_geom_d2__$Point_Point_$Impl_$.zero:new thx_geom_d2_xy_PointXY(c[2],c[3]);
+		var nin = null == c[4]?thx_geom_d2__$Point_Point_$Impl_$.zero:new thx_geom_d2_xy_PointXY(c[4],c[5]);
+		return new thx_geom_d2_SplineNode(p,nout,nin);
+	});
+	return new thx_geom_d2_Spline(nodes,closed);
+};
+thx_geom_d2_Spline.createEdge = function(a,b,nout,nin) {
+	if(null == nout?null == nin:false) return new thx_geom_d2_EdgeLinear(a,b); else if(null == nout) return new thx_geom_d2_EdgeCubic(a,a,nin,b); else if(null == nin) return new thx_geom_d2_EdgeCubic(a,nout,b,b); else return new thx_geom_d2_EdgeCubic(a,nout,nin,b);
+};
+thx_geom_d2_Spline.prototype = {
+	area: null
+	,length: null
+	,isSelfIntersecting: null
+	,isPolygon: null
+	,isEmpty: null
+	,isClockwise: null
+	,box: null
+	,edges: null
+	,nodes: null
+	,isClosed: null
+	,iterator: function() {
+		return HxOverrides.iter(this.nodes);
+	}
+	,iterate: function(fstart,fit) {
+		var a;
+		var b;
+		if(null != fstart) fstart(this.nodes[0].position);
+		var _g1 = 0;
+		var _g = this.nodes.length - 1;
+		while(_g1 < _g) {
+			var i = _g1++;
+			a = this.nodes[i];
+			b = this.nodes[i + 1];
+			fit(a.position,b.position,a.normalOut,b.normalIn);
+		}
+		if(this.isClosed) {
+			a = this.nodes[this.nodes.length - 1];
+			b = this.nodes[0];
+			fit(a.position,b.position,a.normalOut,b.normalIn);
+		}
+	}
+	,iterateEdges: function(f) {
+		this.get_edges().map(f);
+	}
+	,get_edges: function() {
+		var _g = this;
+		if(null == this.edges) {
+			this.edges = [];
+			this.iterate(null,function(a,b,nout,nin) {
+				_g.get_edges().push(thx_geom_d2_Spline.createEdge(a,b,nout,nin));
+			});
+		}
+		return this.edges;
+	}
+	,transform: function(matrix) {
+		var ismirror = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.isMirroring(matrix);
+		var result = new thx_geom_d2_Spline(thx_core_Iterators.map(this.iterator(),function(node) {
+			return node.transform(matrix);
+		}),this.isClosed);
+		if(ismirror) result = result.flip();
+		return result;
+	}
+	,flip: function() {
+		var arr = thx_core_Iterators.map(this.iterator(),function(node) {
+			return node.flip();
+		});
+		arr.reverse();
+		return new thx_geom_d2_Spline(arr,this.isClosed);
+	}
+	,contains: function(p) {
+		throw "not implemented";
+	}
+	,selfIntersections: function() {
+		var intersections = [];
+		thx_core_Arrays.eachPair(this.get_edges(),function(a,b) {
+			intersections = intersections.concat(a.intersections(b));
+			return true;
+		});
+		return intersections;
+	}
+	,intersectsPath: function(other) {
+		return this.intersectionsPath(other).length > 0;
+	}
+	,intersectsSpline: function(other) {
+		return this.intersectionsSpline(other).length > 0;
+	}
+	,intersectsLine: function(line) {
+		return this.intersectionsLine(line).length > 0;
+	}
+	,intersectionsPath: function(other) {
+		return other.intersectionsSpline(this);
+	}
+	,intersectionsSpline: function(other) {
+		var tmp;
+		var array1 = this.get_edges().map(function(a) {
+			var tmp1;
+			var array = other.get_edges().map(function(b) {
+				return a.intersections(b);
+			});
+			tmp1 = Array.prototype.concat.apply([],array);
+			return tmp1;
+		});
+		tmp = Array.prototype.concat.apply([],array1);
+		return tmp;
+	}
+	,intersectionsLine: function(line) {
+		var tmp;
+		var array = this.get_edges().map(function(edge) {
+			return edge.intersectionsLine(line);
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		return tmp;
+	}
+	,split: function(value) {
+		if(!(value < 0)?value > 1:true) return null;
+		var len = this.get_length();
+		var nor;
+		var edge;
+		var edges = this.get_edges();
+		var _g1 = 0;
+		var _g = edges.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			edge = edges[i];
+			nor = edge.get_length() / len;
+			if(value <= nor) {
+				var n = edge.split(value);
+				return [thx_geom_d2_Spline.fromEdges(edges.slice(0,i).concat([n[0]]),this.isClosed),thx_geom_d2_Spline.fromEdges([n[1]].concat(edges.slice(i + 1)),this.isClosed)];
+			}
+			value -= nor;
+		}
+		return [];
+	}
+	,interpolate: function(value) {
+		if(!(value < 0)?value > 1:true) return null;
+		var len = this.get_length();
+		var nor;
+		var _g = 0;
+		var _g1 = this.get_edges();
+		while(_g < _g1.length) {
+			var edge = _g1[_g];
+			++_g;
+			nor = edge.get_length() / len;
+			if(value <= nor) return edge.interpolate(value);
+			value -= nor;
+		}
+		return null;
+	}
+	,reduce: function() {
+		var edges = this.get_edges();
+		var i = edges.length;
+		var result = [];
+		var edge;
+		while(--i >= 0) {
+			edge = edges[i];
+			if(edge.get_length() == 0) continue;
+			if(edge.get_isLinear()) edge = edge.toLinear();
+			result.unshift(edge);
+		}
+		return thx_geom_d2_Spline.fromEdges(result,this.isClosed);
+	}
+	,_isClockwise: null
+	,get_isClockwise: function() {
+		if(!this._isClockwise) {
+			this._isClockwise = true;
+			var sum = 0.0;
+			this.iterateEdges(function(edge) {
+				sum += (edge.last.get_x() - edge.first.get_x()) * (edge.last.get_y() + edge.first.get_y());
+			});
+			this.isClockwise = sum > 0;
+		}
+		return this.isClockwise;
+	}
+	,asClockwise: function(clockwise) {
+		if(clockwise == null) clockwise = true;
+		if(this.get_isClockwise() == clockwise) return this; else {
+			var counter = this.flip();
+			counter.isClockwise = !clockwise;
+			return counter;
+		}
+	}
+	,toLinear: function() {
+		var tmp;
+		var array = this.get_edges().map(function(edge) {
+			return edge.get_linearSegments();
+		});
+		tmp = Array.prototype.concat.apply([],array);
+		var edges = tmp;
+		return thx_geom_d2_Spline.fromEdges(edges,this.isClosed);
+	}
+	,union: function(other) {
+		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).union(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
+			return _.toSpline();
+		});
+	}
+	,difference: function(other) {
+		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).difference(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
+			return _.toSpline();
+		});
+	}
+	,intersection: function(other) {
+		return thx_geom_bool_Polygon.fromSpline(this.toLinear()).intersection(thx_geom_bool_Polygon.fromSpline(other.toLinear())).map(function(_) {
+			return _.toSpline();
+		});
+	}
+	,intersections: function(other) {
+		throw "not implemented";
+	}
+	,toPath: function() {
+		return new thx_geom_d2_Path([this]);
+	}
+	,toPoints: function() {
+		return this.nodes.map(function(node) {
+			return node.position;
+		});
+	}
+	,toString: function() {
+		return "Spline(" + this.nodes.map(function(n) {
+			return "[" + n.toStringValues() + "]";
+		}).join(", ") + "," + Std.string(this.isClosed) + ")";
+	}
+	,get_area: function() {
+		var area = 0.0;
+		this.iterateEdges(function(edge) {
+			area += edge.get_area();
+		});
+		return area;
+	}
+	,get_length: function() {
+		var length = 0.0;
+		this.iterateEdges(function(edge) {
+			length += edge.get_length();
+		});
+		return length;
+	}
+	,get_isSelfIntersecting: function() {
+		var edges = this.get_edges();
+		var isSelfIntersecting = false;
+		thx_core_Arrays.eachPair(edges,function(a,b) {
+			return !(isSelfIntersecting = a.intersects(b));
+		});
+		return isSelfIntersecting;
+	}
+	,get_isPolygon: function() {
+		var _g = 0;
+		var _g1 = this.nodes;
+		while(_g < _g1.length) {
+			var node = _g1[_g];
+			++_g;
+			var tmp;
+			var this1 = node.normalIn;
+			var tmp2;
+			if(this1.get_x() == null.get_x()) tmp2 = this1.get_y() == null.get_y(); else tmp2 = false;
+			tmp = !tmp2;
+			var tmp1;
+			if(!tmp) {
+				var this2 = node.normalOut;
+				var tmp3;
+				if(this2.get_x() == null.get_x()) tmp3 = this2.get_y() == null.get_y(); else tmp3 = false;
+				tmp1 = !tmp3;
+			} else tmp1 = true;
+			if(tmp1) return false;
+		}
+		return true;
+	}
+	,get_isEmpty: function() {
+		return this.nodes.length > 1;
+	}
+	,get_box: function() {
+		var box = null;
+		if(this.nodes.length > 0) {
+			box = [this.nodes[0].position,this.nodes[0].position];
+			this.iterate(null,function(a,b,nout,nin) {
+				box = thx_geom_shape__$Box_Box_$Impl_$.expandByPoints(box,[a,b,nout,nin]);
+			});
+		}
+		return box;
+	}
+	,__class__: thx_geom_d2_Spline
+};
+var thx_geom_d2_SplineNode = function(position,normalout,normalin) {
+	this.position = position;
+	this.normalOut = (!(null == normalout)?thx_geom_d2__$Point_Point_$Impl_$.nearEquals(normalout,position):true)?null:normalout;
+	this.normalIn = (!(null == normalin)?thx_geom_d2__$Point_Point_$Impl_$.nearEquals(normalin,position):true)?null:normalin;
+};
+thx_geom_d2_SplineNode.__name__ = ["thx","geom","d2","SplineNode"];
+thx_geom_d2_SplineNode.prototype = {
+	position: null
+	,normalIn: null
+	,normalOut: null
+	,transform: function(matrix) {
+		return new thx_geom_d2_SplineNode(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.position),null != this.normalOut?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normalOut):null,null != this.normalIn?thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this.normalIn):null);
+	}
+	,flip: function() {
+		return new thx_geom_d2_SplineNode(this.position,this.normalIn,this.normalOut);
+	}
+	,toStringValues: function() {
+		var nout = null == this.normalOut?"null":"" + this.normalOut.get_y() + "," + this.normalOut.get_y();
+		var nin = null == this.normalIn?"null":"" + this.normalIn.get_y() + "," + this.normalIn.get_y();
+		return "" + this.position.get_x() + "," + this.position.get_y() + "," + nout + "," + nin;
+	}
+	,toString: function() {
+		return "SplineNode(" + this.toStringValues() + ")";
+	}
+	,__class__: thx_geom_d2_SplineNode
+};
+var thx_geom_d2_xy_LinkedXY = function(getX,getY,setX,setY) {
+	this.getX = getX;
+	this.getY = getY;
+	this.setX = setX;
+	this.setY = setY;
+};
+thx_geom_d2_xy_LinkedXY.__name__ = ["thx","geom","d2","xy","LinkedXY"];
+thx_geom_d2_xy_LinkedXY.__interfaces__ = [thx_geom_d2_xy_XY];
+thx_geom_d2_xy_LinkedXY.prototype = {
+	getX: null
+	,getY: null
+	,setX: null
+	,setY: null
+	,get_x: function() {
+		return this.getX();
+	}
+	,get_y: function() {
+		return this.getY();
+	}
+	,set_x: function(v) {
+		return this.setX(v);
+	}
+	,set_y: function(v) {
+		return this.setY(v);
+	}
+	,__class__: thx_geom_d2_xy_LinkedXY
+};
+var thx_geom_d2_xy_PointXY = function(x,y) {
+	this._x = x;
+	this._y = y;
+};
+thx_geom_d2_xy_PointXY.__name__ = ["thx","geom","d2","xy","PointXY"];
+thx_geom_d2_xy_PointXY.__interfaces__ = [thx_geom_d2_xy_XY];
+thx_geom_d2_xy_PointXY.prototype = {
+	_x: null
+	,_y: null
+	,get_x: function() {
+		return this._x;
+	}
+	,get_y: function() {
+		return this._y;
+	}
+	,set_x: function(v) {
+		return this._x = v;
+	}
+	,set_y: function(v) {
+		return this._y = v;
+	}
+	,__class__: thx_geom_d2_xy_PointXY
+};
+var thx_geom_d3_Line = function(point,direction) {
+	this.point = point;
+	var tmp;
+	var v = Math.sqrt(direction.get_x() * direction.get_x() + direction.get_y() * direction.get_y() + direction.get_z() * direction.get_z());
+	var x = direction.get_x() / v;
+	var y = direction.get_y() / v;
+	var z = direction.get_z() / v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	this.direction = tmp;
+};
+thx_geom_d3_Line.__name__ = ["thx","geom","d3","Line"];
+thx_geom_d3_Line.fromPoints = function(p1,p2) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var x2 = -p1.get_x();
+	var y2 = -p1.get_y();
+	var z2 = -p1.get_z();
+	tmp2 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+	var p = tmp2;
+	var x1 = p2.get_x() + p.get_x();
+	var y1 = p2.get_y() + p.get_y();
+	var z1 = p2.get_z() + p.get_z();
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	var this1 = tmp1;
+	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z());
+	var x = this1.get_x() / v;
+	var y = this1.get_y() / v;
+	var z = this1.get_z() / v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return new thx_geom_d3_Line(p1,tmp);
+};
+thx_geom_d3_Line.fromPlanes = function(p1,p2) {
+	var direction = thx_geom_d3__$Point_Point_$Impl_$.cross(p1.normal,p2.normal);
+	var l = Math.sqrt(direction.get_x() * direction.get_x() + direction.get_y() * direction.get_y() + direction.get_z() * direction.get_z());
+	if(l < 1e-10) throw "Parallel planes";
+	var tmp;
+	var v = 1.0 / l;
+	var x = direction.get_x() * v;
+	var y = direction.get_y() * v;
+	var z = direction.get_z() * v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	direction = tmp;
+	var mabsx = Math.abs(direction.get_x());
+	var mabsy = Math.abs(direction.get_y());
+	var mabsz = Math.abs(direction.get_z());
+	var origin;
+	if(mabsx >= mabsy?mabsx >= mabsz:false) {
+		var r = thx_geom_d2__$Point_Point_$Impl_$.solve2Linear(p1.normal.get_y(),p1.normal.get_z(),p2.normal.get_y(),p2.normal.get_z(),p1.w,p2.w);
+		var tmp1;
+		var y1 = r.get_x();
+		var z1 = r.get_y();
+		tmp1 = new thx_geom_d3_xyz_PointXYZ(0,y1,z1);
+		origin = tmp1;
+	} else if(mabsy >= mabsx?mabsy >= mabsz:false) {
+		var r1 = thx_geom_d2__$Point_Point_$Impl_$.solve2Linear(p1.normal.get_x(),p1.normal.get_z(),p2.normal.get_x(),p2.normal.get_z(),p1.w,p2.w);
+		var tmp2;
+		var x1 = r1.get_x();
+		var z2 = r1.get_y();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x1,0,z2);
+		origin = tmp2;
+	} else {
+		var r2 = thx_geom_d2__$Point_Point_$Impl_$.solve2Linear(p1.normal.get_x(),p1.normal.get_y(),p2.normal.get_x(),p2.normal.get_y(),p1.w,p2.w);
+		var tmp3;
+		var x2 = r2.get_x();
+		var y2 = r2.get_y();
+		tmp3 = new thx_geom_d3_xyz_PointXYZ(x2,y2,0);
+		origin = tmp3;
+	}
+	return new thx_geom_d3_Line(origin,direction);
+};
+thx_geom_d3_Line.prototype = {
+	point: null
+	,direction: null
+	,intersectWithPlane: function(plane) {
+		var tmp;
+		var this1 = plane.normal;
+		var p = this.point;
+		tmp = this1.get_x() * p.get_x() + this1.get_y() * p.get_y() + this1.get_z() * p.get_z();
+		var tmp1;
+		var this2 = plane.normal;
+		var p1 = this.direction;
+		tmp1 = this2.get_x() * p1.get_x() + this2.get_y() * p1.get_y() + this2.get_z() * p1.get_z();
+		var lambda = (plane.w - tmp) / tmp1;
+		var tmp2;
+		var this3 = this.point;
+		var tmp3;
+		var this4 = this.direction;
+		var x1 = this4.get_x() * lambda;
+		var y1 = this4.get_y() * lambda;
+		var z1 = this4.get_z() * lambda;
+		tmp3 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var p2 = tmp3;
+		var x = this3.get_x() + p2.get_x();
+		var y = this3.get_y() + p2.get_y();
+		var z = this3.get_z() + p2.get_z();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		return tmp2;
+	}
+	,reverse: function() {
+		var tmp;
+		var this1 = this.direction;
+		var x = -this1.get_x();
+		var y = -this1.get_y();
+		var z = -this1.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		return new thx_geom_d3_Line(this.point,tmp);
+	}
+	,transform: function(matrix4x4) {
+		var newpoint = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,this.point);
+		var tmp;
+		var this1 = this.point;
+		var p = this.direction;
+		var x = this1.get_x() + p.get_x();
+		var y = this1.get_y() + p.get_y();
+		var z = this1.get_z() + p.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		var pointaddDirection = tmp;
+		var newPointaddDirection = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix4x4,pointaddDirection);
+		var tmp1;
+		var tmp2;
+		var x2 = -newpoint.get_x();
+		var y2 = -newpoint.get_y();
+		var z2 = -newpoint.get_z();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+		var p1 = tmp2;
+		var x1 = newPointaddDirection.get_x() + p1.get_x();
+		var y1 = newPointaddDirection.get_y() + p1.get_y();
+		var z1 = newPointaddDirection.get_z() + p1.get_z();
+		tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var newdirection = tmp1;
+		return new thx_geom_d3_Line(newpoint,newdirection);
+	}
+	,closestPointOnLine: function(point) {
+		var tmp;
+		var tmp3;
+		var tmp4;
+		var x1 = -point.get_x();
+		var y1 = -point.get_y();
+		var z1 = -point.get_z();
+		tmp4 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var p1 = tmp4;
+		var x = point.get_x() + p1.get_x();
+		var y = point.get_y() + p1.get_y();
+		var z = point.get_z() + p1.get_z();
+		tmp3 = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		var this1 = tmp3;
+		var p = this.direction;
+		tmp = this1.get_x() * p.get_x() + this1.get_y() * p.get_y() + this1.get_z() * p.get_z();
+		var tmp1;
+		var this2 = this.direction;
+		var p2 = this.direction;
+		tmp1 = this2.get_x() * p2.get_x() + this2.get_y() * p2.get_y() + this2.get_z() * p2.get_z();
+		var t = tmp / tmp1;
+		var tmp2;
+		var tmp5;
+		var this3 = this.direction;
+		var x3 = this3.get_x() * t;
+		var y3 = this3.get_y() * t;
+		var z3 = this3.get_z() * t;
+		tmp5 = new thx_geom_d3_xyz_PointXYZ(x3,y3,z3);
+		var p3 = tmp5;
+		var x2 = point.get_x() + p3.get_x();
+		var y2 = point.get_y() + p3.get_y();
+		var z2 = point.get_z() + p3.get_z();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+		return tmp2;
+	}
+	,distanceToPoint: function(point) {
+		var closestpoint = this.closestPointOnLine(point);
+		var tmp;
+		var tmp1;
+		var x1 = -closestpoint.get_x();
+		var y1 = -closestpoint.get_y();
+		var z1 = -closestpoint.get_z();
+		tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var p = tmp1;
+		var x = point.get_x() + p.get_x();
+		var y = point.get_y() + p.get_y();
+		var z = point.get_z() + p.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		var distancevector = tmp;
+		return Math.sqrt(distancevector.get_x() * distancevector.get_x() + distancevector.get_y() * distancevector.get_y() + distancevector.get_z() * distancevector.get_z());
+	}
+	,equals: function(line) {
+		var tmp;
+		var this1 = this.direction;
+		var p = line.direction;
+		if(this1.get_x() == p.get_x()?this1.get_y() == p.get_y():false) tmp = this1.get_z() == p.get_z(); else tmp = false;
+		if(!tmp) return false;
+		var tmp1;
+		var n = this.distanceToPoint(line.point);
+		tmp1 = Math.abs(n) <= 10e-10;
+		return tmp1;
+	}
+	,__class__: thx_geom_d3_Line
+};
+var thx_geom_d3_xyz_ImmutableXYZ = function(x,y,z) {
+	this._x = x;
+	this._y = y;
+	this._z = z;
+};
+thx_geom_d3_xyz_ImmutableXYZ.__name__ = ["thx","geom","d3","xyz","ImmutableXYZ"];
+thx_geom_d3_xyz_ImmutableXYZ.__interfaces__ = [thx_geom_d3_xyz_XYZ];
+thx_geom_d3_xyz_ImmutableXYZ.prototype = {
+	_x: null
+	,_y: null
+	,_z: null
+	,get_x: function() {
+		return this._x;
+	}
+	,get_y: function() {
+		return this._y;
+	}
+	,get_z: function() {
+		return this._z;
+	}
+	,set_x: function(v) {
+		throw "this instance of Point cannot be modified";
+	}
+	,set_y: function(v) {
+		throw "this instance of Point cannot be modified";
+	}
+	,set_z: function(v) {
+		throw "this instance of Point cannot be modified";
+	}
+	,__class__: thx_geom_d3_xyz_ImmutableXYZ
+};
+var thx_geom_d3__$Point_Point_$Impl_$ = {};
+thx_geom_d3__$Point_Point_$Impl_$.__name__ = ["thx","geom","d3","_Point","Point_Impl_"];
+thx_geom_d3__$Point_Point_$Impl_$.fromFloats = function(arr) {
+	thx_core_ArrayFloats.resize(arr,3,0);
+	return new thx_geom_d3_xyz_PointXYZ(arr[0],arr[1],arr[2]);
+};
+thx_geom_d3__$Point_Point_$Impl_$.fromObject = function(o) {
+	return thx_geom_d3__$Point_Point_$Impl_$.create(o.x,o.y,o.z);
+};
+thx_geom_d3__$Point_Point_$Impl_$.create = function(x,y,z) {
+	return new thx_geom_d3_xyz_PointXYZ(x,y,z);
+};
+thx_geom_d3__$Point_Point_$Impl_$.linked = function(getX,getY,getZ,setX,setY,setZ) {
+	return new thx_geom_d3_xyz_LinkedXYZ(getX,getY,getZ,setX,setY,setZ);
+};
+thx_geom_d3__$Point_Point_$Impl_$.immutable = function(x,y,z) {
+	return new thx_geom_d3_xyz_ImmutableXYZ(x,y,z);
+};
+thx_geom_d3__$Point_Point_$Impl_$._new = function(xyz) {
+	return xyz;
+};
+thx_geom_d3__$Point_Point_$Impl_$.addPointAssign = function(this1,p) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() + p.get_x(),this1.get_y() + p.get_y(),this1.get_z() + p.get_z());
+};
+thx_geom_d3__$Point_Point_$Impl_$.addPoint = function(this1,p) {
+	var tmp;
+	var x = this1.get_x() + p.get_x();
+	var y = this1.get_y() + p.get_y();
+	var z = this1.get_z() + p.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.addAssign = function(this1,v) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() + v,this1.get_y() + v,this1.get_z() + v);
+};
+thx_geom_d3__$Point_Point_$Impl_$.add = function(this1,v) {
+	var tmp;
+	var x = this1.get_x() + v;
+	var y = this1.get_y() + v;
+	var z = this1.get_z() + v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.negate = function(this1) {
+	var tmp;
+	var x = -this1.get_x();
+	var y = -this1.get_y();
+	var z = -this1.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.subtractPointAssign = function(this1,p) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() - p.get_x(),this1.get_y() - p.get_y(),this1.get_z() - p.get_z());
+};
+thx_geom_d3__$Point_Point_$Impl_$.subtractPoint = function(this1,p) {
+	var tmp;
+	var tmp1;
+	var x1 = -p.get_x();
+	var y1 = -p.get_y();
+	var z1 = -p.get_z();
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	var p1 = tmp1;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	var z = this1.get_z() + p1.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.subtractAssign = function(this1,v) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() - v,this1.get_y() - v,this1.get_z() - v);
+};
+thx_geom_d3__$Point_Point_$Impl_$.subtract = function(this1,v) {
+	var tmp;
+	var v1 = -v;
+	var x = this1.get_x() + v1;
+	var y = this1.get_y() + v1;
+	var z = this1.get_z() + v1;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.multiplyPointAssign = function(this1,p) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() * p.get_x(),this1.get_y() * p.get_y(),this1.get_z() * p.get_z());
+};
+thx_geom_d3__$Point_Point_$Impl_$.multiplyPoint = function(this1,p) {
+	var tmp;
+	var x = this1.get_x() * p.get_x();
+	var y = this1.get_y() * p.get_y();
+	var z = this1.get_z() * p.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.multiplyAssign = function(this1,v) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() * v,this1.get_y() * v,this1.get_z() * v);
+};
+thx_geom_d3__$Point_Point_$Impl_$.multiply = function(this1,v) {
+	var tmp;
+	var x = this1.get_x() * v;
+	var y = this1.get_y() * v;
+	var z = this1.get_z() * v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.dividePointAssign = function(this1,p) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() / p.get_x(),this1.get_y() / p.get_y(),this1.get_z() / p.get_z());
+};
+thx_geom_d3__$Point_Point_$Impl_$.dividePoint = function(this1,p) {
+	var tmp;
+	var x = this1.get_x() / p.get_x();
+	var y = this1.get_y() / p.get_y();
+	var z = this1.get_z() / p.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.divideAssign = function(this1,v) {
+	return thx_geom_d3__$Point_Point_$Impl_$.set(this1,this1.get_x() / v,this1.get_y() / v,this1.get_z() / v);
+};
+thx_geom_d3__$Point_Point_$Impl_$.divide = function(this1,v) {
+	var tmp;
+	var x = this1.get_x() / v;
+	var y = this1.get_y() / v;
+	var z = this1.get_z() / v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.equals = function(this1,p) {
+	return (this1.get_x() == p.get_x()?this1.get_y() == p.get_y():false)?this1.get_z() == p.get_z():false;
+};
+thx_geom_d3__$Point_Point_$Impl_$.notEquals = function(this1,p) {
+	return !((this1.get_x() == p.get_x()?this1.get_y() == p.get_y():false)?this1.get_z() == p.get_z():false);
+};
+thx_geom_d3__$Point_Point_$Impl_$.abs = function(this1) {
+	var tmp;
+	var x = Math.abs(this1.get_x());
+	var y = Math.abs(this1.get_y());
+	var z = Math.abs(this1.get_z());
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.nearEquals = function(this1,p) {
+	return (Math.abs(this1.get_x() - p.get_x()) <= 10e-10?Math.abs(this1.get_y() - p.get_y()) <= 10e-10:false)?Math.abs(this1.get_z() - p.get_z()) <= 10e-10:false;
+};
+thx_geom_d3__$Point_Point_$Impl_$.notNearEquals = function(this1,p) {
+	return !thx_geom_d3__$Point_Point_$Impl_$.nearEquals(this1,p);
+};
+thx_geom_d3__$Point_Point_$Impl_$.interpolate = function(this1,p,f) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var tmp3;
+	var x3 = -this1.get_x();
+	var y3 = -this1.get_y();
+	var z3 = -this1.get_z();
+	tmp3 = new thx_geom_d3_xyz_PointXYZ(x3,y3,z3);
+	var p2 = tmp3;
+	var x2 = p.get_x() + p2.get_x();
+	var y2 = p.get_y() + p2.get_y();
+	var z2 = p.get_z() + p2.get_z();
+	tmp2 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+	var this2 = tmp2;
+	var x1 = this2.get_x() * f;
+	var y1 = this2.get_y() * f;
+	var z1 = this2.get_z() * f;
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	var p1 = tmp1;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	var z = this1.get_z() + p1.get_z();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.isZero = function(this1) {
+	var tmp;
+	var p = thx_geom_d3__$Point_Point_$Impl_$.zero;
+	if(this1.get_x() == p.get_x()?this1.get_y() == p.get_y():false) tmp = this1.get_z() == p.get_z(); else tmp = false;
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.isNearZero = function(this1) {
+	return thx_geom_d3__$Point_Point_$Impl_$.nearEquals(this1,thx_geom_d3__$Point_Point_$Impl_$.zero);
+};
+thx_geom_d3__$Point_Point_$Impl_$.dot = function(this1,p) {
+	return this1.get_x() * p.get_x() + this1.get_y() * p.get_y() + this1.get_z() * p.get_z();
+};
+thx_geom_d3__$Point_Point_$Impl_$.normalize = function(this1) {
+	var tmp;
+	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z());
+	var x = this1.get_x() / v;
+	var y = this1.get_y() / v;
+	var z = this1.get_z() / v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.distanceTo = function(this1,p) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var x1 = -p.get_x();
+	var y1 = -p.get_y();
+	var z1 = -p.get_z();
+	tmp2 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	var p1 = tmp2;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	var z = this1.get_z() + p1.get_z();
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	var this2 = tmp1;
+	tmp = Math.sqrt(this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y() + this2.get_z() * this2.get_z());
+	return Math.abs(tmp);
+};
+thx_geom_d3__$Point_Point_$Impl_$.distanceToSquared = function(this1,p) {
+	var tmp;
+	var tmp1;
+	var tmp2;
+	var x1 = -p.get_x();
+	var y1 = -p.get_y();
+	var z1 = -p.get_z();
+	tmp2 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	var p1 = tmp2;
+	var x = this1.get_x() + p1.get_x();
+	var y = this1.get_y() + p1.get_y();
+	var z = this1.get_z() + p1.get_z();
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	var this2 = tmp1;
+	tmp = this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y() + this2.get_z() * this2.get_z();
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.transform = function(this1,matrix) {
+	return thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,this1);
+};
+thx_geom_d3__$Point_Point_$Impl_$.randomNonParallelVector = function(this1) {
+	var tmp;
+	var x = Math.abs(this1.get_x());
+	var y = Math.abs(this1.get_y());
+	var z = Math.abs(this1.get_z());
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	var a = tmp;
+	if(a.get_x() <= a.get_y()?a.get_x() <= a.get_z():false) return new thx_geom_d3_xyz_PointXYZ(1,0,0); else if(a.get_y() <= a.get_x()?a.get_y() <= a.get_z():false) return new thx_geom_d3_xyz_PointXYZ(0,1,0); else return new thx_geom_d3_xyz_PointXYZ(0,0,1);
+};
+thx_geom_d3__$Point_Point_$Impl_$.cross = function(this1,p) {
+	var tmp;
+	var x = this1.get_y() * p.get_z() - this1.get_z() * p.get_y();
+	var y = this1.get_z() * p.get_x() - this1.get_x() * p.get_z();
+	var z = this1.get_x() * p.get_y() - this1.get_y() * p.get_x();
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.min = function(this1,p) {
+	var tmp;
+	var x = Math.min(this1.get_x(),p.get_x());
+	var y = Math.min(this1.get_y(),p.get_y());
+	var z = Math.min(this1.get_z(),p.get_z());
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.max = function(this1,p) {
+	var tmp;
+	var x = Math.max(this1.get_x(),p.get_x());
+	var y = Math.max(this1.get_y(),p.get_y());
+	var z = Math.max(this1.get_z(),p.get_z());
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	return tmp;
+};
+thx_geom_d3__$Point_Point_$Impl_$.set = function(this1,nx,ny,nz) {
+	this1.set_x(nx);
+	this1.set_y(ny);
+	this1.set_z(nz);
+	return this1;
+};
+thx_geom_d3__$Point_Point_$Impl_$.toPoint = function(this1) {
+	return this1;
+};
+thx_geom_d3__$Point_Point_$Impl_$.toArray = function(this1) {
+	return [this1.get_x(),this1.get_y(),this1.get_z()];
+};
+thx_geom_d3__$Point_Point_$Impl_$.toObject = function(this1) {
+	return { x : this1.get_x(), y : this1.get_y(), z : this1.get_z()};
+};
+thx_geom_d3__$Point_Point_$Impl_$.toString = function(this1) {
+	return "Point(" + this1.get_x() + "," + this1.get_y() + "," + this1.get_z() + ")";
+};
+thx_geom_d3__$Point_Point_$Impl_$.get_x = function(this1) {
+	return this1.get_x();
+};
+thx_geom_d3__$Point_Point_$Impl_$.get_y = function(this1) {
+	return this1.get_y();
+};
+thx_geom_d3__$Point_Point_$Impl_$.get_z = function(this1) {
+	return this1.get_z();
+};
+thx_geom_d3__$Point_Point_$Impl_$.set_x = function(this1,v) {
+	return this1.set_x(v);
+};
+thx_geom_d3__$Point_Point_$Impl_$.set_y = function(this1,v) {
+	return this1.set_y(v);
+};
+thx_geom_d3__$Point_Point_$Impl_$.set_z = function(this1,v) {
+	return this1.set_z(v);
+};
+thx_geom_d3__$Point_Point_$Impl_$.get_length = function(this1) {
+	return Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z());
+};
+thx_geom_d3__$Point_Point_$Impl_$.get_lengthSquared = function(this1) {
+	return this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z();
+};
+var thx_geom_d3_OrthoNormalBasis = function(plane,rightvector) {
+	var tmp;
+	var this1 = thx_geom_d3__$Point_Point_$Impl_$.cross(plane.normal,rightvector);
+	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z());
+	var x = this1.get_x() / v;
+	var y = this1.get_y() / v;
+	var z = this1.get_z() / v;
+	tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+	this.v = tmp;
+	this.u = thx_geom_d3__$Point_Point_$Impl_$.cross(this.v,plane.normal);
+	this.plane = plane;
+	var tmp1;
+	var this2 = plane.normal;
+	var v1 = plane.w;
+	var x1 = this2.get_x() * v1;
+	var y1 = this2.get_y() * v1;
+	var z1 = this2.get_z() * v1;
+	tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+	this.planeOrigin = tmp1;
+};
+thx_geom_d3_OrthoNormalBasis.__name__ = ["thx","geom","d3","OrthoNormalBasis"];
+thx_geom_d3_OrthoNormalBasis.fromPlane = function(plane) {
+	return new thx_geom_d3_OrthoNormalBasis(plane,thx_geom_d3__$Point_Point_$Impl_$.randomNonParallelVector(plane.normal));
+};
+thx_geom_d3_OrthoNormalBasis.prototype = {
+	v: null
+	,u: null
+	,plane: null
+	,planeOrigin: null
+	,getProjectionMatrix: function() {
+		var tmp;
+		var e0 = this.u.get_x();
+		var e1 = this.v.get_x();
+		var e2 = this.plane.normal.get_x();
+		var e4 = this.u.get_y();
+		var e5 = this.v.get_y();
+		var e6 = this.plane.normal.get_y();
+		var e8 = this.u.get_z();
+		var e9 = this.v.get_z();
+		var e10 = this.plane.normal.get_z();
+		tmp = [e0,e1,e2,0,e4,e5,e6,0,e8,e9,e10,0,0,0,-this.plane.w,1];
+		return tmp;
+	}
+	,getInverseProjectionMatrix: function() {
+		var tmp;
+		var this1 = this.plane.normal;
+		var v = this.plane.w;
+		var x = this1.get_x() * v;
+		var y = this1.get_y() * v;
+		var z = this1.get_z() * v;
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		var p = tmp;
+		var tmp1;
+		var e0 = this.u.get_x();
+		var e1 = this.u.get_y();
+		var e2 = this.u.get_z();
+		var e4 = this.v.get_x();
+		var e5 = this.v.get_y();
+		var e6 = this.v.get_z();
+		var e8 = this.plane.normal.get_x();
+		var e9 = this.plane.normal.get_y();
+		var e10 = this.plane.normal.get_z();
+		var e12 = p.get_x();
+		var e13 = p.get_y();
+		var e14 = p.get_z();
+		tmp1 = [e0,e1,e2,0,e4,e5,e6,0,e8,e9,e10,0,e12,e13,e14,1];
+		return tmp1;
+	}
+	,to2D: function(vec3) {
+		var tmp;
+		var tmp1;
+		var p = this.u;
+		tmp1 = vec3.get_x() * p.get_x() + vec3.get_y() * p.get_y() + vec3.get_z() * p.get_z();
+		var x = tmp1;
+		var tmp2;
+		var p1 = this.v;
+		tmp2 = vec3.get_x() * p1.get_x() + vec3.get_y() * p1.get_y() + vec3.get_z() * p1.get_z();
+		var y = tmp2;
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		return tmp;
+	}
+	,to3D: function(vec2) {
+		var tmp;
+		var tmp1;
+		var this2 = this.planeOrigin;
+		var tmp3;
+		var this3 = this.u;
+		var v = vec2.get_x();
+		var x2 = this3.get_x() * v;
+		var y2 = this3.get_y() * v;
+		var z2 = this3.get_z() * v;
+		tmp3 = new thx_geom_d3_xyz_PointXYZ(x2,y2,z2);
+		var p1 = tmp3;
+		var x1 = this2.get_x() + p1.get_x();
+		var y1 = this2.get_y() + p1.get_y();
+		var z1 = this2.get_z() + p1.get_z();
+		tmp1 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var this1 = tmp1;
+		var tmp2;
+		var this4 = this.v;
+		var v1 = vec2.get_y();
+		var x3 = this4.get_x() * v1;
+		var y3 = this4.get_y() * v1;
+		var z3 = this4.get_z() * v1;
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x3,y3,z3);
+		var p = tmp2;
+		var x = this1.get_x() + p.get_x();
+		var y = this1.get_y() + p.get_y();
+		var z = this1.get_z() + p.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		return tmp;
+	}
+	,line3Dto2D: function(line) {
+		var tmp;
+		var this1 = line.direction;
+		var p = line.point;
+		var x = this1.get_x() + p.get_x();
+		var y = this1.get_y() + p.get_y();
+		var z = this1.get_z() + p.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		return thx_geom_d2_Line.fromPoints(this.to2D(line.point),this.to2D(tmp));
+	}
+	,line2Dto3D: function(line) {
+		var a = line.origin();
+		var tmp;
+		var this1 = line.direction();
+		var x = this1.get_x() + a.get_x();
+		var y = this1.get_y() + a.get_y();
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
+		var b = tmp;
+		return thx_geom_d3_Line.fromPoints(this.to3D(a),this.to3D(b));
+	}
+	,transform: function(matrix) {
+		var newplane = this.plane.transform(matrix);
+		var rightpoint_transformed = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,this.u);
+		var tmp;
+		var this1 = new thx_geom_d3_xyz_PointXYZ(0,0,0);
+		tmp = thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,this1);
+		var origin_transformed = tmp;
+		var tmp1;
+		var tmp2;
+		var x1 = -origin_transformed.get_x();
+		var y1 = -origin_transformed.get_y();
+		var z1 = -origin_transformed.get_z();
+		tmp2 = new thx_geom_d3_xyz_PointXYZ(x1,y1,z1);
+		var p = tmp2;
+		var x = rightpoint_transformed.get_x() + p.get_x();
+		var y = rightpoint_transformed.get_y() + p.get_y();
+		var z = rightpoint_transformed.get_z() + p.get_z();
+		tmp1 = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		var newrighthandvector = tmp1;
+		return new thx_geom_d3_OrthoNormalBasis(newplane,newrighthandvector);
+	}
+	,__class__: thx_geom_d3_OrthoNormalBasis
+};
+var thx_geom_d3_Polygon = function(vertices) {
+	this.vertices = vertices;
+};
+thx_geom_d3_Polygon.__name__ = ["thx","geom","d3","Polygon"];
+thx_geom_d3_Polygon.fromVertices = function(vertices) {
+	if((vertices instanceof Array)?vertices.__enum__ == null:false) return new thx_geom_d3_Polygon(vertices.copy()); else {
+		var tmp;
+		var _g = [];
+		var $it0 = $iterator(vertices)();
+		while( $it0.hasNext() ) {
+			var v = $it0.next();
+			_g.push(v);
+		}
+		tmp = _g;
+		return new thx_geom_d3_Polygon(tmp);
+	}
+};
+thx_geom_d3_Polygon.prototype = {
+	plane: null
+	,vertices: null
+	,flip: function() {
+		var reverse = this.vertices.slice();
+		reverse.reverse();
+		return new thx_geom_d3_Polygon(reverse.map(function(v) {
+			var tmp;
+			var this1 = v.normal;
+			var x = -this1.get_x();
+			var y = -this1.get_y();
+			var z = -this1.get_z();
+			tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+			return new thx_geom_d3_Vertex(v.position,tmp);
+		}));
+	}
+	,iterator: function() {
+		return HxOverrides.iter(this.vertices);
+	}
+	,all: function() {
+		return this.vertices.slice();
+	}
+	,get_plane: function() {
+		return thx_geom_d3_Plane.fromPoints(this.vertices[0].position,this.vertices[1].position,this.vertices[2].position);
+	}
+	,__class__: thx_geom_d3_Polygon
+};
+var thx_geom_d3_Vertex = function(position,normal) {
+	this.position = position;
+	this.normal = normal;
+};
+thx_geom_d3_Vertex.__name__ = ["thx","geom","d3","Vertex"];
+thx_geom_d3_Vertex.prototype = {
+	position: null
+	,normal: null
+	,flip: function() {
+		var tmp;
+		var this1 = this.normal;
+		var x = -this1.get_x();
+		var y = -this1.get_y();
+		var z = -this1.get_z();
+		tmp = new thx_geom_d3_xyz_PointXYZ(x,y,z);
+		return new thx_geom_d3_Vertex(this.position,tmp);
+	}
+	,interpolate: function(other,t) {
+		return new thx_geom_d3_Vertex(thx_geom_d3__$Point_Point_$Impl_$.interpolate(this.position,other.position,t),thx_geom_d3__$Point_Point_$Impl_$.interpolate(this.normal,other.normal,t));
+	}
+	,transform: function(matrix) {
+		return new thx_geom_d3_Vertex(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,this.position),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint3D(matrix,this.normal));
+	}
+	,toString: function() {
+		var tmp;
+		var this1 = this.position;
+		tmp = "Point(" + this1.get_x() + "," + this1.get_y() + "," + this1.get_z() + ")";
+		var tmp1;
+		var this2 = this.normal;
+		tmp1 = "Point(" + this2.get_x() + "," + this2.get_y() + "," + this2.get_z() + ")";
+		return "Vertex " + tmp + ", " + tmp1;
+	}
+	,__class__: thx_geom_d3_Vertex
+};
+var thx_geom_d3_xyz_LinkedXYZ = function(getX,getY,getZ,setX,setY,setZ) {
+	this.getX = getX;
+	this.getY = getY;
+	this.getZ = getZ;
+	this.setX = setX;
+	this.setY = setY;
+	this.setZ = setZ;
+};
+thx_geom_d3_xyz_LinkedXYZ.__name__ = ["thx","geom","d3","xyz","LinkedXYZ"];
+thx_geom_d3_xyz_LinkedXYZ.__interfaces__ = [thx_geom_d3_xyz_XYZ];
+thx_geom_d3_xyz_LinkedXYZ.prototype = {
+	getX: null
+	,getY: null
+	,getZ: null
+	,setX: null
+	,setY: null
+	,setZ: null
+	,get_x: function() {
+		return this.getX();
+	}
+	,get_y: function() {
+		return this.getY();
+	}
+	,get_z: function() {
+		return this.getZ();
+	}
+	,set_x: function(v) {
+		return this.setX(v);
+	}
+	,set_y: function(v) {
+		return this.setY(v);
+	}
+	,set_z: function(v) {
+		return this.setZ(v);
+	}
+	,__class__: thx_geom_d3_xyz_LinkedXYZ
+};
 var thx_geom_shape__$Box_Box_$Impl_$ = {};
 thx_geom_shape__$Box_Box_$Impl_$.__name__ = ["thx","geom","shape","_Box","Box_Impl_"];
 thx_geom_shape__$Box_Box_$Impl_$.fromPoints = function(a,b) {
 	var tmp;
 	var tmp1;
-	var tmp3;
-	var x = Math.min(a[0],b[0]);
-	var y = Math.min(a[1],b[1]);
-	tmp3 = [x,y];
-	tmp1 = tmp3;
+	var x = Math.min(a.get_x(),b.get_x());
+	var y = Math.min(a.get_y(),b.get_y());
+	tmp1 = new thx_geom_d2_xy_PointXY(x,y);
 	var bottomLeft = tmp1;
 	var tmp2;
-	var tmp4;
-	var x1 = Math.max(a[0],b[0]);
-	var y1 = Math.max(a[1],b[1]);
-	tmp4 = [x1,y1];
-	tmp2 = tmp4;
+	var x1 = Math.max(a.get_x(),b.get_x());
+	var y1 = Math.max(a.get_y(),b.get_y());
+	tmp2 = new thx_geom_d2_xy_PointXY(x1,y1);
 	var topRight = tmp2;
 	tmp = [bottomLeft,topRight];
 	return tmp;
@@ -8315,7 +9234,11 @@ thx_geom_shape__$Box_Box_$Impl_$.transform = function(this1,matrix) {
 	return thx_geom_shape__$Box_Box_$Impl_$.fromPoints(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this1[0]),thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.leftMultiplyPoint(matrix,this1[1]));
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_topLeft = function(this1) {
-	return [this1[0][0],this1[1][1]];
+	var tmp;
+	var x = this1[0].get_x();
+	var y = this1[1].get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_topRight = function(this1) {
 	return this1[1];
@@ -8324,46 +9247,50 @@ thx_geom_shape__$Box_Box_$Impl_$.get_bottomLeft = function(this1) {
 	return this1[0];
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_bottomRight = function(this1) {
-	return [this1[1][0],this1[0][1]];
+	var tmp;
+	var x = this1[1].get_x();
+	var y = this1[0].get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_center = function(this1) {
-	return [this1[0][0] + (this1[1][0] - this1[0][0]) / 2,this1[1][1] + (this1[1][1] - this1[0][1]) / 2];
+	var tmp;
+	var x = this1[0].get_x() + (this1[1].get_x() - this1[0].get_x()) / 2;
+	var y = this1[1].get_y() + (this1[1].get_y() - this1[0].get_y()) / 2;
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	return tmp;
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_left = function(this1) {
-	return this1[0][0];
+	return this1[0].get_x();
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_right = function(this1) {
-	return this1[1][0];
+	return this1[1].get_x();
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_top = function(this1) {
-	return this1[1][1];
+	return this1[1].get_y();
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_bottom = function(this1) {
-	return this1[0][1];
+	return this1[0].get_y();
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_width = function(this1) {
-	return this1[1][0] - this1[0][0];
+	return this1[1].get_x() - this1[0].get_x();
 };
 thx_geom_shape__$Box_Box_$Impl_$.get_height = function(this1) {
-	return this1[1][1] - this1[0][1];
+	return this1[1].get_y() - this1[0].get_y();
 };
 thx_geom_shape__$Box_Box_$Impl_$.expandByPoint = function(this1,point) {
 	var tmp;
 	var tmp1;
-	var this11 = this1[0];
-	var tmp3;
-	var x = Math.min(this11[0],point[0]);
-	var y = Math.min(this11[1],point[1]);
-	tmp3 = [x,y];
-	tmp1 = tmp3;
+	var this2 = this1[0];
+	var x = Math.min(this2.get_x(),point.get_x());
+	var y = Math.min(this2.get_y(),point.get_y());
+	tmp1 = new thx_geom_d2_xy_PointXY(x,y);
 	var bottomLeft = tmp1;
 	var tmp2;
-	var this12 = this1[1];
-	var tmp4;
-	var x1 = Math.max(this12[0],point[0]);
-	var y1 = Math.max(this12[1],point[1]);
-	tmp4 = [x1,y1];
-	tmp2 = tmp4;
+	var this3 = this1[1];
+	var x1 = Math.max(this3.get_x(),point.get_x());
+	var y1 = Math.max(this3.get_y(),point.get_y());
+	tmp2 = new thx_geom_d2_xy_PointXY(x1,y1);
 	var topRight = tmp2;
 	tmp = [bottomLeft,topRight];
 	return tmp;
@@ -8375,50 +9302,54 @@ thx_geom_shape__$Box_Box_$Impl_$.expandByPoints = function(this1,points) {
 	while( $it0.hasNext() ) {
 		var point = $it0.next();
 		var tmp;
-		var tmp2;
-		var x = Math.min(min[0],point[0]);
-		var y = Math.min(min[1],point[1]);
-		tmp2 = [x,y];
-		tmp = tmp2;
+		var x = Math.min(min.get_x(),point.get_x());
+		var y = Math.min(min.get_y(),point.get_y());
+		tmp = new thx_geom_d2_xy_PointXY(x,y);
 		min = tmp;
 		var tmp1;
-		var tmp3;
-		var x1 = Math.max(max[0],point[0]);
-		var y1 = Math.max(max[1],point[1]);
-		tmp3 = [x1,y1];
-		tmp1 = tmp3;
+		var x1 = Math.max(max.get_x(),point.get_x());
+		var y1 = Math.max(max.get_y(),point.get_y());
+		tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
 		max = tmp1;
 	}
 	return [min,max];
 };
 thx_geom_shape__$Box_Box_$Impl_$.intersects = function(this1,other) {
 	var tmp;
-	if(!(this1[1][0] >= other[0][0]?this1[0][0] <= other[1][0]:false)) {
-		if(this1[0][1] >= other[1][1]) tmp = this1[1][1] <= other[0][1]; else tmp = false;
+	if(!(this1[1].get_x() >= other[0].get_x()?this1[0].get_x() <= other[1].get_x():false)) {
+		if(this1[0].get_y() >= other[1].get_y()) tmp = this1[1].get_y() <= other[0].get_y(); else tmp = false;
 	} else tmp = true;
 	return tmp;
 };
 thx_geom_shape__$Box_Box_$Impl_$.contains = function(this1,point) {
-	return ((this1[0][0] <= point[0]?this1[1][0] >= point[0]:false)?this1[1][1] >= point[1]:false)?this1[0][1] <= point[1]:false;
+	return ((this1[0].get_x() <= point.get_x()?this1[1].get_x() >= point.get_x():false)?this1[1].get_y() >= point.get_y():false)?this1[0].get_y() <= point.get_y():false;
 };
 thx_geom_shape__$Box_Box_$Impl_$.equals = function(this1,other) {
 	var tmp;
-	var this11 = this1[0];
+	var this2 = this1[0];
 	var p = other[0];
-	if(this11[0] == p[0]) tmp = this11[1] == p[1]; else tmp = false;
+	if(this2.get_x() == p.get_x()) tmp = this2.get_y() == p.get_y(); else tmp = false;
 	var tmp1;
 	if(tmp) {
-		var this12 = this1[1];
+		var this3 = this1[1];
 		var p1 = other[1];
-		if(this12[0] == p1[0]) tmp1 = this12[1] == p1[1]; else tmp1 = false;
+		if(this3.get_x() == p1.get_x()) tmp1 = this3.get_y() == p1.get_y(); else tmp1 = false;
 	} else tmp1 = false;
 	return tmp1;
 };
 thx_geom_shape__$Box_Box_$Impl_$.toString = function(this1) {
-	return "Box(x:" + this1[0][0] + ",y:" + this1[1][1] + ",w:" + (this1[1][0] - this1[0][0]) + ",h:" + (this1[1][1] - this1[0][1]) + ")";
+	return "Box(x:" + this1[0].get_x() + ",y:" + this1[1].get_y() + ",w:" + (this1[1].get_x() - this1[0].get_x()) + ",h:" + (this1[1].get_y() - this1[0].get_y()) + ")";
 };
 thx_geom_shape__$Box_Box_$Impl_$.toSpline = function(this1) {
-	return thx_geom_Spline.fromArray([[this1[0][0],this1[1][1]],this1[1],[this1[1][0],this1[0][1]],this1[0]],true);
+	var tmp;
+	var x = this1[0].get_x();
+	var y = this1[1].get_y();
+	tmp = new thx_geom_d2_xy_PointXY(x,y);
+	var tmp1;
+	var x1 = this1[1].get_x();
+	var y1 = this1[0].get_y();
+	tmp1 = new thx_geom_d2_xy_PointXY(x1,y1);
+	return thx_geom_d2_Spline.fromArray([tmp,this1[1],tmp1,this1[0]],true);
 };
 thx_geom_shape__$Box_Box_$Impl_$.toPath = function(this1) {
 	return thx_geom_shape__$Box_Box_$Impl_$.toSpline(this1).toPath();
@@ -8435,12 +9366,20 @@ thx_geom_shape__$Circle_Circle_$Impl_$.get_radius = function(this1) {
 	return this1.radius;
 };
 thx_geom_shape__$Circle_Circle_$Impl_$.toString = function(this1) {
-	return "Circle(" + this1.center[0] + "," + this1.center[1] + "," + this1.radius + ")";
+	return "Circle(" + this1.center.get_x() + "," + this1.center.get_y() + "," + this1.radius + ")";
 };
 thx_geom_shape__$Circle_Circle_$Impl_$.toSpline = function(this1) {
 	var tmp;
-	var t = thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling([this1.radius,this1.radius,1]));
-	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation([this1.center[0],this1.center[1],0]));
+	var tmp1;
+	var f = new thx_geom_d3_xyz_PointXYZ(this1.radius,this1.radius,1);
+	tmp1 = thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.scaling(f));
+	var t = tmp1;
+	var tmp2;
+	var x = this1.center.get_x();
+	var y = this1.center.get_y();
+	tmp2 = new thx_geom_d3_xyz_PointXYZ(x,y,0);
+	var v = tmp2;
+	tmp = t.transform(thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.translation(v));
 	return tmp;
 };
 thx_geom_shape__$Circle_Circle_$Impl_$.toPath = function(this1) {
@@ -10606,19 +11545,19 @@ thx_core_Strings.DIGITS = new EReg("^[0-9]+$","");
 thx_core_Strings.STRIPTAGS = new EReg("</?[a-z]+[^>]*?/?>","gi");
 thx_core_Strings.WSG = new EReg("\\s+","g");
 thx_core_Strings.SPLIT_LINES = new EReg("\r\n|\n\r|\n|\r","g");
-thx_geom_EdgeCubic.NEAR_FLAT = 1.000000001;
 thx_geom__$Matrix4x4_Matrix4x4_$Impl_$.identity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
-thx_geom_Plane.COPLANAR = 0;
-thx_geom_Plane.FRONT = 1;
-thx_geom_Plane.BACK = 2;
-thx_geom_Plane.SPANNING = 3;
-thx_geom__$Point3D_Point3D_$Impl_$.zero = [0,0,0];
-thx_geom_OrthoNormalBasis.z0Plane = new thx_geom_OrthoNormalBasis(new thx_geom_Plane([0,0,1],0),[1,0,0]);
-thx_geom__$Point_Point_$Impl_$.zero = [0,0];
-thx_geom_Transformables.MX = new thx_geom_Plane([1,0,0],0);
-thx_geom_Transformables.MY = new thx_geom_Plane([0,1,0],0);
-thx_geom_Transformables.MZ = new thx_geom_Plane([0,0,1],0);
-thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle = new thx_geom_Spline([new thx_geom_SplineNode([1,0],[1,-0.552284749830793564],[1,0.5522847498307936]),new thx_geom_SplineNode([0,-1],[-0.552284749830793564,-1],[0.5522847498307936,-1]),new thx_geom_SplineNode([-1,0],[-1,0.5522847498307936],[-1,-0.552284749830793564]),new thx_geom_SplineNode([0,1],[0.5522847498307936,1],[-0.552284749830793564,1])],true);
+thx_geom_d3_Plane.COPLANAR = 0;
+thx_geom_d3_Plane.FRONT = 1;
+thx_geom_d3_Plane.BACK = 2;
+thx_geom_d3_Plane.SPANNING = 3;
+thx_geom_Transformables.MX = new thx_geom_d3_Plane(new thx_geom_d3_xyz_PointXYZ(1,0,0),0);
+thx_geom_Transformables.MY = new thx_geom_d3_Plane(new thx_geom_d3_xyz_PointXYZ(0,1,0),0);
+thx_geom_Transformables.MZ = new thx_geom_d3_Plane(new thx_geom_d3_xyz_PointXYZ(0,0,1),0);
+thx_geom_d2_EdgeCubic.NEAR_FLAT = 1.000000001;
+thx_geom_d2__$Point_Point_$Impl_$.zero = new thx_geom_d2_xy_ImmutableXY(0,0);
+thx_geom_d3__$Point_Point_$Impl_$.zero = new thx_geom_d3_xyz_ImmutableXYZ(0,0,0);
+thx_geom_d3_OrthoNormalBasis.z0Plane = new thx_geom_d3_OrthoNormalBasis(new thx_geom_d3_Plane(new thx_geom_d3_xyz_PointXYZ(0,0,1),0),new thx_geom_d3_xyz_PointXYZ(1,0,0));
+thx_geom_shape__$Circle_Circle_$Impl_$.unitaryCircle = new thx_geom_d2_Spline([new thx_geom_d2_SplineNode(new thx_geom_d2_xy_PointXY(1,0),new thx_geom_d2_xy_PointXY(1,-0.552284749830793564),new thx_geom_d2_xy_PointXY(1,0.5522847498307936)),new thx_geom_d2_SplineNode(new thx_geom_d2_xy_PointXY(0,-1),new thx_geom_d2_xy_PointXY(-0.552284749830793564,-1),new thx_geom_d2_xy_PointXY(0.5522847498307936,-1)),new thx_geom_d2_SplineNode(new thx_geom_d2_xy_PointXY(-1,0),new thx_geom_d2_xy_PointXY(-1,0.5522847498307936),new thx_geom_d2_xy_PointXY(-1,-0.552284749830793564)),new thx_geom_d2_SplineNode(new thx_geom_d2_xy_PointXY(0,1),new thx_geom_d2_xy_PointXY(0.5522847498307936,1),new thx_geom_d2_xy_PointXY(-0.552284749830793564,1))],true);
 thx_math_Const.TWO_PI = 6.283185307179586477;
 thx_math_Const.PI = 3.141592653589793238;
 thx_math_Const.HALF_PI = 1.570796326794896619;

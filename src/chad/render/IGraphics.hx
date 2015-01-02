@@ -1,6 +1,6 @@
 package chad.render;
 
-import thx.geom.Point;
+import thx.geom.d2.Point;
 import thx.geom.shape.Box;
 
 interface IGraphics {
