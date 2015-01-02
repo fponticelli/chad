@@ -1,5 +1,5 @@
-import chad.csg.*;
-import chad.csg.Solids;
+import thx.geom.d3.csg.*;
+import thx.geom.d3.csg.Solids;
 import chad.*;
 
 import chad.export.ThreeJS;

@@ -1,6 +1,6 @@
 package chad.export;
 
-import chad.csg.Solid;
+import thx.geom.d3.csg.Solid;
 import thx.geom.d3.Point in Point3D;
 import thx.geom.d3.Vertex in Vertex3D;
 

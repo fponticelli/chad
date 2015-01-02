@@ -1,6 +1,5 @@
 (function () { "use strict";
 var console = (1,eval)('this').console || {log:function(){}};
-var $estr = function() { return js_Boot.__string_rec(this,''); };
 function $extend(from, fields) {
 	function Inherit() {} Inherit.prototype = from; var proto = new Inherit();
 	for (var name in fields) proto[name] = fields[name];
@@ -174,12 +173,10 @@ Lambda.has = function(it,elt) {
 Math.__name__ = ["Math"];
 var ScaleMode = { __ename__ : ["ScaleMode"], __constructs__ : ["NoScale","Auto","Scaled"] };
 ScaleMode.NoScale = ["NoScale",0];
-ScaleMode.NoScale.toString = $estr;
 ScaleMode.NoScale.__enum__ = ScaleMode;
 ScaleMode.Auto = ["Auto",1];
-ScaleMode.Auto.toString = $estr;
 ScaleMode.Auto.__enum__ = ScaleMode;
-ScaleMode.Scaled = function(v) { var $x = ["Scaled",2,v]; $x.__enum__ = ScaleMode; $x.toString = $estr; return $x; };
+ScaleMode.Scaled = function(v) { var $x = ["Scaled",2,v]; $x.__enum__ = ScaleMode; return $x; };
 var MiniCanvas = function(width,height,scaleMode) {
 	this.scaleMode = scaleMode;
 	this.width = width;
@@ -486,27 +483,20 @@ StringTools.hex = function(n,digits) {
 };
 var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
 ValueType.TNull = ["TNull",0];
-ValueType.TNull.toString = $estr;
 ValueType.TNull.__enum__ = ValueType;
 ValueType.TInt = ["TInt",1];
-ValueType.TInt.toString = $estr;
 ValueType.TInt.__enum__ = ValueType;
 ValueType.TFloat = ["TFloat",2];
-ValueType.TFloat.toString = $estr;
 ValueType.TFloat.__enum__ = ValueType;
 ValueType.TBool = ["TBool",3];
-ValueType.TBool.toString = $estr;
 ValueType.TBool.__enum__ = ValueType;
 ValueType.TObject = ["TObject",4];
-ValueType.TObject.toString = $estr;
 ValueType.TObject.__enum__ = ValueType;
 ValueType.TFunction = ["TFunction",5];
-ValueType.TFunction.toString = $estr;
 ValueType.TFunction.__enum__ = ValueType;
-ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; return $x; };
 ValueType.TUnknown = ["TUnknown",8];
-ValueType.TUnknown.toString = $estr;
 ValueType.TUnknown.__enum__ = ValueType;
 var Type = function() { };
 Type.__name__ = ["Type"];
@@ -576,7 +566,7 @@ Type["typeof"] = function(v) {
 	}
 };
 var chad_render_FillStyle = { __ename__ : ["chad","render","FillStyle"], __constructs__ : ["FillColor"] };
-chad_render_FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad_render_FillStyle; $x.toString = $estr; return $x; };
+chad_render_FillStyle.FillColor = function(c) { var $x = ["FillColor",0,c]; $x.__enum__ = chad_render_FillStyle; return $x; };
 var chad_render_IGraphics = function() { };
 chad_render_IGraphics.__name__ = ["chad","render","IGraphics"];
 chad_render_IGraphics.prototype = {
@@ -700,9 +690,9 @@ chad_render_Render.prototype = {
 	,__class__: chad_render_Render
 };
 var chad_render_StrokeStyle = { __ename__ : ["chad","render","StrokeStyle"], __constructs__ : ["StrokeLine","StrokeDash","StrokeDot"] };
-chad_render_StrokeStyle.StrokeLine = function(style) { var $x = ["StrokeLine",0,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
-chad_render_StrokeStyle.StrokeDash = function(pattern,style) { var $x = ["StrokeDash",1,pattern,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
-chad_render_StrokeStyle.StrokeDot = function(spacing,style) { var $x = ["StrokeDot",2,spacing,style]; $x.__enum__ = chad_render_StrokeStyle; $x.toString = $estr; return $x; };
+chad_render_StrokeStyle.StrokeLine = function(style) { var $x = ["StrokeLine",0,style]; $x.__enum__ = chad_render_StrokeStyle; return $x; };
+chad_render_StrokeStyle.StrokeDash = function(pattern,style) { var $x = ["StrokeDash",1,pattern,style]; $x.__enum__ = chad_render_StrokeStyle; return $x; };
+chad_render_StrokeStyle.StrokeDot = function(spacing,style) { var $x = ["StrokeDot",2,spacing,style]; $x.__enum__ = chad_render_StrokeStyle; return $x; };
 var chad_render_canvas_MiniCanvasGraphics = function(mini,weightScale) {
 	this.weightScale = null == weightScale?function(x) {
 		return x;
@@ -797,12 +787,11 @@ chad_render_canvas_MiniCanvasGraphics.prototype = {
 };
 var haxe_StackItem = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"] };
 haxe_StackItem.CFunction = ["CFunction",0];
-haxe_StackItem.CFunction.toString = $estr;
 haxe_StackItem.CFunction.__enum__ = haxe_StackItem;
-haxe_StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
-haxe_StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
-haxe_StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
-haxe_StackItem.LocalFunction = function(v) { var $x = ["LocalFunction",4,v]; $x.__enum__ = haxe_StackItem; $x.toString = $estr; return $x; };
+haxe_StackItem.Module = function(m) { var $x = ["Module",1,m]; $x.__enum__ = haxe_StackItem; return $x; };
+haxe_StackItem.FilePos = function(s,file,line) { var $x = ["FilePos",2,s,file,line]; $x.__enum__ = haxe_StackItem; return $x; };
+haxe_StackItem.Method = function(classname,method) { var $x = ["Method",3,classname,method]; $x.__enum__ = haxe_StackItem; return $x; };
+haxe_StackItem.LocalFunction = function(v) { var $x = ["LocalFunction",4,v]; $x.__enum__ = haxe_StackItem; return $x; };
 var haxe_CallStack = function() { };
 haxe_CallStack.__name__ = ["haxe","CallStack"];
 haxe_CallStack.callStack = function() {
@@ -4661,12 +4650,12 @@ thx_color_parse_ColorInfo.prototype = {
 	,__class__: thx_color_parse_ColorInfo
 };
 var thx_color_parse_ChannelInfo = { __ename__ : ["thx","color","parse","ChannelInfo"], __constructs__ : ["CIPercent","CIFloat","CIDegree","CIInt8","CIInt","CIBool"] };
-thx_color_parse_ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIInt8 = function(value) { var $x = ["CIInt8",3,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIInt = function(value) { var $x = ["CIInt",4,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
-thx_color_parse_ChannelInfo.CIBool = function(value) { var $x = ["CIBool",5,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
+thx_color_parse_ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIInt8 = function(value) { var $x = ["CIInt8",3,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIInt = function(value) { var $x = ["CIInt",4,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
+thx_color_parse_ChannelInfo.CIBool = function(value) { var $x = ["CIBool",5,value]; $x.__enum__ = thx_color_parse_ChannelInfo; return $x; };
 var thx_core_Arrays = function() { };
 thx_core_Arrays.__name__ = ["thx","core","Arrays"];
 thx_core_Arrays.after = function(array,element) {
@@ -5613,7 +5602,6 @@ thx_core_Iterators.toArray = function(it) {
 };
 var thx_core_Nil = { __ename__ : ["thx","core","Nil"], __constructs__ : ["nil"] };
 thx_core_Nil.nil = ["nil",0];
-thx_core_Nil.nil.toString = $estr;
 thx_core_Nil.nil.__enum__ = thx_core_Nil;
 var thx_core_Nulls = function() { };
 thx_core_Nulls.__name__ = ["thx","core","Nulls"];

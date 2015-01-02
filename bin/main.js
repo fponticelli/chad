@@ -104,7 +104,7 @@ Main.main = function() {
 	(window || {}).Main = Main;
 };
 Main.geom = function() {
-	return chad.export.ThreeJS.toModel(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.intersect(chad.csg._Solid.Solid_Impl_.subtract(chad.csg._Solid.Solid_Impl_.union(chad.csg.Solids.box(thx.geom.d3._Point.Point_Impl_.fromFloats([-0.5,-0.5,-0.5]),thx.geom.d3._Point.Point_Impl_.fromFloats([1.0,1.0,1.0])),chad.csg.Solids.box(thx.geom.d3._Point.Point_Impl_.fromFloats([0.1,0.1,0.1]),thx.geom.d3._Point.Point_Impl_.fromFloats([1.0,1.0,1.0]))),chad.csg.Solids.box(thx.geom.d3._Point.Point_Impl_.fromFloats([-1.1,-1.1,-1.1]),thx.geom.d3._Point.Point_Impl_.fromFloats([1.0,1.0,1.0]))),chad.csg.Solids.sphere(thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.0,0.0]),0.7)),chad.csg.Solids.sphere(thx.geom.d3._Point.Point_Impl_.fromFloats([0.5,0.5,0.5]),0.35)),chad.csg.Solids.cylinder(thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.0,-0.95]),thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.0,0.95]),0.25)),chad.csg.Solids.cylinder(thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,-0.95,0.0]),thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.95,0.0]),0.35)),chad.csg.Solids.cylinder(thx.geom.d3._Point.Point_Impl_.fromFloats([-0.95,0.0,0.0]),thx.geom.d3._Point.Point_Impl_.fromFloats([0.95,0.0,0.0]),0.15)));
+	return chad.export.ThreeJS.toModel(thx.geom.d3.csg._Solid.Solid_Impl_.subtract(thx.geom.d3.csg._Solid.Solid_Impl_.subtract(thx.geom.d3.csg._Solid.Solid_Impl_.subtract(thx.geom.d3.csg._Solid.Solid_Impl_.subtract(thx.geom.d3.csg._Solid.Solid_Impl_.intersect(thx.geom.d3.csg._Solid.Solid_Impl_.subtract(thx.geom.d3.csg._Solid.Solid_Impl_.union(thx.geom.d3.csg.Solids.box(thx.geom.d3._Point.Point_Impl_.fromFloats([-0.5,-0.5,-0.5]),thx.geom.d3._Point.Point_Impl_.fromFloats([1.0,1.0,1.0])),thx.geom.d3.csg.Solids.box(thx.geom.d3._Point.Point_Impl_.fromFloats([0.1,0.1,0.1]),thx.geom.d3._Point.Point_Impl_.fromFloats([1.0,1.0,1.0]))),thx.geom.d3.csg.Solids.box(thx.geom.d3._Point.Point_Impl_.fromFloats([-1.1,-1.1,-1.1]),thx.geom.d3._Point.Point_Impl_.fromFloats([1.0,1.0,1.0]))),thx.geom.d3.csg.Solids.sphere(thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.0,0.0]),0.7)),thx.geom.d3.csg.Solids.sphere(thx.geom.d3._Point.Point_Impl_.fromFloats([0.5,0.5,0.5]),0.35)),thx.geom.d3.csg.Solids.cylinder(thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.0,-0.95]),thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.0,0.95]),0.25)),thx.geom.d3.csg.Solids.cylinder(thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,-0.95,0.0]),thx.geom.d3._Point.Point_Impl_.fromFloats([0.0,0.95,0.0]),0.35)),thx.geom.d3.csg.Solids.cylinder(thx.geom.d3._Point.Point_Impl_.fromFloats([-0.95,0.0,0.0]),thx.geom.d3._Point.Point_Impl_.fromFloats([0.95,0.0,0.0]),0.15)));
 };
 Math.__name__ = true;
 var Std = function() { };
@@ -157,352 +157,6 @@ StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 };
 var chad = {};
-chad.csg = {};
-chad.csg.Node = function(polygons) {
-	this.plane = null;
-	this.front = null;
-	this.back = null;
-	this.polygons = [];
-	if(null != polygons) this.build(polygons);
-};
-chad.csg.Node.__name__ = true;
-chad.csg.Node.prototype = {
-	build: function(polygons) {
-		if(polygons.length == 0) return; else {
-			if(null == this.plane) this.plane = polygons[0].get_plane();
-			var front = [];
-			var back = [];
-			var _g = 0;
-			while(_g < polygons.length) {
-				var polygon = polygons[_g];
-				++_g;
-				this.plane.splitPolygon(polygon,this.polygons,this.polygons,front,back);
-			}
-			if(front.length > 0) {
-				if(null == this.front) this.front = new chad.csg.Node();
-				this.front.build(front);
-			}
-			if(back.length > 0) {
-				if(null == this.back) this.back = new chad.csg.Node();
-				this.back.build(back);
-			}
-		}
-	}
-	,invert: function() {
-		var _g1 = 0;
-		var _g = this.polygons.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			this.polygons[i] = this.polygons[i].flip();
-		}
-		this.plane = this.plane.flip();
-		if(null != this.front) this.front.invert();
-		if(null != this.back) this.back.invert();
-		var temp = this.front;
-		this.front = this.back;
-		this.back = temp;
-	}
-	,clipPolygons: function(polygons) {
-		if(null == this.plane) return polygons.slice(); else {
-			var front = [];
-			var back = [];
-			var _g = 0;
-			while(_g < polygons.length) {
-				var polygon = polygons[_g];
-				++_g;
-				this.plane.splitPolygon(polygon,front,back,front,back);
-			}
-			if(null != this.front) front = this.front.clipPolygons(front);
-			if(null != this.back) back = this.back.clipPolygons(back); else back = [];
-			return front.concat(back);
-		}
-	}
-	,clipTo: function(other) {
-		this.polygons = other.clipPolygons(this.polygons);
-		if(null != this.front) this.front.clipTo(other);
-		if(null != this.back) this.back.clipTo(other);
-	}
-	,iterator: function() {
-		return HxOverrides.iter(this.polygons);
-	}
-	,all: function() {
-		return this.polygons.concat(null == this.front?[]:this.front.all()).concat(null == this.back?[]:this.back.all());
-	}
-	,toString: function() {
-		return "Node [length: " + this.polygons.concat(null == this.front?[]:this.front.all()).concat(null == this.back?[]:this.back.all()).length + ", front: " + Std.string(null == this.front) + ", back: " + Std.string(null == this.back) + "]";
-	}
-};
-chad.csg._Solid = {};
-chad.csg._Solid.Solid_Impl_ = {};
-chad.csg._Solid.Solid_Impl_.__name__ = true;
-chad.csg._Solid.Solid_Impl_._new = function(polygons) {
-	return polygons;
-};
-chad.csg._Solid.Solid_Impl_.fromPolygons = function(polygons) {
-	return chad.csg._Solid.Solid_Impl_._new(polygons);
-};
-chad.csg._Solid.Solid_Impl_.union = function(this1,other) {
-	var a = new chad.csg.Node(this1.slice());
-	var b = new chad.csg.Node(other.slice());
-	a.clipTo(b);
-	b.clipTo(a);
-	b.invert();
-	b.clipTo(a);
-	b.invert();
-	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
-	return chad.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
-};
-chad.csg._Solid.Solid_Impl_.subtract = function(this1,other) {
-	var a = new chad.csg.Node(this1.slice());
-	var b = new chad.csg.Node(other.slice());
-	a.invert();
-	a.clipTo(b);
-	b.clipTo(a);
-	b.invert();
-	b.clipTo(a);
-	b.invert();
-	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
-	a.invert();
-	return chad.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
-};
-chad.csg._Solid.Solid_Impl_.intersect = function(this1,other) {
-	var a = new chad.csg.Node(this1.slice());
-	var b = new chad.csg.Node(other.slice());
-	a.invert();
-	b.clipTo(a);
-	b.invert();
-	a.clipTo(b);
-	b.clipTo(a);
-	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
-	a.invert();
-	return chad.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
-};
-chad.csg._Solid.Solid_Impl_.toArray = function(this1) {
-	return this1.slice();
-};
-chad.csg._Solid.Solid_Impl_.iterator = function(this1) {
-	return HxOverrides.iter(this1);
-};
-chad.csg._Solid.Solid_Impl_.toString = function(this1) {
-	return "Solid(" + this1.length + ")";
-};
-chad.csg.Solids = function() { };
-chad.csg.Solids.__name__ = true;
-chad.csg.Solids.box = function(position,size) {
-	if(null == position) position = thx.geom.d3._Point.Point_Impl_.zero;
-	return chad.csg._Solid.Solid_Impl_.fromPolygons(chad.csg.Solids.baseCube.map(function(info) {
-		return new thx.geom.d3.Polygon(info.p.map(function(i) {
-			var pos;
-			var x;
-			x = position.get_x() + size.get_x() * ((i & 1) != 0?1:0);
-			var y;
-			y = position.get_y() + size.get_y() * ((i & 2) != 0?1:0);
-			var z;
-			z = position.get_z() + size.get_z() * ((i & 4) != 0?1:0);
-			pos = new thx.geom.d3.xyz.PointXYZ(x,y,z);
-			return new thx.geom.d3.Vertex(pos,thx.geom.d3._Point.Point_Impl_.fromFloats(info.n));
-		}));
-	}));
-};
-chad.csg.Solids.cylinder = function(start,end,radius,resolution) {
-	if(radius == null) radius = 1.0;
-	if(null == resolution) resolution = chad.csg.Solids.getResolution;
-	var slices = resolution(radius);
-	var ray;
-	ray = (function($this) {
-		var $r;
-		var p4;
-		p4 = (function($this) {
-			var $r;
-			var x13 = -start.get_x();
-			var y13 = -start.get_y();
-			var z13 = -start.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x13,y13,z13);
-			return $r;
-		}($this));
-		var x12 = end.get_x() + p4.get_x();
-		var y12 = end.get_y() + p4.get_y();
-		var z12 = end.get_z() + p4.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x12,y12,z12);
-		return $r;
-	}(this));
-	var axisZ;
-	axisZ = (function($this) {
-		var $r;
-		var v4 = Math.sqrt(ray.get_x() * ray.get_x() + ray.get_y() * ray.get_y() + ray.get_z() * ray.get_z());
-		var x14 = ray.get_x() / v4;
-		var y14 = ray.get_y() / v4;
-		var z14 = ray.get_z() / v4;
-		$r = new thx.geom.d3.xyz.PointXYZ(x14,y14,z14);
-		return $r;
-	}(this));
-	var isY = Math.abs(axisZ.get_y()) > 0.5;
-	var axisX;
-	var this4 = thx.geom.d3._Point.Point_Impl_.cross(new thx.geom.d3.xyz.PointXYZ(isY?1:0,isY?0:1,0),axisZ);
-	var v5 = Math.sqrt(this4.get_x() * this4.get_x() + this4.get_y() * this4.get_y() + this4.get_z() * this4.get_z());
-	var x15 = this4.get_x() / v5;
-	var y15 = this4.get_y() / v5;
-	var z15 = this4.get_z() / v5;
-	axisX = new thx.geom.d3.xyz.PointXYZ(x15,y15,z15);
-	var axisY;
-	var this5 = thx.geom.d3._Point.Point_Impl_.cross(axisX,axisZ);
-	var v6 = Math.sqrt(this5.get_x() * this5.get_x() + this5.get_y() * this5.get_y() + this5.get_z() * this5.get_z());
-	var x16 = this5.get_x() / v6;
-	var y16 = this5.get_y() / v6;
-	var z16 = this5.get_z() / v6;
-	axisY = new thx.geom.d3.xyz.PointXYZ(x16,y16,z16);
-	var s = new thx.geom.d3.Vertex(start,(function($this) {
-		var $r;
-		var x = -axisZ.get_x();
-		var y = -axisZ.get_y();
-		var z = -axisZ.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
-		return $r;
-	}(this)));
-	var e = new thx.geom.d3.Vertex(end,(function($this) {
-		var $r;
-		var v = Math.sqrt(axisZ.get_x() * axisZ.get_x() + axisZ.get_y() * axisZ.get_y() + axisZ.get_z() * axisZ.get_z());
-		var x1 = axisZ.get_x() / v;
-		var y1 = axisZ.get_y() / v;
-		var z1 = axisZ.get_z() / v;
-		$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
-		return $r;
-	}(this)));
-	var polygons = [];
-	var t0;
-	var t1;
-	var point = function(stack,slice,normalBlend) {
-		var angle = slice * Math.PI * 2;
-		var out;
-		var this1;
-		var v1 = Math.cos(angle);
-		var x3 = axisX.get_x() * v1;
-		var y3 = axisX.get_y() * v1;
-		var z3 = axisX.get_z() * v1;
-		this1 = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
-		var p;
-		var v2 = Math.sin(angle);
-		var x4 = axisY.get_x() * v2;
-		var y4 = axisY.get_y() * v2;
-		var z4 = axisY.get_z() * v2;
-		p = new thx.geom.d3.xyz.PointXYZ(x4,y4,z4);
-		var x2 = this1.get_x() + p.get_x();
-		var y2 = this1.get_y() + p.get_y();
-		var z2 = this1.get_z() + p.get_z();
-		out = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
-		var pos;
-		var this2;
-		var p2;
-		p2 = (function($this) {
-			var $r;
-			var x7 = ray.get_x() * stack;
-			var y7 = ray.get_y() * stack;
-			var z7 = ray.get_z() * stack;
-			$r = new thx.geom.d3.xyz.PointXYZ(x7,y7,z7);
-			return $r;
-		}(this));
-		var x6 = start.get_x() + p2.get_x();
-		var y6 = start.get_y() + p2.get_y();
-		var z6 = start.get_z() + p2.get_z();
-		this2 = new thx.geom.d3.xyz.PointXYZ(x6,y6,z6);
-		var p1;
-		p1 = (function($this) {
-			var $r;
-			var x8 = out.get_x() * radius;
-			var y8 = out.get_y() * radius;
-			var z8 = out.get_z() * radius;
-			$r = new thx.geom.d3.xyz.PointXYZ(x8,y8,z8);
-			return $r;
-		}(this));
-		var x5 = this2.get_x() + p1.get_x();
-		var y5 = this2.get_y() + p1.get_y();
-		var z5 = this2.get_z() + p1.get_z();
-		pos = new thx.geom.d3.xyz.PointXYZ(x5,y5,z5);
-		var normal;
-		var this3;
-		var v3 = 1 - Math.abs(normalBlend);
-		var x10 = out.get_x() * v3;
-		var y10 = out.get_y() * v3;
-		var z10 = out.get_z() * v3;
-		this3 = new thx.geom.d3.xyz.PointXYZ(x10,y10,z10);
-		var p3;
-		p3 = (function($this) {
-			var $r;
-			var x11 = axisZ.get_x() * normalBlend;
-			var y11 = axisZ.get_y() * normalBlend;
-			var z11 = axisZ.get_z() * normalBlend;
-			$r = new thx.geom.d3.xyz.PointXYZ(x11,y11,z11);
-			return $r;
-		}(this));
-		var x9 = this3.get_x() + p3.get_x();
-		var y9 = this3.get_y() + p3.get_y();
-		var z9 = this3.get_z() + p3.get_z();
-		normal = new thx.geom.d3.xyz.PointXYZ(x9,y9,z9);
-		return new thx.geom.d3.Vertex(pos,normal);
-	};
-	var _g = 0;
-	while(_g < slices) {
-		var i = _g++;
-		t0 = i / slices;
-		t1 = (i + 1) / slices;
-		polygons.push(new thx.geom.d3.Polygon([s,point(0,t0,-1),point(0,t1,-1)]));
-		polygons.push(new thx.geom.d3.Polygon([point(0,t1,0),point(0,t0,0),point(1,t0,0),point(1,t1,0)]));
-		polygons.push(new thx.geom.d3.Polygon([e,point(1,t1,1),point(1,t0,1)]));
-	}
-	return chad.csg._Solid.Solid_Impl_.fromPolygons(polygons);
-};
-chad.csg.Solids.getResolution = function(r) {
-	return 36;
-};
-chad.csg.Solids.sphere = function(position,radius,resolution) {
-	if(radius == null) radius = 1.0;
-	if(null == resolution) resolution = chad.csg.Solids.getResolution;
-	var slices = resolution(radius);
-	var stacks = Math.ceil(slices / 2);
-	var polygons = [];
-	var vertices = [];
-	var vertex = function(theta,phi) {
-		theta *= Math.PI * 2;
-		phi *= Math.PI;
-		var dir;
-		var x = Math.cos(theta) * Math.sin(phi);
-		var y = Math.cos(phi);
-		var z = Math.sin(theta) * Math.sin(phi);
-		dir = new thx.geom.d3.xyz.PointXYZ(x,y,z);
-		vertices.push(new thx.geom.d3.Vertex((function($this) {
-			var $r;
-			var p;
-			p = (function($this) {
-				var $r;
-				var x2 = dir.get_x() * radius;
-				var y2 = dir.get_y() * radius;
-				var z2 = dir.get_z() * radius;
-				$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
-				return $r;
-			}($this));
-			var x1 = position.get_x() + p.get_x();
-			var y1 = position.get_y() + p.get_y();
-			var z1 = position.get_z() + p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
-			return $r;
-		}(this)),dir));
-	};
-	var _g = 0;
-	while(_g < slices) {
-		var i = _g++;
-		var _g1 = 0;
-		while(_g1 < stacks) {
-			var j = _g1++;
-			vertices = [];
-			vertex(i / slices,j / stacks);
-			if(j > 0) vertex((i + 1) / slices,j / stacks);
-			if(j < stacks - 1) vertex((i + 1) / slices,(j + 1) / stacks);
-			vertex(i / slices,(j + 1) / stacks);
-			polygons.push(new thx.geom.d3.Polygon(vertices));
-		}
-	}
-	return chad.csg._Solid.Solid_Impl_.fromPolygons(polygons);
-};
 chad["export"] = {};
 chad.export.ThreeJS = function() { };
 chad.export.ThreeJS.__name__ = true;
@@ -3682,6 +3336,356 @@ thx.geom.d3.Vertex.prototype = {
 		}(this));
 	}
 };
+thx.geom.d3.csg = {};
+thx.geom.d3.csg.Node = function(polygons) {
+	this.plane = null;
+	this.front = null;
+	this.back = null;
+	this.polygons = [];
+	if(null != polygons) this.build(polygons);
+};
+thx.geom.d3.csg.Node.__name__ = true;
+thx.geom.d3.csg.Node.prototype = {
+	build: function(polygons) {
+		if(polygons.length == 0) return; else {
+			if(null == this.plane) this.plane = polygons[0].get_plane();
+			var front = [];
+			var back = [];
+			var _g = 0;
+			while(_g < polygons.length) {
+				var polygon = polygons[_g];
+				++_g;
+				this.plane.splitPolygon(polygon,this.polygons,this.polygons,front,back);
+			}
+			if(front.length > 0) {
+				if(null == this.front) this.front = new thx.geom.d3.csg.Node();
+				this.front.build(front);
+			}
+			if(back.length > 0) {
+				if(null == this.back) this.back = new thx.geom.d3.csg.Node();
+				this.back.build(back);
+			}
+		}
+	}
+	,invert: function() {
+		var _g1 = 0;
+		var _g = this.polygons.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this.polygons[i] = this.polygons[i].flip();
+		}
+		this.plane = this.plane.flip();
+		if(null != this.front) this.front.invert();
+		if(null != this.back) this.back.invert();
+		var temp = this.front;
+		this.front = this.back;
+		this.back = temp;
+	}
+	,clipPolygons: function(polygons) {
+		if(null == this.plane) return polygons.slice(); else {
+			var front = [];
+			var back = [];
+			var _g = 0;
+			while(_g < polygons.length) {
+				var polygon = polygons[_g];
+				++_g;
+				this.plane.splitPolygon(polygon,front,back,front,back);
+			}
+			if(null != this.front) front = this.front.clipPolygons(front);
+			if(null != this.back) back = this.back.clipPolygons(back); else back = [];
+			return front.concat(back);
+		}
+	}
+	,clipTo: function(other) {
+		this.polygons = other.clipPolygons(this.polygons);
+		if(null != this.front) this.front.clipTo(other);
+		if(null != this.back) this.back.clipTo(other);
+	}
+	,iterator: function() {
+		return HxOverrides.iter(this.polygons);
+	}
+	,all: function() {
+		return this.polygons.concat(null == this.front?[]:this.front.all()).concat(null == this.back?[]:this.back.all());
+	}
+	,toString: function() {
+		return "Node [length: " + this.polygons.concat(null == this.front?[]:this.front.all()).concat(null == this.back?[]:this.back.all()).length + ", front: " + Std.string(null == this.front) + ", back: " + Std.string(null == this.back) + "]";
+	}
+};
+thx.geom.d3.csg._Solid = {};
+thx.geom.d3.csg._Solid.Solid_Impl_ = {};
+thx.geom.d3.csg._Solid.Solid_Impl_.__name__ = true;
+thx.geom.d3.csg._Solid.Solid_Impl_._new = function(polygons) {
+	return polygons;
+};
+thx.geom.d3.csg._Solid.Solid_Impl_.fromPolygons = function(polygons) {
+	return thx.geom.d3.csg._Solid.Solid_Impl_._new(polygons);
+};
+thx.geom.d3.csg._Solid.Solid_Impl_.union = function(this1,other) {
+	var a = new thx.geom.d3.csg.Node(this1.slice());
+	var b = new thx.geom.d3.csg.Node(other.slice());
+	a.clipTo(b);
+	b.clipTo(a);
+	b.invert();
+	b.clipTo(a);
+	b.invert();
+	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
+	return thx.geom.d3.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
+};
+thx.geom.d3.csg._Solid.Solid_Impl_.subtract = function(this1,other) {
+	var a = new thx.geom.d3.csg.Node(this1.slice());
+	var b = new thx.geom.d3.csg.Node(other.slice());
+	a.invert();
+	a.clipTo(b);
+	b.clipTo(a);
+	b.invert();
+	b.clipTo(a);
+	b.invert();
+	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
+	a.invert();
+	return thx.geom.d3.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
+};
+thx.geom.d3.csg._Solid.Solid_Impl_.intersect = function(this1,other) {
+	var a = new thx.geom.d3.csg.Node(this1.slice());
+	var b = new thx.geom.d3.csg.Node(other.slice());
+	a.invert();
+	b.clipTo(a);
+	b.invert();
+	a.clipTo(b);
+	b.clipTo(a);
+	a.build(b.polygons.concat(null == b.front?[]:b.front.all()).concat(null == b.back?[]:b.back.all()));
+	a.invert();
+	return thx.geom.d3.csg._Solid.Solid_Impl_.fromPolygons(a.polygons.concat(null == a.front?[]:a.front.all()).concat(null == a.back?[]:a.back.all()));
+};
+thx.geom.d3.csg._Solid.Solid_Impl_.toArray = function(this1) {
+	return this1.slice();
+};
+thx.geom.d3.csg._Solid.Solid_Impl_.iterator = function(this1) {
+	return HxOverrides.iter(this1);
+};
+thx.geom.d3.csg._Solid.Solid_Impl_.toString = function(this1) {
+	return "Solid(" + this1.length + ")";
+};
+thx.geom.d3.csg.Solids = function() { };
+thx.geom.d3.csg.Solids.__name__ = true;
+thx.geom.d3.csg.Solids.box = function(position,size) {
+	if(null == position) position = thx.geom.d3._Point.Point_Impl_.zero;
+	return thx.geom.d3.csg._Solid.Solid_Impl_.fromPolygons(thx.geom.d3.csg.Solids.baseCube.map(function(info) {
+		return new thx.geom.d3.Polygon(info.p.map(function(i) {
+			var pos;
+			var x;
+			x = position.get_x() + size.get_x() * ((i & 1) != 0?1:0);
+			var y;
+			y = position.get_y() + size.get_y() * ((i & 2) != 0?1:0);
+			var z;
+			z = position.get_z() + size.get_z() * ((i & 4) != 0?1:0);
+			pos = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			return new thx.geom.d3.Vertex(pos,thx.geom.d3._Point.Point_Impl_.fromFloats(info.n));
+		}));
+	}));
+};
+thx.geom.d3.csg.Solids.cylinder = function(start,end,radius,resolution) {
+	if(radius == null) radius = 1.0;
+	if(null == resolution) resolution = thx.geom.d3.csg.Solids.getResolution;
+	var slices = resolution(radius);
+	var ray;
+	ray = (function($this) {
+		var $r;
+		var p11;
+		p11 = (function($this) {
+			var $r;
+			var x13 = -start.get_x();
+			var y13 = -start.get_y();
+			var z13 = -start.get_z();
+			$r = new thx.geom.d3.xyz.PointXYZ(x13,y13,z13);
+			return $r;
+		}($this));
+		var x12 = end.get_x() + p11.get_x();
+		var y12 = end.get_y() + p11.get_y();
+		var z12 = end.get_z() + p11.get_z();
+		$r = new thx.geom.d3.xyz.PointXYZ(x12,y12,z12);
+		return $r;
+	}(this));
+	var axisZ;
+	axisZ = (function($this) {
+		var $r;
+		var v4 = Math.sqrt(ray.get_x() * ray.get_x() + ray.get_y() * ray.get_y() + ray.get_z() * ray.get_z());
+		var x14 = ray.get_x() / v4;
+		var y14 = ray.get_y() / v4;
+		var z14 = ray.get_z() / v4;
+		$r = new thx.geom.d3.xyz.PointXYZ(x14,y14,z14);
+		return $r;
+	}(this));
+	var isY = Math.abs(axisZ.get_y()) > 0.5;
+	var axisX;
+	var this13 = thx.geom.d3._Point.Point_Impl_.cross(new thx.geom.d3.xyz.PointXYZ(isY?1:0,isY?0:1,0),axisZ);
+	var v5 = Math.sqrt(this13.get_x() * this13.get_x() + this13.get_y() * this13.get_y() + this13.get_z() * this13.get_z());
+	var x15 = this13.get_x() / v5;
+	var y15 = this13.get_y() / v5;
+	var z15 = this13.get_z() / v5;
+	axisX = new thx.geom.d3.xyz.PointXYZ(x15,y15,z15);
+	var axisY;
+	var this14 = thx.geom.d3._Point.Point_Impl_.cross(axisX,axisZ);
+	var v6 = Math.sqrt(this14.get_x() * this14.get_x() + this14.get_y() * this14.get_y() + this14.get_z() * this14.get_z());
+	var x16 = this14.get_x() / v6;
+	var y16 = this14.get_y() / v6;
+	var z16 = this14.get_z() / v6;
+	axisY = new thx.geom.d3.xyz.PointXYZ(x16,y16,z16);
+	var s = new thx.geom.d3.Vertex(start,(function($this) {
+		var $r;
+		var x = -axisZ.get_x();
+		var y = -axisZ.get_y();
+		var z = -axisZ.get_z();
+		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		return $r;
+	}(this)));
+	var e = new thx.geom.d3.Vertex(end,(function($this) {
+		var $r;
+		var v = Math.sqrt(axisZ.get_x() * axisZ.get_x() + axisZ.get_y() * axisZ.get_y() + axisZ.get_z() * axisZ.get_z());
+		var x1 = axisZ.get_x() / v;
+		var y1 = axisZ.get_y() / v;
+		var z1 = axisZ.get_z() / v;
+		$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+		return $r;
+	}(this)));
+	var polygons = [];
+	var t0;
+	var t1;
+	var point = function(stack,slice,normalBlend) {
+		var angle = slice * Math.PI * 2;
+		var out;
+		var this1;
+		var v1 = Math.cos(angle);
+		var x2 = axisX.get_x() * v1;
+		var y2 = axisX.get_y() * v1;
+		var z2 = axisX.get_z() * v1;
+		this1 = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		var p;
+		var v2 = Math.sin(angle);
+		var x3 = axisY.get_x() * v2;
+		var y3 = axisY.get_y() * v2;
+		var z3 = axisY.get_z() * v2;
+		p = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
+		var x4 = this1.get_x() + p.get_x();
+		var y4 = this1.get_y() + p.get_y();
+		var z4 = this1.get_z() + p.get_z();
+		out = new thx.geom.d3.xyz.PointXYZ(x4,y4,z4);
+		var pos;
+		var this11;
+		var p2;
+		p2 = (function($this) {
+			var $r;
+			var x5 = ray.get_x() * stack;
+			var y5 = ray.get_y() * stack;
+			var z5 = ray.get_z() * stack;
+			$r = new thx.geom.d3.xyz.PointXYZ(x5,y5,z5);
+			return $r;
+		}(this));
+		var x6 = start.get_x() + p2.get_x();
+		var y6 = start.get_y() + p2.get_y();
+		var z6 = start.get_z() + p2.get_z();
+		this11 = new thx.geom.d3.xyz.PointXYZ(x6,y6,z6);
+		var p1;
+		p1 = (function($this) {
+			var $r;
+			var x7 = out.get_x() * radius;
+			var y7 = out.get_y() * radius;
+			var z7 = out.get_z() * radius;
+			$r = new thx.geom.d3.xyz.PointXYZ(x7,y7,z7);
+			return $r;
+		}(this));
+		var x8 = this11.get_x() + p1.get_x();
+		var y8 = this11.get_y() + p1.get_y();
+		var z8 = this11.get_z() + p1.get_z();
+		pos = new thx.geom.d3.xyz.PointXYZ(x8,y8,z8);
+		var normal;
+		var this12;
+		var v3 = 1 - Math.abs(normalBlend);
+		var x9 = out.get_x() * v3;
+		var y9 = out.get_y() * v3;
+		var z9 = out.get_z() * v3;
+		this12 = new thx.geom.d3.xyz.PointXYZ(x9,y9,z9);
+		var p3;
+		p3 = (function($this) {
+			var $r;
+			var x10 = axisZ.get_x() * normalBlend;
+			var y10 = axisZ.get_y() * normalBlend;
+			var z10 = axisZ.get_z() * normalBlend;
+			$r = new thx.geom.d3.xyz.PointXYZ(x10,y10,z10);
+			return $r;
+		}(this));
+		var x11 = this12.get_x() + p3.get_x();
+		var y11 = this12.get_y() + p3.get_y();
+		var z11 = this12.get_z() + p3.get_z();
+		normal = new thx.geom.d3.xyz.PointXYZ(x11,y11,z11);
+		return new thx.geom.d3.Vertex(pos,normal);
+	};
+	var _g = 0;
+	while(_g < slices) {
+		var i = _g++;
+		t0 = i / slices;
+		t1 = (i + 1) / slices;
+		polygons.push(new thx.geom.d3.Polygon([s,point(0,t0,-1),point(0,t1,-1)]));
+		polygons.push(new thx.geom.d3.Polygon([point(0,t1,0),point(0,t0,0),point(1,t0,0),point(1,t1,0)]));
+		polygons.push(new thx.geom.d3.Polygon([e,point(1,t1,1),point(1,t0,1)]));
+	}
+	return thx.geom.d3.csg._Solid.Solid_Impl_.fromPolygons(polygons);
+};
+thx.geom.d3.csg.Solids.getResolution = function(r) {
+	return 36;
+};
+thx.geom.d3.csg.Solids.sphere = function(position,radius,resolution) {
+	if(radius == null) radius = 1.0;
+	if(null == resolution) resolution = thx.geom.d3.csg.Solids.getResolution;
+	var slices = resolution(radius);
+	var stacks = Math.ceil(slices / 2);
+	var polygons = [];
+	var vertices = [];
+	var vertex = function(theta,phi) {
+		theta *= Math.PI * 2;
+		phi *= Math.PI;
+		var dir;
+		var x = Math.cos(theta) * Math.sin(phi);
+		var y = Math.cos(phi);
+		var z = Math.sin(theta) * Math.sin(phi);
+		dir = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		vertices.push(new thx.geom.d3.Vertex((function($this) {
+			var $r;
+			var p;
+			p = (function($this) {
+				var $r;
+				var x1 = dir.get_x() * radius;
+				var y1 = dir.get_y() * radius;
+				var z1 = dir.get_z() * radius;
+				$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+				return $r;
+			}($this));
+			$r = (function($this) {
+				var $r;
+				var x2 = position.get_x() + p.get_x();
+				var y2 = position.get_y() + p.get_y();
+				var z2 = position.get_z() + p.get_z();
+				$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+				return $r;
+			}($this));
+			return $r;
+		}(this)),dir));
+	};
+	var _g = 0;
+	while(_g < slices) {
+		var i = _g++;
+		var _g1 = 0;
+		while(_g1 < stacks) {
+			var j = _g1++;
+			vertices = [];
+			vertex(i / slices,j / stacks);
+			if(j > 0) vertex((i + 1) / slices,j / stacks);
+			if(j < stacks - 1) vertex((i + 1) / slices,(j + 1) / stacks);
+			vertex(i / slices,(j + 1) / stacks);
+			polygons.push(new thx.geom.d3.Polygon(vertices));
+		}
+	}
+	return thx.geom.d3.csg._Solid.Solid_Impl_.fromPolygons(polygons);
+};
 thx.geom.d3.xyz.LinkedXYZ = function(getX,getY,getZ,setX,setY,setZ) {
 	this.getX = getX;
 	this.getY = getY;
@@ -3774,7 +3778,6 @@ if(Array.prototype.filter == null) Array.prototype.filter = function(f1) {
         };
       }
     ;
-chad.csg.Solids.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 thx.core.Floats.TOLERANCE = 10e-5;
 thx.core.Floats.EPSILON = 10e-10;
 thx.core.Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
@@ -3798,5 +3801,6 @@ thx.geom.Transformables.MZ = new thx.geom.d3.Plane(new thx.geom.d3.xyz.PointXYZ(
 thx.geom.d2._Point.Point_Impl_.zero = new thx.geom.d2.xy.ImmutableXY(0,0);
 thx.geom.d3._Point.Point_Impl_.zero = new thx.geom.d3.xyz.ImmutableXYZ(0,0,0);
 thx.geom.d3.OrthoNormalBasis.z0Plane = new thx.geom.d3.OrthoNormalBasis(new thx.geom.d3.Plane(new thx.geom.d3.xyz.PointXYZ(0,0,1),0),new thx.geom.d3.xyz.PointXYZ(1,0,0));
+thx.geom.d3.csg.Solids.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 Main.main();
 })();
