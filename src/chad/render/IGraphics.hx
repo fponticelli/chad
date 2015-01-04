@@ -1,15 +1,12 @@
 package chad.render;
 
-import thx.geom.d2.Point;
-import thx.geom.shape.Box;
+import thx.color.RGBXA;
 
 interface IGraphics {
-  public var weightScale(default, null) : Float -> Float;
-  public var reverseCoords(get, null) : Box;
-  public function wrap(?stroke : StrokeStyle, ?fill : FillStyle, f : Void -> Void) : Void;
-  public function lineTo(point : Point) : Void;
-  public function curveTo(point : Point, cout : Null<Point>, cin : Null<Point>) : Void;
-  public function moveTo(point : Point) : Void;
-  public function applyStrokeStyle(style : StrokeStyle) : Void;
-  public function applyFillStyle(style : FillStyle) : Void;
+  public function moveTo(x : Float, y : Float) : Void;
+  public function lineTo(x : Float, y : Float) : Void;
+  public function curveTo(coutx : Float, couty : Float, cinx : Float, ciny : Float, x : Float, y : Float) : Void;
+  public function begin() : Void;
+  public function fill(?fillStyle : FillStyle) : Void;
+  public function stroke(?width : Float, ?color : RGBXA, ?join : Join, ?cap : Cap, ?strokeStyle : StrokeStyle) : Void;
 }
