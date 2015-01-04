@@ -1410,86 +1410,87 @@ thx.core._Tuple.Tuple6_Impl_.toString = function(this1) {
 	return "Tuple6(" + Std.string(this1._0) + "," + Std.string(this1._1) + "," + Std.string(this1._2) + "," + Std.string(this1._3) + "," + Std.string(this1._4) + "," + Std.string(this1._5) + ")";
 };
 thx.geom = {};
-thx.geom._Matrix4x4 = {};
-thx.geom._Matrix4x4.Matrix4x4_Impl_ = {};
-thx.geom._Matrix4x4.Matrix4x4_Impl_.__name__ = true;
-thx.geom._Matrix4x4.Matrix4x4_Impl_.fromArray = function(e) {
-	if(e.length != 16) throw "Invalid array length (" + e.length + ") for Matrix4x4, should be 16";
+thx.geom.ICloneable = function() { };
+thx.geom.ICloneable.__name__ = true;
+thx.geom.ITransformable44 = function() { };
+thx.geom.ITransformable44.__name__ = true;
+thx.geom.ITransformable44.__interfaces__ = [thx.geom.ICloneable];
+thx.geom._Matrix44 = {};
+thx.geom._Matrix44.Matrix44_Impl_ = {};
+thx.geom._Matrix44.Matrix44_Impl_.__name__ = true;
+thx.geom._Matrix44.Matrix44_Impl_.fromArray = function(e) {
+	thx.core.Arrays.resize(e,16,0.0);
 	return [e[0],e[1],e[2],e[3],e[4],e[5],e[6],e[7],e[8],e[9],e[10],e[11],e[12],e[13],e[14],e[15]];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationX = function(radians) {
+thx.geom._Matrix44.Matrix44_Impl_.rotationX = function(radians) {
 	var cos = Math.cos(radians);
 	var sin = Math.sin(radians);
 	return [1,0,0,0,0,cos,sin,0,0,-sin,cos,0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationY = function(radians) {
+thx.geom._Matrix44.Matrix44_Impl_.rotationY = function(radians) {
 	var cos = Math.cos(radians);
 	var sin = Math.sin(radians);
 	return [cos,0,-sin,0,0,1,0,0,sin,0,cos,0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ = function(radians) {
+thx.geom._Matrix44.Matrix44_Impl_.rotationZ = function(radians) {
 	var cos = Math.cos(radians);
 	var sin = Math.sin(radians);
 	return [cos,sin,0,0,-sin,cos,0,0,0,0,1,0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rotation = function(rotationCenter,rotationAxis,radians) {
+thx.geom._Matrix44.Matrix44_Impl_.rotation = function(rotationCenter,rotationAxis,radians) {
 	var rotationPlane = thx.geom.d3.Plane.fromNormalAndPoint(rotationAxis,rotationCenter);
 	var orthobasis = new thx.geom.d3.OrthoNormalBasis(rotationPlane,thx.geom.d3._Point.Point_Impl_.randomNonParallelVector(rotationPlane.normal));
-	var transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.translation((function($this) {
+	var negation;
+	negation = (function($this) {
 		var $r;
 		var x = -rotationCenter.get_x();
 		var y = -rotationCenter.get_y();
 		var z = -rotationCenter.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
-	}(this)));
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getProjectionMatrix());
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ(radians));
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,orthobasis.getInverseProjectionMatrix());
-	transformation = thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply(transformation,thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(rotationCenter));
+	}(this));
+	var transformation = thx.geom._Matrix44.Matrix44_Impl_.translation(negation.get_x(),negation.get_y(),negation.get_z());
+	transformation = thx.geom._Matrix44.Matrix44_Impl_.multiply(transformation,orthobasis.getProjectionMatrix());
+	transformation = thx.geom._Matrix44.Matrix44_Impl_.multiply(transformation,thx.geom._Matrix44.Matrix44_Impl_.rotationZ(radians));
+	transformation = thx.geom._Matrix44.Matrix44_Impl_.multiply(transformation,orthobasis.getInverseProjectionMatrix());
+	transformation = thx.geom._Matrix44.Matrix44_Impl_.multiply(transformation,thx.geom._Matrix44.Matrix44_Impl_.translation(rotationCenter.get_x(),rotationCenter.get_y(),rotationCenter.get_z()));
 	return transformation;
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.translation = function(vec) {
-	var e12 = vec.get_x();
-	var e13 = vec.get_y();
-	var e14 = vec.get_z();
-	return [1,0,0,0,0,1,0,0,0,0,1,0,e12,e13,e14,1];
+thx.geom._Matrix44.Matrix44_Impl_.translation = function(x,y,z) {
+	return [1,0,0,0,0,1,0,0,0,0,1,0,x,y,z,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorX = function() {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MX);
+thx.geom._Matrix44.Matrix44_Impl_.mirrorX = function() {
+	return thx.geom._Matrix44.Matrix44_Impl_.mirroring(thx.geom.d3.Plane.PX);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorY = function() {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MY);
+thx.geom._Matrix44.Matrix44_Impl_.mirrorY = function() {
+	return thx.geom._Matrix44.Matrix44_Impl_.mirroring(thx.geom.d3.Plane.PY);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirrorZ = function() {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MZ);
+thx.geom._Matrix44.Matrix44_Impl_.mirrorZ = function() {
+	return thx.geom._Matrix44.Matrix44_Impl_.mirroring(thx.geom.d3.Plane.PZ);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring = function(plane) {
+thx.geom._Matrix44.Matrix44_Impl_.mirroring = function(plane) {
 	var nx = plane.normal.get_x();
 	var ny = plane.normal.get_y();
 	var nz = plane.normal.get_z();
 	var w = plane.w;
 	return [1.0 - 2.0 * nx * nx,-2. * ny * nx,-2. * nz * nx,0,-2. * nx * ny,1.0 - 2.0 * ny * ny,-2. * nz * ny,0,-2. * nx * nz,-2. * ny * nz,1.0 - 2.0 * nz * nz,0,-2. * nx * w,-2. * ny * w,-2. * nz * w,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling = function(vec) {
-	var e0 = vec.get_x();
-	var e5 = vec.get_y();
-	var e10 = vec.get_z();
-	return [e0,0,0,0,0,e5,0,0,0,0,e10,0,0,0,0,1];
+thx.geom._Matrix44.Matrix44_Impl_.scaling = function(x,y,z) {
+	return [x,0,0,0,0,y,0,0,0,0,z,0,0,0,0,1];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_._new = function(e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15) {
+thx.geom._Matrix44.Matrix44_Impl_._new = function(e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15) {
 	return [e0,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.toArray = function(this1) {
+thx.geom._Matrix44.Matrix44_Impl_.toArray = function(this1) {
 	return this1.slice();
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.add = function(this1,other) {
+thx.geom._Matrix44.Matrix44_Impl_.add = function(this1,other) {
 	return [this1[0] + other[0],this1[1] + other[1],this1[2] + other[2],this1[3] + other[3],this1[4] + other[4],this1[5] + other[5],this1[6] + other[6],this1[7] + other[7],this1[8] + other[8],this1[9] + other[9],this1[10] + other[10],this1[11] + other[11],this1[12] + other[12],this1[13] + other[13],this1[14] + other[14],this1[15] + other[15]];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.subtract = function(this1,other) {
+thx.geom._Matrix44.Matrix44_Impl_.subtract = function(this1,other) {
 	return [this1[0] - other[0],this1[1] - other[1],this1[2] - other[2],this1[3] - other[3],this1[4] - other[4],this1[5] - other[5],this1[6] - other[6],this1[7] - other[7],this1[8] - other[8],this1[9] - other[9],this1[10] - other[10],this1[11] - other[11],this1[12] - other[12],this1[13] - other[13],this1[14] - other[14],this1[15] - other[15]];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply = function(this1,other) {
+thx.geom._Matrix44.Matrix44_Impl_.multiply = function(this1,other) {
 	var t0 = this1[0];
 	var t1 = this1[1];
 	var t2 = this1[2];
@@ -1524,7 +1525,7 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.multiply = function(this1,other) {
 	var m15 = other[15];
 	return [t0 * m0 + t1 * m4 + t2 * m8 + t3 * m12,t0 * m1 + t1 * m5 + t2 * m9 + t3 * m13,t0 * m2 + t1 * m6 + t2 * m10 + t3 * m14,t0 * m3 + t1 * m7 + t2 * m11 + t3 * m15,t4 * m0 + t5 * m4 + t6 * m8 + t7 * m12,t4 * m1 + t5 * m5 + t6 * m9 + t7 * m13,t4 * m2 + t5 * m6 + t6 * m10 + t7 * m14,t4 * m3 + t5 * m7 + t6 * m11 + t7 * m15,t8 * m0 + t9 * m4 + t10 * m8 + t11 * m12,t8 * m1 + t9 * m5 + t10 * m9 + t11 * m13,t8 * m2 + t9 * m6 + t10 * m10 + t11 * m14,t8 * m3 + t9 * m7 + t10 * m11 + t11 * m15,t12 * m0 + t13 * m4 + t14 * m8 + t15 * m12,t12 * m1 + t13 * m5 + t14 * m9 + t15 * m13,t12 * m2 + t13 * m6 + t14 * m10 + t15 * m14,t12 * m3 + t13 * m7 + t14 * m11 + t15 * m15];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyPoint3D = function(this1,vector) {
+thx.geom._Matrix44.Matrix44_Impl_.rightMultiplyPoint3D = function(this1,vector) {
 	var v0 = vector.get_x();
 	var v1 = vector.get_y();
 	var v2 = vector.get_z();
@@ -1539,9 +1540,9 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyPoint3D = function(this1,vector
 		y *= invw;
 		z *= invw;
 	}
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D = function(this1,vector) {
+thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint3D = function(this1,vector) {
 	var v0 = vector.get_x();
 	var v1 = vector.get_y();
 	var v2 = vector.get_z();
@@ -1556,29 +1557,12 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D = function(this1,vector)
 		y *= invw;
 		z *= invw;
 	}
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return thx.geom.d3._Point.Point_Impl_.set(vector,x,y,z);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.rightMultiplyPoint = function(this1,vector) {
+thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D = function(this1,vector) {
 	var v0 = vector.get_x();
 	var v1 = vector.get_y();
-	var v2 = 0;
-	var v3 = 1;
-	var x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + v3 * this1[3];
-	var y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + v3 * this1[7];
-	var z = v0 * this1[8] + v1 * this1[9] + v2 * this1[10] + v3 * this1[11];
-	var w = v0 * this1[12] + v1 * this1[13] + v2 * this1[14] + v3 * this1[15];
-	if(w != 1) {
-		var invw = 1.0 / w;
-		x *= invw;
-		y *= invw;
-		z *= invw;
-	}
-	return new thx.geom.d2.xy.PointXY(x,y);
-};
-thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint = function(this1,vector) {
-	var v0 = vector.get_x();
-	var v1 = vector.get_y();
-	var v2 = 0;
+	var v2 = vector.get_z();
 	var v3 = 1;
 	var x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + v3 * this1[12];
 	var y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + v3 * this1[13];
@@ -1590,19 +1574,65 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint = function(this1,vector) {
 		y *= invw;
 		z *= invw;
 	}
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring = function(this1) {
-	var u = new thx.geom.d3.xyz.PointXYZ(this1[0],this1[4],this1[8]);
-	var v = new thx.geom.d3.xyz.PointXYZ(this1[1],this1[5],this1[9]);
-	var w = new thx.geom.d3.xyz.PointXYZ(this1[2],this1[6],this1[10]);
+thx.geom._Matrix44.Matrix44_Impl_.rightMultiplyPoint = function(this1,vector) {
+	var v0 = vector.get_x();
+	var v1 = vector.get_y();
+	var v2 = 0;
+	var v3 = 1;
+	var x = v0 * this1[0] + v1 * this1[1] + v2 * this1[2] + v3 * this1[3];
+	var y = v0 * this1[4] + v1 * this1[5] + v2 * this1[6] + v3 * this1[7];
+	var w = v0 * this1[12] + v1 * this1[13] + v2 * this1[14] + v3 * this1[15];
+	if(w != 1) {
+		var invw = 1.0 / w;
+		x *= invw;
+		y *= invw;
+	}
+	return new thx.geom.d2.xy.MutXY(x,y);
+};
+thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint = function(this1,vector) {
+	var v0 = vector.get_x();
+	var v1 = vector.get_y();
+	var v2 = 0;
+	var v3 = 1;
+	var x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + v3 * this1[12];
+	var y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + v3 * this1[13];
+	var w = v0 * this1[3] + v1 * this1[7] + v2 * this1[11] + v3 * this1[15];
+	if(w != 1) {
+		var invw = 1.0 / w;
+		x *= invw;
+		y *= invw;
+	}
+	return new thx.geom.d2.xy.MutXY(x,y);
+};
+thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint = function(this1,vector) {
+	var v0 = vector.get_x();
+	var v1 = vector.get_y();
+	var v2 = 0;
+	var v3 = 1;
+	var x = v0 * this1[0] + v1 * this1[4] + v2 * this1[8] + v3 * this1[12];
+	var y = v0 * this1[1] + v1 * this1[5] + v2 * this1[9] + v3 * this1[13];
+	var w = v0 * this1[3] + v1 * this1[7] + v2 * this1[11] + v3 * this1[15];
+	if(w != 1) {
+		var invw = 1.0 / w;
+		x *= invw;
+		y *= invw;
+	}
+	thx.geom.d2._Point.Point_Impl_.set(vector,x,y);
+	return vector;
+};
+thx.geom._Matrix44.Matrix44_Impl_.isMirroring = function(this1) {
+	var u = new thx.geom.d3.xyz.MutXYZ(this1[0],this1[4],this1[8]);
+	var v = new thx.geom.d3.xyz.MutXYZ(this1[1],this1[5],this1[9]);
+	var w = new thx.geom.d3.xyz.MutXYZ(this1[2],this1[6],this1[10]);
 	var mirrorvalue;
 	var this2 = thx.geom.d3._Point.Point_Impl_.cross(u,v);
 	mirrorvalue = this2.get_x() * w.get_x() + this2.get_y() * w.get_y() + this2.get_z() * w.get_z();
 	var ismirror = mirrorvalue < 0;
 	return ismirror;
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.inverse = function(this1) {
+thx.geom._Matrix44.Matrix44_Impl_.inverse = function(this1) {
 	var inv_0 = this1[5] * this1[10] * this1[15] - this1[5] * this1[11] * this1[14] - this1[9] * this1[6] * this1[15] + this1[9] * this1[7] * this1[14] + this1[13] * this1[6] * this1[11] - this1[13] * this1[7] * this1[10];
 	var inv_4 = -this1[4] * this1[10] * this1[15] + this1[4] * this1[11] * this1[14] + this1[8] * this1[6] * this1[15] - this1[8] * this1[7] * this1[14] - this1[12] * this1[6] * this1[11] + this1[12] * this1[7] * this1[10];
 	var inv_8 = this1[4] * this1[9] * this1[15] - this1[4] * this1[11] * this1[13] - this1[8] * this1[5] * this1[15] + this1[8] * this1[7] * this1[13] + this1[12] * this1[5] * this1[11] - this1[12] * this1[7] * this1[9];
@@ -1623,30 +1653,38 @@ thx.geom._Matrix4x4.Matrix4x4_Impl_.inverse = function(this1) {
 	if(det == 0) return null;
 	return [inv_0,inv_1,inv_2,inv_3,inv_4,inv_5,inv_6,inv_7,inv_8,inv_9,inv_10,inv_11,inv_12,inv_13,inv_14,inv_15];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.at = function(this1,index) {
+thx.geom._Matrix44.Matrix44_Impl_.at = function(this1,index) {
 	return this1[index];
 };
-thx.geom._Matrix4x4.Matrix4x4_Impl_.toString = function(this1) {
-	return "Matrix(" + this1.join(",") + ")";
+thx.geom._Matrix44.Matrix44_Impl_.toString = function(this1) {
+	return "matrix(" + this1.join(",") + ")";
 };
 thx.geom.d2 = {};
 thx.geom.d2.xy = {};
 thx.geom.d2.xy.XY = function() { };
 thx.geom.d2.xy.XY.__name__ = true;
+thx.geom.d2.xy.XY.__interfaces__ = [thx.geom.ITransformable44];
 thx.geom.d3 = {};
 thx.geom.d3.xyz = {};
 thx.geom.d3.xyz.XYZ = function() { };
 thx.geom.d3.xyz.XYZ.__name__ = true;
-thx.geom.d3.xyz.XYZ.__interfaces__ = [thx.geom.d2.xy.XY];
-thx.geom.d3.xyz.PointXYZ = function(x,y,z) {
+thx.geom.d3.xyz.XYZ.__interfaces__ = [thx.geom.ITransformable44,thx.geom.d2.xy.XY];
+thx.geom.d3.xyz.ImmutableXYZ = function(x,y,z) {
 	this._x = x;
 	this._y = y;
 	this._z = z;
 };
-thx.geom.d3.xyz.PointXYZ.__name__ = true;
-thx.geom.d3.xyz.PointXYZ.__interfaces__ = [thx.geom.d3.xyz.XYZ];
-thx.geom.d3.xyz.PointXYZ.prototype = {
-	get_x: function() {
+thx.geom.d3.xyz.ImmutableXYZ.__name__ = true;
+thx.geom.d3.xyz.ImmutableXYZ.__interfaces__ = [thx.geom.d3.xyz.XYZ];
+thx.geom.d3.xyz.ImmutableXYZ.prototype = {
+	apply44: function(matrix) {
+		thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint3D(matrix,this);
+		return this;
+	}
+	,clone: function() {
+		return new thx.geom.d3.xyz.MutXYZ(this._x,this._y,this._z);
+	}
+	,get_x: function() {
 		return this._x;
 	}
 	,get_y: function() {
@@ -1656,13 +1694,13 @@ thx.geom.d3.xyz.PointXYZ.prototype = {
 		return this._z;
 	}
 	,set_x: function(v) {
-		return this._x = v;
+		throw "this instance of Point cannot be modified";
 	}
 	,set_y: function(v) {
-		return this._y = v;
+		throw "this instance of Point cannot be modified";
 	}
 	,set_z: function(v) {
-		return this._z = v;
+		throw "this instance of Point cannot be modified";
 	}
 };
 thx.geom.d3.Plane = function(normal,w) {
@@ -1680,13 +1718,13 @@ thx.geom.d3.Plane.fromPoints = function(a,b,c) {
 			var x1 = -a.get_x();
 			var y1 = -a.get_y();
 			var z1 = -a.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+			$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 			return $r;
 		}($this));
 		var x = b.get_x() + p.get_x();
 		var y = b.get_y() + p.get_y();
 		var z = b.get_z() + p.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this)),(function($this) {
 		var $r;
@@ -1696,20 +1734,20 @@ thx.geom.d3.Plane.fromPoints = function(a,b,c) {
 			var x3 = -a.get_x();
 			var y3 = -a.get_y();
 			var z3 = -a.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
+			$r = new thx.geom.d3.xyz.MutXYZ(x3,y3,z3);
 			return $r;
 		}($this));
 		var x2 = c.get_x() + p1.get_x();
 		var y2 = c.get_y() + p1.get_y();
 		var z2 = c.get_z() + p1.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 		return $r;
 	}(this)));
 	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z());
 	var x4 = this1.get_x() / v;
 	var y4 = this1.get_y() / v;
 	var z4 = this1.get_z() / v;
-	n = new thx.geom.d3.xyz.PointXYZ(x4,y4,z4);
+	n = new thx.geom.d3.xyz.MutXYZ(x4,y4,z4);
 	return new thx.geom.d3.Plane(n,n.get_x() * a.get_x() + n.get_y() * a.get_y() + n.get_z() * a.get_z());
 };
 thx.geom.d3.Plane.anyPlaneFromPoints = function(a,b,c) {
@@ -1722,13 +1760,13 @@ thx.geom.d3.Plane.anyPlaneFromPoints = function(a,b,c) {
 			var x1 = -a.get_x();
 			var y1 = -a.get_y();
 			var z1 = -a.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+			$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 			return $r;
 		}($this));
 		var x = b.get_x() + p.get_x();
 		var y = b.get_y() + p.get_y();
 		var z = b.get_z() + p.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this));
 	var v2;
@@ -1740,13 +1778,13 @@ thx.geom.d3.Plane.anyPlaneFromPoints = function(a,b,c) {
 			var x3 = -a.get_x();
 			var y3 = -a.get_y();
 			var z3 = -a.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
+			$r = new thx.geom.d3.xyz.MutXYZ(x3,y3,z3);
 			return $r;
 		}($this));
 		var x2 = c.get_x() + p1.get_x();
 		var y2 = c.get_y() + p1.get_y();
 		var z2 = c.get_z() + p1.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 		return $r;
 	}(this));
 	if(Math.sqrt(v1.get_x() * v1.get_x() + v1.get_y() * v1.get_y() + v1.get_z() * v1.get_z()) < 10e-10) v1 = thx.geom.d3._Point.Point_Impl_.randomNonParallelVector(v2);
@@ -1762,7 +1800,7 @@ thx.geom.d3.Plane.anyPlaneFromPoints = function(a,b,c) {
 		var x4 = normal.get_x() / v;
 		var y4 = normal.get_y() / v;
 		var z4 = normal.get_z() / v;
-		$r = new thx.geom.d3.xyz.PointXYZ(x4,y4,z4);
+		$r = new thx.geom.d3.xyz.MutXYZ(x4,y4,z4);
 		return $r;
 	}(this));
 	return new thx.geom.d3.Plane(normal,normal.get_x() * a.get_x() + normal.get_y() * a.get_y() + normal.get_z() * a.get_z());
@@ -1774,7 +1812,7 @@ thx.geom.d3.Plane.fromNormalAndPoint = function(normal,point) {
 		var x = normal.get_x() / v;
 		var y = normal.get_y() / v;
 		var z = normal.get_z() / v;
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this));
 	return new thx.geom.d3.Plane(normal,point.get_x() * normal.get_x() + point.get_y() * normal.get_y() + point.get_z() * normal.get_z());
@@ -1787,7 +1825,7 @@ thx.geom.d3.Plane.prototype = {
 			var x = -this1.get_x();
 			var y = -this1.get_y();
 			var z = -this1.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}(this)),-this.w);
 	}
@@ -1870,13 +1908,13 @@ thx.geom.d3.Plane.prototype = {
 								var x1 = -p4.get_x();
 								var y1 = -p4.get_y();
 								var z1 = -p4.get_z();
-								$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+								$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 								return $r;
 							}($this));
 							var x = this5.get_x() + p5.get_x();
 							var y = this5.get_y() + p5.get_y();
 							var z = this5.get_z() + p5.get_z();
-							p3 = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+							p3 = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 						}
 						$r = this4.get_x() * p3.get_x() + this4.get_y() * p3.get_y() + this4.get_z() * p3.get_z();
 						return $r;
@@ -1901,7 +1939,7 @@ thx.geom.d3.Plane.prototype = {
 		}(this)) && this.w == other.w;
 	}
 	,transform: function(matrix) {
-		var ismirror = thx.geom._Matrix4x4.Matrix4x4_Impl_.isMirroring(matrix);
+		var ismirror = thx.geom._Matrix44.Matrix44_Impl_.isMirroring(matrix);
 		var r = thx.geom.d3._Point.Point_Impl_.randomNonParallelVector(this.normal);
 		var u = thx.geom.d3._Point.Point_Impl_.cross(this.normal,r);
 		var v = thx.geom.d3._Point.Point_Impl_.cross(this.normal,u);
@@ -1911,14 +1949,14 @@ thx.geom.d3.Plane.prototype = {
 		var x = this1.get_x() * v1;
 		var y = this1.get_y() * v1;
 		var z = this1.get_z() * v1;
-		point1 = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		point1 = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		var point2;
 		point2 = (function($this) {
 			var $r;
 			var x1 = point1.get_x() + u.get_x();
 			var y1 = point1.get_y() + u.get_y();
 			var z1 = point1.get_z() + u.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+			$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 			return $r;
 		}(this));
 		var point3;
@@ -1927,12 +1965,12 @@ thx.geom.d3.Plane.prototype = {
 			var x2 = point1.get_x() + v.get_x();
 			var y2 = point1.get_y() + v.get_y();
 			var z2 = point1.get_z() + v.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+			$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 			return $r;
 		}(this));
-		point1 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,point1);
-		point2 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,point2);
-		point3 = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,point3);
+		point1 = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,point1);
+		point2 = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,point2);
+		point3 = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,point3);
 		var newplane = thx.geom.d3.Plane.fromPoints(point1,point2,point3);
 		if(ismirror) newplane = newplane.flip();
 		return newplane;
@@ -1947,13 +1985,13 @@ thx.geom.d3.Plane.prototype = {
 				var x1 = -p1.get_x();
 				var y1 = -p1.get_y();
 				var z1 = -p1.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+				$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 				return $r;
 			}($this));
 			var x = p2.get_x() + p.get_x();
 			var y = p2.get_y() + p.get_y();
 			var z = p2.get_z() + p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}(this));
 		var lambda;
@@ -1975,13 +2013,13 @@ thx.geom.d3.Plane.prototype = {
 			var x3 = direction.get_x() * lambda;
 			var y3 = direction.get_y() * lambda;
 			var z3 = direction.get_z() * lambda;
-			$r = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
+			$r = new thx.geom.d3.xyz.MutXYZ(x3,y3,z3);
 			return $r;
 		}(this));
 		var x2 = p1.get_x() + p3.get_x();
 		var y2 = p1.get_y() + p3.get_y();
 		var z2 = p1.get_z() + p3.get_z();
-		return new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		return new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 	}
 	,intersectWithLine: function(line) {
 		return line.intersectWithPlane(this);
@@ -2014,63 +2052,120 @@ thx.geom.d3.Plane.prototype = {
 		var x1 = this1.get_x() * v;
 		var y1 = this1.get_y() * v;
 		var z1 = this1.get_z() * v;
-		p = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+		p = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 		var p1;
 		p1 = (function($this) {
 			var $r;
 			var x2 = -p.get_x();
 			var y2 = -p.get_y();
 			var z2 = -p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+			$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 			return $r;
 		}(this));
 		var x = point3d.get_x() + p1.get_x();
 		var y = point3d.get_y() + p1.get_y();
 		var z = point3d.get_z() + p1.get_z();
-		mirrored = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		mirrored = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return mirrored;
 	}
 };
-thx.geom.Transformables = function() { };
-thx.geom.Transformables.__name__ = true;
-thx.geom.Transformables.mirror = function(t,plane) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(plane));
+thx.geom.Transformables44 = function() { };
+thx.geom.Transformables44.__name__ = true;
+thx.geom.Transformables44.applyMirror = function(o,plane) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.mirroring(plane));
 };
-thx.geom.Transformables.mirrorX = function(t) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MX));
+thx.geom.Transformables44.applyMirrorX = function(o) {
+	return o.apply44(thx.geom.Transformables44.MX);
 };
-thx.geom.Transformables.mirrorY = function(t) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MY));
+thx.geom.Transformables44.applyMirrorY = function(o) {
+	return o.apply44(thx.geom.Transformables44.MY);
 };
-thx.geom.Transformables.mirrorZ = function(t) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.mirroring(thx.geom.Transformables.MZ));
+thx.geom.Transformables44.applyMirrorZ = function(o) {
+	return o.apply44(thx.geom.Transformables44.MZ);
 };
-thx.geom.Transformables.translate = function(t,v) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(v));
+thx.geom.Transformables44.applyRotateX = function(o,angle) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.rotationX(angle));
 };
-thx.geom.Transformables.translateX = function(t,x) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(new thx.geom.d3.xyz.PointXYZ(x,0,0)));
+thx.geom.Transformables44.applyRotateY = function(o,angle) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.rotationY(angle));
 };
-thx.geom.Transformables.translateY = function(t,y) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(new thx.geom.d3.xyz.PointXYZ(0,y,0)));
+thx.geom.Transformables44.applyRotateZ = function(o,angle) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.rotationZ(angle));
 };
-thx.geom.Transformables.translateZ = function(t,z) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.translation(new thx.geom.d3.xyz.PointXYZ(0,0,z)));
+thx.geom.Transformables44.applyRotateOnAxis = function(o,center,axis,angle) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.rotation(center,axis,angle));
 };
-thx.geom.Transformables.scale = function(t,f) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.scaling(f));
+thx.geom.Transformables44.applyScale = function(o,x,y,z) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.scaling(x,y,z));
 };
-thx.geom.Transformables.rotateX = function(t,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationX(angle));
+thx.geom.Transformables44.applyScaleX = function(o,x) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.scaling(x,0,0));
 };
-thx.geom.Transformables.rotateY = function(t,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationY(angle));
+thx.geom.Transformables44.applyScaleY = function(o,y) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.scaling(0,y,0));
 };
-thx.geom.Transformables.rotateZ = function(t,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotationZ(angle));
+thx.geom.Transformables44.applyScaleZ = function(o,z) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.scaling(0,0,z));
 };
-thx.geom.Transformables.rotateOnAxis = function(t,center,axis,angle) {
-	return t.transform(thx.geom._Matrix4x4.Matrix4x4_Impl_.rotation(center,axis,angle));
+thx.geom.Transformables44.applyTranslation = function(o,x,y,z) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.translation(x,y,z));
+};
+thx.geom.Transformables44.applyTranslationX = function(o,x) {
+	return thx.geom.Transformables44.applyTranslation(o,x,0,0);
+};
+thx.geom.Transformables44.applyTranslationY = function(o,y) {
+	return thx.geom.Transformables44.applyTranslation(o,0,y,0);
+};
+thx.geom.Transformables44.applyTranslationZ = function(o,z) {
+	return thx.geom.Transformables44.applyTranslation(o,0,0,z);
+};
+thx.geom.Transformables44.mirror = function(o,plane) {
+	return thx.geom.Transformables44.applyMirror(o.clone(),plane);
+};
+thx.geom.Transformables44.mirrorX = function(o) {
+	return thx.geom.Transformables44.applyMirrorX(o.clone());
+};
+thx.geom.Transformables44.mirrorY = function(o) {
+	return thx.geom.Transformables44.applyMirrorY(o.clone());
+};
+thx.geom.Transformables44.mirrorZ = function(o) {
+	return thx.geom.Transformables44.applyMirrorZ(o.clone());
+};
+thx.geom.Transformables44.rotateX = function(o,angle) {
+	return thx.geom.Transformables44.applyRotateX(o.clone(),angle);
+};
+thx.geom.Transformables44.rotateY = function(o,angle) {
+	return thx.geom.Transformables44.applyRotateY(o.clone(),angle);
+};
+thx.geom.Transformables44.rotateZ = function(o,angle) {
+	return thx.geom.Transformables44.applyRotateZ(o.clone(),angle);
+};
+thx.geom.Transformables44.rotateOnAxis = function(o,center,axis,angle) {
+	return thx.geom.Transformables44.applyRotateOnAxis(o.clone(),center,axis,angle);
+};
+thx.geom.Transformables44.scale = function(o,x,y,z) {
+	return o.apply44(thx.geom._Matrix44.Matrix44_Impl_.scaling(x,y,z));
+};
+thx.geom.Transformables44.scaleX = function(o,x) {
+	return thx.geom.Transformables44.applyScaleX(o.clone(),x);
+};
+thx.geom.Transformables44.scaleY = function(o,y) {
+	return thx.geom.Transformables44.applyScaleY(o.clone(),y);
+};
+thx.geom.Transformables44.scaleZ = function(o,z) {
+	return thx.geom.Transformables44.applyScaleZ(o.clone(),z);
+};
+thx.geom.Transformables44.translate = function(o,x,y,z) {
+	return thx.geom.Transformables44.applyTranslation(o.clone(),x,y,z);
+};
+thx.geom.Transformables44.translateX = function(o,x) {
+	return thx.geom.Transformables44.translate(o,x,0,0);
+};
+thx.geom.Transformables44.translateY = function(o,y) {
+	return thx.geom.Transformables44.translate(o,0,y,0);
+};
+thx.geom.Transformables44.translateZ = function(o,z) {
+	return thx.geom.Transformables44.translate(o,0,0,z);
 };
 thx.geom.d2.Line = function(normal,w) {
 	var l = Math.sqrt(normal.get_x() * normal.get_x() + normal.get_y() * normal.get_y());
@@ -2079,7 +2174,7 @@ thx.geom.d2.Line = function(normal,w) {
 		var $r;
 		var x = normal.get_x() / l;
 		var y = normal.get_y() / l;
-		$r = new thx.geom.d2.xy.PointXY(x,y);
+		$r = new thx.geom.d2.xy.MutXY(x,y);
 		return $r;
 	}(this));
 };
@@ -2093,12 +2188,12 @@ thx.geom.d2.Line.fromPoints = function(p1,p2) {
 			var $r;
 			var x1 = -p1.get_x();
 			var y1 = -p1.get_y();
-			$r = new thx.geom.d2.xy.PointXY(x1,y1);
+			$r = new thx.geom.d2.xy.MutXY(x1,y1);
 			return $r;
 		}($this));
 		var x = p2.get_x() + p.get_x();
 		var y = p2.get_y() + p.get_y();
-		$r = new thx.geom.d2.xy.PointXY(x,y);
+		$r = new thx.geom.d2.xy.MutXY(x,y);
 		return $r;
 	}(this));
 	var normal;
@@ -2108,16 +2203,16 @@ thx.geom.d2.Line.fromPoints = function(p1,p2) {
 		var $r;
 		var x4 = direction.get_y();
 		var y4 = -direction.get_x();
-		$r = new thx.geom.d2.xy.PointXY(x4,y4);
+		$r = new thx.geom.d2.xy.MutXY(x4,y4);
 		return $r;
 	}(this));
 	var x3 = -this2.get_x();
 	var y3 = -this2.get_y();
-	this1 = new thx.geom.d2.xy.PointXY(x3,y3);
+	this1 = new thx.geom.d2.xy.MutXY(x3,y3);
 	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y());
 	var x2 = this1.get_x() / v;
 	var y2 = this1.get_y() / v;
-	normal = new thx.geom.d2.xy.PointXY(x2,y2);
+	normal = new thx.geom.d2.xy.MutXY(x2,y2);
 	var w = p1.get_x() * normal.get_x() + p1.get_y() * normal.get_y();
 	return new thx.geom.d2.Line(normal,w);
 };
@@ -2131,7 +2226,7 @@ thx.geom.d2.Line.prototype = {
 			var this1 = $this.normal;
 			var x = -this1.get_x();
 			var y = -this1.get_y();
-			$r = new thx.geom.d2.xy.PointXY(x,y);
+			$r = new thx.geom.d2.xy.MutXY(x,y);
 			return $r;
 		}(this)),-this.w);
 	}
@@ -2149,13 +2244,13 @@ thx.geom.d2.Line.prototype = {
 		var v = this.w;
 		var x = this1.get_x() * v;
 		var y = this1.get_y() * v;
-		return new thx.geom.d2.xy.PointXY(x,y);
+		return new thx.geom.d2.xy.MutXY(x,y);
 	}
 	,direction: function() {
 		var this1 = this.normal;
 		var x = this1.get_y();
 		var y = -this1.get_x();
-		return new thx.geom.d2.xy.PointXY(x,y);
+		return new thx.geom.d2.xy.MutXY(x,y);
 	}
 	,xAtY: function(y) {
 		return (this.w - this.normal.get_y() * y) / this.normal.get_x();
@@ -2172,15 +2267,15 @@ thx.geom.d2.Line.prototype = {
 		return thx.geom.d2._Point.Point_Impl_.solve2Linear(this.normal.get_x(),this.normal.get_y(),line.normal.get_x(),line.normal.get_y(),this.w,line.w);
 	}
 	,transform: function(matrix) {
-		var origin = new thx.geom.d2.xy.PointXY(0,0);
+		var origin = new thx.geom.d2.xy.MutXY(0,0);
 		var pointOnPlane;
 		var this1 = this.normal;
 		var v = this.w;
 		var x = this1.get_x() * v;
 		var y = this1.get_y() * v;
-		pointOnPlane = new thx.geom.d2.xy.PointXY(x,y);
-		var neworigin = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,origin);
-		var neworiginPlusNormal = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this.normal);
+		pointOnPlane = new thx.geom.d2.xy.MutXY(x,y);
+		var neworigin = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint(matrix,origin);
+		var neworiginPlusNormal = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint(matrix,this.normal);
 		var newnormal;
 		newnormal = (function($this) {
 			var $r;
@@ -2189,15 +2284,15 @@ thx.geom.d2.Line.prototype = {
 				var $r;
 				var x2 = -neworigin.get_x();
 				var y2 = -neworigin.get_y();
-				$r = new thx.geom.d2.xy.PointXY(x2,y2);
+				$r = new thx.geom.d2.xy.MutXY(x2,y2);
 				return $r;
 			}($this));
 			var x1 = neworiginPlusNormal.get_x() + p.get_x();
 			var y1 = neworiginPlusNormal.get_y() + p.get_y();
-			$r = new thx.geom.d2.xy.PointXY(x1,y1);
+			$r = new thx.geom.d2.xy.MutXY(x1,y1);
 			return $r;
 		}(this));
-		var newpointOnPlane = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,pointOnPlane);
+		var newpointOnPlane = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint(matrix,pointOnPlane);
 		var neww = newnormal.get_x() * newpointOnPlane.get_x() + newnormal.get_y() * newpointOnPlane.get_y();
 		return new thx.geom.d2.Line(newnormal,neww);
 	}
@@ -2218,7 +2313,14 @@ thx.geom.d2.xy.ImmutableXY = function(x,y) {
 thx.geom.d2.xy.ImmutableXY.__name__ = true;
 thx.geom.d2.xy.ImmutableXY.__interfaces__ = [thx.geom.d2.xy.XY];
 thx.geom.d2.xy.ImmutableXY.prototype = {
-	get_x: function() {
+	apply44: function(matrix) {
+		thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint(matrix,this);
+		return this;
+	}
+	,clone: function() {
+		return new thx.geom.d2.xy.MutXY(this._x,this._y);
+	}
+	,get_x: function() {
 		return this._x;
 	}
 	,get_y: function() {
@@ -2236,7 +2338,7 @@ thx.geom.d2._Point.Point_Impl_ = {};
 thx.geom.d2._Point.Point_Impl_.__name__ = true;
 thx.geom.d2._Point.Point_Impl_.fromFloats = function(arr) {
 	thx.core.ArrayFloats.resize(arr,2,0);
-	return new thx.geom.d2.xy.PointXY(arr[0],arr[1]);
+	return new thx.geom.d2.xy.MutXY(arr[0],arr[1]);
 };
 thx.geom.d2._Point.Point_Impl_.fromObject = function(o) {
 	return thx.geom.d2._Point.Point_Impl_.create(o.x,o.y);
@@ -2245,7 +2347,7 @@ thx.geom.d2._Point.Point_Impl_.fromAngle = function(angle) {
 	return thx.geom.d2._Point.Point_Impl_.create(Math.cos(angle),Math.sin(angle));
 };
 thx.geom.d2._Point.Point_Impl_.create = function(x,y) {
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.linked = function(getX,getY,setX,setY) {
 	return new thx.geom.d2.xy.LinkedXY(getX,getY,setX,setY);
@@ -2262,7 +2364,7 @@ thx.geom.d2._Point.Point_Impl_.addPointAssign = function(this1,p) {
 thx.geom.d2._Point.Point_Impl_.addPoint = function(this1,p) {
 	var x = this1.get_x() + p.get_x();
 	var y = this1.get_y() + p.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.addAssign = function(this1,v) {
 	return thx.geom.d2._Point.Point_Impl_.set(this1,this1.get_x() + v,this1.get_y() + v);
@@ -2270,12 +2372,12 @@ thx.geom.d2._Point.Point_Impl_.addAssign = function(this1,v) {
 thx.geom.d2._Point.Point_Impl_.add = function(this1,v) {
 	var x = this1.get_x() + v;
 	var y = this1.get_y() + v;
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.negate = function(this1) {
 	var x = -this1.get_x();
 	var y = -this1.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.subtractPointAssign = function(this1,p) {
 	return thx.geom.d2._Point.Point_Impl_.set(this1,this1.get_x() - p.get_x(),this1.get_y() - p.get_y());
@@ -2286,12 +2388,12 @@ thx.geom.d2._Point.Point_Impl_.subtractPoint = function(this1,p) {
 		var $r;
 		var x1 = -p.get_x();
 		var y1 = -p.get_y();
-		$r = new thx.geom.d2.xy.PointXY(x1,y1);
+		$r = new thx.geom.d2.xy.MutXY(x1,y1);
 		return $r;
 	}(this));
 	var x = this1.get_x() + p1.get_x();
 	var y = this1.get_y() + p1.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.subtractAssign = function(this1,v) {
 	return thx.geom.d2._Point.Point_Impl_.set(this1,this1.get_x() - v,this1.get_y() - v);
@@ -2300,7 +2402,7 @@ thx.geom.d2._Point.Point_Impl_.subtract = function(this1,v) {
 	var v1 = -v;
 	var x = this1.get_x() + v1;
 	var y = this1.get_y() + v1;
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.multiplyPointAssign = function(this1,p) {
 	return thx.geom.d2._Point.Point_Impl_.set(this1,this1.get_x() * p.get_x(),this1.get_y() * p.get_y());
@@ -2308,7 +2410,7 @@ thx.geom.d2._Point.Point_Impl_.multiplyPointAssign = function(this1,p) {
 thx.geom.d2._Point.Point_Impl_.multiplyPoint = function(this1,p) {
 	var x = this1.get_x() * p.get_x();
 	var y = this1.get_y() * p.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.multiplyAssign = function(this1,v) {
 	return thx.geom.d2._Point.Point_Impl_.set(this1,this1.get_x() * v,this1.get_y() * v);
@@ -2316,7 +2418,7 @@ thx.geom.d2._Point.Point_Impl_.multiplyAssign = function(this1,v) {
 thx.geom.d2._Point.Point_Impl_.multiply = function(this1,v) {
 	var x = this1.get_x() * v;
 	var y = this1.get_y() * v;
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.dividePointAssign = function(this1,p) {
 	return thx.geom.d2._Point.Point_Impl_.set(this1,this1.get_x() / p.get_x(),this1.get_y() / p.get_y());
@@ -2324,7 +2426,7 @@ thx.geom.d2._Point.Point_Impl_.dividePointAssign = function(this1,p) {
 thx.geom.d2._Point.Point_Impl_.dividePoint = function(this1,p) {
 	var x = this1.get_x() / p.get_x();
 	var y = this1.get_y() / p.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.divideAssign = function(this1,v) {
 	return thx.geom.d2._Point.Point_Impl_.set(this1,this1.get_x() / v,this1.get_y() / v);
@@ -2332,7 +2434,7 @@ thx.geom.d2._Point.Point_Impl_.divideAssign = function(this1,v) {
 thx.geom.d2._Point.Point_Impl_.divide = function(this1,v) {
 	var x = this1.get_x() / v;
 	var y = this1.get_y() / v;
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.equals = function(this1,p) {
 	return this1.get_x() == p.get_x() && this1.get_y() == p.get_y();
@@ -2343,7 +2445,10 @@ thx.geom.d2._Point.Point_Impl_.notEquals = function(this1,p) {
 thx.geom.d2._Point.Point_Impl_.abs = function(this1) {
 	var x = Math.abs(this1.get_x());
 	var y = Math.abs(this1.get_y());
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
+};
+thx.geom.d2._Point.Point_Impl_.copyTo = function(this1,other) {
+	return thx.geom.d2._Point.Point_Impl_.set(other,this1.get_x(),this1.get_y());
 };
 thx.geom.d2._Point.Point_Impl_.nearEquals = function(this1,p) {
 	return Math.abs(this1.get_x() - p.get_x()) <= 10e-10 && Math.abs(this1.get_y() - p.get_y()) <= 10e-10;
@@ -2361,20 +2466,20 @@ thx.geom.d2._Point.Point_Impl_.interpolate = function(this1,p,f) {
 			var $r;
 			var x3 = -this1.get_x();
 			var y3 = -this1.get_y();
-			$r = new thx.geom.d2.xy.PointXY(x3,y3);
+			$r = new thx.geom.d2.xy.MutXY(x3,y3);
 			return $r;
 		}($this));
 		var x2 = p.get_x() + p2.get_x();
 		var y2 = p.get_y() + p2.get_y();
-		$r = new thx.geom.d2.xy.PointXY(x2,y2);
+		$r = new thx.geom.d2.xy.MutXY(x2,y2);
 		return $r;
 	}(this));
 	var x1 = this2.get_x() * f;
 	var y1 = this2.get_y() * f;
-	p1 = new thx.geom.d2.xy.PointXY(x1,y1);
+	p1 = new thx.geom.d2.xy.MutXY(x1,y1);
 	var x = this1.get_x() + p1.get_x();
 	var y = this1.get_y() + p1.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.isZero = function(this1) {
 	var p = thx.geom.d2._Point.Point_Impl_.zero;
@@ -2383,19 +2488,25 @@ thx.geom.d2._Point.Point_Impl_.isZero = function(this1) {
 thx.geom.d2._Point.Point_Impl_.isNearZero = function(this1) {
 	return thx.geom.d2._Point.Point_Impl_.nearEquals(this1,thx.geom.d2._Point.Point_Impl_.zero);
 };
+thx.geom.d2._Point.Point_Impl_.clone = function(this1) {
+	return this1.clone();
+};
+thx.geom.d2._Point.Point_Impl_.apply44 = function(this1,matrix) {
+	return this1.apply44(matrix);
+};
 thx.geom.d2._Point.Point_Impl_.dot = function(this1,p) {
 	return this1.get_x() * p.get_x() + this1.get_y() * p.get_y();
 };
 thx.geom.d2._Point.Point_Impl_.normal = function(this1) {
 	var x = this1.get_y();
 	var y = -this1.get_x();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.normalize = function(this1) {
 	var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y());
 	var x = this1.get_x() / v;
 	var y = this1.get_y() / v;
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.distanceTo = function(this1,p) {
 	return Math.abs((function($this) {
@@ -2408,12 +2519,12 @@ thx.geom.d2._Point.Point_Impl_.distanceTo = function(this1,p) {
 				var $r;
 				var x1 = -p.get_x();
 				var y1 = -p.get_y();
-				$r = new thx.geom.d2.xy.PointXY(x1,y1);
+				$r = new thx.geom.d2.xy.MutXY(x1,y1);
 				return $r;
 			}($this));
 			var x = this1.get_x() + p1.get_x();
 			var y = this1.get_y() + p1.get_y();
-			$r = new thx.geom.d2.xy.PointXY(x,y);
+			$r = new thx.geom.d2.xy.MutXY(x,y);
 			return $r;
 		}($this));
 		$r = Math.sqrt(this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y());
@@ -2429,18 +2540,18 @@ thx.geom.d2._Point.Point_Impl_.distanceToSquared = function(this1,p) {
 			var $r;
 			var x1 = -p.get_x();
 			var y1 = -p.get_y();
-			$r = new thx.geom.d2.xy.PointXY(x1,y1);
+			$r = new thx.geom.d2.xy.MutXY(x1,y1);
 			return $r;
 		}($this));
 		var x = this1.get_x() + p1.get_x();
 		var y = this1.get_y() + p1.get_y();
-		$r = new thx.geom.d2.xy.PointXY(x,y);
+		$r = new thx.geom.d2.xy.MutXY(x,y);
 		return $r;
 	}(this));
 	return this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y();
 };
 thx.geom.d2._Point.Point_Impl_.transform = function(this1,matrix) {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint(matrix,this1);
+	return thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint(matrix,this1);
 };
 thx.geom.d2._Point.Point_Impl_.cross = function(this1,p) {
 	return this1.get_x() * p.get_y() - this1.get_y() * p.get_x();
@@ -2448,32 +2559,32 @@ thx.geom.d2._Point.Point_Impl_.cross = function(this1,p) {
 thx.geom.d2._Point.Point_Impl_.min = function(this1,p) {
 	var x = Math.min(this1.get_x(),p.get_x());
 	var y = Math.min(this1.get_y(),p.get_y());
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.minX = function(this1,p) {
 	var x = Math.min(this1.get_x(),p.get_x());
 	var y = this1.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.minY = function(this1,p) {
 	var x = this1.get_x();
 	var y = Math.min(this1.get_y(),p.get_y());
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.max = function(this1,p) {
 	var x = Math.max(this1.get_x(),p.get_x());
 	var y = Math.max(this1.get_y(),p.get_y());
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.maxX = function(this1,p) {
 	var x = Math.max(this1.get_x(),p.get_x());
 	var y = this1.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.maxY = function(this1,p) {
 	var x = this1.get_x();
 	var y = Math.max(this1.get_y(),p.get_y());
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
 	var this2 = this1;
@@ -2481,10 +2592,10 @@ thx.geom.d2._Point.Point_Impl_.pointAt = function(this1,angle,distance) {
 	var this3 = thx.geom.d2._Point.Point_Impl_.create(Math.cos(angle),Math.sin(angle));
 	var x1 = this3.get_x() * distance;
 	var y1 = this3.get_y() * distance;
-	p = new thx.geom.d2.xy.PointXY(x1,y1);
+	p = new thx.geom.d2.xy.MutXY(x1,y1);
 	var x = this2.get_x() + p.get_x();
 	var y = this2.get_y() + p.get_y();
-	return new thx.geom.d2.xy.PointXY(x,y);
+	return new thx.geom.d2.xy.MutXY(x,y);
 };
 thx.geom.d2._Point.Point_Impl_.isOnLine = function(this1,line) {
 	if(line.get_isHorizontal()) return thx.core.Floats.nearEquals(this1.get_y(),line.w);
@@ -2513,7 +2624,7 @@ thx.geom.d2._Point.Point_Impl_.solve2Linear = function(a,b,c,d,u,v) {
 	var invdet = 1.0 / det;
 	var x = u * d - b * v;
 	var y = -u * c + a * v;
-	return new thx.geom.d2.xy.PointXY(x * invdet,y * invdet);
+	return new thx.geom.d2.xy.MutXY(x * invdet,y * invdet);
 };
 thx.geom.d2._Point.Point_Impl_.interpolateBetween2DPointsForY = function(p1,p2,y) {
 	var f1 = y - p1.get_y();
@@ -2553,7 +2664,14 @@ thx.geom.d2.xy.LinkedXY = function(getX,getY,setX,setY) {
 thx.geom.d2.xy.LinkedXY.__name__ = true;
 thx.geom.d2.xy.LinkedXY.__interfaces__ = [thx.geom.d2.xy.XY];
 thx.geom.d2.xy.LinkedXY.prototype = {
-	get_x: function() {
+	apply44: function(matrix) {
+		thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint(matrix,this);
+		return this;
+	}
+	,clone: function() {
+		return new thx.geom.d2.xy.MutXY(this.getX(),this.getY());
+	}
+	,get_x: function() {
 		return this.getX();
 	}
 	,get_y: function() {
@@ -2566,14 +2684,21 @@ thx.geom.d2.xy.LinkedXY.prototype = {
 		return this.setY(v);
 	}
 };
-thx.geom.d2.xy.PointXY = function(x,y) {
+thx.geom.d2.xy.MutXY = function(x,y) {
 	this._x = x;
 	this._y = y;
 };
-thx.geom.d2.xy.PointXY.__name__ = true;
-thx.geom.d2.xy.PointXY.__interfaces__ = [thx.geom.d2.xy.XY];
-thx.geom.d2.xy.PointXY.prototype = {
-	get_x: function() {
+thx.geom.d2.xy.MutXY.__name__ = true;
+thx.geom.d2.xy.MutXY.__interfaces__ = [thx.geom.d2.xy.XY];
+thx.geom.d2.xy.MutXY.prototype = {
+	apply44: function(matrix) {
+		thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint(matrix,this);
+		return this;
+	}
+	,clone: function() {
+		return new thx.geom.d2.xy.MutXY(this._x,this._y);
+	}
+	,get_x: function() {
 		return this._x;
 	}
 	,get_y: function() {
@@ -2594,7 +2719,7 @@ thx.geom.d3.Line = function(point,direction) {
 		var x = direction.get_x() / v;
 		var y = direction.get_y() / v;
 		var z = direction.get_z() / v;
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this));
 };
@@ -2611,20 +2736,20 @@ thx.geom.d3.Line.fromPoints = function(p1,p2) {
 				var x2 = -p1.get_x();
 				var y2 = -p1.get_y();
 				var z2 = -p1.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+				$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 				return $r;
 			}($this));
 			var x1 = p2.get_x() + p.get_x();
 			var y1 = p2.get_y() + p.get_y();
 			var z1 = p2.get_z() + p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+			$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 			return $r;
 		}($this));
 		var v = Math.sqrt(this1.get_x() * this1.get_x() + this1.get_y() * this1.get_y() + this1.get_z() * this1.get_z());
 		var x = this1.get_x() / v;
 		var y = this1.get_y() / v;
 		var z = this1.get_z() / v;
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this)));
 };
@@ -2636,7 +2761,7 @@ thx.geom.d3.Line.fromPlanes = function(p1,p2) {
 	var x = direction.get_x() * v;
 	var y = direction.get_y() * v;
 	var z = direction.get_z() * v;
-	direction = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	direction = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 	var mabsx = Math.abs(direction.get_x());
 	var mabsy = Math.abs(direction.get_y());
 	var mabsz = Math.abs(direction.get_z());
@@ -2645,17 +2770,17 @@ thx.geom.d3.Line.fromPlanes = function(p1,p2) {
 		var r = thx.geom.d2._Point.Point_Impl_.solve2Linear(p1.normal.get_y(),p1.normal.get_z(),p2.normal.get_y(),p2.normal.get_z(),p1.w,p2.w);
 		var y1 = r.get_x();
 		var z1 = r.get_y();
-		origin = new thx.geom.d3.xyz.PointXYZ(0,y1,z1);
+		origin = new thx.geom.d3.xyz.MutXYZ(0,y1,z1);
 	} else if(mabsy >= mabsx && mabsy >= mabsz) {
 		var r1 = thx.geom.d2._Point.Point_Impl_.solve2Linear(p1.normal.get_x(),p1.normal.get_z(),p2.normal.get_x(),p2.normal.get_z(),p1.w,p2.w);
 		var x1 = r1.get_x();
 		var z2 = r1.get_y();
-		origin = new thx.geom.d3.xyz.PointXYZ(x1,0,z2);
+		origin = new thx.geom.d3.xyz.MutXYZ(x1,0,z2);
 	} else {
 		var r2 = thx.geom.d2._Point.Point_Impl_.solve2Linear(p1.normal.get_x(),p1.normal.get_y(),p2.normal.get_x(),p2.normal.get_y(),p1.w,p2.w);
 		var x2 = r2.get_x();
 		var y2 = r2.get_y();
-		origin = new thx.geom.d3.xyz.PointXYZ(x2,y2,0);
+		origin = new thx.geom.d3.xyz.MutXYZ(x2,y2,0);
 	}
 	return new thx.geom.d3.Line(origin,direction);
 };
@@ -2681,11 +2806,11 @@ thx.geom.d3.Line.prototype = {
 		var x1 = this4.get_x() * lambda;
 		var y1 = this4.get_y() * lambda;
 		var z1 = this4.get_z() * lambda;
-		p2 = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+		p2 = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 		var x = this3.get_x() + p2.get_x();
 		var y = this3.get_y() + p2.get_y();
 		var z = this3.get_z() + p2.get_z();
-		return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 	}
 	,reverse: function() {
 		return new thx.geom.d3.Line(this.point,(function($this) {
@@ -2694,20 +2819,20 @@ thx.geom.d3.Line.prototype = {
 			var x = -this1.get_x();
 			var y = -this1.get_y();
 			var z = -this1.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}(this)));
 	}
-	,transform: function(matrix4x4) {
-		var newpoint = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,this.point);
+	,transform: function(matrix44) {
+		var newpoint = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix44,this.point);
 		var pointaddDirection;
 		var this1 = this.point;
 		var p = this.direction;
 		var x = this1.get_x() + p.get_x();
 		var y = this1.get_y() + p.get_y();
 		var z = this1.get_z() + p.get_z();
-		pointaddDirection = new thx.geom.d3.xyz.PointXYZ(x,y,z);
-		var newPointaddDirection = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix4x4,pointaddDirection);
+		pointaddDirection = new thx.geom.d3.xyz.MutXYZ(x,y,z);
+		var newPointaddDirection = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix44,pointaddDirection);
 		var newdirection;
 		newdirection = (function($this) {
 			var $r;
@@ -2717,13 +2842,13 @@ thx.geom.d3.Line.prototype = {
 				var x2 = -newpoint.get_x();
 				var y2 = -newpoint.get_y();
 				var z2 = -newpoint.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+				$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 				return $r;
 			}($this));
 			var x1 = newPointaddDirection.get_x() + p1.get_x();
 			var y1 = newPointaddDirection.get_y() + p1.get_y();
 			var z1 = newPointaddDirection.get_z() + p1.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+			$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 			return $r;
 		}(this));
 		return new thx.geom.d3.Line(newpoint,newdirection);
@@ -2741,13 +2866,13 @@ thx.geom.d3.Line.prototype = {
 					var x1 = -point.get_x();
 					var y1 = -point.get_y();
 					var z1 = -point.get_z();
-					$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+					$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 					return $r;
 				}($this));
 				var x = point.get_x() + p1.get_x();
 				var y = point.get_y() + p1.get_y();
 				var z = point.get_z() + p1.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+				$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 				return $r;
 			}($this));
 			var p = $this.direction;
@@ -2765,11 +2890,11 @@ thx.geom.d3.Line.prototype = {
 		var x3 = this3.get_x() * t;
 		var y3 = this3.get_y() * t;
 		var z3 = this3.get_z() * t;
-		p3 = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
+		p3 = new thx.geom.d3.xyz.MutXYZ(x3,y3,z3);
 		var x2 = point.get_x() + p3.get_x();
 		var y2 = point.get_y() + p3.get_y();
 		var z2 = point.get_z() + p3.get_z();
-		return new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		return new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 	}
 	,distanceToPoint: function(point) {
 		var closestpoint = this.closestPointOnLine(point);
@@ -2782,13 +2907,13 @@ thx.geom.d3.Line.prototype = {
 				var x1 = -closestpoint.get_x();
 				var y1 = -closestpoint.get_y();
 				var z1 = -closestpoint.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+				$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 				return $r;
 			}($this));
 			var x = point.get_x() + p.get_x();
 			var y = point.get_y() + p.get_y();
 			var z = point.get_z() + p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}(this));
 		return Math.sqrt(distancevector.get_x() * distancevector.get_x() + distancevector.get_y() * distancevector.get_y() + distancevector.get_z() * distancevector.get_z());
@@ -2804,15 +2929,22 @@ thx.geom.d3.Line.prototype = {
 		return thx.core.Floats.nearZero(this.distanceToPoint(line.point));
 	}
 };
-thx.geom.d3.xyz.ImmutableXYZ = function(x,y,z) {
+thx.geom.d3.xyz.MutXYZ = function(x,y,z) {
 	this._x = x;
 	this._y = y;
 	this._z = z;
 };
-thx.geom.d3.xyz.ImmutableXYZ.__name__ = true;
-thx.geom.d3.xyz.ImmutableXYZ.__interfaces__ = [thx.geom.d3.xyz.XYZ];
-thx.geom.d3.xyz.ImmutableXYZ.prototype = {
-	get_x: function() {
+thx.geom.d3.xyz.MutXYZ.__name__ = true;
+thx.geom.d3.xyz.MutXYZ.__interfaces__ = [thx.geom.d3.xyz.XYZ];
+thx.geom.d3.xyz.MutXYZ.prototype = {
+	apply44: function(matrix) {
+		thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint3D(matrix,this);
+		return this;
+	}
+	,clone: function() {
+		return new thx.geom.d3.xyz.MutXYZ(this._x,this._y,this._z);
+	}
+	,get_x: function() {
 		return this._x;
 	}
 	,get_y: function() {
@@ -2822,13 +2954,13 @@ thx.geom.d3.xyz.ImmutableXYZ.prototype = {
 		return this._z;
 	}
 	,set_x: function(v) {
-		throw "this instance of Point cannot be modified";
+		return this._x = v;
 	}
 	,set_y: function(v) {
-		throw "this instance of Point cannot be modified";
+		return this._y = v;
 	}
 	,set_z: function(v) {
-		throw "this instance of Point cannot be modified";
+		return this._z = v;
 	}
 };
 thx.geom.d3._Point = {};
@@ -2836,13 +2968,13 @@ thx.geom.d3._Point.Point_Impl_ = {};
 thx.geom.d3._Point.Point_Impl_.__name__ = true;
 thx.geom.d3._Point.Point_Impl_.fromFloats = function(arr) {
 	thx.core.ArrayFloats.resize(arr,3,0);
-	return new thx.geom.d3.xyz.PointXYZ(arr[0],arr[1],arr[2]);
+	return new thx.geom.d3.xyz.MutXYZ(arr[0],arr[1],arr[2]);
 };
 thx.geom.d3._Point.Point_Impl_.fromObject = function(o) {
 	return thx.geom.d3._Point.Point_Impl_.create(o.x,o.y,o.z);
 };
 thx.geom.d3._Point.Point_Impl_.create = function(x,y,z) {
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.linked = function(getX,getY,getZ,setX,setY,setZ) {
 	return new thx.geom.d3.xyz.LinkedXYZ(getX,getY,getZ,setX,setY,setZ);
@@ -2860,7 +2992,7 @@ thx.geom.d3._Point.Point_Impl_.addPoint = function(this1,p) {
 	var x = this1.get_x() + p.get_x();
 	var y = this1.get_y() + p.get_y();
 	var z = this1.get_z() + p.get_z();
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.addAssign = function(this1,v) {
 	return thx.geom.d3._Point.Point_Impl_.set(this1,this1.get_x() + v,this1.get_y() + v,this1.get_z() + v);
@@ -2869,13 +3001,13 @@ thx.geom.d3._Point.Point_Impl_.add = function(this1,v) {
 	var x = this1.get_x() + v;
 	var y = this1.get_y() + v;
 	var z = this1.get_z() + v;
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.negate = function(this1) {
 	var x = -this1.get_x();
 	var y = -this1.get_y();
 	var z = -this1.get_z();
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.subtractPointAssign = function(this1,p) {
 	return thx.geom.d3._Point.Point_Impl_.set(this1,this1.get_x() - p.get_x(),this1.get_y() - p.get_y(),this1.get_z() - p.get_z());
@@ -2887,13 +3019,13 @@ thx.geom.d3._Point.Point_Impl_.subtractPoint = function(this1,p) {
 		var x1 = -p.get_x();
 		var y1 = -p.get_y();
 		var z1 = -p.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+		$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 		return $r;
 	}(this));
 	var x = this1.get_x() + p1.get_x();
 	var y = this1.get_y() + p1.get_y();
 	var z = this1.get_z() + p1.get_z();
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.subtractAssign = function(this1,v) {
 	return thx.geom.d3._Point.Point_Impl_.set(this1,this1.get_x() - v,this1.get_y() - v,this1.get_z() - v);
@@ -2903,7 +3035,7 @@ thx.geom.d3._Point.Point_Impl_.subtract = function(this1,v) {
 	var x = this1.get_x() + v1;
 	var y = this1.get_y() + v1;
 	var z = this1.get_z() + v1;
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.multiplyPointAssign = function(this1,p) {
 	return thx.geom.d3._Point.Point_Impl_.set(this1,this1.get_x() * p.get_x(),this1.get_y() * p.get_y(),this1.get_z() * p.get_z());
@@ -2912,7 +3044,7 @@ thx.geom.d3._Point.Point_Impl_.multiplyPoint = function(this1,p) {
 	var x = this1.get_x() * p.get_x();
 	var y = this1.get_y() * p.get_y();
 	var z = this1.get_z() * p.get_z();
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.multiplyAssign = function(this1,v) {
 	return thx.geom.d3._Point.Point_Impl_.set(this1,this1.get_x() * v,this1.get_y() * v,this1.get_z() * v);
@@ -2921,7 +3053,7 @@ thx.geom.d3._Point.Point_Impl_.multiply = function(this1,v) {
 	var x = this1.get_x() * v;
 	var y = this1.get_y() * v;
 	var z = this1.get_z() * v;
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.dividePointAssign = function(this1,p) {
 	return thx.geom.d3._Point.Point_Impl_.set(this1,this1.get_x() / p.get_x(),this1.get_y() / p.get_y(),this1.get_z() / p.get_z());
@@ -2930,7 +3062,7 @@ thx.geom.d3._Point.Point_Impl_.dividePoint = function(this1,p) {
 	var x = this1.get_x() / p.get_x();
 	var y = this1.get_y() / p.get_y();
 	var z = this1.get_z() / p.get_z();
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.divideAssign = function(this1,v) {
 	return thx.geom.d3._Point.Point_Impl_.set(this1,this1.get_x() / v,this1.get_y() / v,this1.get_z() / v);
@@ -2939,7 +3071,7 @@ thx.geom.d3._Point.Point_Impl_.divide = function(this1,v) {
 	var x = this1.get_x() / v;
 	var y = this1.get_y() / v;
 	var z = this1.get_z() / v;
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.equals = function(this1,p) {
 	return this1.get_x() == p.get_x() && this1.get_y() == p.get_y() && this1.get_z() == p.get_z();
@@ -2951,7 +3083,16 @@ thx.geom.d3._Point.Point_Impl_.abs = function(this1) {
 	var x = Math.abs(this1.get_x());
 	var y = Math.abs(this1.get_y());
 	var z = Math.abs(this1.get_z());
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
+};
+thx.geom.d3._Point.Point_Impl_.clone = function(this1) {
+	return this1.clone();
+};
+thx.geom.d3._Point.Point_Impl_.copyTo = function(this1,other) {
+	return thx.geom.d3._Point.Point_Impl_.set(other,this1.get_x(),this1.get_y(),this1.get_z());
+};
+thx.geom.d3._Point.Point_Impl_.apply44 = function(this1,matrix) {
+	return this1.apply44(matrix);
 };
 thx.geom.d3._Point.Point_Impl_.nearEquals = function(this1,p) {
 	return Math.abs(this1.get_x() - p.get_x()) <= 10e-10 && Math.abs(this1.get_y() - p.get_y()) <= 10e-10 && Math.abs(this1.get_z() - p.get_z()) <= 10e-10;
@@ -2970,23 +3111,23 @@ thx.geom.d3._Point.Point_Impl_.interpolate = function(this1,p,f) {
 			var x3 = -this1.get_x();
 			var y3 = -this1.get_y();
 			var z3 = -this1.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
+			$r = new thx.geom.d3.xyz.MutXYZ(x3,y3,z3);
 			return $r;
 		}($this));
 		var x2 = p.get_x() + p2.get_x();
 		var y2 = p.get_y() + p2.get_y();
 		var z2 = p.get_z() + p2.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 		return $r;
 	}(this));
 	var x1 = this2.get_x() * f;
 	var y1 = this2.get_y() * f;
 	var z1 = this2.get_z() * f;
-	p1 = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+	p1 = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 	var x = this1.get_x() + p1.get_x();
 	var y = this1.get_y() + p1.get_y();
 	var z = this1.get_z() + p1.get_z();
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.isZero = function(this1) {
 	var p = thx.geom.d3._Point.Point_Impl_.zero;
@@ -3003,7 +3144,7 @@ thx.geom.d3._Point.Point_Impl_.normalize = function(this1) {
 	var x = this1.get_x() / v;
 	var y = this1.get_y() / v;
 	var z = this1.get_z() / v;
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.distanceTo = function(this1,p) {
 	return Math.abs((function($this) {
@@ -3017,13 +3158,13 @@ thx.geom.d3._Point.Point_Impl_.distanceTo = function(this1,p) {
 				var x1 = -p.get_x();
 				var y1 = -p.get_y();
 				var z1 = -p.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+				$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 				return $r;
 			}($this));
 			var x = this1.get_x() + p1.get_x();
 			var y = this1.get_y() + p1.get_y();
 			var z = this1.get_z() + p1.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}($this));
 		$r = Math.sqrt(this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y() + this2.get_z() * this2.get_z());
@@ -3040,19 +3181,19 @@ thx.geom.d3._Point.Point_Impl_.distanceToSquared = function(this1,p) {
 			var x1 = -p.get_x();
 			var y1 = -p.get_y();
 			var z1 = -p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+			$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 			return $r;
 		}($this));
 		var x = this1.get_x() + p1.get_x();
 		var y = this1.get_y() + p1.get_y();
 		var z = this1.get_z() + p1.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this));
 	return this2.get_x() * this2.get_x() + this2.get_y() * this2.get_y() + this2.get_z() * this2.get_z();
 };
 thx.geom.d3._Point.Point_Impl_.transform = function(this1,matrix) {
-	return thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,this1);
+	return thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,this1);
 };
 thx.geom.d3._Point.Point_Impl_.randomNonParallelVector = function(this1) {
 	var a;
@@ -3061,28 +3202,28 @@ thx.geom.d3._Point.Point_Impl_.randomNonParallelVector = function(this1) {
 		var x = Math.abs(this1.get_x());
 		var y = Math.abs(this1.get_y());
 		var z = Math.abs(this1.get_z());
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this));
-	if(a.get_x() <= a.get_y() && a.get_x() <= a.get_z()) return new thx.geom.d3.xyz.PointXYZ(1,0,0); else if(a.get_y() <= a.get_x() && a.get_y() <= a.get_z()) return new thx.geom.d3.xyz.PointXYZ(0,1,0); else return new thx.geom.d3.xyz.PointXYZ(0,0,1);
+	if(a.get_x() <= a.get_y() && a.get_x() <= a.get_z()) return new thx.geom.d3.xyz.MutXYZ(1,0,0); else if(a.get_y() <= a.get_x() && a.get_y() <= a.get_z()) return new thx.geom.d3.xyz.MutXYZ(0,1,0); else return new thx.geom.d3.xyz.MutXYZ(0,0,1);
 };
 thx.geom.d3._Point.Point_Impl_.cross = function(this1,p) {
 	var x = this1.get_y() * p.get_z() - this1.get_z() * p.get_y();
 	var y = this1.get_z() * p.get_x() - this1.get_x() * p.get_z();
 	var z = this1.get_x() * p.get_y() - this1.get_y() * p.get_x();
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.min = function(this1,p) {
 	var x = Math.min(this1.get_x(),p.get_x());
 	var y = Math.min(this1.get_y(),p.get_y());
 	var z = Math.min(this1.get_z(),p.get_z());
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.max = function(this1,p) {
 	var x = Math.max(this1.get_x(),p.get_x());
 	var y = Math.max(this1.get_y(),p.get_y());
 	var z = Math.max(this1.get_z(),p.get_z());
-	return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 };
 thx.geom.d3._Point.Point_Impl_.set = function(this1,nx,ny,nz) {
 	this1.set_x(nx);
@@ -3132,7 +3273,7 @@ thx.geom.d3.OrthoNormalBasis = function(plane,rightvector) {
 	var x = this1.get_x() / v;
 	var y = this1.get_y() / v;
 	var z = this1.get_z() / v;
-	this.v = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+	this.v = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 	this.u = thx.geom.d3._Point.Point_Impl_.cross(this.v,plane.normal);
 	this.plane = plane;
 	var this2 = plane.normal;
@@ -3140,7 +3281,7 @@ thx.geom.d3.OrthoNormalBasis = function(plane,rightvector) {
 	var x1 = this2.get_x() * v1;
 	var y1 = this2.get_y() * v1;
 	var z1 = this2.get_z() * v1;
-	this.planeOrigin = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+	this.planeOrigin = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 };
 thx.geom.d3.OrthoNormalBasis.__name__ = true;
 thx.geom.d3.OrthoNormalBasis.fromPlane = function(plane) {
@@ -3166,7 +3307,7 @@ thx.geom.d3.OrthoNormalBasis.prototype = {
 		var x = this1.get_x() * v;
 		var y = this1.get_y() * v;
 		var z = this1.get_z() * v;
-		p = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		p = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		var e0 = this.u.get_x();
 		var e1 = this.u.get_y();
 		var e2 = this.u.get_z();
@@ -3188,7 +3329,7 @@ thx.geom.d3.OrthoNormalBasis.prototype = {
 		var y;
 		var p1 = this.v;
 		y = vec3.get_x() * p1.get_x() + vec3.get_y() * p1.get_y() + vec3.get_z() * p1.get_z();
-		return new thx.geom.d2.xy.PointXY(x,y);
+		return new thx.geom.d2.xy.MutXY(x,y);
 	}
 	,to3D: function(vec2) {
 		var this1;
@@ -3199,22 +3340,22 @@ thx.geom.d3.OrthoNormalBasis.prototype = {
 		var x2 = this3.get_x() * v;
 		var y2 = this3.get_y() * v;
 		var z2 = this3.get_z() * v;
-		p1 = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		p1 = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 		var x1 = this2.get_x() + p1.get_x();
 		var y1 = this2.get_y() + p1.get_y();
 		var z1 = this2.get_z() + p1.get_z();
-		this1 = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+		this1 = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 		var p;
 		var this4 = this.v;
 		var v1 = vec2.get_y();
 		var x3 = this4.get_x() * v1;
 		var y3 = this4.get_y() * v1;
 		var z3 = this4.get_z() * v1;
-		p = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
+		p = new thx.geom.d3.xyz.MutXYZ(x3,y3,z3);
 		var x = this1.get_x() + p.get_x();
 		var y = this1.get_y() + p.get_y();
 		var z = this1.get_z() + p.get_z();
-		return new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		return new thx.geom.d3.xyz.MutXYZ(x,y,z);
 	}
 	,line3Dto2D: function(line) {
 		return thx.geom.d2.Line.fromPoints(this.to2D(line.point),this.to2D((function($this) {
@@ -3224,7 +3365,7 @@ thx.geom.d3.OrthoNormalBasis.prototype = {
 			var x = this1.get_x() + p.get_x();
 			var y = this1.get_y() + p.get_y();
 			var z = this1.get_z() + p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}(this))));
 	}
@@ -3234,15 +3375,15 @@ thx.geom.d3.OrthoNormalBasis.prototype = {
 		var this1 = line.direction();
 		var x = this1.get_x() + a.get_x();
 		var y = this1.get_y() + a.get_y();
-		b = new thx.geom.d2.xy.PointXY(x,y);
+		b = new thx.geom.d2.xy.MutXY(x,y);
 		return thx.geom.d3.Line.fromPoints(this.to3D(a),this.to3D(b));
 	}
 	,transform: function(matrix) {
 		var newplane = this.plane.transform(matrix);
-		var rightpoint_transformed = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,this.u);
+		var rightpoint_transformed = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,this.u);
 		var origin_transformed;
-		var this1 = new thx.geom.d3.xyz.PointXYZ(0,0,0);
-		origin_transformed = thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,this1);
+		var this1 = new thx.geom.d3.xyz.MutXYZ(0,0,0);
+		origin_transformed = thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,this1);
 		var newrighthandvector;
 		newrighthandvector = (function($this) {
 			var $r;
@@ -3252,13 +3393,13 @@ thx.geom.d3.OrthoNormalBasis.prototype = {
 				var x1 = -origin_transformed.get_x();
 				var y1 = -origin_transformed.get_y();
 				var z1 = -origin_transformed.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+				$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 				return $r;
 			}($this));
 			var x = rightpoint_transformed.get_x() + p.get_x();
 			var y = rightpoint_transformed.get_y() + p.get_y();
 			var z = rightpoint_transformed.get_z() + p.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}(this));
 		return new thx.geom.d3.OrthoNormalBasis(newplane,newrighthandvector);
@@ -3312,7 +3453,7 @@ thx.geom.d3.Vertex.prototype = {
 			var x = -this1.get_x();
 			var y = -this1.get_y();
 			var z = -this1.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return $r;
 		}(this)));
 	}
@@ -3320,7 +3461,7 @@ thx.geom.d3.Vertex.prototype = {
 		return new thx.geom.d3.Vertex(thx.geom.d3._Point.Point_Impl_.interpolate(this.position,other.position,t),thx.geom.d3._Point.Point_Impl_.interpolate(this.normal,other.normal,t));
 	}
 	,transform: function(matrix) {
-		return new thx.geom.d3.Vertex(thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,this.position),thx.geom._Matrix4x4.Matrix4x4_Impl_.leftMultiplyPoint3D(matrix,this.normal));
+		return new thx.geom.d3.Vertex(thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,this.position),thx.geom._Matrix44.Matrix44_Impl_.leftMultiplyPoint3D(matrix,this.normal));
 	}
 	,toString: function() {
 		return "Vertex " + (function($this) {
@@ -3478,7 +3619,7 @@ thx.geom.d3.csg.Solids.box = function(position,size) {
 			y = position.get_y() + size.get_y() * ((i & 2) != 0?1:0);
 			var z;
 			z = position.get_z() + size.get_z() * ((i & 4) != 0?1:0);
-			pos = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+			pos = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 			return new thx.geom.d3.Vertex(pos,thx.geom.d3._Point.Point_Impl_.fromFloats(info.n));
 		}));
 	}));
@@ -3490,19 +3631,19 @@ thx.geom.d3.csg.Solids.cylinder = function(start,end,radius,resolution) {
 	var ray;
 	ray = (function($this) {
 		var $r;
-		var p11;
-		p11 = (function($this) {
+		var p4;
+		p4 = (function($this) {
 			var $r;
 			var x13 = -start.get_x();
 			var y13 = -start.get_y();
 			var z13 = -start.get_z();
-			$r = new thx.geom.d3.xyz.PointXYZ(x13,y13,z13);
+			$r = new thx.geom.d3.xyz.MutXYZ(x13,y13,z13);
 			return $r;
 		}($this));
-		var x12 = end.get_x() + p11.get_x();
-		var y12 = end.get_y() + p11.get_y();
-		var z12 = end.get_z() + p11.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x12,y12,z12);
+		var x12 = end.get_x() + p4.get_x();
+		var y12 = end.get_y() + p4.get_y();
+		var z12 = end.get_z() + p4.get_z();
+		$r = new thx.geom.d3.xyz.MutXYZ(x12,y12,z12);
 		return $r;
 	}(this));
 	var axisZ;
@@ -3512,30 +3653,30 @@ thx.geom.d3.csg.Solids.cylinder = function(start,end,radius,resolution) {
 		var x14 = ray.get_x() / v4;
 		var y14 = ray.get_y() / v4;
 		var z14 = ray.get_z() / v4;
-		$r = new thx.geom.d3.xyz.PointXYZ(x14,y14,z14);
+		$r = new thx.geom.d3.xyz.MutXYZ(x14,y14,z14);
 		return $r;
 	}(this));
 	var isY = Math.abs(axisZ.get_y()) > 0.5;
 	var axisX;
-	var this13 = thx.geom.d3._Point.Point_Impl_.cross(new thx.geom.d3.xyz.PointXYZ(isY?1:0,isY?0:1,0),axisZ);
-	var v5 = Math.sqrt(this13.get_x() * this13.get_x() + this13.get_y() * this13.get_y() + this13.get_z() * this13.get_z());
-	var x15 = this13.get_x() / v5;
-	var y15 = this13.get_y() / v5;
-	var z15 = this13.get_z() / v5;
-	axisX = new thx.geom.d3.xyz.PointXYZ(x15,y15,z15);
+	var this4 = thx.geom.d3._Point.Point_Impl_.cross(new thx.geom.d3.xyz.MutXYZ(isY?1:0,isY?0:1,0),axisZ);
+	var v5 = Math.sqrt(this4.get_x() * this4.get_x() + this4.get_y() * this4.get_y() + this4.get_z() * this4.get_z());
+	var x15 = this4.get_x() / v5;
+	var y15 = this4.get_y() / v5;
+	var z15 = this4.get_z() / v5;
+	axisX = new thx.geom.d3.xyz.MutXYZ(x15,y15,z15);
 	var axisY;
-	var this14 = thx.geom.d3._Point.Point_Impl_.cross(axisX,axisZ);
-	var v6 = Math.sqrt(this14.get_x() * this14.get_x() + this14.get_y() * this14.get_y() + this14.get_z() * this14.get_z());
-	var x16 = this14.get_x() / v6;
-	var y16 = this14.get_y() / v6;
-	var z16 = this14.get_z() / v6;
-	axisY = new thx.geom.d3.xyz.PointXYZ(x16,y16,z16);
+	var this5 = thx.geom.d3._Point.Point_Impl_.cross(axisX,axisZ);
+	var v6 = Math.sqrt(this5.get_x() * this5.get_x() + this5.get_y() * this5.get_y() + this5.get_z() * this5.get_z());
+	var x16 = this5.get_x() / v6;
+	var y16 = this5.get_y() / v6;
+	var z16 = this5.get_z() / v6;
+	axisY = new thx.geom.d3.xyz.MutXYZ(x16,y16,z16);
 	var s = new thx.geom.d3.Vertex(start,(function($this) {
 		var $r;
 		var x = -axisZ.get_x();
 		var y = -axisZ.get_y();
 		var z = -axisZ.get_z();
-		$r = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		$r = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		return $r;
 	}(this)));
 	var e = new thx.geom.d3.Vertex(end,(function($this) {
@@ -3544,7 +3685,7 @@ thx.geom.d3.csg.Solids.cylinder = function(start,end,radius,resolution) {
 		var x1 = axisZ.get_x() / v;
 		var y1 = axisZ.get_y() / v;
 		var z1 = axisZ.get_z() / v;
-		$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+		$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 		return $r;
 	}(this)));
 	var polygons = [];
@@ -3555,68 +3696,68 @@ thx.geom.d3.csg.Solids.cylinder = function(start,end,radius,resolution) {
 		var out;
 		var this1;
 		var v1 = Math.cos(angle);
-		var x2 = axisX.get_x() * v1;
-		var y2 = axisX.get_y() * v1;
-		var z2 = axisX.get_z() * v1;
-		this1 = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
+		var x3 = axisX.get_x() * v1;
+		var y3 = axisX.get_y() * v1;
+		var z3 = axisX.get_z() * v1;
+		this1 = new thx.geom.d3.xyz.MutXYZ(x3,y3,z3);
 		var p;
 		var v2 = Math.sin(angle);
-		var x3 = axisY.get_x() * v2;
-		var y3 = axisY.get_y() * v2;
-		var z3 = axisY.get_z() * v2;
-		p = new thx.geom.d3.xyz.PointXYZ(x3,y3,z3);
-		var x4 = this1.get_x() + p.get_x();
-		var y4 = this1.get_y() + p.get_y();
-		var z4 = this1.get_z() + p.get_z();
-		out = new thx.geom.d3.xyz.PointXYZ(x4,y4,z4);
+		var x4 = axisY.get_x() * v2;
+		var y4 = axisY.get_y() * v2;
+		var z4 = axisY.get_z() * v2;
+		p = new thx.geom.d3.xyz.MutXYZ(x4,y4,z4);
+		var x2 = this1.get_x() + p.get_x();
+		var y2 = this1.get_y() + p.get_y();
+		var z2 = this1.get_z() + p.get_z();
+		out = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 		var pos;
-		var this11;
+		var this2;
 		var p2;
 		p2 = (function($this) {
 			var $r;
-			var x5 = ray.get_x() * stack;
-			var y5 = ray.get_y() * stack;
-			var z5 = ray.get_z() * stack;
-			$r = new thx.geom.d3.xyz.PointXYZ(x5,y5,z5);
+			var x7 = ray.get_x() * stack;
+			var y7 = ray.get_y() * stack;
+			var z7 = ray.get_z() * stack;
+			$r = new thx.geom.d3.xyz.MutXYZ(x7,y7,z7);
 			return $r;
 		}(this));
 		var x6 = start.get_x() + p2.get_x();
 		var y6 = start.get_y() + p2.get_y();
 		var z6 = start.get_z() + p2.get_z();
-		this11 = new thx.geom.d3.xyz.PointXYZ(x6,y6,z6);
+		this2 = new thx.geom.d3.xyz.MutXYZ(x6,y6,z6);
 		var p1;
 		p1 = (function($this) {
 			var $r;
-			var x7 = out.get_x() * radius;
-			var y7 = out.get_y() * radius;
-			var z7 = out.get_z() * radius;
-			$r = new thx.geom.d3.xyz.PointXYZ(x7,y7,z7);
+			var x8 = out.get_x() * radius;
+			var y8 = out.get_y() * radius;
+			var z8 = out.get_z() * radius;
+			$r = new thx.geom.d3.xyz.MutXYZ(x8,y8,z8);
 			return $r;
 		}(this));
-		var x8 = this11.get_x() + p1.get_x();
-		var y8 = this11.get_y() + p1.get_y();
-		var z8 = this11.get_z() + p1.get_z();
-		pos = new thx.geom.d3.xyz.PointXYZ(x8,y8,z8);
+		var x5 = this2.get_x() + p1.get_x();
+		var y5 = this2.get_y() + p1.get_y();
+		var z5 = this2.get_z() + p1.get_z();
+		pos = new thx.geom.d3.xyz.MutXYZ(x5,y5,z5);
 		var normal;
-		var this12;
+		var this3;
 		var v3 = 1 - Math.abs(normalBlend);
-		var x9 = out.get_x() * v3;
-		var y9 = out.get_y() * v3;
-		var z9 = out.get_z() * v3;
-		this12 = new thx.geom.d3.xyz.PointXYZ(x9,y9,z9);
+		var x10 = out.get_x() * v3;
+		var y10 = out.get_y() * v3;
+		var z10 = out.get_z() * v3;
+		this3 = new thx.geom.d3.xyz.MutXYZ(x10,y10,z10);
 		var p3;
 		p3 = (function($this) {
 			var $r;
-			var x10 = axisZ.get_x() * normalBlend;
-			var y10 = axisZ.get_y() * normalBlend;
-			var z10 = axisZ.get_z() * normalBlend;
-			$r = new thx.geom.d3.xyz.PointXYZ(x10,y10,z10);
+			var x11 = axisZ.get_x() * normalBlend;
+			var y11 = axisZ.get_y() * normalBlend;
+			var z11 = axisZ.get_z() * normalBlend;
+			$r = new thx.geom.d3.xyz.MutXYZ(x11,y11,z11);
 			return $r;
 		}(this));
-		var x11 = this12.get_x() + p3.get_x();
-		var y11 = this12.get_y() + p3.get_y();
-		var z11 = this12.get_z() + p3.get_z();
-		normal = new thx.geom.d3.xyz.PointXYZ(x11,y11,z11);
+		var x9 = this3.get_x() + p3.get_x();
+		var y9 = this3.get_y() + p3.get_y();
+		var z9 = this3.get_z() + p3.get_z();
+		normal = new thx.geom.d3.xyz.MutXYZ(x9,y9,z9);
 		return new thx.geom.d3.Vertex(pos,normal);
 	};
 	var _g = 0;
@@ -3647,26 +3788,22 @@ thx.geom.d3.csg.Solids.sphere = function(position,radius,resolution) {
 		var x = Math.cos(theta) * Math.sin(phi);
 		var y = Math.cos(phi);
 		var z = Math.sin(theta) * Math.sin(phi);
-		dir = new thx.geom.d3.xyz.PointXYZ(x,y,z);
+		dir = new thx.geom.d3.xyz.MutXYZ(x,y,z);
 		vertices.push(new thx.geom.d3.Vertex((function($this) {
 			var $r;
 			var p;
 			p = (function($this) {
 				var $r;
-				var x1 = dir.get_x() * radius;
-				var y1 = dir.get_y() * radius;
-				var z1 = dir.get_z() * radius;
-				$r = new thx.geom.d3.xyz.PointXYZ(x1,y1,z1);
+				var x2 = dir.get_x() * radius;
+				var y2 = dir.get_y() * radius;
+				var z2 = dir.get_z() * radius;
+				$r = new thx.geom.d3.xyz.MutXYZ(x2,y2,z2);
 				return $r;
 			}($this));
-			$r = (function($this) {
-				var $r;
-				var x2 = position.get_x() + p.get_x();
-				var y2 = position.get_y() + p.get_y();
-				var z2 = position.get_z() + p.get_z();
-				$r = new thx.geom.d3.xyz.PointXYZ(x2,y2,z2);
-				return $r;
-			}($this));
+			var x1 = position.get_x() + p.get_x();
+			var y1 = position.get_y() + p.get_y();
+			var z1 = position.get_z() + p.get_z();
+			$r = new thx.geom.d3.xyz.MutXYZ(x1,y1,z1);
 			return $r;
 		}(this)),dir));
 	};
@@ -3697,7 +3834,14 @@ thx.geom.d3.xyz.LinkedXYZ = function(getX,getY,getZ,setX,setY,setZ) {
 thx.geom.d3.xyz.LinkedXYZ.__name__ = true;
 thx.geom.d3.xyz.LinkedXYZ.__interfaces__ = [thx.geom.d3.xyz.XYZ];
 thx.geom.d3.xyz.LinkedXYZ.prototype = {
-	get_x: function() {
+	apply44: function(matrix) {
+		thx.geom._Matrix44.Matrix44_Impl_.applyLeftMultiplyPoint3D(matrix,this);
+		return this;
+	}
+	,clone: function() {
+		return new thx.geom.d3.xyz.MutXYZ(this.getX(),this.getY(),this.getZ());
+	}
+	,get_x: function() {
 		return this.getX();
 	}
 	,get_y: function() {
@@ -3790,17 +3934,20 @@ thx.core.Strings.DIGITS = new EReg("^[0-9]+$","");
 thx.core.Strings.STRIPTAGS = new EReg("</?[a-z]+[^>]*?/?>","gi");
 thx.core.Strings.WSG = new EReg("\\s+","g");
 thx.core.Strings.SPLIT_LINES = new EReg("\r\n|\n\r|\n|\r","g");
-thx.geom._Matrix4x4.Matrix4x4_Impl_.identity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
+thx.geom._Matrix44.Matrix44_Impl_.identity = [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
+thx.geom.d3.Plane.PX = new thx.geom.d3.Plane(new thx.geom.d3.xyz.ImmutableXYZ(1,0,0),0);
+thx.geom.d3.Plane.PY = new thx.geom.d3.Plane(new thx.geom.d3.xyz.ImmutableXYZ(0,1,0),0);
+thx.geom.d3.Plane.PZ = new thx.geom.d3.Plane(new thx.geom.d3.xyz.ImmutableXYZ(0,0,1),0);
 thx.geom.d3.Plane.COPLANAR = 0;
 thx.geom.d3.Plane.FRONT = 1;
 thx.geom.d3.Plane.BACK = 2;
 thx.geom.d3.Plane.SPANNING = 3;
-thx.geom.Transformables.MX = new thx.geom.d3.Plane(new thx.geom.d3.xyz.PointXYZ(1,0,0),0);
-thx.geom.Transformables.MY = new thx.geom.d3.Plane(new thx.geom.d3.xyz.PointXYZ(0,1,0),0);
-thx.geom.Transformables.MZ = new thx.geom.d3.Plane(new thx.geom.d3.xyz.PointXYZ(0,0,1),0);
+thx.geom.Transformables44.MX = thx.geom._Matrix44.Matrix44_Impl_.mirroring(thx.geom.d3.Plane.PX);
+thx.geom.Transformables44.MY = thx.geom._Matrix44.Matrix44_Impl_.mirroring(thx.geom.d3.Plane.PY);
+thx.geom.Transformables44.MZ = thx.geom._Matrix44.Matrix44_Impl_.mirroring(thx.geom.d3.Plane.PZ);
 thx.geom.d2._Point.Point_Impl_.zero = new thx.geom.d2.xy.ImmutableXY(0,0);
 thx.geom.d3._Point.Point_Impl_.zero = new thx.geom.d3.xyz.ImmutableXYZ(0,0,0);
-thx.geom.d3.OrthoNormalBasis.z0Plane = new thx.geom.d3.OrthoNormalBasis(new thx.geom.d3.Plane(new thx.geom.d3.xyz.PointXYZ(0,0,1),0),new thx.geom.d3.xyz.PointXYZ(1,0,0));
+thx.geom.d3.OrthoNormalBasis.z0Plane = new thx.geom.d3.OrthoNormalBasis(new thx.geom.d3.Plane(new thx.geom.d3.xyz.MutXYZ(0,0,1),0),new thx.geom.d3.xyz.MutXYZ(1,0,0));
 thx.geom.d3.csg.Solids.baseCube = [{ p : [0,4,6,2], n : [-1.0,0.0,0.0]},{ p : [1,3,7,5], n : [1.0,0.0,0.0]},{ p : [0,1,5,4], n : [0.0,-1.0,0.0]},{ p : [2,6,7,3], n : [0.0,1.0,0.0]},{ p : [0,2,3,1], n : [0.0,0.0,-1.0]},{ p : [4,5,7,6], n : [0.0,0.0,1.0]}];
 Main.main();
 })();
