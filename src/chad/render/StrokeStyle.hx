@@ -1,7 +1,7 @@
 package chad.render;
 
 enum StrokeStyle {
-  StrokeLine(style : LineStyle);
-  StrokeDash(pattern : Array<Float>, ?style : LineStyle);
-  StrokeDot(spacing : Float, ?style : LineStyle);
+  Solid;
+  Dashed(pattern : Array<Float>);
+  Dotted(spacing : Float);
 }
