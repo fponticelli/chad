@@ -1,9 +1,9 @@
 package chad.render;
 
-import thx.color.RGBA;
+import thx.color.RGBXA;
 
 enum FillStyle {
-  FillColor(c : RGBA);
+  FillColor(c : RGBXA);
   // TODO LinearGradient
   // TODO RadialGradient
   // TODO Pattern
