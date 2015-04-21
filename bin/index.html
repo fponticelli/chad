@@ -1,127 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Demo Viewer</title>
+    <title>Chad Demo</title>
     <style>
-      * { margin: 0; }
-      body {
-background: rgb(125,126,125); /* Old browsers */
-background: -moz-linear-gradient(top, rgba(125,126,125,1) 0%, rgba(14,14,14,1) 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,126,125,1)), color-stop(100%,rgba(14,14,14,1))); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%); /* IE10+ */
-background: linear-gradient(to bottom, rgba(125,126,125,1) 0%,rgba(14,14,14,1) 100%); /* W3C */
-      }
-      canvas { width: 100%; height: 100% }
+#svg {
+  background-color: #eeeeee;
+}
     </style>
   </head>
   <body>
-    <script src="three.js"></script>
-    <script src="OrbitControls.js"></script>
+    <svg id="svg" width="800" height="600"></svg>
     <script src="main.js"></script>
-    <script>
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.2, 1000 );
-scene.add( new THREE.AmbientLight( 0x222222 ) );
-
-var light = new THREE.DirectionalLight(0xffffff);
-light.castShadow = true;
-light.shadowMapWidth = 1024; // default is 512
-light.shadowMapHeight = 1024; // default is 512
-//light.shadowCameraVisible = true;
-light.shadowDarkness = 0.5;
-light.shadowCameraNear = 0.1;
-light.shadowCameraRight     =  5;
-light.shadowCameraLeft     = -5;
-light.shadowCameraTop      =  5;
-light.shadowCameraBottom   = -5;
-light.shadowCascade = true;
-
-scene.add(light);
-
-camera.position.z = 1;
-camera.position.x = 1.75;
-camera.position.y = 1.75;
-camera.shadowCameraFov = 70;
-
-var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.shadowMapEnabled = true;
-renderer.shadowMapSoft = true;
-renderer.shadowMapType = THREE.PCFSoftShadowMap; //THREE.PCFSoftShadowMap;
-document.body.appendChild( renderer.domElement );
-var controls = new THREE.OrbitControls( camera, renderer.domElement );
-
-var before = +(new Date),
-  test = 14405;
-
-test = 5035;
-console.log("Processing ...");
-
-var def = Main.geom();
-
-var after = +(new Date),
-  delta = after - before;
-var loader = new THREE.JSONLoader(true);
-
-console.log("Time", delta, test - delta, Math.round((test / delta - 1) * 10000) / 100 + '%');
-
-var geometry = loader.parse(def).geometry;
-
-var obj = THREE.SceneUtils.createMultiMaterialObject(geometry, [
-    new THREE.MeshPhongMaterial({ color: 0xccddee,  transparent: true, opacity: 0.8 }),
-    new THREE.MeshBasicMaterial({ wireframe : true,  transparent: true, opacity: 0.02 })
-  ]);
-
-obj.castShadow = true;
-obj.receiveShadow = true;
-scene.add(obj);
-
-var outlineMaterial1 = new THREE.MeshBasicMaterial( { color: 0xaaaaaa, side: THREE.BackSide } );
-var outlineMesh1 = new THREE.Mesh( geometry, outlineMaterial1 );
-outlineMesh1.scale.multiplyScalar(1.012);
-scene.add( outlineMesh1 );
-
-var debugaxis = function(axisLength){
-    //Create axis (point1, point2, colour)
-    var p0 = new THREE.Vector3(0, 0, 0);
-    function createAxis(p1, p2, color){
-            var len = axisLength / 30,
-              dashLineGeometry = new THREE.Geometry(),
-              lineGeometry = new THREE.Geometry(),
-              dashLineMat = new THREE.LineDashedMaterial({color: color, linewidth: 2, dashSize : len, gapSize : len}),
-              lineMat = new THREE.LineBasicMaterial({color: color, linewidth: 2});
-            dashLineGeometry.vertices.push(p1, p0);
-            lineGeometry.vertices.push(p0, p2);
-            dashLineGeometry.computeLineDistances();
-            lineGeometry.computeLineDistances();
-            scene.add(new THREE.Line(dashLineGeometry, dashLineMat, THREE.LinePieces));
-            scene.add(new THREE.Line(lineGeometry, lineMat, THREE.LinePieces));
-    }
-
-    createAxis(new THREE.Vector3(-axisLength, 0, 0), new THREE.Vector3(axisLength, 0, 0), 0xFF0000);
-    createAxis(new THREE.Vector3(0, -axisLength, 0), new THREE.Vector3(0, axisLength, 0), 0x00FF00);
-    createAxis(new THREE.Vector3(0, 0, -axisLength), new THREE.Vector3(0, 0, axisLength), 0x0000FF);
-};
-
-debugaxis(1);
-
-var angle = 0, dist = 2, step = 0.05;
-function render() {
-  light.position.set(Math.cos(angle) * dist, dist, Math.sin(angle) * dist);
-  renderer.render(scene, camera);
-  angle += 0.005;
-}
-
-function animate()
-{
-    requestAnimationFrame( animate );
-  controls.update();
-  render();
-}
-
-animate();
-    </script>
   </body>
 </html>
