@@ -6,3 +6,4 @@
 -lib thx.geom
 -lib thx.unit
 -lib thx.color
+-lib edge
