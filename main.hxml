@@ -5,4 +5,4 @@
 -lib thx.core
 -lib thx.geom
 -lib thx.unit
--D thxunit
+-lib thx.color
