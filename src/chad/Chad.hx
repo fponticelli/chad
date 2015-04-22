@@ -20,7 +20,7 @@ class Chad {
         Circle.fromPoints(p1, p2)
       ]);
     var incr = 1;
-    thx.core.Timer.repeat(function() {
+    thx.Timer.repeat(function() {
       p1.x += incr;
       p2.y += incr;
       if(p1.x > 300)

@@ -2,8 +2,8 @@
 -cp src
 -main Main
 -js bin/main.js
--lib thx.core
+#-lib thx.core
 -lib thx.geom
--lib thx.unit
--lib thx.color
+#-lib thx.unit
+#-lib thx.color
 -lib edge
