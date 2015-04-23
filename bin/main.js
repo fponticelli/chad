@@ -170,11 +170,13 @@ Type.getClassName = function(c) {
 };
 var chad_Chad = function(svg) {
 	this.svg = svg;
+	this.layers = [];
 	this.world = new edge_World(15);
 	this.addSystems();
+	var layer = this.addLayer("my layer");
 	var p1 = new thx_geom_core_MutableXY(60,60);
 	var p2 = new thx_geom_core_MutableXY(90,80);
-	this.world.engine.create([thx_geom_d2_Circle.fromPoints(p1,p2),chad_components_LineStyle.constructionLine]);
+	this.world.engine.create([thx_geom_d2_Circle.fromPoints(p1,p2),chad_components_LineStyle.constructionLine,layer]);
 	var incr = 1;
 	thx_Timer.repeat(function() {
 		var v = p1.get_x() + incr;
@@ -187,13 +189,36 @@ var chad_Chad = function(svg) {
 };
 chad_Chad.__name__ = ["chad","Chad"];
 chad_Chad.prototype = {
-	addSystems: function() {
-		this.world.render.add(new chad_systems_RenderCircle(this.svg));
+	addLayer: function(name) {
+		if(null != this.getLayer(name)) throw new js__$Boot_HaxeError("layer \"" + name + "\" already exists");
+		var layer = new chad_components_Layer();
+		this.layers.push({ _0 : name, _1 : layer});
+		return layer;
+	}
+	,getLayer: function(name) {
+		return thx_Arrays.find(this.layers,function(t) {
+			return t._0 == name;
+		});
+	}
+	,addSystems: function() {
+		this.world.render.add(new chad_systems_LayerGroupProvider(this.svg));
+		this.world.render.add(new chad_systems_RenderCircle());
 	}
 	,__class__: chad_Chad
 };
 var edge_IComponent = function() { };
 edge_IComponent.__name__ = ["edge","IComponent"];
+var chad_components_Layer = function() {
+	this.group = null;
+};
+chad_components_Layer.__name__ = ["chad","components","Layer"];
+chad_components_Layer.__interfaces__ = [edge_IComponent];
+chad_components_Layer.prototype = {
+	toString: function(group) {
+		return "Layer(group=$group)";
+	}
+	,__class__: chad_components_Layer
+};
 var chad_components_Style = { __ename__ : true, __constructs__ : ["ConstructionLine"] };
 chad_components_Style.ConstructionLine = ["ConstructionLine",0];
 chad_components_Style.ConstructionLine.toString = $estr;
@@ -221,26 +246,98 @@ edge_ISystem.__name__ = ["edge","ISystem"];
 edge_ISystem.prototype = {
 	__class__: edge_ISystem
 };
-var chad_systems_RenderCircle = function(svg) {
+var chad_systems_LayerGroupProvider = function(svg) {
 	this.svg = svg;
+	this.__process__ = new chad_systems_LayerGroupProvider_$SystemProcess(this);
+};
+chad_systems_LayerGroupProvider.__name__ = ["chad","systems","LayerGroupProvider"];
+chad_systems_LayerGroupProvider.__interfaces__ = [edge_ISystem];
+chad_systems_LayerGroupProvider.prototype = {
+	updateAdded: function(entity,data) {
+		var g = this.svg.ownerDocument.createElementNS("http://www.w3.org/2000/svg","g");
+		data.layer.group = g;
+		this.svg.appendChild(g);
+	}
+	,updateRemoved: function(entity,data) {
+		this.svg.removeChild(data.layer.group);
+		data.layer.group = null;
+	}
+	,update: function(layer) {
+		return true;
+	}
+	,toString: function() {
+		return "chad.systems.LayerGroupProvider";
+	}
+	,__class__: chad_systems_LayerGroupProvider
+};
+var edge_core_ISystemProcess = function() { };
+edge_core_ISystemProcess.__name__ = ["edge","core","ISystemProcess"];
+edge_core_ISystemProcess.prototype = {
+	__class__: edge_core_ISystemProcess
+};
+var chad_systems_LayerGroupProvider_$SystemProcess = function(system) {
+	this.system = system;
+	this.updateItems = new edge_View();
+};
+chad_systems_LayerGroupProvider_$SystemProcess.__name__ = ["chad","systems","LayerGroupProvider_SystemProcess"];
+chad_systems_LayerGroupProvider_$SystemProcess.__interfaces__ = [edge_core_ISystemProcess];
+chad_systems_LayerGroupProvider_$SystemProcess.prototype = {
+	removeEntity: function(entity) {
+		var removed = this.updateItems.tryRemove(entity);
+		if(removed != null) this.system.updateRemoved(entity,removed);
+	}
+	,addEntity: function(entity) {
+		this.updateMatchRequirements(entity);
+	}
+	,update: function(engine,delta) {
+		var result = true;
+		var data;
+		var $it0 = this.updateItems.iterator();
+		while( $it0.hasNext() ) {
+			var item = $it0.next();
+			data = item.data;
+			result = this.system.update(data.layer);
+			if(!result) break;
+		}
+		return result;
+	}
+	,updateMatchRequirements: function(entity) {
+		var removed = this.updateItems.tryRemove(entity);
+		var count = 1;
+		var o = { layer : null};
+		var $it0 = entity.map.iterator();
+		while( $it0.hasNext() ) {
+			var component = $it0.next();
+			if(js_Boot.__instanceof(component,chad_components_Layer)) {
+				o.layer = component;
+				if(--count == 0) break; else continue;
+			}
+		}
+		var added = count == 0 && this.updateItems.tryAdd(entity,o);
+		if(null != removed && !added) this.system.updateRemoved(entity,removed);
+		if(added && null == removed) this.system.updateAdded(entity,o);
+	}
+	,__class__: chad_systems_LayerGroupProvider_$SystemProcess
+};
+var chad_systems_RenderCircle = function() {
 	this.map = new haxe_ds_ObjectMap();
 	this.__process__ = new chad_systems_RenderCircle_$SystemProcess(this);
 };
 chad_systems_RenderCircle.__name__ = ["chad","systems","RenderCircle"];
 chad_systems_RenderCircle.__interfaces__ = [edge_ISystem];
 chad_systems_RenderCircle.prototype = {
-	lineStyledAdded: function(entity,data) {
-		var circle = this.svg.ownerDocument.createElementNS("http://www.w3.org/2000/svg","circle");
+	updateAdded: function(entity,data) {
+		var circle = data.layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg","circle");
 		chad_components_LineStyle.applyTo(data.style,circle);
 		this.map.set(data.circle,circle);
-		this.svg.appendChild(circle);
+		data.layer.group.appendChild(circle);
 	}
-	,lineStyledRemoved: function(entity,data) {
+	,updateRemoved: function(entity,data) {
 		var circle = this.map.h[data.circle.__id__];
-		this.svg.removeChild(circle);
+		data.layer.group.removeChild(circle);
 		this.map.remove(data.circle);
 	}
-	,update: function(circle) {
+	,update: function(circle,style,layer) {
 		var c = this.map.h[circle.__id__];
 		c.setAttribute("cx","" + circle.center.get_x());
 		c.setAttribute("cy","" + circle.center.get_y());
@@ -252,26 +349,18 @@ chad_systems_RenderCircle.prototype = {
 	}
 	,__class__: chad_systems_RenderCircle
 };
-var edge_core_ISystemProcess = function() { };
-edge_core_ISystemProcess.__name__ = ["edge","core","ISystemProcess"];
-edge_core_ISystemProcess.prototype = {
-	__class__: edge_core_ISystemProcess
-};
 var chad_systems_RenderCircle_$SystemProcess = function(system) {
 	this.system = system;
 	this.updateItems = new edge_View();
-	system.lineStyled = new edge_View();
 };
 chad_systems_RenderCircle_$SystemProcess.__name__ = ["chad","systems","RenderCircle_SystemProcess"];
 chad_systems_RenderCircle_$SystemProcess.__interfaces__ = [edge_core_ISystemProcess];
 chad_systems_RenderCircle_$SystemProcess.prototype = {
 	removeEntity: function(entity) {
-		this.updateItems.tryRemove(entity);
-		var removed = this.system.lineStyled.tryRemove(entity);
-		if(removed != null) this.system.lineStyledRemoved(entity,removed);
+		var removed = this.updateItems.tryRemove(entity);
+		if(removed != null) this.system.updateRemoved(entity,removed);
 	}
 	,addEntity: function(entity) {
-		this.lineStyledMatchRequirements(entity);
 		this.updateMatchRequirements(entity);
 	}
 	,update: function(engine,delta) {
@@ -281,44 +370,34 @@ chad_systems_RenderCircle_$SystemProcess.prototype = {
 		while( $it0.hasNext() ) {
 			var item = $it0.next();
 			data = item.data;
-			result = this.system.update(data.circle);
+			result = this.system.update(data.circle,data.style,data.layer);
 			if(!result) break;
 		}
 		return result;
 	}
-	,lineStyledMatchRequirements: function(entity) {
-		var removed = this.system.lineStyled.tryRemove(entity);
-		var count = 2;
-		var o = { style : null, circle : null};
+	,updateMatchRequirements: function(entity) {
+		var removed = this.updateItems.tryRemove(entity);
+		var count = 3;
+		var o = { circle : null, style : null, layer : null};
 		var $it0 = entity.map.iterator();
 		while( $it0.hasNext() ) {
 			var component = $it0.next();
+			if(js_Boot.__instanceof(component,thx_geom_d2_Circle)) {
+				o.circle = component;
+				if(--count == 0) break; else continue;
+			}
 			if(js_Boot.__instanceof(component,chad_components_LineStyle)) {
 				o.style = component;
 				if(--count == 0) break; else continue;
 			}
-			if(js_Boot.__instanceof(component,thx_geom_d2_Circle)) {
-				o.circle = component;
-				if(--count == 0) break; else continue;
-			}
-		}
-		var added = count == 0 && this.system.lineStyled.tryAdd(entity,o);
-		if(null != removed && !added) this.system.lineStyledRemoved(entity,removed);
-		if(added && null == removed) this.system.lineStyledAdded(entity,o);
-	}
-	,updateMatchRequirements: function(entity) {
-		var removed = this.updateItems.tryRemove(entity);
-		var count = 1;
-		var o = { circle : null};
-		var $it0 = entity.map.iterator();
-		while( $it0.hasNext() ) {
-			var component = $it0.next();
-			if(js_Boot.__instanceof(component,thx_geom_d2_Circle)) {
-				o.circle = component;
+			if(js_Boot.__instanceof(component,chad_components_Layer)) {
+				o.layer = component;
 				if(--count == 0) break; else continue;
 			}
 		}
 		var added = count == 0 && this.updateItems.tryAdd(entity,o);
+		if(null != removed && !added) this.system.updateRemoved(entity,removed);
+		if(added && null == removed) this.system.updateAdded(entity,o);
 	}
 	,__class__: chad_systems_RenderCircle_$SystemProcess
 };
