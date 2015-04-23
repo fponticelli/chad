@@ -2,6 +2,7 @@ package chad;
 
 import edge.World;
 import js.html.svg.SVGElement;
+import chad.components.*;
 import chad.systems.*;
 import thx.geom.d2.*;
 
@@ -17,7 +18,8 @@ class Chad {
     var p1 = Point.create(60, 60),
         p2 = Point.create(90, 80);
     world.engine.create([
-        Circle.fromPoints(p1, p2)
+        Circle.fromPoints(p1, p2),
+        Style.constructionLine
       ]);
     var incr = 1;
     thx.Timer.repeat(function() {
