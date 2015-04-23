@@ -7,8 +7,8 @@ class LineStyle implements edge.IComponent {
     case ConstructionLine:
       node.setAttribute("fill", "none");
       node.setAttribute("stroke-width", "1");
-      node.setAttribute("stroke", "#333333");
-      node.setAttribute("stroke-dasharray", "3, 2");
+      node.setAttribute("stroke", "#666666");
+      node.setAttribute("stroke-dasharray", "5, 3");
   }
 
   public var value(default, null) : Style;

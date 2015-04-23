@@ -207,8 +207,8 @@ chad_components_LineStyle.applyTo = function(style,node) {
 	var _g = style.value;
 	node.setAttribute("fill","none");
 	node.setAttribute("stroke-width","1");
-	node.setAttribute("stroke","#333333");
-	node.setAttribute("stroke-dasharray","3, 2");
+	node.setAttribute("stroke","#666666");
+	node.setAttribute("stroke-dasharray","5, 3");
 };
 chad_components_LineStyle.prototype = {
 	toString: function() {
