@@ -19,7 +19,7 @@ class Chad {
         p2 = Point.create(90, 80);
     world.engine.create([
         Circle.fromPoints(p1, p2),
-        Style.constructionLine
+        LineStyle.constructionLine
       ]);
     var incr = 1;
     thx.Timer.repeat(function() {

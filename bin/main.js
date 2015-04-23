@@ -174,7 +174,7 @@ var chad_Chad = function(svg) {
 	this.addSystems();
 	var p1 = new thx_geom_core_MutableXY(60,60);
 	var p2 = new thx_geom_core_MutableXY(90,80);
-	this.world.engine.create([thx_geom_d2_Circle.fromPoints(p1,p2),chad_components_Style.constructionLine]);
+	this.world.engine.create([thx_geom_d2_Circle.fromPoints(p1,p2),chad_components_LineStyle.constructionLine]);
 	var incr = 1;
 	thx_Timer.repeat(function() {
 		var v = p1.get_x() + incr;
@@ -192,29 +192,29 @@ chad_Chad.prototype = {
 	}
 	,__class__: chad_Chad
 };
-var chad_components_StyleType = { __ename__ : true, __constructs__ : ["ConstructionLine"] };
-chad_components_StyleType.ConstructionLine = ["ConstructionLine",0];
-chad_components_StyleType.ConstructionLine.toString = $estr;
-chad_components_StyleType.ConstructionLine.__enum__ = chad_components_StyleType;
 var edge_IComponent = function() { };
 edge_IComponent.__name__ = ["edge","IComponent"];
-var chad_components_Style = function(value) {
+var chad_components_Style = { __ename__ : true, __constructs__ : ["ConstructionLine"] };
+chad_components_Style.ConstructionLine = ["ConstructionLine",0];
+chad_components_Style.ConstructionLine.toString = $estr;
+chad_components_Style.ConstructionLine.__enum__ = chad_components_Style;
+var chad_components_LineStyle = function(value) {
 	this.value = value;
 };
-chad_components_Style.__name__ = ["chad","components","Style"];
-chad_components_Style.__interfaces__ = [edge_IComponent];
-chad_components_Style.applyTo = function(style,node) {
+chad_components_LineStyle.__name__ = ["chad","components","LineStyle"];
+chad_components_LineStyle.__interfaces__ = [edge_IComponent];
+chad_components_LineStyle.applyTo = function(style,node) {
 	var _g = style.value;
 	node.setAttribute("fill","none");
 	node.setAttribute("stroke-width","1");
 	node.setAttribute("stroke","#333333");
 	node.setAttribute("stroke-dasharray","3, 2");
 };
-chad_components_Style.prototype = {
+chad_components_LineStyle.prototype = {
 	toString: function() {
-		return "Style()";
+		return "LineStyle()";
 	}
-	,__class__: chad_components_Style
+	,__class__: chad_components_LineStyle
 };
 var edge_ISystem = function() { };
 edge_ISystem.__name__ = ["edge","ISystem"];
@@ -229,18 +229,18 @@ var chad_systems_RenderCircle = function(svg) {
 chad_systems_RenderCircle.__name__ = ["chad","systems","RenderCircle"];
 chad_systems_RenderCircle.__interfaces__ = [edge_ISystem];
 chad_systems_RenderCircle.prototype = {
-	updateAdded: function(entity,data) {
+	lineStyledAdded: function(entity,data) {
 		var circle = this.svg.ownerDocument.createElementNS("http://www.w3.org/2000/svg","circle");
-		chad_components_Style.applyTo(data.style,circle);
+		chad_components_LineStyle.applyTo(data.style,circle);
 		this.map.set(data.circle,circle);
 		this.svg.appendChild(circle);
 	}
-	,updateRemoved: function(entity,data) {
+	,lineStyledRemoved: function(entity,data) {
 		var circle = this.map.h[data.circle.__id__];
 		this.svg.removeChild(circle);
 		this.map.remove(data.circle);
 	}
-	,update: function(circle,style) {
+	,update: function(circle) {
 		var c = this.map.h[circle.__id__];
 		c.setAttribute("cx","" + circle.center.get_x());
 		c.setAttribute("cy","" + circle.center.get_y());
@@ -260,15 +260,18 @@ edge_core_ISystemProcess.prototype = {
 var chad_systems_RenderCircle_$SystemProcess = function(system) {
 	this.system = system;
 	this.updateItems = new edge_View();
+	system.lineStyled = new edge_View();
 };
 chad_systems_RenderCircle_$SystemProcess.__name__ = ["chad","systems","RenderCircle_SystemProcess"];
 chad_systems_RenderCircle_$SystemProcess.__interfaces__ = [edge_core_ISystemProcess];
 chad_systems_RenderCircle_$SystemProcess.prototype = {
 	removeEntity: function(entity) {
-		var removed = this.updateItems.tryRemove(entity);
-		if(removed != null) this.system.updateRemoved(entity,removed);
+		this.updateItems.tryRemove(entity);
+		var removed = this.system.lineStyled.tryRemove(entity);
+		if(removed != null) this.system.lineStyledRemoved(entity,removed);
 	}
 	,addEntity: function(entity) {
+		this.lineStyledMatchRequirements(entity);
 		this.updateMatchRequirements(entity);
 	}
 	,update: function(engine,delta) {
@@ -278,15 +281,35 @@ chad_systems_RenderCircle_$SystemProcess.prototype = {
 		while( $it0.hasNext() ) {
 			var item = $it0.next();
 			data = item.data;
-			result = this.system.update(data.circle,data.style);
+			result = this.system.update(data.circle);
 			if(!result) break;
 		}
 		return result;
 	}
+	,lineStyledMatchRequirements: function(entity) {
+		var removed = this.system.lineStyled.tryRemove(entity);
+		var count = 2;
+		var o = { style : null, circle : null};
+		var $it0 = entity.map.iterator();
+		while( $it0.hasNext() ) {
+			var component = $it0.next();
+			if(js_Boot.__instanceof(component,chad_components_LineStyle)) {
+				o.style = component;
+				if(--count == 0) break; else continue;
+			}
+			if(js_Boot.__instanceof(component,thx_geom_d2_Circle)) {
+				o.circle = component;
+				if(--count == 0) break; else continue;
+			}
+		}
+		var added = count == 0 && this.system.lineStyled.tryAdd(entity,o);
+		if(null != removed && !added) this.system.lineStyledRemoved(entity,removed);
+		if(added && null == removed) this.system.lineStyledAdded(entity,o);
+	}
 	,updateMatchRequirements: function(entity) {
 		var removed = this.updateItems.tryRemove(entity);
-		var count = 2;
-		var o = { circle : null, style : null};
+		var count = 1;
+		var o = { circle : null};
 		var $it0 = entity.map.iterator();
 		while( $it0.hasNext() ) {
 			var component = $it0.next();
@@ -294,14 +317,8 @@ chad_systems_RenderCircle_$SystemProcess.prototype = {
 				o.circle = component;
 				if(--count == 0) break; else continue;
 			}
-			if(js_Boot.__instanceof(component,chad_components_Style)) {
-				o.style = component;
-				if(--count == 0) break; else continue;
-			}
 		}
 		var added = count == 0 && this.updateItems.tryAdd(entity,o);
-		if(null != removed && !added) this.system.updateRemoved(entity,removed);
-		if(added && null == removed) this.system.updateAdded(entity,o);
 	}
 	,__class__: chad_systems_RenderCircle_$SystemProcess
 };
@@ -3492,7 +3509,7 @@ if(typeof(scope.performance.now) == "undefined") {
 	};
 	scope.performance.now = now;
 }
-chad_components_Style.constructionLine = new chad_components_Style(chad_components_StyleType.ConstructionLine);
+chad_components_LineStyle.constructionLine = new chad_components_LineStyle(chad_components_Style.ConstructionLine);
 haxe_ds_ObjectMap.count = 0;
 js_Boot.__toStr = {}.toString;
 thx_Floats.TOLERANCE = 10e-5;
