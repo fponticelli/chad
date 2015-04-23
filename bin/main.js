@@ -111,6 +111,13 @@ Main.main = function() {
 	var editor = new chad_Chad(window.document.getElementById("svg"));
 };
 Math.__name__ = ["Math"];
+var Reflect = function() { };
+Reflect.__name__ = ["Reflect"];
+Reflect.isObject = function(v) {
+	if(v == null) return false;
+	var t = typeof(v);
+	return t == "string" || t == "object" && v.__enum__ == null || t == "function" && (v.__name__ || v.__ename__) != null;
+};
 var Std = function() { };
 Std.__name__ = ["Std"];
 Std.string = function(s) {
@@ -161,30 +168,83 @@ StringTools.trim = function(s) {
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 };
+var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
+ValueType.TNull = ["TNull",0];
+ValueType.TNull.toString = $estr;
+ValueType.TNull.__enum__ = ValueType;
+ValueType.TInt = ["TInt",1];
+ValueType.TInt.toString = $estr;
+ValueType.TInt.__enum__ = ValueType;
+ValueType.TFloat = ["TFloat",2];
+ValueType.TFloat.toString = $estr;
+ValueType.TFloat.__enum__ = ValueType;
+ValueType.TBool = ["TBool",3];
+ValueType.TBool.toString = $estr;
+ValueType.TBool.__enum__ = ValueType;
+ValueType.TObject = ["TObject",4];
+ValueType.TObject.toString = $estr;
+ValueType.TObject.__enum__ = ValueType;
+ValueType.TFunction = ["TFunction",5];
+ValueType.TFunction.toString = $estr;
+ValueType.TFunction.__enum__ = ValueType;
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TUnknown = ["TUnknown",8];
+ValueType.TUnknown.toString = $estr;
+ValueType.TUnknown.__enum__ = ValueType;
 var Type = function() { };
 Type.__name__ = ["Type"];
+Type.getClass = function(o) {
+	if(o == null) return null; else return js_Boot.getClass(o);
+};
+Type.getSuperClass = function(c) {
+	return c.__super__;
+};
 Type.getClassName = function(c) {
 	var a = c.__name__;
 	if(a == null) return null;
 	return a.join(".");
 };
+Type.getEnumName = function(e) {
+	var a = e.__ename__;
+	return a.join(".");
+};
+Type["typeof"] = function(v) {
+	var _g = typeof(v);
+	switch(_g) {
+	case "boolean":
+		return ValueType.TBool;
+	case "string":
+		return ValueType.TClass(String);
+	case "number":
+		if(Math.ceil(v) == v % 2147483648.0) return ValueType.TInt;
+		return ValueType.TFloat;
+	case "object":
+		if(v == null) return ValueType.TNull;
+		var e = v.__enum__;
+		if(e != null) return ValueType.TEnum(e);
+		var c = js_Boot.getClass(v);
+		if(c != null) return ValueType.TClass(c);
+		return ValueType.TObject;
+	case "function":
+		if(v.__name__ || v.__ename__) return ValueType.TObject;
+		return ValueType.TFunction;
+	case "undefined":
+		return ValueType.TNull;
+	default:
+		return ValueType.TUnknown;
+	}
+};
 var chad_Chad = function(svg) {
 	this.svg = svg;
 	this.layers = [];
+	this.selectedLayer = chad_components_Layer.createFromSvg(svg);
 	this.world = new edge_World(20);
 	this.addSystems();
 	var layer = this.addLayer("my layer");
 	var p1 = new thx_geom_core_MutableXY(60,60);
-	var p2 = new thx_geom_core_MutableXY(90,80);
-	this.world.engine.create([thx_geom_d2_Circle.fromPoints(p1,p2),chad_components_LineStyle.constructionLine,layer]);
-	var incr = 1;
-	thx_Timer.repeat(function() {
-		var v = p1.get_x() + incr;
-		p1.set_x(v);
-		var v1 = p2.get_y() + incr;
-		p2.set_y(v1);
-		if(p1.get_x() > 300) incr = -1; else if(p1.get_x() < 40) incr = 1;
-	},10);
+	var p2 = new thx_geom_core_MutableXY(180,80);
+	this.world.engine.create([thx_geom_d2_Circle.fromPoints(p1,p2),chad_components_LineStyle.constructionLine,layer,chad_components_Selected.instance]);
 	this.world.start();
 };
 chad_Chad.__name__ = ["chad","Chad"];
@@ -192,16 +252,19 @@ chad_Chad.prototype = {
 	addLayer: function(name) {
 		if(null != this.getLayer(name)) throw new js__$Boot_HaxeError("layer \"" + name + "\" already exists");
 		var layer = chad_components_Layer.createFromSvg(this.svg);
+		this.svg.appendChild(this.selectedLayer.group);
 		this.layers.push({ _0 : name, _1 : layer});
 		return layer;
 	}
 	,getLayer: function(name) {
-		return thx_Arrays.find(this.layers,function(t) {
+		var t1 = thx_Arrays.find(this.layers,function(t) {
 			return t._0 == name;
 		});
+		if(null == t1) return null; else return t1._1;
 	}
 	,addSystems: function() {
 		this.world.render.add(new chad_systems_RenderCircle());
+		this.world.render.add(new chad_systems_RenderSelected(this.selectedLayer));
 	}
 	,__class__: chad_Chad
 };
@@ -223,27 +286,51 @@ chad_components_Layer.prototype = {
 	}
 	,__class__: chad_components_Layer
 };
-var chad_components_Style = { __ename__ : true, __constructs__ : ["ConstructionLine"] };
+var chad_components_Style = { __ename__ : ["chad","components","Style"], __constructs__ : ["ConstructionLine","Selected"] };
 chad_components_Style.ConstructionLine = ["ConstructionLine",0];
 chad_components_Style.ConstructionLine.toString = $estr;
 chad_components_Style.ConstructionLine.__enum__ = chad_components_Style;
+chad_components_Style.Selected = ["Selected",1];
+chad_components_Style.Selected.toString = $estr;
+chad_components_Style.Selected.__enum__ = chad_components_Style;
 var chad_components_LineStyle = function(value) {
 	this.value = value;
 };
 chad_components_LineStyle.__name__ = ["chad","components","LineStyle"];
 chad_components_LineStyle.__interfaces__ = [edge_IComponent];
-chad_components_LineStyle.applyTo = function(style,node) {
-	var _g = style.value;
-	node.setAttribute("fill","none");
-	node.setAttribute("stroke-width","1");
-	node.setAttribute("stroke","#666666");
-	node.setAttribute("stroke-dasharray","5, 3");
+chad_components_LineStyle.apply = function(style,node) {
+	switch(style[1]) {
+	case 0:
+		node.setAttribute("fill","none");
+		node.setAttribute("stroke-width","1");
+		node.setAttribute("stroke","#666666");
+		node.setAttribute("stroke-dasharray","5, 3");
+		break;
+	case 1:
+		node.setAttribute("fill","none");
+		node.setAttribute("stroke-width","2");
+		node.setAttribute("stroke","#3366CC");
+		break;
+	}
 };
 chad_components_LineStyle.prototype = {
-	toString: function() {
+	applyTo: function(node) {
+		chad_components_LineStyle.apply(this.value,node);
+	}
+	,toString: function() {
 		return "LineStyle()";
 	}
 	,__class__: chad_components_LineStyle
+};
+var chad_components_Selected = function() {
+};
+chad_components_Selected.__name__ = ["chad","components","Selected"];
+chad_components_Selected.__interfaces__ = [edge_IComponent];
+chad_components_Selected.prototype = {
+	toString: function() {
+		return "Selected()";
+	}
+	,__class__: chad_components_Selected
 };
 var edge_ISystem = function() { };
 edge_ISystem.__name__ = ["edge","ISystem"];
@@ -259,7 +346,7 @@ chad_systems_RenderCircle.__interfaces__ = [edge_ISystem];
 chad_systems_RenderCircle.prototype = {
 	updateAdded: function(entity,data) {
 		var circle = data.layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg","circle");
-		chad_components_LineStyle.applyTo(data.style,circle);
+		data.style.applyTo(circle);
 		this.map.set(data.circle,circle);
 		data.layer.group.appendChild(circle);
 	}
@@ -336,6 +423,89 @@ chad_systems_RenderCircle_$SystemProcess.prototype = {
 		if(added && null == removed) this.system.updateAdded(entity,o);
 	}
 	,__class__: chad_systems_RenderCircle_$SystemProcess
+};
+var chad_systems_RenderSelected = function(layer) {
+	this.map = new haxe_ds_ObjectMap();
+	this.layer = layer;
+	this.__process__ = new chad_systems_RenderSelected_$SystemProcess(this);
+};
+chad_systems_RenderSelected.__name__ = ["chad","systems","RenderSelected"];
+chad_systems_RenderSelected.__interfaces__ = [edge_ISystem];
+chad_systems_RenderSelected.prototype = {
+	updateAdded: function(entity,data) {
+		var _g = this;
+		var points = data.shape.get_anchors();
+		var rects = points.map(function(point) {
+			var rect = _g.layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg","rect");
+			rect.setAttribute("width","" + chad_systems_RenderSelected.size);
+			rect.setAttribute("height","" + chad_systems_RenderSelected.size);
+			chad_components_LineStyle.apply(chad_components_Style.Selected,rect);
+			_g.layer.group.appendChild(rect);
+			return rect;
+		});
+		this.map.set(data.shape,rects);
+	}
+	,updateRemoved: function(entity,data) {
+		var rects = this.map.h[data.shape.__id__];
+		rects.map(($_=this.layer.group,$bind($_,$_.removeChild)));
+		this.map.remove(data.shape);
+	}
+	,update: function(shape) {
+		var rs = this.map.h[shape.__id__];
+		thx_Arrays.zip(rs,shape.get_anchors()).map(function(t) {
+			t._0.setAttribute("x","" + (t._1.get_x() - chad_systems_RenderSelected.size / 2));
+			t._0.setAttribute("y","" + (t._1.get_y() - chad_systems_RenderSelected.size / 2));
+		});
+		return true;
+	}
+	,toString: function() {
+		return "chad.systems.RenderSelected";
+	}
+	,__class__: chad_systems_RenderSelected
+};
+var chad_systems_RenderSelected_$SystemProcess = function(system) {
+	this.system = system;
+	this.updateItems = new edge_View();
+};
+chad_systems_RenderSelected_$SystemProcess.__name__ = ["chad","systems","RenderSelected_SystemProcess"];
+chad_systems_RenderSelected_$SystemProcess.__interfaces__ = [edge_core_ISystemProcess];
+chad_systems_RenderSelected_$SystemProcess.prototype = {
+	removeEntity: function(entity) {
+		var removed = this.updateItems.tryRemove(entity);
+		if(removed != null) this.system.updateRemoved(entity,removed);
+	}
+	,addEntity: function(entity) {
+		this.updateMatchRequirements(entity);
+	}
+	,update: function(engine,delta) {
+		var result = true;
+		var data;
+		var $it0 = this.updateItems.iterator();
+		while( $it0.hasNext() ) {
+			var item = $it0.next();
+			data = item.data;
+			result = this.system.update(data.shape);
+			if(!result) break;
+		}
+		return result;
+	}
+	,updateMatchRequirements: function(entity) {
+		var removed = this.updateItems.tryRemove(entity);
+		var count = 1;
+		var o = { shape : null};
+		var $it0 = entity.map.iterator();
+		while( $it0.hasNext() ) {
+			var component = $it0.next();
+			if(js_Boot.__instanceof(component,thx_geom_d2_IShape)) {
+				o.shape = component;
+				if(--count == 0) break; else continue;
+			}
+		}
+		var added = count == 0 && this.updateItems.tryAdd(entity,o);
+		if(null != removed && !added) this.system.updateRemoved(entity,removed);
+		if(added && null == removed) this.system.updateAdded(entity,o);
+	}
+	,__class__: chad_systems_RenderSelected_$SystemProcess
 };
 var edge_Engine = function() {
 	this.mapEntities = new haxe_ds_ObjectMap();
@@ -445,7 +615,7 @@ edge_Entity.prototype = {
 		this.map = new haxe_ds_StringMap();
 	}
 	,exists: function(component) {
-		return this.existsType(component == null?null:js_Boot.getClass(component));
+		return this.existsType(Type.getClass(component));
 	}
 	,existsType: function(type) {
 		var key = Type.getClassName(type);
@@ -479,19 +649,26 @@ edge_Entity.prototype = {
 		return this.map.iterator();
 	}
 	,_add: function(component) {
-		var type = Type.getClassName(component == null?null:js_Boot.getClass(component));
+		var type = this.key(component);
 		if(this.map.exists(type)) this.remove(this.map.get(type));
-		this.map.set(type,component);
+		var value = component;
+		this.map.set(type,value);
 	}
 	,_remove: function(component) {
-		var type = Type.getClassName(component == null?null:js_Boot.getClass(component));
+		var type = this.key(component);
 		this._removeTypeName(type);
 	}
 	,_removeTypeName: function(type) {
 		this.map.remove(type);
 	}
 	,key: function(component) {
-		return Type.getClassName(component == null?null:js_Boot.getClass(component));
+		var t = Type.getClass(component);
+		var s = Type.getSuperClass(t);
+		while(s != null && s != edge_IComponent) {
+			t = s;
+			s = Type.getSuperClass(t);
+		}
+		return Type.getClassName(t);
 	}
 	,__class__: edge_Entity
 };
@@ -1726,7 +1903,7 @@ thx_Ints.wrapCircular = function(v,max) {
 	if(v < 0) v += max;
 	return v;
 };
-var thx_Nil = { __ename__ : true, __constructs__ : ["nil"] };
+var thx_Nil = { __ename__ : ["thx","Nil"], __constructs__ : ["nil"] };
 thx_Nil.nil = ["nil",0];
 thx_Nil.nil.toString = $estr;
 thx_Nil.nil.__enum__ = thx_Nil;
@@ -2165,6 +2342,92 @@ thx__$Tuple_Tuple6_$Impl_$.toString = function(this1) {
 thx__$Tuple_Tuple6_$Impl_$.arrayToTuple6 = function(v) {
 	return { _0 : v[0], _1 : v[1], _2 : v[2], _3 : v[3], _4 : v[4], _5 : v[5]};
 };
+var thx_Types = function() { };
+thx_Types.__name__ = ["thx","Types"];
+thx_Types.isAnonymousObject = function(v) {
+	return Reflect.isObject(v) && null == Type.getClass(v);
+};
+thx_Types.isPrimitive = function(v) {
+	{
+		var _g = Type["typeof"](v);
+		switch(_g[1]) {
+		case 1:case 2:case 3:
+			return true;
+		case 0:case 5:case 7:case 4:case 8:
+			return false;
+		case 6:
+			var c = _g[2];
+			return Type.getClassName(c) == "String";
+		}
+	}
+};
+thx_Types.hasSuperClass = function(cls,sup) {
+	while(null != cls) {
+		if(cls == sup) return true;
+		cls = Type.getSuperClass(cls);
+	}
+	return false;
+};
+thx_Types.sameType = function(a,b) {
+	return thx_Types.typeToString(Type["typeof"](a)) == thx_Types.typeToString(Type["typeof"](b));
+};
+thx_Types.typeInheritance = function(type) {
+	switch(type[1]) {
+	case 1:
+		return ["Int"];
+	case 2:
+		return ["Float"];
+	case 3:
+		return ["Bool"];
+	case 4:
+		return ["{}"];
+	case 5:
+		return ["Function"];
+	case 6:
+		var c = type[2];
+		var classes = [];
+		while(null != c) {
+			classes.push(c);
+			c = Type.getSuperClass(c);
+		}
+		return classes.map(Type.getClassName);
+	case 7:
+		var e = type[2];
+		return [Type.getEnumName(e)];
+	default:
+		throw new js__$Boot_HaxeError("invalid type " + Std.string(type));
+	}
+};
+thx_Types.typeToString = function(type) {
+	switch(type[1]) {
+	case 0:
+		return "Null";
+	case 1:
+		return "Int";
+	case 2:
+		return "Float";
+	case 3:
+		return "Bool";
+	case 4:
+		return "{}";
+	case 5:
+		return "Function";
+	case 6:
+		var c = type[2];
+		return Type.getClassName(c);
+	case 7:
+		var e = type[2];
+		return Type.getEnumName(e);
+	default:
+		throw new js__$Boot_HaxeError("invalid type " + Std.string(type));
+	}
+};
+thx_Types.valueTypeInheritance = function(value) {
+	return thx_Types.typeInheritance(Type["typeof"](value));
+};
+thx_Types.valueTypeToString = function(value) {
+	return thx_Types.typeToString(Type["typeof"](value));
+};
 var thx_geom_core_M23 = function() { };
 thx_geom_core_M23.__name__ = ["thx","geom","core","M23"];
 thx_geom_core_M23.prototype = {
@@ -2524,11 +2787,17 @@ thx_geom_core_MutableXY.prototype = {
 	}
 	,__class__: thx_geom_core_MutableXY
 };
+var thx_geom_d2_IShape = function() { };
+thx_geom_d2_IShape.__name__ = ["thx","geom","d2","IShape"];
+thx_geom_d2_IShape.prototype = {
+	__class__: thx_geom_d2_IShape
+};
 var thx_geom_d2_Circle = function(center,radius) {
 	this.center = center;
 	this.radius = radius;
 };
 thx_geom_d2_Circle.__name__ = ["thx","geom","d2","Circle"];
+thx_geom_d2_Circle.__interfaces__ = [thx_geom_d2_IShape];
 thx_geom_d2_Circle.fromPoints = function(a,b) {
 	var c = new thx_geom_core_LinkedXY(function() {
 		return (a.get_x() + b.get_x()) / 2;
@@ -2641,6 +2910,23 @@ thx_geom_d2_Circle.prototype = {
 	}
 	,toString: function() {
 		return "Circle(" + this.center.get_x() + "," + this.center.get_y() + "," + ("Radius(" + this.radius.get_coord() + ")") + ")";
+	}
+	,get_anchors: function() {
+		if(null == this.anchors) return [this.center,this.get_centerLeft()];
+		return this.anchors;
+	}
+	,get_centerLeft: function() {
+		var _g = this;
+		if(null == this.centerLeft) this.centerLeft = new thx_geom_core_LinkedXY(function() {
+			return _g.center.get_x() - _g.radius.get_coord();
+		},function() {
+			return _g.center.get_y();
+		},function(v) {
+			return _g.set_left(v);
+		},function(v1) {
+			return _g.center.set_y(v1);
+		});
+		return this.centerLeft;
 	}
 	,__class__: thx_geom_d2_Circle
 };
@@ -3525,6 +3811,8 @@ if(typeof(scope.performance.now) == "undefined") {
 	scope.performance.now = now;
 }
 chad_components_LineStyle.constructionLine = new chad_components_LineStyle(chad_components_Style.ConstructionLine);
+chad_components_Selected.instance = new chad_components_Selected();
+chad_systems_RenderSelected.size = 8;
 haxe_ds_ObjectMap.count = 0;
 js_Boot.__toStr = {}.toString;
 thx_Floats.TOLERANCE = 10e-5;
