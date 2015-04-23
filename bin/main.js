@@ -171,7 +171,7 @@ Type.getClassName = function(c) {
 var chad_Chad = function(svg) {
 	this.svg = svg;
 	this.layers = [];
-	this.world = new edge_World(15);
+	this.world = new edge_World(20);
 	this.addSystems();
 	var layer = this.addLayer("my layer");
 	var p1 = new thx_geom_core_MutableXY(60,60);
@@ -191,7 +191,7 @@ chad_Chad.__name__ = ["chad","Chad"];
 chad_Chad.prototype = {
 	addLayer: function(name) {
 		if(null != this.getLayer(name)) throw new js__$Boot_HaxeError("layer \"" + name + "\" already exists");
-		var layer = new chad_components_Layer();
+		var layer = chad_components_Layer.createFromSvg(this.svg);
 		this.layers.push({ _0 : name, _1 : layer});
 		return layer;
 	}
@@ -201,18 +201,22 @@ chad_Chad.prototype = {
 		});
 	}
 	,addSystems: function() {
-		this.world.render.add(new chad_systems_LayerGroupProvider(this.svg));
 		this.world.render.add(new chad_systems_RenderCircle());
 	}
 	,__class__: chad_Chad
 };
 var edge_IComponent = function() { };
 edge_IComponent.__name__ = ["edge","IComponent"];
-var chad_components_Layer = function() {
-	this.group = null;
+var chad_components_Layer = function(group) {
+	this.group = group;
 };
 chad_components_Layer.__name__ = ["chad","components","Layer"];
 chad_components_Layer.__interfaces__ = [edge_IComponent];
+chad_components_Layer.createFromSvg = function(svg) {
+	var g = svg.ownerDocument.createElementNS("http://www.w3.org/2000/svg","g");
+	svg.appendChild(g);
+	return new chad_components_Layer(g);
+};
 chad_components_Layer.prototype = {
 	toString: function(group) {
 		return "Layer(group=$group)";
@@ -246,79 +250,6 @@ edge_ISystem.__name__ = ["edge","ISystem"];
 edge_ISystem.prototype = {
 	__class__: edge_ISystem
 };
-var chad_systems_LayerGroupProvider = function(svg) {
-	this.svg = svg;
-	this.__process__ = new chad_systems_LayerGroupProvider_$SystemProcess(this);
-};
-chad_systems_LayerGroupProvider.__name__ = ["chad","systems","LayerGroupProvider"];
-chad_systems_LayerGroupProvider.__interfaces__ = [edge_ISystem];
-chad_systems_LayerGroupProvider.prototype = {
-	updateAdded: function(entity,data) {
-		var g = this.svg.ownerDocument.createElementNS("http://www.w3.org/2000/svg","g");
-		data.layer.group = g;
-		this.svg.appendChild(g);
-	}
-	,updateRemoved: function(entity,data) {
-		this.svg.removeChild(data.layer.group);
-		data.layer.group = null;
-	}
-	,update: function(layer) {
-		return true;
-	}
-	,toString: function() {
-		return "chad.systems.LayerGroupProvider";
-	}
-	,__class__: chad_systems_LayerGroupProvider
-};
-var edge_core_ISystemProcess = function() { };
-edge_core_ISystemProcess.__name__ = ["edge","core","ISystemProcess"];
-edge_core_ISystemProcess.prototype = {
-	__class__: edge_core_ISystemProcess
-};
-var chad_systems_LayerGroupProvider_$SystemProcess = function(system) {
-	this.system = system;
-	this.updateItems = new edge_View();
-};
-chad_systems_LayerGroupProvider_$SystemProcess.__name__ = ["chad","systems","LayerGroupProvider_SystemProcess"];
-chad_systems_LayerGroupProvider_$SystemProcess.__interfaces__ = [edge_core_ISystemProcess];
-chad_systems_LayerGroupProvider_$SystemProcess.prototype = {
-	removeEntity: function(entity) {
-		var removed = this.updateItems.tryRemove(entity);
-		if(removed != null) this.system.updateRemoved(entity,removed);
-	}
-	,addEntity: function(entity) {
-		this.updateMatchRequirements(entity);
-	}
-	,update: function(engine,delta) {
-		var result = true;
-		var data;
-		var $it0 = this.updateItems.iterator();
-		while( $it0.hasNext() ) {
-			var item = $it0.next();
-			data = item.data;
-			result = this.system.update(data.layer);
-			if(!result) break;
-		}
-		return result;
-	}
-	,updateMatchRequirements: function(entity) {
-		var removed = this.updateItems.tryRemove(entity);
-		var count = 1;
-		var o = { layer : null};
-		var $it0 = entity.map.iterator();
-		while( $it0.hasNext() ) {
-			var component = $it0.next();
-			if(js_Boot.__instanceof(component,chad_components_Layer)) {
-				o.layer = component;
-				if(--count == 0) break; else continue;
-			}
-		}
-		var added = count == 0 && this.updateItems.tryAdd(entity,o);
-		if(null != removed && !added) this.system.updateRemoved(entity,removed);
-		if(added && null == removed) this.system.updateAdded(entity,o);
-	}
-	,__class__: chad_systems_LayerGroupProvider_$SystemProcess
-};
 var chad_systems_RenderCircle = function() {
 	this.map = new haxe_ds_ObjectMap();
 	this.__process__ = new chad_systems_RenderCircle_$SystemProcess(this);
@@ -348,6 +279,11 @@ chad_systems_RenderCircle.prototype = {
 		return "chad.systems.RenderCircle";
 	}
 	,__class__: chad_systems_RenderCircle
+};
+var edge_core_ISystemProcess = function() { };
+edge_core_ISystemProcess.__name__ = ["edge","core","ISystemProcess"];
+edge_core_ISystemProcess.prototype = {
+	__class__: edge_core_ISystemProcess
 };
 var chad_systems_RenderCircle_$SystemProcess = function(system) {
 	this.system = system;

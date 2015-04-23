@@ -27,7 +27,6 @@ class RenderCircle implements edge.ISystem {
     map.remove(data.circle);
   }
 
-  // TODO add Layer
   function update(circle : Circle, style : LineStyle, layer : Layer) {
     var c = map.get(circle);
     c.setAttribute("cx", ""+circle.x);

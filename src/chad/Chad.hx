@@ -16,7 +16,7 @@ class Chad {
   public function new(svg : SVGElement) {
     this.svg = svg;
     this.layers = [];
-    world = new World(15);
+    world = new World(20);
     addSystems();
     // TODO remove
     var layer = addLayer("my layer");
@@ -44,16 +44,15 @@ class Chad {
   public function addLayer(name : String) {
     if(null != getLayer(name))
       throw 'layer "$name" already exists';
-    var layer = new Layer();
+    var layer = Layer.createFromSvg(svg);
     layers.push(new Tuple2(name, layer));
     return layer;
   }
 
   public function getLayer(name : String)
-    return layers.find(function(t) return t.left == name);
+    return layers.find(function(t) return t.left == name).right;
 
   public function addSystems() {
-    world.render.add(new LayerGroupProvider(svg));
     world.render.add(new RenderCircle());
   }
 }
