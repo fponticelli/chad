@@ -6,7 +6,7 @@ import thx.geom.d2.Circle;
 import edge.Entity;
 import edge.View;
 using chad.components.LineStyle;
-import chad.components.Layer;
+import chad.components.*;
 
 class RenderCircle implements edge.ISystem {
   var map : Map<Circle, CircleElement>;
