@@ -111,13 +111,6 @@ Main.main = function() {
 	var editor = new chad_Chad(window.document.getElementById("svg"));
 };
 Math.__name__ = ["Math"];
-var Reflect = function() { };
-Reflect.__name__ = ["Reflect"];
-Reflect.isObject = function(v) {
-	if(v == null) return false;
-	var t = typeof(v);
-	return t == "string" || t == "object" && v.__enum__ == null || t == "function" && (v.__name__ || v.__ename__) != null;
-};
 var Std = function() { };
 Std.__name__ = ["Std"];
 Std.string = function(s) {
@@ -168,35 +161,8 @@ StringTools.trim = function(s) {
 StringTools.replace = function(s,sub,by) {
 	return s.split(sub).join(by);
 };
-var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
-ValueType.TNull = ["TNull",0];
-ValueType.TNull.toString = $estr;
-ValueType.TNull.__enum__ = ValueType;
-ValueType.TInt = ["TInt",1];
-ValueType.TInt.toString = $estr;
-ValueType.TInt.__enum__ = ValueType;
-ValueType.TFloat = ["TFloat",2];
-ValueType.TFloat.toString = $estr;
-ValueType.TFloat.__enum__ = ValueType;
-ValueType.TBool = ["TBool",3];
-ValueType.TBool.toString = $estr;
-ValueType.TBool.__enum__ = ValueType;
-ValueType.TObject = ["TObject",4];
-ValueType.TObject.toString = $estr;
-ValueType.TObject.__enum__ = ValueType;
-ValueType.TFunction = ["TFunction",5];
-ValueType.TFunction.toString = $estr;
-ValueType.TFunction.__enum__ = ValueType;
-ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TUnknown = ["TUnknown",8];
-ValueType.TUnknown.toString = $estr;
-ValueType.TUnknown.__enum__ = ValueType;
 var Type = function() { };
 Type.__name__ = ["Type"];
-Type.getClass = function(o) {
-	if(o == null) return null; else return js_Boot.getClass(o);
-};
 Type.getSuperClass = function(c) {
 	return c.__super__;
 };
@@ -204,36 +170,6 @@ Type.getClassName = function(c) {
 	var a = c.__name__;
 	if(a == null) return null;
 	return a.join(".");
-};
-Type.getEnumName = function(e) {
-	var a = e.__ename__;
-	return a.join(".");
-};
-Type["typeof"] = function(v) {
-	var _g = typeof(v);
-	switch(_g) {
-	case "boolean":
-		return ValueType.TBool;
-	case "string":
-		return ValueType.TClass(String);
-	case "number":
-		if(Math.ceil(v) == v % 2147483648.0) return ValueType.TInt;
-		return ValueType.TFloat;
-	case "object":
-		if(v == null) return ValueType.TNull;
-		var e = v.__enum__;
-		if(e != null) return ValueType.TEnum(e);
-		var c = js_Boot.getClass(v);
-		if(c != null) return ValueType.TClass(c);
-		return ValueType.TObject;
-	case "function":
-		if(v.__name__ || v.__ename__) return ValueType.TObject;
-		return ValueType.TFunction;
-	case "undefined":
-		return ValueType.TNull;
-	default:
-		return ValueType.TUnknown;
-	}
 };
 var chad_Chad = function(svg) {
 	this.svg = svg;
@@ -286,7 +222,7 @@ chad_components_Layer.prototype = {
 	}
 	,__class__: chad_components_Layer
 };
-var chad_components_Style = { __ename__ : ["chad","components","Style"], __constructs__ : ["ConstructionLine","Selected"] };
+var chad_components_Style = { __ename__ : true, __constructs__ : ["ConstructionLine","Selected"] };
 chad_components_Style.ConstructionLine = ["ConstructionLine",0];
 chad_components_Style.ConstructionLine.toString = $estr;
 chad_components_Style.ConstructionLine.__enum__ = chad_components_Style;
@@ -615,7 +551,7 @@ edge_Entity.prototype = {
 		this.map = new haxe_ds_StringMap();
 	}
 	,exists: function(component) {
-		return this.existsType(Type.getClass(component));
+		return this.existsType(component == null?null:js_Boot.getClass(component));
 	}
 	,existsType: function(type) {
 		var key = Type.getClassName(type);
@@ -651,8 +587,7 @@ edge_Entity.prototype = {
 	,_add: function(component) {
 		var type = this.key(component);
 		if(this.map.exists(type)) this.remove(this.map.get(type));
-		var value = component;
-		this.map.set(type,value);
+		this.map.set(type,component);
 	}
 	,_remove: function(component) {
 		var type = this.key(component);
@@ -662,7 +597,8 @@ edge_Entity.prototype = {
 		this.map.remove(type);
 	}
 	,key: function(component) {
-		var t = Type.getClass(component);
+		var t;
+		if(component == null) t = null; else t = js_Boot.getClass(component);
 		var s = Type.getSuperClass(t);
 		while(s != null && s != edge_IComponent) {
 			t = s;
@@ -1903,7 +1839,7 @@ thx_Ints.wrapCircular = function(v,max) {
 	if(v < 0) v += max;
 	return v;
 };
-var thx_Nil = { __ename__ : ["thx","Nil"], __constructs__ : ["nil"] };
+var thx_Nil = { __ename__ : true, __constructs__ : ["nil"] };
 thx_Nil.nil = ["nil",0];
 thx_Nil.nil.toString = $estr;
 thx_Nil.nil.__enum__ = thx_Nil;
@@ -2341,92 +2277,6 @@ thx__$Tuple_Tuple6_$Impl_$.toString = function(this1) {
 };
 thx__$Tuple_Tuple6_$Impl_$.arrayToTuple6 = function(v) {
 	return { _0 : v[0], _1 : v[1], _2 : v[2], _3 : v[3], _4 : v[4], _5 : v[5]};
-};
-var thx_Types = function() { };
-thx_Types.__name__ = ["thx","Types"];
-thx_Types.isAnonymousObject = function(v) {
-	return Reflect.isObject(v) && null == Type.getClass(v);
-};
-thx_Types.isPrimitive = function(v) {
-	{
-		var _g = Type["typeof"](v);
-		switch(_g[1]) {
-		case 1:case 2:case 3:
-			return true;
-		case 0:case 5:case 7:case 4:case 8:
-			return false;
-		case 6:
-			var c = _g[2];
-			return Type.getClassName(c) == "String";
-		}
-	}
-};
-thx_Types.hasSuperClass = function(cls,sup) {
-	while(null != cls) {
-		if(cls == sup) return true;
-		cls = Type.getSuperClass(cls);
-	}
-	return false;
-};
-thx_Types.sameType = function(a,b) {
-	return thx_Types.typeToString(Type["typeof"](a)) == thx_Types.typeToString(Type["typeof"](b));
-};
-thx_Types.typeInheritance = function(type) {
-	switch(type[1]) {
-	case 1:
-		return ["Int"];
-	case 2:
-		return ["Float"];
-	case 3:
-		return ["Bool"];
-	case 4:
-		return ["{}"];
-	case 5:
-		return ["Function"];
-	case 6:
-		var c = type[2];
-		var classes = [];
-		while(null != c) {
-			classes.push(c);
-			c = Type.getSuperClass(c);
-		}
-		return classes.map(Type.getClassName);
-	case 7:
-		var e = type[2];
-		return [Type.getEnumName(e)];
-	default:
-		throw new js__$Boot_HaxeError("invalid type " + Std.string(type));
-	}
-};
-thx_Types.typeToString = function(type) {
-	switch(type[1]) {
-	case 0:
-		return "Null";
-	case 1:
-		return "Int";
-	case 2:
-		return "Float";
-	case 3:
-		return "Bool";
-	case 4:
-		return "{}";
-	case 5:
-		return "Function";
-	case 6:
-		var c = type[2];
-		return Type.getClassName(c);
-	case 7:
-		var e = type[2];
-		return Type.getEnumName(e);
-	default:
-		throw new js__$Boot_HaxeError("invalid type " + Std.string(type));
-	}
-};
-thx_Types.valueTypeInheritance = function(value) {
-	return thx_Types.typeInheritance(Type["typeof"](value));
-};
-thx_Types.valueTypeToString = function(value) {
-	return thx_Types.typeToString(Type["typeof"](value));
 };
 var thx_geom_core_M23 = function() { };
 thx_geom_core_M23.__name__ = ["thx","geom","core","M23"];
@@ -2912,7 +2762,7 @@ thx_geom_d2_Circle.prototype = {
 		return "Circle(" + this.center.get_x() + "," + this.center.get_y() + "," + ("Radius(" + this.radius.get_coord() + ")") + ")";
 	}
 	,get_anchors: function() {
-		if(null == this.anchors) return [this.center,this.get_centerLeft()];
+		if(null == this.anchors) return [this.center,this.get_centerLeft(),this.get_centerTop(),this.get_centerRight(),this.get_centerBottom()];
 		return this.anchors;
 	}
 	,get_centerLeft: function() {
@@ -2927,6 +2777,45 @@ thx_geom_d2_Circle.prototype = {
 			return _g.center.set_y(v1);
 		});
 		return this.centerLeft;
+	}
+	,get_centerRight: function() {
+		var _g = this;
+		if(null == this.centerRight) this.centerRight = new thx_geom_core_LinkedXY(function() {
+			return _g.center.get_x() + _g.radius.get_coord();
+		},function() {
+			return _g.center.get_y();
+		},function(v) {
+			return _g.set_right(v);
+		},function(v1) {
+			return _g.center.set_y(v1);
+		});
+		return this.centerRight;
+	}
+	,get_centerTop: function() {
+		var _g = this;
+		if(null == this.centerTop) this.centerTop = new thx_geom_core_LinkedXY(function() {
+			return _g.center.get_x();
+		},function() {
+			return _g.center.get_y() - _g.radius.get_coord();
+		},function(v) {
+			return _g.center.set_x(v);
+		},function(v1) {
+			return _g.set_top(v1);
+		});
+		return this.centerTop;
+	}
+	,get_centerBottom: function() {
+		var _g = this;
+		if(null == this.centerBottom) this.centerBottom = new thx_geom_core_LinkedXY(function() {
+			return _g.center.get_x();
+		},function() {
+			return _g.center.get_y() + _g.radius.get_coord();
+		},function(v) {
+			return _g.center.set_x(v);
+		},function(v1) {
+			return _g.set_bottom(v1);
+		});
+		return this.centerBottom;
 	}
 	,__class__: thx_geom_d2_Circle
 };
