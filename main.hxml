@@ -5,5 +5,5 @@
 #-lib thx.core
 -lib thx.geom
 #-lib thx.unit
-#-lib thx.color
+-lib thx.color
 -lib edge
