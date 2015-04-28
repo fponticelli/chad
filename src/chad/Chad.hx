@@ -7,6 +7,9 @@ import chad.systems.*;
 import thx.geom.d2.*;
 using thx.Arrays;
 using thx.Tuple;
+using thx.color.RGB;
+using thx.color.HSL;
+using thx.color.Color;
 
 class Chad {
   var world : World;
@@ -27,6 +30,13 @@ class Chad {
     world.engine.create([
         Circle.fromPoints(p1, p2),
         LineStyle.constructionLine,
+        layer,
+        Selected.instance
+      ]);
+
+    world.engine.create([
+        Path.fromSVGPath("M 80 80 A 45 45 0 0 0 125 125 L 125 80 Z M230 80 A 45 45, 0, 1, 0, 275 125 L 275 80 Z M80 230 A 45 45, 0, 0, 1, 125 275 L 125 230 Z M230 230 A 45 45, 0, 1, 1, 275 275 L 275 230 Z"),
+        LineStyle.solidStroke(Color.darkblue, 2),
         layer,
         Selected.instance
       ]);
@@ -63,6 +73,7 @@ class Chad {
 
   public function addSystems() {
     world.render.add(new RenderCircle());
+    world.render.add(new RenderPath());
     world.render.add(new RenderSelected(selectedLayer));
   }
 }
