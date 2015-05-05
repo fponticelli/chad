@@ -9,10 +9,10 @@ using chad.components.LineStyle;
 using chad.components.Style;
 import chad.components.*;
 using thx.Arrays;
+using thx.Iterables;
 
 class RenderSelected implements edge.ISystem {
-  static var size = 8;
-  var map : Map<IShape, Array<RectElement>>;
+  var map : Map<IShape, RectElement>;
   var layer : Layer;
   public function new(layer : Layer) {
     this.map = new Map();
@@ -20,29 +20,23 @@ class RenderSelected implements edge.ISystem {
   }
 
   public function updateAdded(entity : Entity, data : { shape : IShape }) {
-    var points = data.shape.anchors,
-        rects = points.map(function(point) {
-          var rect : RectElement = cast layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg", "rect");
-          rect.setAttribute("width", '$size');
-          rect.setAttribute("height", '$size');
-          Style.Selected.apply(rect);
-          layer.group.appendChild(rect);
-          return rect;
-        });
-    map.set(data.shape, rects);
+    var rect : RectElement = cast layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg", "rect");
+    map.set(data.shape, rect);
+    Style.Selected.apply(rect);
+    layer.group.appendChild(rect);
   }
 
   public function updateRemoved(entity : Entity, data : { shape : IShape }) {
-    var rects = map.get(data.shape);
-    rects.map(layer.group.removeChild);
+    var rect = map.get(data.shape);
+    layer.group.removeChild(rect);
     map.remove(data.shape);
   }
 
   function update(shape : IShape) {
-    var rs = map.get(shape);
-    rs.zip(shape.anchors).map(function(t) {
-      t.left.setAttribute("x", ""+(t.right.x - size / 2));
-      t.left.setAttribute("y", ""+(t.right.y - size / 2));
-    });
+    var rect = map.get(shape);
+    rect.setAttribute("width",  '${shape.box.size.width}');
+    rect.setAttribute("height", '${shape.box.size.height}');
+    rect.setAttribute("x", '${shape.box.position.x}');
+    rect.setAttribute("y", '${shape.box.position.y}');
   }
 }

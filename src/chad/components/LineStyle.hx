@@ -10,9 +10,10 @@ class LineStyle implements edge.IComponent {
   public static function apply(style : Style, node) switch style {
     case ConstructionLine:
       node.setAttribute("fill", "none");
-      node.setAttribute("stroke-width", "1");
+      node.setAttribute("stroke-width", "2");
       node.setAttribute("stroke", "#666666");
-      node.setAttribute("stroke-dasharray", "5, 3");
+      node.setAttribute("stroke-dasharray", "1, 6");
+      node.setAttribute("stroke-linecap", "round");
     case SolidStroke(color, width, alpha):
       node.setAttribute("fill", "none");
       node.setAttribute("stroke", color.toHex());

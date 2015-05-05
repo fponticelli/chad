@@ -12,7 +12,8 @@ var EReg = function(r,opt) {
 };
 EReg.__name__ = ["EReg"];
 EReg.prototype = {
-	match: function(s) {
+	r: null
+	,match: function(s) {
 		if(this.r.global) this.r.lastIndex = 0;
 		this.r.m = this.r.exec(s);
 		this.r.s = s;
@@ -98,6 +99,12 @@ HxOverrides.indexOf = function(a,obj,i) {
 	}
 	return -1;
 };
+HxOverrides.remove = function(a,obj) {
+	var i = HxOverrides.indexOf(a,obj,0);
+	if(i == -1) return false;
+	a.splice(i,1);
+	return true;
+};
 HxOverrides.iter = function(a) {
 	return { cur : 0, arr : a, hasNext : function() {
 		return this.cur < this.arr.length;
@@ -105,12 +112,51 @@ HxOverrides.iter = function(a) {
 		return this.arr[this.cur++];
 	}};
 };
+var Lambda = function() { };
+Lambda.__name__ = ["Lambda"];
+Lambda.has = function(it,elt) {
+	var $it0 = $iterator(it)();
+	while( $it0.hasNext() ) {
+		var x = $it0.next();
+		if(x == elt) return true;
+	}
+	return false;
+};
 var Main = function() { };
 Main.__name__ = ["Main"];
 Main.main = function() {
 	var editor = new chad_Chad(window.document.getElementById("svg"));
 };
 Math.__name__ = ["Math"];
+var Reflect = function() { };
+Reflect.__name__ = ["Reflect"];
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		haxe_CallStack.lastException = e;
+		if (e instanceof js__$Boot_HaxeError) e = e.val;
+		return null;
+	}
+};
+Reflect.fields = function(o) {
+	var a = [];
+	if(o != null) {
+		var hasOwnProperty = Object.prototype.hasOwnProperty;
+		for( var f in o ) {
+		if(f != "__id__" && f != "hx__closures__" && hasOwnProperty.call(o,f)) a.push(f);
+		}
+	}
+	return a;
+};
+Reflect.isFunction = function(f) {
+	return typeof(f) == "function" && !(f.__name__ || f.__ename__);
+};
+Reflect.isObject = function(v) {
+	if(v == null) return false;
+	var t = typeof(v);
+	return t == "string" || t == "object" && v.__enum__ == null || t == "function" && (v.__name__ || v.__ename__) != null;
+};
 var Std = function() { };
 Std.__name__ = ["Std"];
 Std.string = function(s) {
@@ -130,7 +176,8 @@ var StringBuf = function() {
 };
 StringBuf.__name__ = ["StringBuf"];
 StringBuf.prototype = {
-	add: function(x) {
+	b: null
+	,add: function(x) {
 		this.b += Std.string(x);
 	}
 	,__class__: StringBuf
@@ -177,8 +224,35 @@ StringTools.hex = function(n,digits) {
 	if(digits != null) while(s.length < digits) s = "0" + s;
 	return s;
 };
+var ValueType = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
+ValueType.TNull = ["TNull",0];
+ValueType.TNull.toString = $estr;
+ValueType.TNull.__enum__ = ValueType;
+ValueType.TInt = ["TInt",1];
+ValueType.TInt.toString = $estr;
+ValueType.TInt.__enum__ = ValueType;
+ValueType.TFloat = ["TFloat",2];
+ValueType.TFloat.toString = $estr;
+ValueType.TFloat.__enum__ = ValueType;
+ValueType.TBool = ["TBool",3];
+ValueType.TBool.toString = $estr;
+ValueType.TBool.__enum__ = ValueType;
+ValueType.TObject = ["TObject",4];
+ValueType.TObject.toString = $estr;
+ValueType.TObject.__enum__ = ValueType;
+ValueType.TFunction = ["TFunction",5];
+ValueType.TFunction.toString = $estr;
+ValueType.TFunction.__enum__ = ValueType;
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TUnknown = ["TUnknown",8];
+ValueType.TUnknown.toString = $estr;
+ValueType.TUnknown.__enum__ = ValueType;
 var Type = function() { };
 Type.__name__ = ["Type"];
+Type.getClass = function(o) {
+	if(o == null) return null; else return js_Boot.getClass(o);
+};
 Type.getSuperClass = function(c) {
 	return c.__super__;
 };
@@ -186,6 +260,43 @@ Type.getClassName = function(c) {
 	var a = c.__name__;
 	if(a == null) return null;
 	return a.join(".");
+};
+Type.getEnumName = function(e) {
+	var a = e.__ename__;
+	return a.join(".");
+};
+Type.getInstanceFields = function(c) {
+	var a = [];
+	for(var i in c.prototype) a.push(i);
+	HxOverrides.remove(a,"__class__");
+	HxOverrides.remove(a,"__properties__");
+	return a;
+};
+Type["typeof"] = function(v) {
+	var _g = typeof(v);
+	switch(_g) {
+	case "boolean":
+		return ValueType.TBool;
+	case "string":
+		return ValueType.TClass(String);
+	case "number":
+		if(Math.ceil(v) == v % 2147483648.0) return ValueType.TInt;
+		return ValueType.TFloat;
+	case "object":
+		if(v == null) return ValueType.TNull;
+		var e = v.__enum__;
+		if(e != null) return ValueType.TEnum(e);
+		var c = js_Boot.getClass(v);
+		if(c != null) return ValueType.TClass(c);
+		return ValueType.TObject;
+	case "function":
+		if(v.__name__ || v.__ename__) return ValueType.TObject;
+		return ValueType.TFunction;
+	case "undefined":
+		return ValueType.TNull;
+	default:
+		return ValueType.TUnknown;
+	}
 };
 var chad_Chad = function(svg) {
 	this.svg = svg;
@@ -202,7 +313,11 @@ var chad_Chad = function(svg) {
 };
 chad_Chad.__name__ = ["chad","Chad"];
 chad_Chad.prototype = {
-	addLayer: function(name) {
+	world: null
+	,svg: null
+	,layers: null
+	,selectedLayer: null
+	,addLayer: function(name) {
 		if(null != this.getLayer(name)) throw new js__$Boot_HaxeError("layer \"" + name + "\" already exists");
 		var layer = chad_components_Layer.createFromSvg(this.svg);
 		this.svg.appendChild(this.selectedLayer.group);
@@ -235,12 +350,13 @@ chad_components_Layer.createFromSvg = function(svg) {
 	return new chad_components_Layer(g);
 };
 chad_components_Layer.prototype = {
-	toString: function(group) {
+	group: null
+	,toString: function(group) {
 		return "Layer(group=$group)";
 	}
 	,__class__: chad_components_Layer
 };
-var chad_components_Style = { __ename__ : true, __constructs__ : ["ConstructionLine","SolidStroke","Selected"] };
+var chad_components_Style = { __ename__ : ["chad","components","Style"], __constructs__ : ["ConstructionLine","SolidStroke","Selected"] };
 chad_components_Style.ConstructionLine = ["ConstructionLine",0];
 chad_components_Style.ConstructionLine.toString = $estr;
 chad_components_Style.ConstructionLine.__enum__ = chad_components_Style;
@@ -260,9 +376,10 @@ chad_components_LineStyle.apply = function(style,node) {
 	switch(style[1]) {
 	case 0:
 		node.setAttribute("fill","none");
-		node.setAttribute("stroke-width","1");
+		node.setAttribute("stroke-width","2");
 		node.setAttribute("stroke","#666666");
-		node.setAttribute("stroke-dasharray","5, 3");
+		node.setAttribute("stroke-dasharray","1, 6");
+		node.setAttribute("stroke-linecap","round");
 		break;
 	case 1:
 		var alpha = style[4];
@@ -284,6 +401,7 @@ chad_components_LineStyle.prototype = {
 	applyTo: function(node) {
 		chad_components_LineStyle.apply(this.value,node);
 	}
+	,value: null
 	,toString: function() {
 		return "LineStyle()";
 	}
@@ -302,7 +420,8 @@ chad_components_Selected.prototype = {
 var edge_ISystem = function() { };
 edge_ISystem.__name__ = ["edge","ISystem"];
 edge_ISystem.prototype = {
-	__class__: edge_ISystem
+	__process__: null
+	,__class__: edge_ISystem
 };
 var chad_systems_RenderCircle = function() {
 	this.map = new haxe_ds_ObjectMap();
@@ -311,7 +430,8 @@ var chad_systems_RenderCircle = function() {
 chad_systems_RenderCircle.__name__ = ["chad","systems","RenderCircle"];
 chad_systems_RenderCircle.__interfaces__ = [edge_ISystem];
 chad_systems_RenderCircle.prototype = {
-	updateAdded: function(entity,data) {
+	map: null
+	,updateAdded: function(entity,data) {
 		var circle = data.layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg","circle");
 		data.style.applyTo(circle);
 		this.map.set(data.circle,circle);
@@ -332,12 +452,16 @@ chad_systems_RenderCircle.prototype = {
 	,toString: function() {
 		return "chad.systems.RenderCircle";
 	}
+	,__process__: null
 	,__class__: chad_systems_RenderCircle
 };
 var edge_core_ISystemProcess = function() { };
 edge_core_ISystemProcess.__name__ = ["edge","core","ISystemProcess"];
 edge_core_ISystemProcess.prototype = {
-	__class__: edge_core_ISystemProcess
+	update: null
+	,addEntity: null
+	,removeEntity: null
+	,__class__: edge_core_ISystemProcess
 };
 var chad_systems_RenderCircle_$SystemProcess = function(system) {
 	this.system = system;
@@ -353,6 +477,8 @@ chad_systems_RenderCircle_$SystemProcess.prototype = {
 	,addEntity: function(entity) {
 		this.updateMatchRequirements(entity);
 	}
+	,system: null
+	,updateItems: null
 	,update: function(engine,delta) {
 		var result = true;
 		var data;
@@ -398,7 +524,8 @@ var chad_systems_RenderPath = function() {
 chad_systems_RenderPath.__name__ = ["chad","systems","RenderPath"];
 chad_systems_RenderPath.__interfaces__ = [edge_ISystem];
 chad_systems_RenderPath.prototype = {
-	updateAdded: function(entity,data) {
+	map: null
+	,updateAdded: function(entity,data) {
 		var path = data.layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg","path");
 		data.style.applyTo(path);
 		this.map.set(data.path,path);
@@ -417,6 +544,7 @@ chad_systems_RenderPath.prototype = {
 	,toString: function() {
 		return "chad.systems.RenderPath";
 	}
+	,__process__: null
 	,__class__: chad_systems_RenderPath
 };
 var chad_systems_RenderPath_$SystemProcess = function(system) {
@@ -433,6 +561,8 @@ chad_systems_RenderPath_$SystemProcess.prototype = {
 	,addEntity: function(entity) {
 		this.updateMatchRequirements(entity);
 	}
+	,system: null
+	,updateItems: null
 	,update: function(engine,delta) {
 		var result = true;
 		var data;
@@ -479,35 +609,31 @@ var chad_systems_RenderSelected = function(layer) {
 chad_systems_RenderSelected.__name__ = ["chad","systems","RenderSelected"];
 chad_systems_RenderSelected.__interfaces__ = [edge_ISystem];
 chad_systems_RenderSelected.prototype = {
-	updateAdded: function(entity,data) {
-		var _g = this;
-		var points = data.shape.get_anchors();
-		var rects = points.map(function(point) {
-			var rect = _g.layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg","rect");
-			rect.setAttribute("width","" + chad_systems_RenderSelected.size);
-			rect.setAttribute("height","" + chad_systems_RenderSelected.size);
-			chad_components_LineStyle.apply(chad_components_Style.Selected,rect);
-			_g.layer.group.appendChild(rect);
-			return rect;
-		});
-		this.map.set(data.shape,rects);
+	map: null
+	,layer: null
+	,updateAdded: function(entity,data) {
+		var rect = this.layer.group.ownerDocument.createElementNS("http://www.w3.org/2000/svg","rect");
+		this.map.set(data.shape,rect);
+		chad_components_LineStyle.apply(chad_components_Style.Selected,rect);
+		this.layer.group.appendChild(rect);
 	}
 	,updateRemoved: function(entity,data) {
-		var rects = this.map.h[data.shape.__id__];
-		rects.map(($_=this.layer.group,$bind($_,$_.removeChild)));
+		var rect = this.map.h[data.shape.__id__];
+		this.layer.group.removeChild(rect);
 		this.map.remove(data.shape);
 	}
 	,update: function(shape) {
-		var rs = this.map.h[shape.__id__];
-		thx_Arrays.zip(rs,shape.get_anchors()).map(function(t) {
-			t._0.setAttribute("x","" + (t._1.get_x() - chad_systems_RenderSelected.size / 2));
-			t._0.setAttribute("y","" + (t._1.get_y() - chad_systems_RenderSelected.size / 2));
-		});
+		var rect = this.map.h[shape.__id__];
+		rect.setAttribute("width","" + shape.box.size.get_x());
+		rect.setAttribute("height","" + shape.box.size.get_y());
+		rect.setAttribute("x","" + shape.box.position.get_x());
+		rect.setAttribute("y","" + shape.box.position.get_y());
 		return true;
 	}
 	,toString: function() {
 		return "chad.systems.RenderSelected";
 	}
+	,__process__: null
 	,__class__: chad_systems_RenderSelected
 };
 var chad_systems_RenderSelected_$SystemProcess = function(system) {
@@ -524,6 +650,8 @@ chad_systems_RenderSelected_$SystemProcess.prototype = {
 	,addEntity: function(entity) {
 		this.updateMatchRequirements(entity);
 	}
+	,system: null
+	,updateItems: null
 	,update: function(engine,delta) {
 		var result = true;
 		var data;
@@ -560,7 +688,9 @@ var edge_Engine = function() {
 };
 edge_Engine.__name__ = ["edge","Engine"];
 edge_Engine.prototype = {
-	create: function(components) {
+	mapEntities: null
+	,listPhases: null
+	,create: function(components) {
 		var entity = new edge_Entity(this,components);
 		this.mapEntities.set(entity,true);
 		this.matchSystems(entity);
@@ -642,7 +772,9 @@ var edge_Entity = function(engine,components) {
 };
 edge_Entity.__name__ = ["edge","Entity"];
 edge_Entity.prototype = {
-	add: function(component) {
+	map: null
+	,engine: null
+	,add: function(component) {
 		if(null == this.engine) return;
 		this._add(component);
 		this.engine.matchSystems(this);
@@ -728,7 +860,14 @@ var edge_Phase = function(engine) {
 };
 edge_Phase.__name__ = ["edge","Phase"];
 edge_Phase.prototype = {
-	add: function(system) {
+	first: null
+	,last: null
+	,mapSystem: null
+	,mapType: null
+	,engine: null
+	,phases: null
+	,enabled: null
+	,add: function(system) {
 		this.remove(system);
 		var node = this.createNode(system);
 		if(null == this.first) {
@@ -849,7 +988,9 @@ var edge_View = function() {
 };
 edge_View.__name__ = ["edge","View"];
 edge_View.prototype = {
-	iterator: function() {
+	count: null
+	,map: null
+	,iterator: function() {
 		var _g = this;
 		var keys = this.map.keys();
 		var holder = { entity : null, data : null};
@@ -890,7 +1031,16 @@ var edge_World = function(delta,schedule) {
 };
 edge_World.__name__ = ["edge","World"];
 edge_World.prototype = {
-	start: function() {
+	frame: null
+	,physics: null
+	,render: null
+	,engine: null
+	,delta: null
+	,running: null
+	,schedule: null
+	,cancel: null
+	,remainder: null
+	,start: function() {
 		if(this.running) return;
 		this.running = true;
 		this.cancel = this.schedule($bind(this,this.run));
@@ -917,14 +1067,18 @@ var edge_core_NodeSystem = function(system) {
 };
 edge_core_NodeSystem.__name__ = ["edge","core","NodeSystem"];
 edge_core_NodeSystem.prototype = {
-	__class__: edge_core_NodeSystem
+	system: null
+	,next: null
+	,prev: null
+	,__class__: edge_core_NodeSystem
 };
 var edge_core_NodeSystemIterator = function(node) {
 	this.node = node;
 };
 edge_core_NodeSystemIterator.__name__ = ["edge","core","NodeSystemIterator"];
 edge_core_NodeSystemIterator.prototype = {
-	hasNext: function() {
+	node: null
+	,hasNext: function() {
 		return null != this.node;
 	}
 	,next: function() {
@@ -934,7 +1088,7 @@ edge_core_NodeSystemIterator.prototype = {
 	}
 	,__class__: edge_core_NodeSystemIterator
 };
-var haxe_StackItem = { __ename__ : true, __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"] };
+var haxe_StackItem = { __ename__ : ["haxe","StackItem"], __constructs__ : ["CFunction","Module","FilePos","Method","LocalFunction"] };
 haxe_StackItem.CFunction = ["CFunction",0];
 haxe_StackItem.CFunction.toString = $estr;
 haxe_StackItem.CFunction.__enum__ = haxe_StackItem;
@@ -1058,7 +1212,9 @@ haxe_CallStack.makeStack = function(s) {
 var haxe_IMap = function() { };
 haxe_IMap.__name__ = ["haxe","IMap"];
 haxe_IMap.prototype = {
-	__class__: haxe_IMap
+	get: null
+	,set: null
+	,__class__: haxe_IMap
 };
 var haxe_ds_ObjectMap = function() {
 	this.h = { };
@@ -1067,7 +1223,8 @@ var haxe_ds_ObjectMap = function() {
 haxe_ds_ObjectMap.__name__ = ["haxe","ds","ObjectMap"];
 haxe_ds_ObjectMap.__interfaces__ = [haxe_IMap];
 haxe_ds_ObjectMap.prototype = {
-	set: function(key,value) {
+	h: null
+	,set: function(key,value) {
 		var id = key.__id__ || (key.__id__ = ++haxe_ds_ObjectMap.count);
 		this.h[id] = value;
 		this.h.__keys__[id] = key;
@@ -1099,7 +1256,11 @@ var haxe_ds__$StringMap_StringMapIterator = function(map,keys) {
 };
 haxe_ds__$StringMap_StringMapIterator.__name__ = ["haxe","ds","_StringMap","StringMapIterator"];
 haxe_ds__$StringMap_StringMapIterator.prototype = {
-	hasNext: function() {
+	map: null
+	,keys: null
+	,index: null
+	,count: null
+	,hasNext: function() {
 		return this.index < this.count;
 	}
 	,next: function() {
@@ -1113,7 +1274,9 @@ var haxe_ds_StringMap = function() {
 haxe_ds_StringMap.__name__ = ["haxe","ds","StringMap"];
 haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
 haxe_ds_StringMap.prototype = {
-	set: function(key,value) {
+	h: null
+	,rh: null
+	,set: function(key,value) {
 		if(__map_reserved[key] != null) this.setReserved(key,value); else this.h[key] = value;
 	}
 	,get: function(key) {
@@ -1173,7 +1336,8 @@ var js__$Boot_HaxeError = function(val) {
 js__$Boot_HaxeError.__name__ = ["js","_Boot","HaxeError"];
 js__$Boot_HaxeError.__super__ = Error;
 js__$Boot_HaxeError.prototype = $extend(Error.prototype,{
-	__class__: js__$Boot_HaxeError
+	val: null
+	,__class__: js__$Boot_HaxeError
 });
 var js_Boot = function() { };
 js_Boot.__name__ = ["js","Boot"];
@@ -1356,6 +1520,14 @@ thx_Arrays.contains = function(array,element,eq) {
 		}
 		return false;
 	}
+};
+thx_Arrays.containsAny = function(array,elements,eq) {
+	var $it0 = $iterator(elements)();
+	while( $it0.hasNext() ) {
+		var el = $it0.next();
+		if(thx_Arrays.contains(array,el,eq)) return true;
+	}
+	return false;
 };
 thx_Arrays.cross = function(a,b) {
 	var r = [];
@@ -1816,7 +1988,9 @@ thx_Error.fromDynamic = function(err,pos) {
 };
 thx_Error.__super__ = Error;
 thx_Error.prototype = $extend(Error.prototype,{
-	toString: function() {
+	pos: null
+	,stackItems: null
+	,toString: function() {
 		return this.message + "\nfrom: " + this.pos.className + "." + this.pos.methodName + "() at " + this.pos.lineNumber + "\n\n" + haxe_CallStack.toString(this.stackItems);
 	}
 	,__class__: thx_Error
@@ -2121,7 +2295,211 @@ thx_Ints.wrapCircular = function(v,max) {
 	if(v < 0) v += max;
 	return v;
 };
-var thx_Nil = { __ename__ : true, __constructs__ : ["nil"] };
+var thx_Iterables = function() { };
+thx_Iterables.__name__ = ["thx","Iterables"];
+thx_Iterables.all = function(it,predicate) {
+	return thx_Iterators.all($iterator(it)(),predicate);
+};
+thx_Iterables.any = function(it,predicate) {
+	return thx_Iterators.any($iterator(it)(),predicate);
+};
+thx_Iterables.eachPair = function(it,handler) {
+	thx_Iterators.eachPair($iterator(it)(),handler);
+	return;
+};
+thx_Iterables.filter = function(it,predicate) {
+	return thx_Iterators.filter($iterator(it)(),predicate);
+};
+thx_Iterables.find = function(it,predicate) {
+	return thx_Iterators.find($iterator(it)(),predicate);
+};
+thx_Iterables.first = function(it) {
+	return thx_Iterators.first($iterator(it)());
+};
+thx_Iterables.last = function(it) {
+	return thx_Iterators.last($iterator(it)());
+};
+thx_Iterables.isEmpty = function(it) {
+	return thx_Iterators.isEmpty($iterator(it)());
+};
+thx_Iterables.isIterable = function(v) {
+	var fields;
+	if(Reflect.isObject(v) && null == Type.getClass(v)) fields = Reflect.fields(v); else fields = Type.getInstanceFields(Type.getClass(v));
+	if(!Lambda.has(fields,"iterator")) return false;
+	return Reflect.isFunction(Reflect.field(v,"iterator"));
+};
+thx_Iterables.map = function(it,f) {
+	return thx_Iterators.map($iterator(it)(),f);
+};
+thx_Iterables.mapi = function(it,f) {
+	return thx_Iterators.mapi($iterator(it)(),f);
+};
+thx_Iterables.order = function(it,sort) {
+	return thx_Iterators.order($iterator(it)(),sort);
+};
+thx_Iterables.reduce = function(it,callback,initial) {
+	return thx_Iterators.reduce($iterator(it)(),callback,initial);
+};
+thx_Iterables.reducei = function(it,callback,initial) {
+	return thx_Iterators.reducei($iterator(it)(),callback,initial);
+};
+thx_Iterables.toArray = function(it) {
+	return thx_Iterators.toArray($iterator(it)());
+};
+thx_Iterables.zip = function(it1,it2) {
+	return thx_Iterators.zip($iterator(it1)(),$iterator(it2)());
+};
+thx_Iterables.zip3 = function(it1,it2,it3) {
+	return thx_Iterators.zip3($iterator(it1)(),$iterator(it2)(),$iterator(it3)());
+};
+thx_Iterables.zip4 = function(it1,it2,it3,it4) {
+	return thx_Iterators.zip4($iterator(it1)(),$iterator(it2)(),$iterator(it3)(),$iterator(it4)());
+};
+thx_Iterables.zip5 = function(it1,it2,it3,it4,it5) {
+	return thx_Iterators.zip5($iterator(it1)(),$iterator(it2)(),$iterator(it3)(),$iterator(it4)(),$iterator(it5)());
+};
+var thx_Iterators = function() { };
+thx_Iterators.__name__ = ["thx","Iterators"];
+thx_Iterators.all = function(it,predicate) {
+	while( it.hasNext() ) {
+		var item = it.next();
+		if(!predicate(item)) return false;
+	}
+	return true;
+};
+thx_Iterators.any = function(it,predicate) {
+	while( it.hasNext() ) {
+		var item = it.next();
+		if(predicate(item)) return true;
+	}
+	return false;
+};
+thx_Iterators.eachPair = function(it,handler) {
+	thx_Arrays.eachPair(thx_Iterators.toArray(it),handler);
+};
+thx_Iterators.filter = function(it,predicate) {
+	return thx_Iterators.reduce(it,function(acc,item) {
+		if(predicate(item)) acc.push(item);
+		return acc;
+	},[]);
+};
+thx_Iterators.find = function(it,f) {
+	while( it.hasNext() ) {
+		var item = it.next();
+		if(f(item)) return item;
+	}
+	return null;
+};
+thx_Iterators.first = function(it) {
+	if(it.hasNext()) return it.next(); else return null;
+};
+thx_Iterators.isEmpty = function(it) {
+	return !it.hasNext();
+};
+thx_Iterators.isIterator = function(v) {
+	var fields;
+	if(Reflect.isObject(v) && null == Type.getClass(v)) fields = Reflect.fields(v); else fields = Type.getInstanceFields(Type.getClass(v));
+	if(!Lambda.has(fields,"next") || !Lambda.has(fields,"hasNext")) return false;
+	return Reflect.isFunction(Reflect.field(v,"next")) && Reflect.isFunction(Reflect.field(v,"hasNext"));
+};
+thx_Iterators.last = function(it) {
+	var buf = null;
+	while(it.hasNext()) buf = it.next();
+	return buf;
+};
+thx_Iterators.map = function(it,f) {
+	var acc = [];
+	while( it.hasNext() ) {
+		var v = it.next();
+		acc.push(f(v));
+	}
+	return acc;
+};
+thx_Iterators.mapi = function(it,f) {
+	var acc = [];
+	var i = 0;
+	while( it.hasNext() ) {
+		var v = it.next();
+		acc.push(f(v,i++));
+	}
+	return acc;
+};
+thx_Iterators.order = function(it,sort) {
+	var n = thx_Iterators.toArray(it);
+	n.sort(sort);
+	return n;
+};
+thx_Iterators.reduce = function(it,callback,initial) {
+	thx_Iterators.map(it,function(v) {
+		initial = callback(initial,v);
+	});
+	return initial;
+};
+thx_Iterators.reducei = function(it,callback,initial) {
+	thx_Iterators.mapi(it,function(v,i) {
+		initial = callback(initial,v,i);
+	});
+	return initial;
+};
+thx_Iterators.toArray = function(it) {
+	var items = [];
+	while( it.hasNext() ) {
+		var item = it.next();
+		items.push(item);
+	}
+	return items;
+};
+thx_Iterators.zip = function(it1,it2) {
+	var array = [];
+	while(it1.hasNext() && it2.hasNext()) array.push((function($this) {
+		var $r;
+		var _0 = it1.next();
+		var _1 = it2.next();
+		$r = { _0 : _0, _1 : _1};
+		return $r;
+	}(this)));
+	return array;
+};
+thx_Iterators.zip3 = function(it1,it2,it3) {
+	var array = [];
+	while(it1.hasNext() && it2.hasNext() && it3.hasNext()) array.push((function($this) {
+		var $r;
+		var _0 = it1.next();
+		var _1 = it2.next();
+		var _2 = it3.next();
+		$r = { _0 : _0, _1 : _1, _2 : _2};
+		return $r;
+	}(this)));
+	return array;
+};
+thx_Iterators.zip4 = function(it1,it2,it3,it4) {
+	var array = [];
+	while(it1.hasNext() && it2.hasNext() && it3.hasNext() && it4.hasNext()) array.push((function($this) {
+		var $r;
+		var _0 = it1.next();
+		var _1 = it2.next();
+		var _2 = it3.next();
+		var _3 = it4.next();
+		$r = { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
+		return $r;
+	}(this)));
+	return array;
+};
+thx_Iterators.zip5 = function(it1,it2,it3,it4,it5) {
+	var array = [];
+	while(it1.hasNext() && it2.hasNext() && it3.hasNext() && it4.hasNext() && it5.hasNext()) array.push((function($this) {
+		var $r;
+		var _0 = it1.next();
+		var _1 = it2.next();
+		var _2 = it3.next();
+		var _3 = it4.next();
+		var _4 = it5.next();
+		$r = { _0 : _0, _1 : _1, _2 : _2, _3 : _3, _4 : _4};
+		return $r;
+	}(this)));
+	return array;
+};
+var thx_Nil = { __ename__ : ["thx","Nil"], __constructs__ : ["nil"] };
 thx_Nil.nil = ["nil",0];
 thx_Nil.nil.toString = $estr;
 thx_Nil.nil.__enum__ = thx_Nil;
@@ -2146,6 +2524,13 @@ thx_Strings.compare = function(a,b) {
 };
 thx_Strings.contains = function(s,test) {
 	return s.indexOf(test) >= 0;
+};
+thx_Strings.containsAny = function(s,tests) {
+	return thx_Arrays.any(tests,(function(f,s1) {
+		return function(a1) {
+			return f(s1,a1);
+		};
+	})(thx_Strings.contains,s));
 };
 thx_Strings.dasherize = function(s) {
 	return StringTools.replace(s,"_","-");
@@ -2559,6 +2944,92 @@ thx__$Tuple_Tuple6_$Impl_$.toString = function(this1) {
 };
 thx__$Tuple_Tuple6_$Impl_$.arrayToTuple6 = function(v) {
 	return { _0 : v[0], _1 : v[1], _2 : v[2], _3 : v[3], _4 : v[4], _5 : v[5]};
+};
+var thx_Types = function() { };
+thx_Types.__name__ = ["thx","Types"];
+thx_Types.isAnonymousObject = function(v) {
+	return Reflect.isObject(v) && null == Type.getClass(v);
+};
+thx_Types.isPrimitive = function(v) {
+	{
+		var _g = Type["typeof"](v);
+		switch(_g[1]) {
+		case 1:case 2:case 3:
+			return true;
+		case 0:case 5:case 7:case 4:case 8:
+			return false;
+		case 6:
+			var c = _g[2];
+			return Type.getClassName(c) == "String";
+		}
+	}
+};
+thx_Types.hasSuperClass = function(cls,sup) {
+	while(null != cls) {
+		if(cls == sup) return true;
+		cls = Type.getSuperClass(cls);
+	}
+	return false;
+};
+thx_Types.sameType = function(a,b) {
+	return thx_Types.typeToString(Type["typeof"](a)) == thx_Types.typeToString(Type["typeof"](b));
+};
+thx_Types.typeInheritance = function(type) {
+	switch(type[1]) {
+	case 1:
+		return ["Int"];
+	case 2:
+		return ["Float"];
+	case 3:
+		return ["Bool"];
+	case 4:
+		return ["{}"];
+	case 5:
+		return ["Function"];
+	case 6:
+		var c = type[2];
+		var classes = [];
+		while(null != c) {
+			classes.push(c);
+			c = Type.getSuperClass(c);
+		}
+		return classes.map(Type.getClassName);
+	case 7:
+		var e = type[2];
+		return [Type.getEnumName(e)];
+	default:
+		throw new js__$Boot_HaxeError("invalid type " + Std.string(type));
+	}
+};
+thx_Types.typeToString = function(type) {
+	switch(type[1]) {
+	case 0:
+		return "Null";
+	case 1:
+		return "Int";
+	case 2:
+		return "Float";
+	case 3:
+		return "Bool";
+	case 4:
+		return "{}";
+	case 5:
+		return "Function";
+	case 6:
+		var c = type[2];
+		return Type.getClassName(c);
+	case 7:
+		var e = type[2];
+		return Type.getEnumName(e);
+	default:
+		throw new js__$Boot_HaxeError("invalid type " + Std.string(type));
+	}
+};
+thx_Types.valueTypeInheritance = function(value) {
+	return thx_Types.typeInheritance(Type["typeof"](value));
+};
+thx_Types.valueTypeToString = function(value) {
+	return thx_Types.typeToString(Type["typeof"](value));
 };
 var thx_color__$CIELCh_CIELCh_$Impl_$ = {};
 thx_color__$CIELCh_CIELCh_$Impl_$.__name__ = ["thx","color","_CIELCh","CIELCh_Impl_"];
@@ -4592,7 +5063,9 @@ thx_color_parse_ColorParser.getInt8Channel = function(channel) {
 	}
 };
 thx_color_parse_ColorParser.prototype = {
-	processHex: function(s) {
+	pattern_color: null
+	,pattern_channel: null
+	,processHex: function(s) {
 		if(!thx_color_parse_ColorParser.isPureHex.match(s)) {
 			if(HxOverrides.substr(s,0,1) == "#") {
 				if(s.length == 4) s = s.charAt(1) + s.charAt(1) + s.charAt(2) + s.charAt(2) + s.charAt(3) + s.charAt(3); else if(s.length == 5) s = s.charAt(1) + s.charAt(1) + s.charAt(2) + s.charAt(2) + s.charAt(3) + s.charAt(3) + s.charAt(4) + s.charAt(4); else s = HxOverrides.substr(s,1,null);
@@ -4670,12 +5143,14 @@ var thx_color_parse_ColorInfo = function(name,channels) {
 };
 thx_color_parse_ColorInfo.__name__ = ["thx","color","parse","ColorInfo"];
 thx_color_parse_ColorInfo.prototype = {
-	toString: function() {
+	name: null
+	,channels: null
+	,toString: function() {
 		return "" + this.name + ", channels: " + Std.string(this.channels);
 	}
 	,__class__: thx_color_parse_ColorInfo
 };
-var thx_color_parse_ChannelInfo = { __ename__ : true, __constructs__ : ["CIPercent","CIFloat","CIDegree","CIInt8","CIInt","CIBool"] };
+var thx_color_parse_ChannelInfo = { __ename__ : ["thx","color","parse","ChannelInfo"], __constructs__ : ["CIPercent","CIFloat","CIDegree","CIInt8","CIInt","CIBool"] };
 thx_color_parse_ChannelInfo.CIPercent = function(value) { var $x = ["CIPercent",0,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
 thx_color_parse_ChannelInfo.CIFloat = function(value) { var $x = ["CIFloat",1,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
 thx_color_parse_ChannelInfo.CIDegree = function(value) { var $x = ["CIDegree",2,value]; $x.__enum__ = thx_color_parse_ChannelInfo; $x.toString = $estr; return $x; };
@@ -4689,7 +5164,8 @@ var thx_error_ErrorWrapper = function(message,innerError,stack,pos) {
 thx_error_ErrorWrapper.__name__ = ["thx","error","ErrorWrapper"];
 thx_error_ErrorWrapper.__super__ = thx_Error;
 thx_error_ErrorWrapper.prototype = $extend(thx_Error.prototype,{
-	__class__: thx_error_ErrorWrapper
+	innerError: null
+	,__class__: thx_error_ErrorWrapper
 });
 var thx_error_NullArgument = function(message,posInfo) {
 	thx_Error.call(this,message,null,posInfo);
@@ -4702,7 +5178,19 @@ thx_error_NullArgument.prototype = $extend(thx_Error.prototype,{
 var thx_geom_core_M23 = function() { };
 thx_geom_core_M23.__name__ = ["thx","geom","core","M23"];
 thx_geom_core_M23.prototype = {
-	__class__: thx_geom_core_M23
+	get_a: null
+	,set_a: null
+	,get_b: null
+	,set_b: null
+	,get_c: null
+	,set_c: null
+	,get_d: null
+	,set_d: null
+	,get_e: null
+	,set_e: null
+	,get_f: null
+	,set_f: null
+	,__class__: thx_geom_core_M23
 };
 var thx_geom_core_ImmutableM23 = function(a,b,c,d,e,f) {
 	this._a = a;
@@ -4715,7 +5203,13 @@ var thx_geom_core_ImmutableM23 = function(a,b,c,d,e,f) {
 thx_geom_core_ImmutableM23.__name__ = ["thx","geom","core","ImmutableM23"];
 thx_geom_core_ImmutableM23.__interfaces__ = [thx_geom_core_M23];
 thx_geom_core_ImmutableM23.prototype = {
-	get_a: function() {
+	_a: null
+	,_b: null
+	,_c: null
+	,_d: null
+	,_e: null
+	,_f: null
+	,get_a: function() {
 		return this._a;
 	}
 	,get_b: function() {
@@ -4755,6 +5249,29 @@ thx_geom_core_ImmutableM23.prototype = {
 };
 var thx_geom__$Matrix23_Matrix23_$Impl_$ = {};
 thx_geom__$Matrix23_Matrix23_$Impl_$.__name__ = ["thx","geom","_Matrix23","Matrix23_Impl_"];
+thx_geom__$Matrix23_Matrix23_$Impl_$.rotation = function(radians) {
+	var c = Math.cos(radians);
+	var s = Math.sin(radians);
+	return thx_geom__$Matrix23_Matrix23_$Impl_$.create(c,s,-s,-c,0,0);
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.rotationAt = function(center,radians) {
+	return thx_geom__$Matrix23_Matrix23_$Impl_$.translateBy(thx_geom__$Matrix23_Matrix23_$Impl_$.rotate(thx_geom__$Matrix23_Matrix23_$Impl_$.translateBy(thx_geom__$Matrix23_Matrix23_$Impl_$.identity,(function($this) {
+		var $r;
+		var x = -center.get_x();
+		var y = -center.get_y();
+		$r = new thx_geom_core_MutableXY(x,y);
+		return $r;
+	}(this))),radians),center);
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.scaled = function(scaleFactorX,scaleFactorY) {
+	return thx_geom__$Matrix23_Matrix23_$Impl_$.create(scaleFactorX,0,0,null == scaleFactorY?scaleFactorX:scaleFactorY,0,0);
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.translation = function(x,y) {
+	return thx_geom__$Matrix23_Matrix23_$Impl_$.create(1,0,0,1,x,y);
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.translationAt = function(point) {
+	return thx_geom__$Matrix23_Matrix23_$Impl_$.create(1,0,0,1,point.get_x(),point.get_y());
+};
 thx_geom__$Matrix23_Matrix23_$Impl_$.create = function(a,b,c,d,e,f) {
 	return new thx_geom_core_MutableM23(a,b,c,d,e,f);
 };
@@ -4794,6 +5311,9 @@ thx_geom__$Matrix23_Matrix23_$Impl_$.rotate = function(this1,angle) {
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.translate = function(this1,x,y) {
 	return thx_geom__$Matrix23_Matrix23_$Impl_$.mul(this1,1,0,0,1,x,y);
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.translateBy = function(this1,point) {
+	return thx_geom__$Matrix23_Matrix23_$Impl_$.mul(this1,1,0,0,1,point.get_x(),point.get_y());
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.scale = function(this1,scaleFactor) {
 	return thx_geom__$Matrix23_Matrix23_$Impl_$.mul(this1,scaleFactor,0,0,scaleFactor,0,0);
@@ -4876,7 +5396,10 @@ thx_geom__$Matrix23_Matrix23_$Impl_$.set_f = function(this1,v) {
 var thx_geom_core_Dim = function() { };
 thx_geom_core_Dim.__name__ = ["thx","geom","core","Dim"];
 thx_geom_core_Dim.prototype = {
-	__class__: thx_geom_core_Dim
+	get_coord: null
+	,set_coord: null
+	,clone: null
+	,__class__: thx_geom_core_Dim
 };
 var thx_geom_core_ImmutableDim = function(coord) {
 	this._coord = coord;
@@ -4884,7 +5407,8 @@ var thx_geom_core_ImmutableDim = function(coord) {
 thx_geom_core_ImmutableDim.__name__ = ["thx","geom","core","ImmutableDim"];
 thx_geom_core_ImmutableDim.__interfaces__ = [thx_geom_core_Dim];
 thx_geom_core_ImmutableDim.prototype = {
-	clone: function() {
+	_coord: null
+	,clone: function() {
 		return new thx_geom_core_MutableDim(this._coord);
 	}
 	,get_coord: function() {
@@ -4898,7 +5422,12 @@ thx_geom_core_ImmutableDim.prototype = {
 var thx_geom_core_XY = function() { };
 thx_geom_core_XY.__name__ = ["thx","geom","core","XY"];
 thx_geom_core_XY.prototype = {
-	__class__: thx_geom_core_XY
+	get_x: null
+	,set_x: null
+	,get_y: null
+	,set_y: null
+	,clone: null
+	,__class__: thx_geom_core_XY
 };
 var thx_geom_core_ImmutableXY = function(x,y) {
 	this._x = x;
@@ -4907,7 +5436,9 @@ var thx_geom_core_ImmutableXY = function(x,y) {
 thx_geom_core_ImmutableXY.__name__ = ["thx","geom","core","ImmutableXY"];
 thx_geom_core_ImmutableXY.__interfaces__ = [thx_geom_core_XY];
 thx_geom_core_ImmutableXY.prototype = {
-	clone: function() {
+	_x: null
+	,_y: null
+	,clone: function() {
 		return new thx_geom_core_MutableXY(this._x,this._y);
 	}
 	,get_x: function() {
@@ -4931,7 +5462,9 @@ var thx_geom_core_LinkedDim = function(getCoord,setCoord) {
 thx_geom_core_LinkedDim.__name__ = ["thx","geom","core","LinkedDim"];
 thx_geom_core_LinkedDim.__interfaces__ = [thx_geom_core_Dim];
 thx_geom_core_LinkedDim.prototype = {
-	clone: function() {
+	getCoord: null
+	,setCoord: null
+	,clone: function() {
 		return new thx_geom_core_MutableDim(this.getCoord());
 	}
 	,get_coord: function() {
@@ -4951,7 +5484,11 @@ var thx_geom_core_LinkedXY = function(getX,getY,setX,setY) {
 thx_geom_core_LinkedXY.__name__ = ["thx","geom","core","LinkedXY"];
 thx_geom_core_LinkedXY.__interfaces__ = [thx_geom_core_XY];
 thx_geom_core_LinkedXY.prototype = {
-	clone: function() {
+	getX: null
+	,getY: null
+	,setX: null
+	,setY: null
+	,clone: function() {
 		return new thx_geom_core_MutableXY(this.getX(),this.getY());
 	}
 	,get_x: function() {
@@ -4974,7 +5511,8 @@ var thx_geom_core_MutableDim = function(coord) {
 thx_geom_core_MutableDim.__name__ = ["thx","geom","core","MutableDim"];
 thx_geom_core_MutableDim.__interfaces__ = [thx_geom_core_Dim];
 thx_geom_core_MutableDim.prototype = {
-	clone: function() {
+	_coord: null
+	,clone: function() {
 		return new thx_geom_core_MutableDim(this._coord);
 	}
 	,get_coord: function() {
@@ -4996,7 +5534,13 @@ var thx_geom_core_MutableM23 = function(a,b,c,d,e,f) {
 thx_geom_core_MutableM23.__name__ = ["thx","geom","core","MutableM23"];
 thx_geom_core_MutableM23.__interfaces__ = [thx_geom_core_M23];
 thx_geom_core_MutableM23.prototype = {
-	get_a: function() {
+	_a: null
+	,_b: null
+	,_c: null
+	,_d: null
+	,_e: null
+	,_f: null
+	,get_a: function() {
 		return this._a;
 	}
 	,get_b: function() {
@@ -5041,7 +5585,9 @@ var thx_geom_core_MutableXY = function(x,y) {
 thx_geom_core_MutableXY.__name__ = ["thx","geom","core","MutableXY"];
 thx_geom_core_MutableXY.__interfaces__ = [thx_geom_core_XY];
 thx_geom_core_MutableXY.prototype = {
-	clone: function() {
+	_x: null
+	,_y: null
+	,clone: function() {
 		return new thx_geom_core_MutableXY(this._x,this._y);
 	}
 	,get_x: function() {
@@ -5058,13 +5604,17 @@ thx_geom_core_MutableXY.prototype = {
 	}
 	,__class__: thx_geom_core_MutableXY
 };
-var thx_geom_d2_Segment = function(start,end) {
+var thx_geom_d2_Segment = function(start,end,cloud) {
 	this.start = start;
 	this.end = end;
+	this.box = thx_geom_d2_Rect.fromPoints(cloud);
 };
 thx_geom_d2_Segment.__name__ = ["thx","geom","d2","Segment"];
 thx_geom_d2_Segment.prototype = {
-	toVector: function() {
+	start: null
+	,end: null
+	,box: null
+	,toVector: function() {
 		var _g = this;
 		return new thx_geom_core_LinkedXY(function() {
 			return _g.end.get_x() - _g.start.get_x();
@@ -5081,32 +5631,25 @@ thx_geom_d2_Segment.prototype = {
 		});
 	}
 	,toString: function() {
-		return "Segment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
+		throw new js__$Boot_HaxeError("Segment.toString() is abstract and must be overwritten");
 	}
 	,__class__: thx_geom_d2_Segment
 };
-var thx_geom_d2_LineSegment = function(start,end) {
-	thx_geom_d2_Segment.call(this,start,end);
-};
-thx_geom_d2_LineSegment.__name__ = ["thx","geom","d2","LineSegment"];
-thx_geom_d2_LineSegment.__super__ = thx_geom_d2_Segment;
-thx_geom_d2_LineSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
-	toString: function() {
-		return "LineSegment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
-	}
-	,__class__: thx_geom_d2_LineSegment
-});
 var thx_geom_d2_ArcSegment = function(start,radius,largeArcFlag,sweepFlag,xAxisRotate,end) {
-	thx_geom_d2_LineSegment.call(this,start,end);
+	thx_geom_d2_Segment.call(this,start,end,[start,end]);
 	this.radius = radius;
 	this.largeArcFlag = largeArcFlag;
 	this.sweepFlag = sweepFlag;
 	this.xAxisRotate = xAxisRotate;
 };
 thx_geom_d2_ArcSegment.__name__ = ["thx","geom","d2","ArcSegment"];
-thx_geom_d2_ArcSegment.__super__ = thx_geom_d2_LineSegment;
-thx_geom_d2_ArcSegment.prototype = $extend(thx_geom_d2_LineSegment.prototype,{
-	toString: function() {
+thx_geom_d2_ArcSegment.__super__ = thx_geom_d2_Segment;
+thx_geom_d2_ArcSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
+	radius: null
+	,largeArcFlag: null
+	,sweepFlag: null
+	,xAxisRotate: null
+	,toString: function() {
 		return "ArcSegment(sx:" + this.start.get_x() + ",sy:" + this.start.get_y() + ",xr:" + this.xAxisRotate.get_coord() + ",laf:" + Std.string(this.largeArcFlag) + ",sf:" + Std.string(this.sweepFlag) + ",ex:" + this.end.get_x() + ",ey:" + this.end.get_y() + ")";
 	}
 	,__class__: thx_geom_d2_ArcSegment
@@ -5114,11 +5657,13 @@ thx_geom_d2_ArcSegment.prototype = $extend(thx_geom_d2_LineSegment.prototype,{
 var thx_geom_d2_IShape = function() { };
 thx_geom_d2_IShape.__name__ = ["thx","geom","d2","IShape"];
 thx_geom_d2_IShape.prototype = {
-	__class__: thx_geom_d2_IShape
+	box: null
+	,__class__: thx_geom_d2_IShape
 };
 var thx_geom_d2_Circle = function(center,radius) {
 	this.center = center;
 	this.radius = radius;
+	this.box = thx_geom_d2_Rect.fromPoints([this.get_bottomLeft(),this.get_topRight()]);
 };
 thx_geom_d2_Circle.__name__ = ["thx","geom","d2","Circle"];
 thx_geom_d2_Circle.__interfaces__ = [thx_geom_d2_IShape];
@@ -5170,7 +5715,16 @@ thx_geom_d2_Circle.create = function(x,y,r) {
 	return new thx_geom_d2_Circle(new thx_geom_core_MutableXY(x,y),r);
 };
 thx_geom_d2_Circle.prototype = {
-	get_area: function() {
+	center: null
+	,radius: null
+	,box: null
+	,centerLeft: null
+	,centerRight: null
+	,centerTop: null
+	,centerBottom: null
+	,bottomLeft: null
+	,topRight: null
+	,get_area: function() {
 		var this1 = this.radius;
 		return this1.get_coord() * this1.get_coord() * 3.141592653589793238;
 	}
@@ -5235,10 +5789,6 @@ thx_geom_d2_Circle.prototype = {
 	,toString: function() {
 		return "Circle(" + this.center.get_x() + "," + this.center.get_y() + "," + ("Radius(" + this.radius.get_coord() + ")") + ")";
 	}
-	,get_anchors: function() {
-		if(null == this.anchors) this.anchors = [this.center,this.get_centerLeft(),this.get_centerTop(),this.get_centerRight(),this.get_centerBottom()];
-		return this.anchors;
-	}
 	,get_centerLeft: function() {
 		var _g = this;
 		if(null == this.centerLeft) this.centerLeft = new thx_geom_core_LinkedXY(function() {
@@ -5291,41 +5841,79 @@ thx_geom_d2_Circle.prototype = {
 		});
 		return this.centerBottom;
 	}
+	,get_bottomLeft: function() {
+		var _g = this;
+		if(null == this.bottomLeft) this.bottomLeft = new thx_geom_core_LinkedXY(function() {
+			return _g.center.get_x() - _g.radius.get_coord();
+		},function() {
+			return _g.center.get_y() + _g.radius.get_coord();
+		},function(v) {
+			return _g.set_left(v);
+		},function(v1) {
+			return _g.set_bottom(v1);
+		});
+		return this.bottomLeft;
+	}
+	,get_topRight: function() {
+		var _g = this;
+		if(null == this.topRight) this.topRight = new thx_geom_core_LinkedXY(function() {
+			return _g.center.get_x() + _g.radius.get_coord();
+		},function() {
+			return _g.center.get_y() - _g.radius.get_coord();
+		},function(v) {
+			return _g.set_right(v);
+		},function(v1) {
+			return _g.set_top(v1);
+		});
+		return this.topRight;
+	}
 	,__class__: thx_geom_d2_Circle
 };
-var thx_geom_d2_QuadraticCurveSegment = function(start,c1,end) {
-	thx_geom_d2_LineSegment.call(this,start,end);
-	this.c1 = c1;
-};
-thx_geom_d2_QuadraticCurveSegment.__name__ = ["thx","geom","d2","QuadraticCurveSegment"];
-thx_geom_d2_QuadraticCurveSegment.__super__ = thx_geom_d2_LineSegment;
-thx_geom_d2_QuadraticCurveSegment.prototype = $extend(thx_geom_d2_LineSegment.prototype,{
-	toString: function() {
-		return "QuadraticCurveSegment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.c1.get_x() + "," + this.c1.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
-	}
-	,__class__: thx_geom_d2_QuadraticCurveSegment
-});
 var thx_geom_d2_CubicCurveSegment = function(start,c1,c2,end) {
-	thx_geom_d2_QuadraticCurveSegment.call(this,start,c1,end);
+	thx_geom_d2_Segment.call(this,start,end,[start,c1,c2,end]);
+	this.c1 = c1;
 	this.c2 = c2;
 };
 thx_geom_d2_CubicCurveSegment.__name__ = ["thx","geom","d2","CubicCurveSegment"];
-thx_geom_d2_CubicCurveSegment.__super__ = thx_geom_d2_QuadraticCurveSegment;
-thx_geom_d2_CubicCurveSegment.prototype = $extend(thx_geom_d2_QuadraticCurveSegment.prototype,{
-	toString: function() {
+thx_geom_d2_CubicCurveSegment.__super__ = thx_geom_d2_Segment;
+thx_geom_d2_CubicCurveSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
+	c1: null
+	,c2: null
+	,toString: function() {
 		return "CubicCurveSegment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.c1.get_x() + "," + this.c1.get_y() + "," + this.c2.get_x() + "," + this.c2.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
 	}
 	,__class__: thx_geom_d2_CubicCurveSegment
 });
+var thx_geom_d2_LineSegment = function(start,end) {
+	thx_geom_d2_Segment.call(this,start,end,[start,end]);
+};
+thx_geom_d2_LineSegment.__name__ = ["thx","geom","d2","LineSegment"];
+thx_geom_d2_LineSegment.__super__ = thx_geom_d2_Segment;
+thx_geom_d2_LineSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
+	toString: function() {
+		return "LineSegment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
+	}
+	,__class__: thx_geom_d2_LineSegment
+});
 var thx_geom_d2_Path = function(list) {
+	var _g = this;
 	if(null == list) this.segments = []; else this.segments = list;
+	this.box = thx_geom_d2_Rect.fromRects({ iterator : function() {
+		var _this = _g.segments.map(function(_) {
+			return _.box;
+		});
+		return HxOverrides.iter(_this);
+	}});
 };
 thx_geom_d2_Path.__name__ = ["thx","geom","d2","Path"];
+thx_geom_d2_Path.__interfaces__ = [thx_geom_d2_IShape];
 thx_geom_d2_Path.fromSVGPath = function(d) {
 	return new thx_geom_d2_Path(thx_geom_d2_svg_Svg.parsePath(d));
 };
 thx_geom_d2_Path.prototype = {
-	toSVGPath: function() {
+	box: null
+	,segments: null
+	,toSVGPath: function() {
 		var buf = [];
 		var end;
 		var x = NaN;
@@ -5382,6 +5970,52 @@ thx_geom_d2_Path.prototype = {
 };
 var thx_geom_d2__$Point_Point_$Impl_$ = {};
 thx_geom_d2__$Point_Point_$Impl_$.__name__ = ["thx","geom","d2","_Point","Point_Impl_"];
+thx_geom_d2__$Point_Point_$Impl_$.linkedMin = function(points) {
+	return new thx_geom_core_LinkedXY(function() {
+		var x = Infinity;
+		var $it0 = $iterator(points)();
+		while( $it0.hasNext() ) {
+			var p = $it0.next();
+			if(p.get_x() < x) x = p.get_x();
+		}
+		return x;
+	},function() {
+		var y = Infinity;
+		var $it1 = $iterator(points)();
+		while( $it1.hasNext() ) {
+			var p1 = $it1.next();
+			if(p1.get_y() < y) y = p1.get_y();
+		}
+		return y;
+	},function(_) {
+		throw new js__$Boot_HaxeError("cannot set X for linkedMin point");
+	},function(_1) {
+		throw new js__$Boot_HaxeError("cannot set Y for linkedMin point");
+	});
+};
+thx_geom_d2__$Point_Point_$Impl_$.linkedMax = function(points) {
+	return new thx_geom_core_LinkedXY(function() {
+		var x = -Infinity;
+		var $it0 = $iterator(points)();
+		while( $it0.hasNext() ) {
+			var p = $it0.next();
+			if(p.get_x() > x) x = p.get_x();
+		}
+		return x;
+	},function() {
+		var y = -Infinity;
+		var $it1 = $iterator(points)();
+		while( $it1.hasNext() ) {
+			var p1 = $it1.next();
+			if(p1.get_y() > y) y = p1.get_y();
+		}
+		return y;
+	},function(_) {
+		throw new js__$Boot_HaxeError("cannot set X for linkedMax point");
+	},function(_1) {
+		throw new js__$Boot_HaxeError("cannot set Y for linkedMax point");
+	});
+};
 thx_geom_d2__$Point_Point_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,2,0);
 	return thx_geom_d2__$Point_Point_$Impl_$.create(arr[0],arr[1]);
@@ -5706,6 +6340,19 @@ thx_geom_d2__$Point_Point_$Impl_$.set_x = function(this1,v) {
 thx_geom_d2__$Point_Point_$Impl_$.set_y = function(this1,v) {
 	return this1.set_y(v);
 };
+var thx_geom_d2_QuadraticCurveSegment = function(start,c1,end) {
+	thx_geom_d2_Segment.call(this,start,end,[start,c1,end]);
+	this.c1 = c1;
+};
+thx_geom_d2_QuadraticCurveSegment.__name__ = ["thx","geom","d2","QuadraticCurveSegment"];
+thx_geom_d2_QuadraticCurveSegment.__super__ = thx_geom_d2_Segment;
+thx_geom_d2_QuadraticCurveSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
+	c1: null
+	,toString: function() {
+		return "QuadraticCurveSegment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.c1.get_x() + "," + this.c1.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
+	}
+	,__class__: thx_geom_d2_QuadraticCurveSegment
+});
 var thx_geom_d2__$Radius_Radius_$Impl_$ = {};
 thx_geom_d2__$Radius_Radius_$Impl_$.__name__ = ["thx","geom","d2","_Radius","Radius_Impl_"];
 thx_geom_d2__$Radius_Radius_$Impl_$.fromFloat = function(r) {
@@ -5769,6 +6416,242 @@ thx_geom_d2__$Radius_Radius_$Impl_$.get_circumference = function(this1) {
 thx_geom_d2__$Radius_Radius_$Impl_$.set_circumference = function(this1,v) {
 	this1.set_coord(v / 6.283185307179586477);
 	return v;
+};
+var thx_geom_d2_Rect = function(position,size) {
+	this.position = position;
+	this.size = size;
+	this.box = this;
+};
+thx_geom_d2_Rect.__name__ = ["thx","geom","d2","Rect"];
+thx_geom_d2_Rect.__interfaces__ = [thx_geom_d2_IShape];
+thx_geom_d2_Rect.create = function(x,y,width,height) {
+	return new thx_geom_d2_Rect(new thx_geom_core_MutableXY(x,y),new thx_geom_core_MutableXY(width,height));
+};
+thx_geom_d2_Rect.fromPoints = function(points) {
+	var min = thx_geom_d2__$Point_Point_$Impl_$.linkedMin(points);
+	var max = thx_geom_d2__$Point_Point_$Impl_$.linkedMax(points);
+	var v = thx_geom_d2__$Vector_Vector_$Impl_$.linkedPoints(min,max);
+	return new thx_geom_d2_Rect(min,v);
+};
+thx_geom_d2_Rect.fromRects = function(rects) {
+	var min = thx_geom_d2__$Point_Point_$Impl_$.linkedMin(thx_Iterators.map($iterator(rects)(),function(_) {
+		return _.get_bottomLeft();
+	}));
+	var max = thx_geom_d2__$Point_Point_$Impl_$.linkedMax(thx_Iterators.map($iterator(rects)(),function(_1) {
+		return _1.get_topRight();
+	}));
+	return thx_geom_d2_Rect.fromPoints([min,max]);
+};
+thx_geom_d2_Rect.prototype = {
+	position: null
+	,size: null
+	,box: null
+	,center: null
+	,centerLeft: null
+	,centerRight: null
+	,centerTop: null
+	,centerBottom: null
+	,topLeft: null
+	,topRight: null
+	,bottomLeft: null
+	,bottomRight: null
+	,corners: null
+	,get_center: function() {
+		var _g = this;
+		if(null == this.center) this.center = new thx_geom_core_LinkedXY(function() {
+			return _g.position.get_x() + _g.size.get_x() / 2;
+		},function() {
+			return _g.position.get_y() + _g.size.get_y() / 2;
+		},function(v) {
+			return _g.set_x(v - _g.size.get_x() / 2);
+		},function(v1) {
+			return _g.set_y(v1 - _g.size.get_y() / 2);
+		});
+		return this.center;
+	}
+	,get_centerLeft: function() {
+		var _g = this;
+		if(null == this.centerLeft) this.centerLeft = new thx_geom_core_LinkedXY(function() {
+			return _g.get_left();
+		},function() {
+			return _g.position.get_y() + _g.size.get_y() / 2;
+		},function(v) {
+			return _g.set_left(v);
+		},function(v1) {
+			return _g.set_y(v1 - _g.size.get_y() / 2);
+		});
+		return this.centerLeft;
+	}
+	,get_centerRight: function() {
+		var _g = this;
+		if(null == this.centerRight) this.centerRight = new thx_geom_core_LinkedXY(function() {
+			return _g.get_right();
+		},function() {
+			return _g.position.get_y() + _g.size.get_y() / 2;
+		},function(v) {
+			return _g.set_right(v);
+		},function(v1) {
+			return _g.set_y(v1 - _g.size.get_y() / 2);
+		});
+		return this.centerRight;
+	}
+	,get_centerTop: function() {
+		var _g = this;
+		if(null == this.centerTop) this.centerTop = new thx_geom_core_LinkedXY(function() {
+			return _g.position.get_x() + _g.size.get_x() / 2;
+		},function() {
+			return _g.get_top();
+		},function(v) {
+			return _g.set_x(v - _g.size.get_x() / 2);
+		},function(v1) {
+			return _g.set_top(v1);
+		});
+		return this.centerTop;
+	}
+	,get_centerBottom: function() {
+		var _g = this;
+		if(null == this.centerBottom) this.centerBottom = new thx_geom_core_LinkedXY(function() {
+			return _g.position.get_x() + _g.size.get_x() / 2;
+		},function() {
+			return _g.get_bottom();
+		},function(v) {
+			return _g.set_x(v - _g.size.get_x() / 2);
+		},function(v1) {
+			return _g.set_bottom(v1);
+		});
+		return this.centerBottom;
+	}
+	,get_topLeft: function() {
+		var _g = this;
+		if(null == this.topLeft) this.topLeft = new thx_geom_core_LinkedXY(function() {
+			return _g.get_left();
+		},function() {
+			return _g.get_top();
+		},function(v) {
+			return _g.set_left(v);
+		},function(v1) {
+			return _g.set_top(v1);
+		});
+		return this.topLeft;
+	}
+	,get_topRight: function() {
+		var _g = this;
+		if(null == this.topRight) this.topRight = new thx_geom_core_LinkedXY(function() {
+			return _g.get_right();
+		},function() {
+			return _g.get_top();
+		},function(v) {
+			return _g.set_right(v);
+		},function(v1) {
+			return _g.set_top(v1);
+		});
+		return this.topRight;
+	}
+	,get_bottomLeft: function() {
+		var _g = this;
+		if(null == this.bottomLeft) this.bottomLeft = new thx_geom_core_LinkedXY(function() {
+			return _g.get_left();
+		},function() {
+			return _g.get_bottom();
+		},function(v) {
+			return _g.set_left(v);
+		},function(v1) {
+			return _g.set_bottom(v1);
+		});
+		return this.bottomLeft;
+	}
+	,get_bottomRight: function() {
+		var _g = this;
+		if(null == this.bottomRight) this.bottomRight = new thx_geom_core_LinkedXY(function() {
+			return _g.get_right();
+		},function() {
+			return _g.get_bottom();
+		},function(v) {
+			return _g.set_right(v);
+		},function(v1) {
+			return _g.set_bottom(v1);
+		});
+		return this.bottomRight;
+	}
+	,get_area: function() {
+		var this1 = this.size;
+		return Math.abs(this1.get_x() * this1.get_y());
+	}
+	,get_perimeter: function() {
+		var this1 = this.size;
+		return (Math.abs(this1.get_x()) + Math.abs(this1.get_y())) * 2;
+	}
+	,get_left: function() {
+		return this.position.get_x() + (this.size.get_x() < 0?this.size.get_x():0);
+	}
+	,get_right: function() {
+		return this.position.get_x() + (this.size.get_x() > 0?this.size.get_x():0);
+	}
+	,get_top: function() {
+		return this.position.get_y() + (this.size.get_y() > 0?this.size.get_y():0);
+	}
+	,get_bottom: function() {
+		return this.position.get_y() + (this.size.get_y() < 0?this.size.get_y():0);
+	}
+	,set_left: function(v) {
+		var r = this.get_right();
+		this.position.set_x(v);
+		this.size.set_x(r - v);
+		return v;
+	}
+	,set_right: function(v) {
+		var l = this.get_left();
+		this.position.set_x(l);
+		this.size.set_x(v - l);
+		return v;
+	}
+	,set_top: function(v) {
+		var b = this.get_bottom();
+		this.position.set_y(b);
+		this.size.set_y(v - b);
+		return v;
+	}
+	,set_bottom: function(v) {
+		var t = this.get_top();
+		this.position.set_y(v);
+		this.size.set_y(t - v);
+		return v;
+	}
+	,get_width: function() {
+		return this.size.get_x();
+	}
+	,set_width: function(v) {
+		return this.size.set_x(v);
+	}
+	,get_height: function() {
+		return this.size.get_y();
+	}
+	,set_height: function(v) {
+		return this.size.set_y(v);
+	}
+	,get_x: function() {
+		return this.position.get_x();
+	}
+	,set_x: function(v) {
+		return this.position.set_x(v);
+	}
+	,get_y: function() {
+		return this.position.get_y();
+	}
+	,set_y: function(v) {
+		return this.position.set_y(v);
+	}
+	,get_corners: function() {
+		if(null == this.corners) this.corners = [this.get_bottomLeft(),this.get_topLeft(),this.get_topRight(),this.get_bottomRight()];
+		return this.corners;
+	}
+	,equals: function(other) {
+		return this.get_left() == other.get_left() && this.get_right() == other.get_right() && this.get_top() == other.get_top() && this.get_bottom() == other.get_bottom();
+	}
+	,toString: function() {
+		return "Rect(" + this.position.get_x() + "," + this.position.get_y() + "," + this.size.get_x() + "," + this.size.get_y() + ")";
+	}
+	,__class__: thx_geom_d2_Rect
 };
 var thx_geom_d2__$Size_Size_$Impl_$ = {};
 thx_geom_d2__$Size_Size_$Impl_$.__name__ = ["thx","geom","d2","_Size","Size_Impl_"];
@@ -5889,13 +6772,28 @@ var thx_geom_d2__$Vector_Vector_$Impl_$ = {};
 thx_geom_d2__$Vector_Vector_$Impl_$.__name__ = ["thx","geom","d2","_Vector","Vector_Impl_"];
 thx_geom_d2__$Vector_Vector_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,2,0);
-	return thx_geom_d2__$Vector_Vector_$Impl_$.create(arr[0],arr[1]);
+	return new thx_geom_core_MutableXY(arr[0],arr[1]);
 };
 thx_geom_d2__$Vector_Vector_$Impl_$.fromObject = function(o) {
 	return thx_geom_d2__$Vector_Vector_$Impl_$.create(o.x,o.y);
 };
 thx_geom_d2__$Vector_Vector_$Impl_$.fromAngle = function(angle) {
 	return thx_geom_d2__$Vector_Vector_$Impl_$.create(Math.cos(angle),Math.sin(angle));
+};
+thx_geom_d2__$Vector_Vector_$Impl_$.linkedPoints = function(a,b) {
+	return new thx_geom_core_LinkedXY(function() {
+		return b.get_x() - a.get_x();
+	},function() {
+		return b.get_y() - a.get_y();
+	},function(v) {
+		var v1 = a.get_x() + v;
+		b.set_x(v1);
+		return v;
+	},function(v2) {
+		var v3 = a.get_y() + v2;
+		b.set_y(v3);
+		return v2;
+	});
 };
 thx_geom_d2__$Vector_Vector_$Impl_$.create = function(x,y) {
 	return new thx_geom_core_MutableXY(x,y);
@@ -6424,6 +7322,9 @@ thx_geom_d2_svg_Svg.parsePath = function(d) {
 				return $r;
 			}(this))) list.push(new thx_geom_d2_LineSegment(last,first.start));
 			break;
+		case ".":
+			d = "0." + d;
+			break;
 		case "-":case "0":case "1":case "2":case "3":case "4":case "5":case "6":case "7":case "8":case "9":case "e":
 			d = prev + c2 + d;
 			break;
@@ -6944,7 +7845,6 @@ thx_color_Color.names.set("yellowgreen",value139);
 thx_color_Color.names.set("yellow green",thx_color_Color.yellowgreen);
 chad_components_LineStyle.constructionLine = new chad_components_LineStyle(chad_components_Style.ConstructionLine);
 chad_components_Selected.instance = new chad_components_Selected();
-chad_systems_RenderSelected.size = 8;
 haxe_ds_ObjectMap.count = 0;
 js_Boot.__toStr = {}.toString;
 thx_Floats.TOLERANCE = 10e-5;
