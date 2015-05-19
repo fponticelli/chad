@@ -1,10 +1,10 @@
 package chad.components;
 
-import thx.color.RGB;
+import thx.color.Rgb;
 
 class LineStyle implements edge.IComponent {
   public static var constructionLine = new LineStyle(ConstructionLine);
-  public static function solidStroke(color : RGB, ?width : Float, ?alpha : Float)
+  public static function solidStroke(color : Rgb, ?width : Float, ?alpha : Float)
     return new LineStyle(SolidStroke(color, width, alpha));
 
   public static function apply(style : Style, node) switch style {

@@ -1,9 +1,9 @@
 package chad.components;
 
-import thx.color.RGB;
+import thx.color.Rgb;
 
 enum Style {
   ConstructionLine;
-  SolidStroke(color : RGB, ?width : Float, ?alpha : Float);
+  SolidStroke(color : Rgb, ?width : Float, ?alpha : Float);
   Selected;
 }

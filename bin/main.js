@@ -386,7 +386,7 @@ chad_components_LineStyle.apply = function(style,node) {
 		var width = style[3];
 		var color = style[2];
 		node.setAttribute("fill","none");
-		node.setAttribute("stroke",thx_color__$RGB_RGB_$Impl_$.toHex(color));
+		node.setAttribute("stroke",thx_color__$Rgb_Rgb_$Impl_$.toHex(color));
 		if(null != width) node.setAttribute("stroke-width","" + width);
 		if(null != alpha) node.setAttribute("stroke-opacity","" + alpha);
 		break;
@@ -1472,7 +1472,7 @@ js_Boot.__isNativeObj = function(o) {
 	return js_Boot.__nativeClassName(o) != null;
 };
 js_Boot.__resolveNativeClass = function(name) {
-	if(typeof window != "undefined") return window[name]; else return global[name];
+	return (Function("return typeof " + name + " != \"undefined\" ? " + name + " : null"))();
 };
 var thx_Arrays = function() { };
 thx_Arrays.__name__ = ["thx","Arrays"];
@@ -1797,46 +1797,6 @@ thx_Arrays.rotate = function(arr) {
 	}
 	return result;
 };
-thx_Arrays.zip = function(array1,array2) {
-	var length = thx_Ints.min(array1.length,array2.length);
-	var array = [];
-	var _g = 0;
-	while(_g < length) {
-		var i = _g++;
-		array.push({ _0 : array1[i], _1 : array2[i]});
-	}
-	return array;
-};
-thx_Arrays.zip3 = function(array1,array2,array3) {
-	var length = thx_ArrayInts.min([array1.length,array2.length,array3.length]);
-	var array = [];
-	var _g = 0;
-	while(_g < length) {
-		var i = _g++;
-		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i]});
-	}
-	return array;
-};
-thx_Arrays.zip4 = function(array1,array2,array3,array4) {
-	var length = thx_ArrayInts.min([array1.length,array2.length,array3.length,array4.length]);
-	var array = [];
-	var _g = 0;
-	while(_g < length) {
-		var i = _g++;
-		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i], _3 : array4[i]});
-	}
-	return array;
-};
-thx_Arrays.zip5 = function(array1,array2,array3,array4,array5) {
-	var length = thx_ArrayInts.min([array1.length,array2.length,array3.length,array4.length,array5.length]);
-	var array = [];
-	var _g = 0;
-	while(_g < length) {
-		var i = _g++;
-		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i], _3 : array4[i], _4 : array5[i]});
-	}
-	return array;
-};
 thx_Arrays.unzip = function(array) {
 	var a1 = [];
 	var a2 = [];
@@ -1884,6 +1844,46 @@ thx_Arrays.unzip5 = function(array) {
 		a5.push(t._4);
 	});
 	return { _0 : a1, _1 : a2, _2 : a3, _3 : a4, _4 : a5};
+};
+thx_Arrays.zip = function(array1,array2) {
+	var length = thx_Ints.min(array1.length,array2.length);
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i]});
+	}
+	return array;
+};
+thx_Arrays.zip3 = function(array1,array2,array3) {
+	var length = thx_ArrayInts.min([array1.length,array2.length,array3.length]);
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i]});
+	}
+	return array;
+};
+thx_Arrays.zip4 = function(array1,array2,array3,array4) {
+	var length = thx_ArrayInts.min([array1.length,array2.length,array3.length,array4.length]);
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i], _3 : array4[i]});
+	}
+	return array;
+};
+thx_Arrays.zip5 = function(array1,array2,array3,array4,array5) {
+	var length = thx_ArrayInts.min([array1.length,array2.length,array3.length,array4.length,array5.length]);
+	var array = [];
+	var _g = 0;
+	while(_g < length) {
+		var i = _g++;
+		array.push({ _0 : array1[i], _1 : array2[i], _2 : array3[i], _3 : array4[i], _4 : array5[i]});
+	}
+	return array;
 };
 var thx_ArrayFloats = function() { };
 thx_ArrayFloats.__name__ = ["thx","ArrayFloats"];
@@ -2346,6 +2346,18 @@ thx_Iterables.reducei = function(it,callback,initial) {
 thx_Iterables.toArray = function(it) {
 	return thx_Iterators.toArray($iterator(it)());
 };
+thx_Iterables.unzip = function(it) {
+	return thx_Iterators.unzip($iterator(it)());
+};
+thx_Iterables.unzip3 = function(it) {
+	return thx_Iterators.unzip3($iterator(it)());
+};
+thx_Iterables.unzip4 = function(it) {
+	return thx_Iterators.unzip4($iterator(it)());
+};
+thx_Iterables.unzip5 = function(it) {
+	return thx_Iterators.unzip5($iterator(it)());
+};
 thx_Iterables.zip = function(it1,it2) {
 	return thx_Iterators.zip($iterator(it1)(),$iterator(it2)());
 };
@@ -2448,6 +2460,54 @@ thx_Iterators.toArray = function(it) {
 		items.push(item);
 	}
 	return items;
+};
+thx_Iterators.unzip = function(it) {
+	var a1 = [];
+	var a2 = [];
+	thx_Iterators.map(it,function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+	});
+	return { _0 : a1, _1 : a2};
+};
+thx_Iterators.unzip3 = function(it) {
+	var a1 = [];
+	var a2 = [];
+	var a3 = [];
+	thx_Iterators.map(it,function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+		a3.push(t._2);
+	});
+	return { _0 : a1, _1 : a2, _2 : a3};
+};
+thx_Iterators.unzip4 = function(it) {
+	var a1 = [];
+	var a2 = [];
+	var a3 = [];
+	var a4 = [];
+	thx_Iterators.map(it,function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+		a3.push(t._2);
+		a4.push(t._3);
+	});
+	return { _0 : a1, _1 : a2, _2 : a3, _3 : a4};
+};
+thx_Iterators.unzip5 = function(it) {
+	var a1 = [];
+	var a2 = [];
+	var a3 = [];
+	var a4 = [];
+	var a5 = [];
+	thx_Iterators.map(it,function(t) {
+		a1.push(t._0);
+		a2.push(t._1);
+		a3.push(t._2);
+		a4.push(t._3);
+		a5.push(t._4);
+	});
+	return { _0 : a1, _1 : a2, _2 : a3, _3 : a4, _4 : a5};
 };
 thx_Iterators.zip = function(it1,it2) {
 	var array = [];
@@ -3031,24 +3091,24 @@ thx_Types.valueTypeInheritance = function(value) {
 thx_Types.valueTypeToString = function(value) {
 	return thx_Types.typeToString(Type["typeof"](value));
 };
-var thx_color__$CIELCh_CIELCh_$Impl_$ = {};
-thx_color__$CIELCh_CIELCh_$Impl_$.__name__ = ["thx","color","_CIELCh","CIELCh_Impl_"];
-thx_color__$CIELCh_CIELCh_$Impl_$.create = function(lightness,chroma,hue) {
+var thx_color__$CieLCh_CieLCh_$Impl_$ = {};
+thx_color__$CieLCh_CieLCh_$Impl_$.__name__ = ["thx","color","_CieLCh","CieLCh_Impl_"];
+thx_color__$CieLCh_CieLCh_$Impl_$.create = function(lightness,chroma,hue) {
 	var channels = [lightness,chroma,thx_Floats.wrapCircular(hue,360)];
 	return channels;
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.fromFloats = function(arr) {
+thx_color__$CieLCh_CieLCh_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,3);
-	return thx_color__$CIELCh_CIELCh_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$CieLCh_CieLCh_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.fromString = function(color) {
+thx_color__$CieLCh_CieLCh_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "cielch":
-			return thx_color__$CIELCh_CIELCh_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
+			return thx_color__$CieLCh_CieLCh_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
 		default:
 			return null;
 		}
@@ -3058,128 +3118,128 @@ thx_color__$CIELCh_CIELCh_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$CIELCh_CIELCh_$Impl_$._new = function(channels) {
+thx_color__$CieLCh_CieLCh_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.analogous = function(this1,spread) {
+thx_color__$CieLCh_CieLCh_$Impl_$.analogous = function(this1,spread) {
 	if(spread == null) spread = 30.0;
-	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.complement = function(this1) {
-	return thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,180);
+thx_color__$CieLCh_CieLCh_$Impl_$.complement = function(this1) {
+	return thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,180);
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$CieLCh_CieLCh_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolateAngle(t,this1[2],other[2],360)];
 	return channels;
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.rotate = function(this1,angle) {
-	return thx_color__$CIELCh_CIELCh_$Impl_$.withHue(this1,this1[2] + angle);
+thx_color__$CieLCh_CieLCh_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$CieLCh_CieLCh_$Impl_$.withHue(this1,this1[2] + angle);
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.split = function(this1,spread) {
+thx_color__$CieLCh_CieLCh_$Impl_$.split = function(this1,spread) {
 	if(spread == null) spread = 144.0;
-	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.square = function(this1) {
-	return thx_color__$CIELCh_CIELCh_$Impl_$.tetrad(this1,90);
+thx_color__$CieLCh_CieLCh_$Impl_$.square = function(this1) {
+	return thx_color__$CieLCh_CieLCh_$Impl_$.tetrad(this1,90);
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.tetrad = function(this1,angle) {
-	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,0);
-	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,angle);
-	var _2 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,180);
-	var _3 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,180 + angle);
+thx_color__$CieLCh_CieLCh_$Impl_$.tetrad = function(this1,angle) {
+	var _0 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,0);
+	var _1 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,angle);
+	var _2 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,180);
+	var _3 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,180 + angle);
 	return { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.triad = function(this1) {
-	var _0 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,-120);
-	var _1 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,0);
-	var _2 = thx_color__$CIELCh_CIELCh_$Impl_$.rotate(this1,120);
+thx_color__$CieLCh_CieLCh_$Impl_$.triad = function(this1) {
+	var _0 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,-120);
+	var _1 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,0);
+	var _2 = thx_color__$CieLCh_CieLCh_$Impl_$.rotate(this1,120);
 	return { _0 : _0, _1 : _1, _2 : _2};
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.withLightness = function(this1,newlightness) {
+thx_color__$CieLCh_CieLCh_$Impl_$.withLightness = function(this1,newlightness) {
 	return [newlightness,this1[1],this1[2]];
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.withChroma = function(this1,newchroma) {
+thx_color__$CieLCh_CieLCh_$Impl_$.withChroma = function(this1,newchroma) {
 	return [this1[0],newchroma,this1[2]];
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.withHue = function(this1,newhue) {
+thx_color__$CieLCh_CieLCh_$Impl_$.withHue = function(this1,newhue) {
 	var channels = [this1[0],this1[1],thx_Floats.wrapCircular(newhue,360)];
 	return channels;
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.equals = function(this1,other) {
+thx_color__$CieLCh_CieLCh_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toString = function(this1) {
-	return "CIELCh(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+thx_color__$CieLCh_CieLCh_$Impl_$.toString = function(this1) {
+	return "CieLCh(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1],6) + "," + thx_Floats.roundTo(this1[2],6) + ")";
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab = function(this1) {
+thx_color__$CieLCh_CieLCh_$Impl_$.toCieLab = function(this1) {
 	var hradi = this1[2] * (Math.PI / 180);
 	var a = Math.cos(hradi) * this1[1];
 	var b = Math.sin(hradi) * this1[1];
 	return [this1[0],a,b];
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBXA(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbxa(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX = function(this1) {
-	return thx_color__$CIELab_CIELab_$Impl_$.toRGBX(thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx = function(this1) {
+	return thx_color__$CieLab_CieLab_$Impl_$.toRgbx(thx_color__$CieLCh_CieLCh_$Impl_$.toCieLab(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$CIELCh_CIELCh_$Impl_$.toRGBX(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$CieLCh_CieLCh_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toXYZ = function(this1) {
-	return thx_color__$CIELab_CIELab_$Impl_$.toXYZ(thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toXyz = function(this1) {
+	return thx_color__$CieLab_CieLab_$Impl_$.toXyz(thx_color__$CieLCh_CieLCh_$Impl_$.toCieLab(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.toYxy = function(this1) {
-	return thx_color__$CIELab_CIELab_$Impl_$.toYxy(thx_color__$CIELCh_CIELCh_$Impl_$.toCIELab(this1));
+thx_color__$CieLCh_CieLCh_$Impl_$.toYxy = function(this1) {
+	return thx_color__$CieLab_CieLab_$Impl_$.toYxy(thx_color__$CieLCh_CieLCh_$Impl_$.toCieLab(this1));
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.get_lightness = function(this1) {
+thx_color__$CieLCh_CieLCh_$Impl_$.get_lightness = function(this1) {
 	return this1[0];
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.get_chroma = function(this1) {
+thx_color__$CieLCh_CieLCh_$Impl_$.get_chroma = function(this1) {
 	return this1[1];
 };
-thx_color__$CIELCh_CIELCh_$Impl_$.get_hue = function(this1) {
+thx_color__$CieLCh_CieLCh_$Impl_$.get_hue = function(this1) {
 	return this1[2];
 };
-var thx_color__$CIELab_CIELab_$Impl_$ = {};
-thx_color__$CIELab_CIELab_$Impl_$.__name__ = ["thx","color","_CIELab","CIELab_Impl_"];
-thx_color__$CIELab_CIELab_$Impl_$.create = function(l,a,b) {
+var thx_color__$CieLab_CieLab_$Impl_$ = {};
+thx_color__$CieLab_CieLab_$Impl_$.__name__ = ["thx","color","_CieLab","CieLab_Impl_"];
+thx_color__$CieLab_CieLab_$Impl_$.create = function(l,a,b) {
 	return [l,a,b];
 };
-thx_color__$CIELab_CIELab_$Impl_$.fromFloats = function(arr) {
+thx_color__$CieLab_CieLab_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,3);
-	return thx_color__$CIELab_CIELab_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$CieLab_CieLab_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$CIELab_CIELab_$Impl_$.fromString = function(color) {
+thx_color__$CieLab_CieLab_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "cielab":
-			return thx_color__$CIELab_CIELab_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
+			return thx_color__$CieLab_CieLab_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false));
 		default:
 			return null;
 		}
@@ -3189,33 +3249,33 @@ thx_color__$CIELab_CIELab_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$CIELab_CIELab_$Impl_$._new = function(channels) {
+thx_color__$CieLab_CieLab_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$CIELab_CIELab_$Impl_$.distance = function(this1,other) {
+thx_color__$CieLab_CieLab_$Impl_$.distance = function(this1,other) {
 	return (this1[0] - other[0]) * (this1[0] - other[0]) + (this1[1] - other[1]) * (this1[1] - other[1]) + (this1[2] - other[2]) * (this1[2] - other[2]);
 };
-thx_color__$CIELab_CIELab_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$CieLab_CieLab_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2])];
 	return channels;
 };
-thx_color__$CIELab_CIELab_$Impl_$.darker = function(this1,t) {
+thx_color__$CieLab_CieLab_$Impl_$.darker = function(this1,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],0),this1[1],this1[2]];
 	return channels;
 };
-thx_color__$CIELab_CIELab_$Impl_$.lighter = function(this1,t) {
+thx_color__$CieLab_CieLab_$Impl_$.lighter = function(this1,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],100),this1[1],this1[2]];
 	return channels;
 };
-thx_color__$CIELab_CIELab_$Impl_$.match = function(this1,palette) {
+thx_color__$CieLab_CieLab_$Impl_$.match = function(this1,palette) {
 	var it = palette;
-	if(null == it) throw new thx_error_NullArgument("Iterable argument \"this\" cannot be null",{ fileName : "NullArgument.hx", lineNumber : 73, className : "thx.color._CIELab.CIELab_Impl_", methodName : "match"}); else if(!$iterator(it)().hasNext()) throw new thx_error_NullArgument("Iterable argument \"this\" cannot be empty",{ fileName : "NullArgument.hx", lineNumber : 75, className : "thx.color._CIELab.CIELab_Impl_", methodName : "match"});
+	if(null == it) throw new thx_error_NullArgument("Iterable argument \"this\" cannot be null",{ fileName : "NullArgument.hx", lineNumber : 73, className : "thx.color._CieLab.CieLab_Impl_", methodName : "match"}); else if(!$iterator(it)().hasNext()) throw new thx_error_NullArgument("Iterable argument \"this\" cannot be empty",{ fileName : "NullArgument.hx", lineNumber : 75, className : "thx.color._CieLab.CieLab_Impl_", methodName : "match"});
 	var dist = Infinity;
 	var closest = null;
 	var $it0 = $iterator(palette)();
 	while( $it0.hasNext() ) {
 		var color = $it0.next();
-		var ndist = thx_color__$CIELab_CIELab_$Impl_$.distance(this1,color);
+		var ndist = thx_color__$CieLab_CieLab_$Impl_$.distance(this1,color);
 		if(ndist < dist) {
 			dist = ndist;
 			closest = color;
@@ -3223,54 +3283,54 @@ thx_color__$CIELab_CIELab_$Impl_$.match = function(this1,palette) {
 	}
 	return closest;
 };
-thx_color__$CIELab_CIELab_$Impl_$.equals = function(this1,other) {
+thx_color__$CieLab_CieLab_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$CIELab_CIELab_$Impl_$.withLightness = function(this1,lightness) {
+thx_color__$CieLab_CieLab_$Impl_$.withLightness = function(this1,lightness) {
 	return [lightness,this1[1],this1[2]];
 };
-thx_color__$CIELab_CIELab_$Impl_$.withA = function(this1,newa) {
+thx_color__$CieLab_CieLab_$Impl_$.withA = function(this1,newa) {
 	return [this1[0],newa,this1[2]];
 };
-thx_color__$CIELab_CIELab_$Impl_$.withB = function(this1,newb) {
+thx_color__$CieLab_CieLab_$Impl_$.withB = function(this1,newb) {
 	return [this1[0],this1[1],newb];
 };
-thx_color__$CIELab_CIELab_$Impl_$.toString = function(this1) {
-	return "CIELab(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+thx_color__$CieLab_CieLab_$Impl_$.toString = function(this1) {
+	return "CieLab(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1],6) + "," + thx_Floats.roundTo(this1[2],6) + ")";
 };
-thx_color__$CIELab_CIELab_$Impl_$.toCIELCh = function(this1) {
+thx_color__$CieLab_CieLab_$Impl_$.toCieLCh = function(this1) {
 	var h = thx_Floats.wrapCircular(Math.atan2(this1[2],this1[1]) * 180 / Math.PI,360);
 	var c = Math.sqrt(this1[1] * this1[1] + this1[2] * this1[2]);
 	return [this1[0],c,h];
 };
-thx_color__$CIELab_CIELab_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$CIELab_CIELab_$Impl_$.toRGBX(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$CieLab_CieLab_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$CIELab_CIELab_$Impl_$.toRGBX(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$CieLab_CieLab_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$CIELab_CIELab_$Impl_$.toRGBX(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$CieLab_CieLab_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$CIELab_CIELab_$Impl_$.toRGBX(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$CieLab_CieLab_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$CIELab_CIELab_$Impl_$.toRGBX(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$CieLab_CieLab_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$CIELab_CIELab_$Impl_$.toRGBX(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$CieLab_CieLab_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$CIELab_CIELab_$Impl_$.toRGBXA(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$CieLab_CieLab_$Impl_$.toRgbxa(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toRGBX = function(this1) {
-	return thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toRgbx = function(this1) {
+	return thx_color__$Xyz_Xyz_$Impl_$.toRgbx(thx_color__$CieLab_CieLab_$Impl_$.toXyz(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$CIELab_CIELab_$Impl_$.toRGBX(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$CieLab_CieLab_$Impl_$.toRgbx(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.toXYZ = function(this1) {
+thx_color__$CieLab_CieLab_$Impl_$.toXyz = function(this1) {
 	var y = (this1[0] + 16) / 116;
 	var x = this1[1] / 500 + y;
 	var z = y - this1[2] / 200;
@@ -3283,28 +3343,28 @@ thx_color__$CIELab_CIELab_$Impl_$.toXYZ = function(this1) {
 	if(p > 0.008856) z = p; else z = (z - 0.137931034482758619) / 7.787;
 	return [95.047 * x,100 * y,108.883 * z];
 };
-thx_color__$CIELab_CIELab_$Impl_$.toYxy = function(this1) {
-	return thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$CIELab_CIELab_$Impl_$.toXYZ(this1));
+thx_color__$CieLab_CieLab_$Impl_$.toYxy = function(this1) {
+	return thx_color__$Xyz_Xyz_$Impl_$.toYxy(thx_color__$CieLab_CieLab_$Impl_$.toXyz(this1));
 };
-thx_color__$CIELab_CIELab_$Impl_$.get_l = function(this1) {
+thx_color__$CieLab_CieLab_$Impl_$.get_l = function(this1) {
 	return this1[0];
 };
-thx_color__$CIELab_CIELab_$Impl_$.get_a = function(this1) {
+thx_color__$CieLab_CieLab_$Impl_$.get_a = function(this1) {
 	return this1[1];
 };
-thx_color__$CIELab_CIELab_$Impl_$.get_b = function(this1) {
+thx_color__$CieLab_CieLab_$Impl_$.get_b = function(this1) {
 	return this1[2];
 };
-var thx_color__$CMY_CMY_$Impl_$ = {};
-thx_color__$CMY_CMY_$Impl_$.__name__ = ["thx","color","_CMY","CMY_Impl_"];
-thx_color__$CMY_CMY_$Impl_$.create = function(cyan,magenta,yellow) {
+var thx_color__$Cmy_Cmy_$Impl_$ = {};
+thx_color__$Cmy_Cmy_$Impl_$.__name__ = ["thx","color","_Cmy","Cmy_Impl_"];
+thx_color__$Cmy_Cmy_$Impl_$.create = function(cyan,magenta,yellow) {
 	return [cyan < 0?0:cyan > 1?1:cyan,magenta < 0?0:magenta > 1?1:magenta,yellow < 0?0:yellow > 1?1:yellow];
 };
-thx_color__$CMY_CMY_$Impl_$.fromFloats = function(arr) {
+thx_color__$Cmy_Cmy_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,3);
-	return thx_color__$CMY_CMY_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$Cmy_Cmy_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$CMY_CMY_$Impl_$.fromString = function(color) {
+thx_color__$Cmy_Cmy_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
@@ -3322,84 +3382,84 @@ thx_color__$CMY_CMY_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$CMY_CMY_$Impl_$._new = function(channels) {
+thx_color__$Cmy_Cmy_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$CMY_CMY_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Cmy_Cmy_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2])];
 	return channels;
 };
-thx_color__$CMY_CMY_$Impl_$.withCyan = function(this1,newcyan) {
+thx_color__$Cmy_Cmy_$Impl_$.withCyan = function(this1,newcyan) {
 	return [newcyan < 0?0:newcyan > 1?1:newcyan,this1[1],this1[2]];
 };
-thx_color__$CMY_CMY_$Impl_$.withMagenta = function(this1,newmagenta) {
+thx_color__$Cmy_Cmy_$Impl_$.withMagenta = function(this1,newmagenta) {
 	return [this1[0],newmagenta < 0?0:newmagenta > 1?1:newmagenta,this1[2]];
 };
-thx_color__$CMY_CMY_$Impl_$.withYellow = function(this1,newyellow) {
+thx_color__$Cmy_Cmy_$Impl_$.withYellow = function(this1,newyellow) {
 	return [this1[0],this1[1],newyellow < 0?0:newyellow > 1?1:newyellow];
 };
-thx_color__$CMY_CMY_$Impl_$.toString = function(this1) {
-	return "cmy(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+thx_color__$Cmy_Cmy_$Impl_$.toString = function(this1) {
+	return "cmy(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1],6) + "," + thx_Floats.roundTo(this1[2],6) + ")";
 };
-thx_color__$CMY_CMY_$Impl_$.equals = function(this1,other) {
+thx_color__$Cmy_Cmy_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$CMY_CMY_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLCh(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toCMYK = function(this1) {
+thx_color__$Cmy_Cmy_$Impl_$.toCmyk = function(this1) {
 	var k = Math.min(Math.min(this1[0],this1[1]),this1[2]);
 	if(k == 1) return [0,0,0,1]; else return [(this1[0] - k) / (1 - k),(this1[1] - k) / (1 - k),(this1[2] - k) / (1 - k),k];
 };
-thx_color__$CMY_CMY_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$CMY_CMY_$Impl_$.toRGBXA(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Cmy_Cmy_$Impl_$.toRgbxa(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toRGBX = function(this1) {
+thx_color__$Cmy_Cmy_$Impl_$.toRgbx = function(this1) {
 	return [1 - this1[0],1 - this1[1],1 - this1[2]];
 };
-thx_color__$CMY_CMY_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toXYZ = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toXyz = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.toYxy = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toYxy(thx_color__$CMY_CMY_$Impl_$.toRGBX(this1));
+thx_color__$Cmy_Cmy_$Impl_$.toYxy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toYxy(thx_color__$Cmy_Cmy_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMY_CMY_$Impl_$.get_cyan = function(this1) {
+thx_color__$Cmy_Cmy_$Impl_$.get_cyan = function(this1) {
 	return this1[0];
 };
-thx_color__$CMY_CMY_$Impl_$.get_magenta = function(this1) {
+thx_color__$Cmy_Cmy_$Impl_$.get_magenta = function(this1) {
 	return this1[1];
 };
-thx_color__$CMY_CMY_$Impl_$.get_yellow = function(this1) {
+thx_color__$Cmy_Cmy_$Impl_$.get_yellow = function(this1) {
 	return this1[2];
 };
-var thx_color__$CMYK_CMYK_$Impl_$ = {};
-thx_color__$CMYK_CMYK_$Impl_$.__name__ = ["thx","color","_CMYK","CMYK_Impl_"];
-thx_color__$CMYK_CMYK_$Impl_$.create = function(cyan,magenta,yellow,black) {
+var thx_color__$Cmyk_Cmyk_$Impl_$ = {};
+thx_color__$Cmyk_Cmyk_$Impl_$.__name__ = ["thx","color","_Cmyk","Cmyk_Impl_"];
+thx_color__$Cmyk_Cmyk_$Impl_$.create = function(cyan,magenta,yellow,black) {
 	return [cyan < 0?0:cyan > 1?1:cyan,magenta < 0?0:magenta > 1?1:magenta,yellow < 0?0:yellow > 1?1:yellow,black < 0?0:black > 1?1:black];
 };
-thx_color__$CMYK_CMYK_$Impl_$.fromFloats = function(arr) {
+thx_color__$Cmyk_Cmyk_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,4);
-	return thx_color__$CMYK_CMYK_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+	return thx_color__$Cmyk_Cmyk_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
 };
-thx_color__$CMYK_CMYK_$Impl_$.fromString = function(color) {
+thx_color__$Cmyk_Cmyk_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
@@ -3417,91 +3477,91 @@ thx_color__$CMYK_CMYK_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$CMYK_CMYK_$Impl_$._new = function(channels) {
+thx_color__$Cmyk_Cmyk_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$CMYK_CMYK_$Impl_$.darker = function(this1,t) {
+thx_color__$Cmyk_Cmyk_$Impl_$.darker = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Floats.interpolate(t,this1[3],1)];
 	return channels;
 };
-thx_color__$CMYK_CMYK_$Impl_$.lighter = function(this1,t) {
+thx_color__$Cmyk_Cmyk_$Impl_$.lighter = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Floats.interpolate(t,this1[3],0)];
 	return channels;
 };
-thx_color__$CMYK_CMYK_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Cmyk_Cmyk_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2]),thx_Floats.interpolate(t,this1[3],other[3])];
 	return channels;
 };
-thx_color__$CMYK_CMYK_$Impl_$.withCyan = function(this1,newcyan) {
+thx_color__$Cmyk_Cmyk_$Impl_$.withCyan = function(this1,newcyan) {
 	return [newcyan < 0?0:newcyan > 1?1:newcyan,this1[1],this1[2],this1[3]];
 };
-thx_color__$CMYK_CMYK_$Impl_$.withMagenta = function(this1,newmagenta) {
+thx_color__$Cmyk_Cmyk_$Impl_$.withMagenta = function(this1,newmagenta) {
 	return [this1[0],newmagenta < 0?0:newmagenta > 1?1:newmagenta,this1[2],this1[3]];
 };
-thx_color__$CMYK_CMYK_$Impl_$.withYellow = function(this1,newyellow) {
+thx_color__$Cmyk_Cmyk_$Impl_$.withYellow = function(this1,newyellow) {
 	return [this1[0],this1[1],newyellow < 0?0:newyellow > 1?1:newyellow,this1[3]];
 };
-thx_color__$CMYK_CMYK_$Impl_$.withBlack = function(this1,newblack) {
+thx_color__$Cmyk_Cmyk_$Impl_$.withBlack = function(this1,newblack) {
 	return [this1[0],this1[1],this1[2],newblack < 0?0:newblack > 1?1:newblack];
 };
-thx_color__$CMYK_CMYK_$Impl_$.toString = function(this1) {
-	return "cmyk(" + this1[0] + "," + this1[1] + "," + this1[2] + "," + this1[3] + ")";
+thx_color__$Cmyk_Cmyk_$Impl_$.toString = function(this1) {
+	return "cmyk(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1],6) + "," + thx_Floats.roundTo(this1[2],6) + "," + thx_Floats.roundTo(this1[3],6) + ")";
 };
-thx_color__$CMYK_CMYK_$Impl_$.equals = function(this1,other) {
+thx_color__$Cmyk_Cmyk_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10 && Math.abs(this1[3] - other[3]) <= 10e-10;
 };
-thx_color__$CMYK_CMYK_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLCh(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toCMY = function(this1) {
+thx_color__$Cmyk_Cmyk_$Impl_$.toCmy = function(this1) {
 	return [this1[3] + (1 - this1[3]) * this1[0],this1[3] + (1 - this1[3]) * this1[1],this1[3] + (1 - this1[3]) * this1[2]];
 };
-thx_color__$CMYK_CMYK_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$CMYK_CMYK_$Impl_$.toRGBXA(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbxa(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toRGBX = function(this1) {
+thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx = function(this1) {
 	return [(1 - this1[3]) * (1 - this1[0]),(1 - this1[3]) * (1 - this1[1]),(1 - this1[3]) * (1 - this1[2])];
 };
-thx_color__$CMYK_CMYK_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.get_cyan = function(this1) {
+thx_color__$Cmyk_Cmyk_$Impl_$.get_cyan = function(this1) {
 	return this1[0];
 };
-thx_color__$CMYK_CMYK_$Impl_$.get_magenta = function(this1) {
+thx_color__$Cmyk_Cmyk_$Impl_$.get_magenta = function(this1) {
 	return this1[1];
 };
-thx_color__$CMYK_CMYK_$Impl_$.get_yellow = function(this1) {
+thx_color__$Cmyk_Cmyk_$Impl_$.get_yellow = function(this1) {
 	return this1[2];
 };
-thx_color__$CMYK_CMYK_$Impl_$.get_black = function(this1) {
+thx_color__$Cmyk_Cmyk_$Impl_$.get_black = function(this1) {
 	return this1[3];
 };
-thx_color__$CMYK_CMYK_$Impl_$.toXYZ = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toXyz = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
-thx_color__$CMYK_CMYK_$Impl_$.toYxy = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toYxy(thx_color__$CMYK_CMYK_$Impl_$.toRGBX(this1));
+thx_color__$Cmyk_Cmyk_$Impl_$.toYxy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toYxy(thx_color__$Cmyk_Cmyk_$Impl_$.toRgbx(this1));
 };
 var thx_color_Color = function() { };
 thx_color_Color.__name__ = ["thx","color","Color"];
 thx_color_Color.parse = function(color) {
-	if(thx_color_Color.names.exists(color)) return thx_color__$RGB_RGB_$Impl_$.toRGBXA(thx_color_Color.names.get(color));
+	if(thx_color_Color.names.exists(color)) return thx_color__$Rgb_Rgb_$Impl_$.toRgbxa(thx_color_Color.names.get(color));
 	var info = thx_color_parse_ColorParser.parseHex(color);
 	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
@@ -3509,37 +3569,37 @@ thx_color_Color.parse = function(color) {
 		var _g = info.name;
 		switch(_g) {
 		case "cielab":
-			return thx_color__$CIELab_CIELab_$Impl_$.toRGBXA(thx_color__$CIELab_CIELab_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false)));
+			return thx_color__$CieLab_CieLab_$Impl_$.toRgbxa(thx_color__$CieLab_CieLab_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false)));
 			break;
 		case "cielch":
-			return thx_color__$CIELCh_CIELCh_$Impl_$.toRGBXA(thx_color__$CIELCh_CIELCh_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false)));
+			return thx_color__$CieLCh_CieLCh_$Impl_$.toRgbxa(thx_color__$CieLCh_CieLCh_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3,false)));
 			break;
 		case "cmy":
-			return thx_color__$CMY_CMY_$Impl_$.toRGBXA(thx_color__$CMY_CMY_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
+			return thx_color__$Cmy_Cmy_$Impl_$.toRgbxa(thx_color__$Cmy_Cmy_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
 			break;
 		case "cmyk":
-			return thx_color__$CMYK_CMYK_$Impl_$.toRGBXA(thx_color__$CMYK_CMYK_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4)));
+			return thx_color__$Cmyk_Cmyk_$Impl_$.toRgbxa(thx_color__$Cmyk_Cmyk_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4)));
 			break;
 		case "grey":case "gray":
-			return thx_color__$Grey_Grey_$Impl_$.toRGBXA(thx_color__$Grey_Grey_$Impl_$.create(thx_color_parse_ColorParser.getFloatChannels(info.channels,1)[0]));
+			return thx_color__$Grey_Grey_$Impl_$.toRgbxa(thx_color__$Grey_Grey_$Impl_$.create(thx_color_parse_ColorParser.getFloatChannels(info.channels,1)[0]));
 			break;
 		case "hsl":
-			return thx_color__$HSL_HSL_$Impl_$.toRGBXA(thx_color__$HSL_HSL_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
+			return thx_color__$Hsl_Hsl_$Impl_$.toRgbxa(thx_color__$Hsl_Hsl_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
 			break;
 		case "hsla":
-			return thx_color__$HSLA_HSLA_$Impl_$.toRGBXA(thx_color__$HSLA_HSLA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4)));
+			return thx_color__$Hsla_Hsla_$Impl_$.toRgbxa(thx_color__$Hsla_Hsla_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4)));
 			break;
 		case "hsv":
-			return thx_color__$HSV_HSV_$Impl_$.toRGBXA(thx_color__$HSV_HSV_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
+			return thx_color__$Hsv_Hsv_$Impl_$.toRgbxa(thx_color__$Hsv_Hsv_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
 			break;
 		case "hsva":
-			return thx_color__$HSVA_HSVA_$Impl_$.toRGBXA(thx_color__$HSVA_HSVA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4)));
+			return thx_color__$Hsva_Hsva_$Impl_$.toRgbxa(thx_color__$Hsva_Hsva_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4)));
 			break;
 		case "rgb":
-			return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$RGBX_RGBX_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
+			return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Rgbx_Rgbx_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
 			break;
 		case "rgba":
-			return thx_color__$RGBXA_RGBXA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
+			return thx_color__$Rgbxa_Rgbxa_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
 		default:
 			return null;
 		}
@@ -3591,7 +3651,7 @@ thx_color__$Grey_Grey_$Impl_$.interpolate = function(this1,other,t) {
 	return grey;
 };
 thx_color__$Grey_Grey_$Impl_$.toString = function(this1) {
-	return "grey(" + this1 * 100 + "%)";
+	return "grey(" + thx_Floats.roundTo(this1 * 100,6) + "%)";
 };
 thx_color__$Grey_Grey_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1 - other) <= 10e-10;
@@ -3599,53 +3659,53 @@ thx_color__$Grey_Grey_$Impl_$.equals = function(this1,other) {
 thx_color__$Grey_Grey_$Impl_$.get_grey = function(this1) {
 	return this1;
 };
-thx_color__$Grey_Grey_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLCh(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$Grey_Grey_$Impl_$.toRGBXA(this1));
+thx_color__$Grey_Grey_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Grey_Grey_$Impl_$.toRgbxa(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toRGBX = function(this1) {
+thx_color__$Grey_Grey_$Impl_$.toRgbx = function(this1) {
 	return [this1,this1,this1];
 };
-thx_color__$Grey_Grey_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-thx_color__$Grey_Grey_$Impl_$.toXYZ = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+thx_color__$Grey_Grey_$Impl_$.toXyz = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
 thx_color__$Grey_Grey_$Impl_$.toYxy = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toYxy(thx_color__$Grey_Grey_$Impl_$.toRGBX(this1));
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toYxy(thx_color__$Grey_Grey_$Impl_$.toRgbx(this1));
 };
-var thx_color__$HSL_HSL_$Impl_$ = {};
-thx_color__$HSL_HSL_$Impl_$.__name__ = ["thx","color","_HSL","HSL_Impl_"];
-thx_color__$HSL_HSL_$Impl_$.create = function(hue,saturation,lightness) {
+var thx_color__$Hsl_Hsl_$Impl_$ = {};
+thx_color__$Hsl_Hsl_$Impl_$.__name__ = ["thx","color","_Hsl","Hsl_Impl_"];
+thx_color__$Hsl_Hsl_$Impl_$.create = function(hue,saturation,lightness) {
 	var channels = [thx_Floats.wrapCircular(hue,360),saturation < 0?0:saturation > 1?1:saturation,lightness < 0?0:lightness > 1?1:lightness];
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.fromFloats = function(arr) {
+thx_color__$Hsl_Hsl_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,3);
-	return thx_color__$HSL_HSL_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$Hsl_Hsl_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$HSL_HSL_$Impl_$.fromString = function(color) {
+thx_color__$Hsl_Hsl_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
@@ -3663,152 +3723,152 @@ thx_color__$HSL_HSL_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$HSL_HSL_$Impl_$._new = function(channels) {
+thx_color__$Hsl_Hsl_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.analogous = function(this1,spread) {
+thx_color__$Hsl_Hsl_$Impl_$.analogous = function(this1,spread) {
 	if(spread == null) spread = 30.0;
-	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSL_HSL_$Impl_$.complement = function(this1) {
-	return thx_color__$HSL_HSL_$Impl_$.rotate(this1,180);
+thx_color__$Hsl_Hsl_$Impl_$.complement = function(this1) {
+	return thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,180);
 };
-thx_color__$HSL_HSL_$Impl_$.darker = function(this1,t) {
+thx_color__$Hsl_Hsl_$Impl_$.darker = function(this1,t) {
 	var channels = [this1[0],this1[1],thx_Floats.interpolate(t,this1[2],0)];
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.lighter = function(this1,t) {
+thx_color__$Hsl_Hsl_$Impl_$.lighter = function(this1,t) {
 	var channels = [this1[0],this1[1],thx_Floats.interpolate(t,this1[2],1)];
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Hsl_Hsl_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolateAngle(t,this1[0],other[0],360),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2])];
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.rotate = function(this1,angle) {
-	return thx_color__$HSL_HSL_$Impl_$.withHue(this1,this1[0] + angle);
+thx_color__$Hsl_Hsl_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$Hsl_Hsl_$Impl_$.withHue(this1,this1[0] + angle);
 };
-thx_color__$HSL_HSL_$Impl_$.split = function(this1,spread) {
+thx_color__$Hsl_Hsl_$Impl_$.split = function(this1,spread) {
 	if(spread == null) spread = 144.0;
-	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSL_HSL_$Impl_$.square = function(this1) {
-	return thx_color__$HSL_HSL_$Impl_$.tetrad(this1,90);
+thx_color__$Hsl_Hsl_$Impl_$.square = function(this1) {
+	return thx_color__$Hsl_Hsl_$Impl_$.tetrad(this1,90);
 };
-thx_color__$HSL_HSL_$Impl_$.tetrad = function(this1,angle) {
-	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,0);
-	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,angle);
-	var _2 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,180);
-	var _3 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,180 + angle);
+thx_color__$Hsl_Hsl_$Impl_$.tetrad = function(this1,angle) {
+	var _0 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,0);
+	var _1 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,angle);
+	var _2 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,180);
+	var _3 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,180 + angle);
 	return { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
 };
-thx_color__$HSL_HSL_$Impl_$.triad = function(this1) {
-	var _0 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,-120);
-	var _1 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,0);
-	var _2 = thx_color__$HSL_HSL_$Impl_$.rotate(this1,120);
+thx_color__$Hsl_Hsl_$Impl_$.triad = function(this1) {
+	var _0 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,-120);
+	var _1 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,0);
+	var _2 = thx_color__$Hsl_Hsl_$Impl_$.rotate(this1,120);
 	return { _0 : _0, _1 : _1, _2 : _2};
 };
-thx_color__$HSL_HSL_$Impl_$.withAlpha = function(this1,alpha) {
+thx_color__$Hsl_Hsl_$Impl_$.withAlpha = function(this1,alpha) {
 	var channels = this1.concat([alpha < 0?0:alpha > 1?1:alpha]);
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.withHue = function(this1,newhue) {
+thx_color__$Hsl_Hsl_$Impl_$.withHue = function(this1,newhue) {
 	var channels = [thx_Floats.wrapCircular(newhue,360),this1[1],this1[2]];
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.withLightness = function(this1,newlightness) {
+thx_color__$Hsl_Hsl_$Impl_$.withLightness = function(this1,newlightness) {
 	return [this1[0],this1[1],newlightness < 0?0:newlightness > 1?1:newlightness];
 };
-thx_color__$HSL_HSL_$Impl_$.withSaturation = function(this1,newsaturation) {
+thx_color__$Hsl_Hsl_$Impl_$.withSaturation = function(this1,newsaturation) {
 	return [this1[0],newsaturation < 0?0:newsaturation > 1?1:newsaturation,this1[2]];
 };
-thx_color__$HSL_HSL_$Impl_$.toCSS3 = function(this1) {
-	return thx_color__$HSL_HSL_$Impl_$.toString(this1);
+thx_color__$Hsl_Hsl_$Impl_$.toCss3 = function(this1) {
+	return thx_color__$Hsl_Hsl_$Impl_$.toString(this1);
 };
-thx_color__$HSL_HSL_$Impl_$.toString = function(this1) {
-	return "hsl(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+thx_color__$Hsl_Hsl_$Impl_$.toString = function(this1) {
+	return "hsl(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1] * 100,6) + "%," + thx_Floats.roundTo(this1[2] * 100,6) + "%)";
 };
-thx_color__$HSL_HSL_$Impl_$.equals = function(this1,other) {
+thx_color__$Hsl_Hsl_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$HSL_HSL_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLCh(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$HSL_HSL_$Impl_$.toRGBXA(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Hsl_Hsl_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toRGBX = function(this1) {
-	var channels = [thx_color__$HSL_HSL_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSL_HSL_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
+thx_color__$Hsl_Hsl_$Impl_$.toRgbx = function(this1) {
+	var channels = [thx_color__$Hsl_Hsl_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$Hsl_Hsl_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$Hsl_Hsl_$Impl_$._c(this1[0] - 120,this1[1],this1[2])];
 	return channels;
 };
-thx_color__$HSL_HSL_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toHSLA = function(this1) {
-	return thx_color__$HSL_HSL_$Impl_$.withAlpha(this1,1.0);
+thx_color__$Hsl_Hsl_$Impl_$.toHsla = function(this1) {
+	return thx_color__$Hsl_Hsl_$Impl_$.withAlpha(this1,1.0);
 };
-thx_color__$HSL_HSL_$Impl_$.toXYZ = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toXyz = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.toYxy = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toYxy(thx_color__$HSL_HSL_$Impl_$.toRGBX(this1));
+thx_color__$Hsl_Hsl_$Impl_$.toYxy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toYxy(thx_color__$Hsl_Hsl_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSL_HSL_$Impl_$.get_hue = function(this1) {
+thx_color__$Hsl_Hsl_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx_color__$HSL_HSL_$Impl_$.get_saturation = function(this1) {
+thx_color__$Hsl_Hsl_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx_color__$HSL_HSL_$Impl_$.get_lightness = function(this1) {
+thx_color__$Hsl_Hsl_$Impl_$.get_lightness = function(this1) {
 	return this1[2];
 };
-thx_color__$HSL_HSL_$Impl_$._c = function(d,s,l) {
+thx_color__$Hsl_Hsl_$Impl_$._c = function(d,s,l) {
 	var m2;
 	if(l <= 0.5) m2 = l * (1 + s); else m2 = l + s - l * s;
 	var m1 = 2 * l - m2;
 	d = thx_Floats.wrapCircular(d,360);
 	if(d < 60) return m1 + (m2 - m1) * d / 60; else if(d < 180) return m2; else if(d < 240) return m1 + (m2 - m1) * (240 - d) / 60; else return m1;
 };
-var thx_color__$HSLA_HSLA_$Impl_$ = {};
-thx_color__$HSLA_HSLA_$Impl_$.__name__ = ["thx","color","_HSLA","HSLA_Impl_"];
-thx_color__$HSLA_HSLA_$Impl_$.create = function(hue,saturation,lightness,alpha) {
+var thx_color__$Hsla_Hsla_$Impl_$ = {};
+thx_color__$Hsla_Hsla_$Impl_$.__name__ = ["thx","color","_Hsla","Hsla_Impl_"];
+thx_color__$Hsla_Hsla_$Impl_$.create = function(hue,saturation,lightness,alpha) {
 	var channels = [thx_Floats.wrapCircular(hue,360),saturation < 0?0:saturation > 1?1:saturation,lightness < 0?0:lightness > 1?1:lightness,alpha < 0?0:alpha > 1?1:alpha];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.fromFloats = function(arr) {
+thx_color__$Hsla_Hsla_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,4);
-	return thx_color__$HSLA_HSLA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+	return thx_color__$Hsla_Hsla_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
 };
-thx_color__$HSLA_HSLA_$Impl_$.fromString = function(color) {
+thx_color__$Hsla_Hsla_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "hsl":
-			return thx_color__$HSL_HSL_$Impl_$.toHSLA((function($this) {
+			return thx_color__$Hsl_Hsl_$Impl_$.toHsla((function($this) {
 				var $r;
 				var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
 				$r = channels;
@@ -3826,116 +3886,116 @@ thx_color__$HSLA_HSLA_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$HSLA_HSLA_$Impl_$._new = function(channels) {
+thx_color__$Hsla_Hsla_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.analogous = function(this1,spread) {
+thx_color__$Hsla_Hsla_$Impl_$.analogous = function(this1,spread) {
 	if(spread == null) spread = 30.0;
-	var _0 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsla_Hsla_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsla_Hsla_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSLA_HSLA_$Impl_$.complement = function(this1) {
-	return thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,180);
+thx_color__$Hsla_Hsla_$Impl_$.complement = function(this1) {
+	return thx_color__$Hsla_Hsla_$Impl_$.rotate(this1,180);
 };
-thx_color__$HSLA_HSLA_$Impl_$.darker = function(this1,t) {
+thx_color__$Hsla_Hsla_$Impl_$.darker = function(this1,t) {
 	var channels = [this1[0],this1[1],thx_Floats.interpolate(t,this1[2],0),this1[3]];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.lighter = function(this1,t) {
+thx_color__$Hsla_Hsla_$Impl_$.lighter = function(this1,t) {
 	var channels = [this1[0],this1[1],thx_Floats.interpolate(t,this1[2],1),this1[3]];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.transparent = function(this1,t) {
+thx_color__$Hsla_Hsla_$Impl_$.transparent = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Floats.interpolate(t,this1[3],0)];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.opaque = function(this1,t) {
+thx_color__$Hsla_Hsla_$Impl_$.opaque = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Floats.interpolate(t,this1[3],1)];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Hsla_Hsla_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolateAngle(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2]),thx_Floats.interpolate(t,this1[3],other[3])];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.rotate = function(this1,angle) {
-	return thx_color__$HSLA_HSLA_$Impl_$.create(this1[0] + angle,this1[1],this1[2],this1[3]);
+thx_color__$Hsla_Hsla_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$Hsla_Hsla_$Impl_$.create(this1[0] + angle,this1[1],this1[2],this1[3]);
 };
-thx_color__$HSLA_HSLA_$Impl_$.split = function(this1,spread) {
+thx_color__$Hsla_Hsla_$Impl_$.split = function(this1,spread) {
 	if(spread == null) spread = 150.0;
-	var _0 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSLA_HSLA_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsla_Hsla_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsla_Hsla_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSLA_HSLA_$Impl_$.withAlpha = function(this1,newalpha) {
+thx_color__$Hsla_Hsla_$Impl_$.withAlpha = function(this1,newalpha) {
 	return [this1[0],this1[1],this1[2],newalpha < 0?0:newalpha > 1?1:newalpha];
 };
-thx_color__$HSLA_HSLA_$Impl_$.withHue = function(this1,newhue) {
+thx_color__$Hsla_Hsla_$Impl_$.withHue = function(this1,newhue) {
 	var channels = [thx_Floats.wrapCircular(newhue,360),this1[1],this1[2],this1[3]];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.withLightness = function(this1,newlightness) {
+thx_color__$Hsla_Hsla_$Impl_$.withLightness = function(this1,newlightness) {
 	return [this1[0],this1[1],newlightness < 0?0:newlightness > 1?1:newlightness,this1[3]];
 };
-thx_color__$HSLA_HSLA_$Impl_$.withSaturation = function(this1,newsaturation) {
+thx_color__$Hsla_Hsla_$Impl_$.withSaturation = function(this1,newsaturation) {
 	return [this1[0],newsaturation < 0?0:newsaturation > 1?1:newsaturation,this1[2],this1[3]];
 };
-thx_color__$HSLA_HSLA_$Impl_$.toCSS3 = function(this1) {
-	return thx_color__$HSLA_HSLA_$Impl_$.toString(this1);
+thx_color__$Hsla_Hsla_$Impl_$.toCss3 = function(this1) {
+	return thx_color__$Hsla_Hsla_$Impl_$.toString(this1);
 };
-thx_color__$HSLA_HSLA_$Impl_$.toString = function(this1) {
-	return "hsla(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+thx_color__$Hsla_Hsla_$Impl_$.toString = function(this1) {
+	return "hsla(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1] * 100,6) + "%," + thx_Floats.roundTo(this1[2] * 100,6) + "%," + thx_Floats.roundTo(this1[3],6) + ")";
 };
-thx_color__$HSLA_HSLA_$Impl_$.equals = function(this1,other) {
+thx_color__$Hsla_Hsla_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10 && Math.abs(this1[3] - other[3]) <= 10e-10;
 };
-thx_color__$HSLA_HSLA_$Impl_$.toHSL = function(this1) {
+thx_color__$Hsla_Hsla_$Impl_$.toHsl = function(this1) {
 	var channels = this1.slice(0,3);
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.toHSVA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSVA(thx_color__$HSLA_HSLA_$Impl_$.toRGBXA(this1));
+thx_color__$Hsla_Hsla_$Impl_$.toHsva = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toHsva(thx_color__$Hsla_Hsla_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSLA_HSLA_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGB(thx_color__$HSLA_HSLA_$Impl_$.toRGBXA(this1));
+thx_color__$Hsla_Hsla_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgb(thx_color__$Hsla_Hsla_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSLA_HSLA_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$HSLA_HSLA_$Impl_$.toRGBXA(this1));
+thx_color__$Hsla_Hsla_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Hsla_Hsla_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSLA_HSLA_$Impl_$.toRGBXA = function(this1) {
-	var channels = [thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$HSLA_HSLA_$Impl_$._c(this1[0] - 120,this1[1],this1[2]),this1[3]];
+thx_color__$Hsla_Hsla_$Impl_$.toRgbxa = function(this1) {
+	var channels = [thx_color__$Hsla_Hsla_$Impl_$._c(this1[0] + 120,this1[1],this1[2]),thx_color__$Hsla_Hsla_$Impl_$._c(this1[0],this1[1],this1[2]),thx_color__$Hsla_Hsla_$Impl_$._c(this1[0] - 120,this1[1],this1[2]),this1[3]];
 	return channels;
 };
-thx_color__$HSLA_HSLA_$Impl_$.get_hue = function(this1) {
+thx_color__$Hsla_Hsla_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx_color__$HSLA_HSLA_$Impl_$.get_saturation = function(this1) {
+thx_color__$Hsla_Hsla_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx_color__$HSLA_HSLA_$Impl_$.get_lightness = function(this1) {
+thx_color__$Hsla_Hsla_$Impl_$.get_lightness = function(this1) {
 	return this1[2];
 };
-thx_color__$HSLA_HSLA_$Impl_$.get_alpha = function(this1) {
+thx_color__$Hsla_Hsla_$Impl_$.get_alpha = function(this1) {
 	return this1[3];
 };
-thx_color__$HSLA_HSLA_$Impl_$._c = function(d,s,l) {
+thx_color__$Hsla_Hsla_$Impl_$._c = function(d,s,l) {
 	var m2;
 	if(l <= 0.5) m2 = l * (1 + s); else m2 = l + s - l * s;
 	var m1 = 2 * l - m2;
 	d = thx_Floats.wrapCircular(d,360);
 	if(d < 60) return m1 + (m2 - m1) * d / 60; else if(d < 180) return m2; else if(d < 240) return m1 + (m2 - m1) * (240 - d) / 60; else return m1;
 };
-var thx_color__$HSV_HSV_$Impl_$ = {};
-thx_color__$HSV_HSV_$Impl_$.__name__ = ["thx","color","_HSV","HSV_Impl_"];
-thx_color__$HSV_HSV_$Impl_$.create = function(hue,saturation,lightness) {
+var thx_color__$Hsv_Hsv_$Impl_$ = {};
+thx_color__$Hsv_Hsv_$Impl_$.__name__ = ["thx","color","_Hsv","Hsv_Impl_"];
+thx_color__$Hsv_Hsv_$Impl_$.create = function(hue,saturation,lightness) {
 	var channels = [thx_Floats.wrapCircular(hue,360),saturation < 0?0:saturation > 1?1:saturation,lightness < 0?0:lightness > 1?1:lightness];
 	return channels;
 };
-thx_color__$HSV_HSV_$Impl_$.fromFloats = function(arr) {
+thx_color__$Hsv_Hsv_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,3);
-	return thx_color__$HSV_HSV_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$Hsv_Hsv_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$HSV_HSV_$Impl_$.fromString = function(color) {
+thx_color__$Hsv_Hsv_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
@@ -3953,95 +4013,95 @@ thx_color__$HSV_HSV_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$HSV_HSV_$Impl_$._new = function(channels) {
+thx_color__$Hsv_Hsv_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$HSV_HSV_$Impl_$.analogous = function(this1,spread) {
+thx_color__$Hsv_Hsv_$Impl_$.analogous = function(this1,spread) {
 	if(spread == null) spread = 30.0;
-	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSV_HSV_$Impl_$.complement = function(this1) {
-	return thx_color__$HSV_HSV_$Impl_$.rotate(this1,180);
+thx_color__$Hsv_Hsv_$Impl_$.complement = function(this1) {
+	return thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,180);
 };
-thx_color__$HSV_HSV_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Hsv_Hsv_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolateAngle(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2])];
 	return channels;
 };
-thx_color__$HSV_HSV_$Impl_$.rotate = function(this1,angle) {
-	return thx_color__$HSV_HSV_$Impl_$.withHue(this1,this1[0] + angle);
+thx_color__$Hsv_Hsv_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$Hsv_Hsv_$Impl_$.withHue(this1,this1[0] + angle);
 };
-thx_color__$HSV_HSV_$Impl_$.split = function(this1,spread) {
+thx_color__$Hsv_Hsv_$Impl_$.split = function(this1,spread) {
 	if(spread == null) spread = 144.0;
-	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSV_HSV_$Impl_$.square = function(this1) {
-	return thx_color__$HSV_HSV_$Impl_$.tetrad(this1,90);
+thx_color__$Hsv_Hsv_$Impl_$.square = function(this1) {
+	return thx_color__$Hsv_Hsv_$Impl_$.tetrad(this1,90);
 };
-thx_color__$HSV_HSV_$Impl_$.tetrad = function(this1,angle) {
-	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,0);
-	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,angle);
-	var _2 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,180);
-	var _3 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,180 + angle);
+thx_color__$Hsv_Hsv_$Impl_$.tetrad = function(this1,angle) {
+	var _0 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,0);
+	var _1 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,angle);
+	var _2 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,180);
+	var _3 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,180 + angle);
 	return { _0 : _0, _1 : _1, _2 : _2, _3 : _3};
 };
-thx_color__$HSV_HSV_$Impl_$.triad = function(this1) {
-	var _0 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,-120);
-	var _1 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,0);
-	var _2 = thx_color__$HSV_HSV_$Impl_$.rotate(this1,120);
+thx_color__$Hsv_Hsv_$Impl_$.triad = function(this1) {
+	var _0 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,-120);
+	var _1 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,0);
+	var _2 = thx_color__$Hsv_Hsv_$Impl_$.rotate(this1,120);
 	return { _0 : _0, _1 : _1, _2 : _2};
 };
-thx_color__$HSV_HSV_$Impl_$.withAlpha = function(this1,alpha) {
+thx_color__$Hsv_Hsv_$Impl_$.withAlpha = function(this1,alpha) {
 	var channels = this1.concat([alpha < 0?0:alpha > 1?1:alpha]);
 	return channels;
 };
-thx_color__$HSV_HSV_$Impl_$.withHue = function(this1,newhue) {
+thx_color__$Hsv_Hsv_$Impl_$.withHue = function(this1,newhue) {
 	var channels = [thx_Floats.wrapCircular(newhue,360),this1[1],this1[2]];
 	return channels;
 };
-thx_color__$HSV_HSV_$Impl_$.withValue = function(this1,newvalue) {
+thx_color__$Hsv_Hsv_$Impl_$.withValue = function(this1,newvalue) {
 	return [this1[0],this1[1],newvalue < 0?0:newvalue > 1?1:newvalue];
 };
-thx_color__$HSV_HSV_$Impl_$.withSaturation = function(this1,newsaturation) {
+thx_color__$Hsv_Hsv_$Impl_$.withSaturation = function(this1,newsaturation) {
 	return [this1[0],newsaturation < 0?0:newsaturation > 1?1:newsaturation,this1[2]];
 };
-thx_color__$HSV_HSV_$Impl_$.toString = function(this1) {
-	return "hsv(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+thx_color__$Hsv_Hsv_$Impl_$.toString = function(this1) {
+	return "hsv(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1] * 100,6) + "%," + thx_Floats.roundTo(this1[2] * 100,6) + "%)";
 };
-thx_color__$HSV_HSV_$Impl_$.equals = function(this1,other) {
+thx_color__$Hsv_Hsv_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$HSV_HSV_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLCh(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toHSVA = function(this1) {
-	return thx_color__$HSV_HSV_$Impl_$.withAlpha(this1,1.0);
+thx_color__$Hsv_Hsv_$Impl_$.toHsva = function(this1) {
+	return thx_color__$Hsv_Hsv_$Impl_$.withAlpha(this1,1.0);
 };
-thx_color__$HSV_HSV_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$HSV_HSV_$Impl_$.toRGBXA(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Hsv_Hsv_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toRGBX = function(this1) {
+thx_color__$Hsv_Hsv_$Impl_$.toRgbx = function(this1) {
 	if(this1[1] == 0) return [this1[2],this1[2],this1[2]];
 	var r;
 	var g;
@@ -4090,42 +4150,42 @@ thx_color__$HSV_HSV_$Impl_$.toRGBX = function(this1) {
 	}
 	return [r,g,b];
 };
-thx_color__$HSV_HSV_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toXYZ = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toXyz = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.toYxy = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toYxy(thx_color__$HSV_HSV_$Impl_$.toRGBX(this1));
+thx_color__$Hsv_Hsv_$Impl_$.toYxy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toYxy(thx_color__$Hsv_Hsv_$Impl_$.toRgbx(this1));
 };
-thx_color__$HSV_HSV_$Impl_$.get_hue = function(this1) {
+thx_color__$Hsv_Hsv_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx_color__$HSV_HSV_$Impl_$.get_saturation = function(this1) {
+thx_color__$Hsv_Hsv_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx_color__$HSV_HSV_$Impl_$.get_value = function(this1) {
+thx_color__$Hsv_Hsv_$Impl_$.get_value = function(this1) {
 	return this1[2];
 };
-var thx_color__$HSVA_HSVA_$Impl_$ = {};
-thx_color__$HSVA_HSVA_$Impl_$.__name__ = ["thx","color","_HSVA","HSVA_Impl_"];
-thx_color__$HSVA_HSVA_$Impl_$.create = function(hue,saturation,value,alpha) {
+var thx_color__$Hsva_Hsva_$Impl_$ = {};
+thx_color__$Hsva_Hsva_$Impl_$.__name__ = ["thx","color","_Hsva","Hsva_Impl_"];
+thx_color__$Hsva_Hsva_$Impl_$.create = function(hue,saturation,value,alpha) {
 	var channels = [thx_Floats.wrapCircular(hue,360),saturation < 0?0:saturation > 1?1:saturation,value < 0?0:value > 1?1:value,alpha < 0?0:alpha > 1?1:alpha];
 	return channels;
 };
-thx_color__$HSVA_HSVA_$Impl_$.fromFloats = function(arr) {
+thx_color__$Hsva_Hsva_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,4);
-	return thx_color__$HSVA_HSVA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+	return thx_color__$Hsva_Hsva_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
 };
-thx_color__$HSVA_HSVA_$Impl_$.fromString = function(color) {
+thx_color__$Hsva_Hsva_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
 		var _g = info.name;
 		switch(_g) {
 		case "hsv":
-			return thx_color__$HSV_HSV_$Impl_$.toHSVA((function($this) {
+			return thx_color__$Hsv_Hsv_$Impl_$.toHsva((function($this) {
 				var $r;
 				var channels = thx_color_parse_ColorParser.getFloatChannels(info.channels,3);
 				$r = channels;
@@ -4143,72 +4203,72 @@ thx_color__$HSVA_HSVA_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$HSVA_HSVA_$Impl_$._new = function(channels) {
+thx_color__$Hsva_Hsva_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$HSVA_HSVA_$Impl_$.analogous = function(this1,spread) {
+thx_color__$Hsva_Hsva_$Impl_$.analogous = function(this1,spread) {
 	if(spread == null) spread = 30.0;
-	var _0 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsva_Hsva_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsva_Hsva_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSVA_HSVA_$Impl_$.complement = function(this1) {
-	return thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,180);
+thx_color__$Hsva_Hsva_$Impl_$.complement = function(this1) {
+	return thx_color__$Hsva_Hsva_$Impl_$.rotate(this1,180);
 };
-thx_color__$HSVA_HSVA_$Impl_$.transparent = function(this1,t) {
+thx_color__$Hsva_Hsva_$Impl_$.transparent = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Floats.interpolate(t,this1[3],0)];
 	return channels;
 };
-thx_color__$HSVA_HSVA_$Impl_$.opaque = function(this1,t) {
+thx_color__$Hsva_Hsva_$Impl_$.opaque = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Floats.interpolate(t,this1[3],1)];
 	return channels;
 };
-thx_color__$HSVA_HSVA_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Hsva_Hsva_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolateAngle(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2]),thx_Floats.interpolate(t,this1[3],other[3])];
 	return channels;
 };
-thx_color__$HSVA_HSVA_$Impl_$.rotate = function(this1,angle) {
-	return thx_color__$HSVA_HSVA_$Impl_$.create(this1[0] + angle,this1[1],this1[2],this1[3]);
+thx_color__$Hsva_Hsva_$Impl_$.rotate = function(this1,angle) {
+	return thx_color__$Hsva_Hsva_$Impl_$.create(this1[0] + angle,this1[1],this1[2],this1[3]);
 };
-thx_color__$HSVA_HSVA_$Impl_$.split = function(this1,spread) {
+thx_color__$Hsva_Hsva_$Impl_$.split = function(this1,spread) {
 	if(spread == null) spread = 150.0;
-	var _0 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,-spread);
-	var _1 = thx_color__$HSVA_HSVA_$Impl_$.rotate(this1,spread);
+	var _0 = thx_color__$Hsva_Hsva_$Impl_$.rotate(this1,-spread);
+	var _1 = thx_color__$Hsva_Hsva_$Impl_$.rotate(this1,spread);
 	return { _0 : _0, _1 : _1};
 };
-thx_color__$HSVA_HSVA_$Impl_$.withAlpha = function(this1,newalpha) {
+thx_color__$Hsva_Hsva_$Impl_$.withAlpha = function(this1,newalpha) {
 	return [this1[0],this1[1],this1[2],newalpha < 0?0:newalpha > 1?1:newalpha];
 };
-thx_color__$HSVA_HSVA_$Impl_$.withHue = function(this1,newhue) {
+thx_color__$Hsva_Hsva_$Impl_$.withHue = function(this1,newhue) {
 	var channels = [thx_Floats.wrapCircular(newhue,360),this1[1],this1[2],this1[3]];
 	return channels;
 };
-thx_color__$HSVA_HSVA_$Impl_$.withLightness = function(this1,newvalue) {
+thx_color__$Hsva_Hsva_$Impl_$.withLightness = function(this1,newvalue) {
 	return [this1[0],this1[1],newvalue < 0?0:newvalue > 1?1:newvalue,this1[3]];
 };
-thx_color__$HSVA_HSVA_$Impl_$.withSaturation = function(this1,newsaturation) {
+thx_color__$Hsva_Hsva_$Impl_$.withSaturation = function(this1,newsaturation) {
 	return [this1[0],newsaturation < 0?0:newsaturation > 1?1:newsaturation,this1[2],this1[3]];
 };
-thx_color__$HSVA_HSVA_$Impl_$.toString = function(this1) {
-	return "hsva(" + this1[0] + "," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+thx_color__$Hsva_Hsva_$Impl_$.toString = function(this1) {
+	return "hsva(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1] * 100,6) + "%," + thx_Floats.roundTo(this1[2] * 100,6) + "%," + thx_Floats.roundTo(this1[3],6) + ")";
 };
-thx_color__$HSVA_HSVA_$Impl_$.equals = function(this1,other) {
+thx_color__$Hsva_Hsva_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10 && Math.abs(this1[3] - other[3]) <= 10e-10;
 };
-thx_color__$HSVA_HSVA_$Impl_$.toHSV = function(this1) {
+thx_color__$Hsva_Hsva_$Impl_$.toHsv = function(this1) {
 	var channels = this1.slice(0,3);
 	return channels;
 };
-thx_color__$HSVA_HSVA_$Impl_$.toHSLA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSLA(thx_color__$HSVA_HSVA_$Impl_$.toRGBXA(this1));
+thx_color__$Hsva_Hsva_$Impl_$.toHsla = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toHsla(thx_color__$Hsva_Hsva_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSVA_HSVA_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGB(thx_color__$HSVA_HSVA_$Impl_$.toRGBXA(this1));
+thx_color__$Hsva_Hsva_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgb(thx_color__$Hsva_Hsva_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSVA_HSVA_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$HSVA_HSVA_$Impl_$.toRGBXA(this1));
+thx_color__$Hsva_Hsva_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Hsva_Hsva_$Impl_$.toRgbxa(this1));
 };
-thx_color__$HSVA_HSVA_$Impl_$.toRGBXA = function(this1) {
+thx_color__$Hsva_Hsva_$Impl_$.toRgbxa = function(this1) {
 	if(this1[1] == 0) return [this1[2],this1[2],this1[2],this1[3]];
 	var r;
 	var g;
@@ -4257,27 +4317,27 @@ thx_color__$HSVA_HSVA_$Impl_$.toRGBXA = function(this1) {
 	}
 	return [r,g,b,this1[3]];
 };
-thx_color__$HSVA_HSVA_$Impl_$.get_hue = function(this1) {
+thx_color__$Hsva_Hsva_$Impl_$.get_hue = function(this1) {
 	return this1[0];
 };
-thx_color__$HSVA_HSVA_$Impl_$.get_saturation = function(this1) {
+thx_color__$Hsva_Hsva_$Impl_$.get_saturation = function(this1) {
 	return this1[1];
 };
-thx_color__$HSVA_HSVA_$Impl_$.get_value = function(this1) {
+thx_color__$Hsva_Hsva_$Impl_$.get_value = function(this1) {
 	return this1[2];
 };
-thx_color__$HSVA_HSVA_$Impl_$.get_alpha = function(this1) {
+thx_color__$Hsva_Hsva_$Impl_$.get_alpha = function(this1) {
 	return this1[3];
 };
-var thx_color__$RGB_RGB_$Impl_$ = {};
-thx_color__$RGB_RGB_$Impl_$.__name__ = ["thx","color","_RGB","RGB_Impl_"];
-thx_color__$RGB_RGB_$Impl_$.create = function(red,green,blue) {
+var thx_color__$Rgb_Rgb_$Impl_$ = {};
+thx_color__$Rgb_Rgb_$Impl_$.__name__ = ["thx","color","_Rgb","Rgb_Impl_"];
+thx_color__$Rgb_Rgb_$Impl_$.create = function(red,green,blue) {
 	return (red & 255) << 16 | (green & 255) << 8 | blue & 255;
 };
-thx_color__$RGB_RGB_$Impl_$.createf = function(red,green,blue) {
-	return thx_color__$RGB_RGB_$Impl_$.create(Math.round(red * 255),Math.round(green * 255),Math.round(blue * 255));
+thx_color__$Rgb_Rgb_$Impl_$.createf = function(red,green,blue) {
+	return thx_color__$Rgb_Rgb_$Impl_$.create(Math.round(red * 255),Math.round(green * 255),Math.round(blue * 255));
 };
-thx_color__$RGB_RGB_$Impl_$.fromString = function(color) {
+thx_color__$Rgb_Rgb_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseHex(color);
 	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
@@ -4285,7 +4345,7 @@ thx_color__$RGB_RGB_$Impl_$.fromString = function(color) {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			return thx_color__$RGB_RGB_$Impl_$.fromInts(thx_color_parse_ColorParser.getInt8Channels(info.channels,3));
+			return thx_color__$Rgb_Rgb_$Impl_$.fromInts(thx_color_parse_ColorParser.getInt8Channels(info.channels,3));
 		default:
 			return null;
 		}
@@ -4295,111 +4355,111 @@ thx_color__$RGB_RGB_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$RGB_RGB_$Impl_$.fromInts = function(arr) {
+thx_color__$Rgb_Rgb_$Impl_$.fromInts = function(arr) {
 	thx_ArrayInts.resize(arr,3);
-	return thx_color__$RGB_RGB_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$Rgb_Rgb_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$RGB_RGB_$Impl_$._new = function(rgb) {
+thx_color__$Rgb_Rgb_$Impl_$._new = function(rgb) {
 	return rgb;
 };
-thx_color__$RGB_RGB_$Impl_$.darker = function(this1,t) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$RGBX_RGBX_$Impl_$.darker(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1),t));
+thx_color__$Rgb_Rgb_$Impl_$.darker = function(this1,t) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Rgbx_Rgbx_$Impl_$.darker(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1),t));
 };
-thx_color__$RGB_RGB_$Impl_$.lighter = function(this1,t) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$RGBX_RGBX_$Impl_$.lighter(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1),t));
+thx_color__$Rgb_Rgb_$Impl_$.lighter = function(this1,t) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Rgbx_Rgbx_$Impl_$.lighter(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1),t));
 };
-thx_color__$RGB_RGB_$Impl_$.interpolate = function(this1,other,t) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$RGBX_RGBX_$Impl_$.interpolate(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1),thx_color__$RGB_RGB_$Impl_$.toRGBX(other),t));
+thx_color__$Rgb_Rgb_$Impl_$.interpolate = function(this1,other,t) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Rgbx_Rgbx_$Impl_$.interpolate(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1),thx_color__$Rgb_Rgb_$Impl_$.toRgbx(other),t));
 };
-thx_color__$RGB_RGB_$Impl_$.withAlpha = function(this1,alpha) {
-	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([thx_color__$RGB_RGB_$Impl_$.get_red(this1),thx_color__$RGB_RGB_$Impl_$.get_green(this1),thx_color__$RGB_RGB_$Impl_$.get_blue(this1),alpha]);
+thx_color__$Rgb_Rgb_$Impl_$.withAlpha = function(this1,alpha) {
+	return thx_color__$Rgba_Rgba_$Impl_$.fromInts([thx_color__$Rgb_Rgb_$Impl_$.get_red(this1),thx_color__$Rgb_Rgb_$Impl_$.get_green(this1),thx_color__$Rgb_Rgb_$Impl_$.get_blue(this1),alpha]);
 };
-thx_color__$RGB_RGB_$Impl_$.withRed = function(this1,newred) {
-	return thx_color__$RGB_RGB_$Impl_$.fromInts([newred,thx_color__$RGB_RGB_$Impl_$.get_green(this1),thx_color__$RGB_RGB_$Impl_$.get_blue(this1)]);
+thx_color__$Rgb_Rgb_$Impl_$.withRed = function(this1,newred) {
+	return thx_color__$Rgb_Rgb_$Impl_$.fromInts([newred,thx_color__$Rgb_Rgb_$Impl_$.get_green(this1),thx_color__$Rgb_Rgb_$Impl_$.get_blue(this1)]);
 };
-thx_color__$RGB_RGB_$Impl_$.withGreen = function(this1,newgreen) {
-	return thx_color__$RGB_RGB_$Impl_$.fromInts([thx_color__$RGB_RGB_$Impl_$.get_red(this1),newgreen,thx_color__$RGB_RGB_$Impl_$.get_blue(this1)]);
+thx_color__$Rgb_Rgb_$Impl_$.withGreen = function(this1,newgreen) {
+	return thx_color__$Rgb_Rgb_$Impl_$.fromInts([thx_color__$Rgb_Rgb_$Impl_$.get_red(this1),newgreen,thx_color__$Rgb_Rgb_$Impl_$.get_blue(this1)]);
 };
-thx_color__$RGB_RGB_$Impl_$.withBlue = function(this1,newblue) {
-	return thx_color__$RGB_RGB_$Impl_$.fromInts([thx_color__$RGB_RGB_$Impl_$.get_red(this1),thx_color__$RGB_RGB_$Impl_$.get_green(this1),newblue]);
+thx_color__$Rgb_Rgb_$Impl_$.withBlue = function(this1,newblue) {
+	return thx_color__$Rgb_Rgb_$Impl_$.fromInts([thx_color__$Rgb_Rgb_$Impl_$.get_red(this1),thx_color__$Rgb_Rgb_$Impl_$.get_green(this1),newblue]);
 };
-thx_color__$RGB_RGB_$Impl_$.toCSS3 = function(this1) {
-	return "rgb(" + thx_color__$RGB_RGB_$Impl_$.get_red(this1) + "," + thx_color__$RGB_RGB_$Impl_$.get_green(this1) + "," + thx_color__$RGB_RGB_$Impl_$.get_blue(this1) + ")";
+thx_color__$Rgb_Rgb_$Impl_$.toCss3 = function(this1) {
+	return "rgb(" + thx_color__$Rgb_Rgb_$Impl_$.get_red(this1) + "," + thx_color__$Rgb_Rgb_$Impl_$.get_green(this1) + "," + thx_color__$Rgb_Rgb_$Impl_$.get_blue(this1) + ")";
 };
-thx_color__$RGB_RGB_$Impl_$.toString = function(this1) {
-	return thx_color__$RGB_RGB_$Impl_$.toHex(this1);
+thx_color__$Rgb_Rgb_$Impl_$.toString = function(this1) {
+	return thx_color__$Rgb_Rgb_$Impl_$.toHex(this1);
 };
-thx_color__$RGB_RGB_$Impl_$.toHex = function(this1,prefix) {
+thx_color__$Rgb_Rgb_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
-	return "" + prefix + StringTools.hex(thx_color__$RGB_RGB_$Impl_$.get_red(this1),2) + StringTools.hex(thx_color__$RGB_RGB_$Impl_$.get_green(this1),2) + StringTools.hex(thx_color__$RGB_RGB_$Impl_$.get_blue(this1),2);
+	return "" + prefix + StringTools.hex(thx_color__$Rgb_Rgb_$Impl_$.get_red(this1),2) + StringTools.hex(thx_color__$Rgb_Rgb_$Impl_$.get_green(this1),2) + StringTools.hex(thx_color__$Rgb_Rgb_$Impl_$.get_blue(this1),2);
 };
-thx_color__$RGB_RGB_$Impl_$.equals = function(this1,other) {
-	return thx_color__$RGB_RGB_$Impl_$.get_red(this1) == thx_color__$RGB_RGB_$Impl_$.get_red(other) && thx_color__$RGB_RGB_$Impl_$.get_green(this1) == thx_color__$RGB_RGB_$Impl_$.get_green(other) && thx_color__$RGB_RGB_$Impl_$.get_blue(this1) == thx_color__$RGB_RGB_$Impl_$.get_blue(other);
+thx_color__$Rgb_Rgb_$Impl_$.equals = function(this1,other) {
+	return thx_color__$Rgb_Rgb_$Impl_$.get_red(this1) == thx_color__$Rgb_Rgb_$Impl_$.get_red(other) && thx_color__$Rgb_Rgb_$Impl_$.get_green(this1) == thx_color__$Rgb_Rgb_$Impl_$.get_green(other) && thx_color__$Rgb_Rgb_$Impl_$.get_blue(this1) == thx_color__$Rgb_Rgb_$Impl_$.get_blue(other);
 };
-thx_color__$RGB_RGB_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELab(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCIELCh(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCieLCh(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toRGBX = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.fromInts([thx_color__$RGB_RGB_$Impl_$.get_red(this1),thx_color__$RGB_RGB_$Impl_$.get_green(this1),thx_color__$RGB_RGB_$Impl_$.get_blue(this1)]);
+thx_color__$Rgb_Rgb_$Impl_$.toRgbx = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.fromInts([thx_color__$Rgb_Rgb_$Impl_$.get_red(this1),thx_color__$Rgb_Rgb_$Impl_$.get_green(this1),thx_color__$Rgb_Rgb_$Impl_$.get_blue(this1)]);
 };
-thx_color__$RGB_RGB_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGB_RGB_$Impl_$.withAlpha(this1,255);
+thx_color__$Rgb_Rgb_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgb_Rgb_$Impl_$.withAlpha(this1,255);
 };
-thx_color__$RGB_RGB_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(thx_color__$RGB_RGB_$Impl_$.toRGBA(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(thx_color__$Rgb_Rgb_$Impl_$.toRgba(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toYxy = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toYxy(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toYxy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toYxy(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.toXYZ = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toXYZ(thx_color__$RGB_RGB_$Impl_$.toRGBX(this1));
+thx_color__$Rgb_Rgb_$Impl_$.toXyz = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(thx_color__$Rgb_Rgb_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGB_RGB_$Impl_$.get_red = function(this1) {
+thx_color__$Rgb_Rgb_$Impl_$.get_red = function(this1) {
 	return this1 >> 16 & 255;
 };
-thx_color__$RGB_RGB_$Impl_$.get_green = function(this1) {
+thx_color__$Rgb_Rgb_$Impl_$.get_green = function(this1) {
 	return this1 >> 8 & 255;
 };
-thx_color__$RGB_RGB_$Impl_$.get_blue = function(this1) {
+thx_color__$Rgb_Rgb_$Impl_$.get_blue = function(this1) {
 	return this1 & 255;
 };
-var thx_color__$RGBA_RGBA_$Impl_$ = {};
-thx_color__$RGBA_RGBA_$Impl_$.__name__ = ["thx","color","_RGBA","RGBA_Impl_"];
-thx_color__$RGBA_RGBA_$Impl_$.create = function(red,green,blue,alpha) {
+var thx_color__$Rgba_Rgba_$Impl_$ = {};
+thx_color__$Rgba_Rgba_$Impl_$.__name__ = ["thx","color","_Rgba","Rgba_Impl_"];
+thx_color__$Rgba_Rgba_$Impl_$.create = function(red,green,blue,alpha) {
 	return (red & 255) << 24 | (green & 255) << 16 | (blue & 255) << 8 | alpha & 255;
 };
-thx_color__$RGBA_RGBA_$Impl_$.fromFloats = function(arr) {
+thx_color__$Rgba_Rgba_$Impl_$.fromFloats = function(arr) {
 	var ints = thx_ArrayFloats.resize(arr,4).map(function(_) {
 		return Math.round(_ * 255);
 	});
-	return thx_color__$RGBA_RGBA_$Impl_$.create(ints[0],ints[1],ints[2],ints[3]);
+	return thx_color__$Rgba_Rgba_$Impl_$.create(ints[0],ints[1],ints[2],ints[3]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.fromInt = function(rgba) {
+thx_color__$Rgba_Rgba_$Impl_$.fromInt = function(rgba) {
 	return rgba;
 };
-thx_color__$RGBA_RGBA_$Impl_$.fromInts = function(arr) {
+thx_color__$Rgba_Rgba_$Impl_$.fromInts = function(arr) {
 	thx_ArrayInts.resize(arr,4);
-	return thx_color__$RGBA_RGBA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+	return thx_color__$Rgba_Rgba_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.fromString = function(color) {
+thx_color__$Rgba_Rgba_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseHex(color);
 	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
@@ -4407,9 +4467,9 @@ thx_color__$RGBA_RGBA_$Impl_$.fromString = function(color) {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			return thx_color__$RGB_RGB_$Impl_$.toRGBA(thx_color__$RGB_RGB_$Impl_$.fromInts(thx_color_parse_ColorParser.getInt8Channels(info.channels,3)));
+			return thx_color__$Rgb_Rgb_$Impl_$.toRgba(thx_color__$Rgb_Rgb_$Impl_$.fromInts(thx_color_parse_ColorParser.getInt8Channels(info.channels,3)));
 		case "rgba":
-			return thx_color__$RGBA_RGBA_$Impl_$.create(thx_color_parse_ColorParser.getInt8Channel(info.channels[0]),thx_color_parse_ColorParser.getInt8Channel(info.channels[1]),thx_color_parse_ColorParser.getInt8Channel(info.channels[2]),Math.round(thx_color_parse_ColorParser.getFloatChannel(info.channels[3]) * 255));
+			return thx_color__$Rgba_Rgba_$Impl_$.create(thx_color_parse_ColorParser.getInt8Channel(info.channels[0]),thx_color_parse_ColorParser.getInt8Channel(info.channels[1]),thx_color_parse_ColorParser.getInt8Channel(info.channels[2]),Math.round(thx_color_parse_ColorParser.getFloatChannel(info.channels[3]) * 255));
 		default:
 			return null;
 		}
@@ -4419,90 +4479,90 @@ thx_color__$RGBA_RGBA_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$RGBA_RGBA_$Impl_$._new = function(rgba) {
+thx_color__$Rgba_Rgba_$Impl_$._new = function(rgba) {
 	return rgba;
 };
-thx_color__$RGBA_RGBA_$Impl_$.darker = function(this1,t) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$RGBXA_RGBXA_$Impl_$.darker(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t));
+thx_color__$Rgba_Rgba_$Impl_$.darker = function(this1,t) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Rgbxa_Rgbxa_$Impl_$.darker(thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(this1),t));
 };
-thx_color__$RGBA_RGBA_$Impl_$.lighter = function(this1,t) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$RGBXA_RGBXA_$Impl_$.lighter(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t));
+thx_color__$Rgba_Rgba_$Impl_$.lighter = function(this1,t) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Rgbxa_Rgbxa_$Impl_$.lighter(thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(this1),t));
 };
-thx_color__$RGBA_RGBA_$Impl_$.transparent = function(this1,t) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$RGBXA_RGBXA_$Impl_$.transparent(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t));
+thx_color__$Rgba_Rgba_$Impl_$.transparent = function(this1,t) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Rgbxa_Rgbxa_$Impl_$.transparent(thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(this1),t));
 };
-thx_color__$RGBA_RGBA_$Impl_$.opaque = function(this1,t) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$RGBXA_RGBXA_$Impl_$.opaque(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),t));
+thx_color__$Rgba_Rgba_$Impl_$.opaque = function(this1,t) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Rgbxa_Rgbxa_$Impl_$.opaque(thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(this1),t));
 };
-thx_color__$RGBA_RGBA_$Impl_$.interpolate = function(this1,other,t) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$RGBXA_RGBXA_$Impl_$.interpolate(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1),thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(other),t));
+thx_color__$Rgba_Rgba_$Impl_$.interpolate = function(this1,other,t) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Rgbxa_Rgbxa_$Impl_$.interpolate(thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(this1),thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(other),t));
 };
-thx_color__$RGBA_RGBA_$Impl_$.withAlpha = function(this1,newalpha) {
-	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255,newalpha]);
+thx_color__$Rgba_Rgba_$Impl_$.withAlpha = function(this1,newalpha) {
+	return thx_color__$Rgba_Rgba_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255,newalpha]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.withRed = function(this1,newred) {
-	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([newred,this1 >> 16 & 255,this1 >> 8 & 255]);
+thx_color__$Rgba_Rgba_$Impl_$.withRed = function(this1,newred) {
+	return thx_color__$Rgba_Rgba_$Impl_$.fromInts([newred,this1 >> 16 & 255,this1 >> 8 & 255]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.withGreen = function(this1,newgreen) {
-	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 24 & 255,newgreen,this1 >> 8 & 255]);
+thx_color__$Rgba_Rgba_$Impl_$.withGreen = function(this1,newgreen) {
+	return thx_color__$Rgba_Rgba_$Impl_$.fromInts([this1 >> 24 & 255,newgreen,this1 >> 8 & 255]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.withBlue = function(this1,newblue) {
-	return thx_color__$RGBA_RGBA_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,newblue]);
+thx_color__$Rgba_Rgba_$Impl_$.withBlue = function(this1,newblue) {
+	return thx_color__$Rgba_Rgba_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,newblue]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.toHSLA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSLA(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1));
+thx_color__$Rgba_Rgba_$Impl_$.toHsla = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toHsla(thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(this1));
 };
-thx_color__$RGBA_RGBA_$Impl_$.toHSVA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toHSVA(thx_color__$RGBA_RGBA_$Impl_$.toRGBXA(this1));
+thx_color__$Rgba_Rgba_$Impl_$.toHsva = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toHsva(thx_color__$Rgba_Rgba_$Impl_$.toRgbxa(this1));
 };
-thx_color__$RGBA_RGBA_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGB_RGB_$Impl_$.create(this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255);
+thx_color__$Rgba_Rgba_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgb_Rgb_$Impl_$.create(this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255);
 };
-thx_color__$RGBA_RGBA_$Impl_$.toRGBX = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255]);
+thx_color__$Rgba_Rgba_$Impl_$.toRgbx = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]);
+thx_color__$Rgba_Rgba_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.fromInts([this1 >> 24 & 255,this1 >> 16 & 255,this1 >> 8 & 255,this1 & 255]);
 };
-thx_color__$RGBA_RGBA_$Impl_$.toCSS3 = function(this1) {
-	return thx_color__$RGBA_RGBA_$Impl_$.toString(this1);
+thx_color__$Rgba_Rgba_$Impl_$.toCss3 = function(this1) {
+	return thx_color__$Rgba_Rgba_$Impl_$.toString(this1);
 };
-thx_color__$RGBA_RGBA_$Impl_$.toString = function(this1) {
+thx_color__$Rgba_Rgba_$Impl_$.toString = function(this1) {
 	return "rgba(" + (this1 >> 24 & 255) + "," + (this1 >> 16 & 255) + "," + (this1 >> 8 & 255) + "," + (this1 & 255) / 255 + ")";
 };
-thx_color__$RGBA_RGBA_$Impl_$.toHex = function(this1,prefix) {
+thx_color__$Rgba_Rgba_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
 	return "" + prefix + StringTools.hex(this1 & 255,2) + StringTools.hex(this1 >> 24 & 255,2) + StringTools.hex(this1 >> 16 & 255,2) + StringTools.hex(this1 >> 8 & 255,2);
 };
-thx_color__$RGBA_RGBA_$Impl_$.equals = function(this1,other) {
+thx_color__$Rgba_Rgba_$Impl_$.equals = function(this1,other) {
 	return (this1 >> 24 & 255) == (other >> 24 & 255) && (this1 & 255) == (other & 255) && (this1 >> 16 & 255) == (other >> 16 & 255) && (this1 >> 8 & 255) == (other >> 8 & 255);
 };
-thx_color__$RGBA_RGBA_$Impl_$.get_alpha = function(this1) {
+thx_color__$Rgba_Rgba_$Impl_$.get_alpha = function(this1) {
 	return this1 & 255;
 };
-thx_color__$RGBA_RGBA_$Impl_$.get_red = function(this1) {
+thx_color__$Rgba_Rgba_$Impl_$.get_red = function(this1) {
 	return this1 >> 24 & 255;
 };
-thx_color__$RGBA_RGBA_$Impl_$.get_green = function(this1) {
+thx_color__$Rgba_Rgba_$Impl_$.get_green = function(this1) {
 	return this1 >> 16 & 255;
 };
-thx_color__$RGBA_RGBA_$Impl_$.get_blue = function(this1) {
+thx_color__$Rgba_Rgba_$Impl_$.get_blue = function(this1) {
 	return this1 >> 8 & 255;
 };
-var thx_color__$RGBX_RGBX_$Impl_$ = {};
-thx_color__$RGBX_RGBX_$Impl_$.__name__ = ["thx","color","_RGBX","RGBX_Impl_"];
-thx_color__$RGBX_RGBX_$Impl_$.create = function(red,green,blue) {
+var thx_color__$Rgbx_Rgbx_$Impl_$ = {};
+thx_color__$Rgbx_Rgbx_$Impl_$.__name__ = ["thx","color","_Rgbx","Rgbx_Impl_"];
+thx_color__$Rgbx_Rgbx_$Impl_$.create = function(red,green,blue) {
 	return [red < 0?0:red > 1?1:red,green < 0?0:green > 1?1:green,blue < 0?0:blue > 1?1:blue];
 };
-thx_color__$RGBX_RGBX_$Impl_$.fromFloats = function(arr) {
+thx_color__$Rgbx_Rgbx_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,3);
-	return thx_color__$RGBX_RGBX_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$Rgbx_Rgbx_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$RGBX_RGBX_$Impl_$.fromInts = function(arr) {
+thx_color__$Rgbx_Rgbx_$Impl_$.fromInts = function(arr) {
 	thx_ArrayInts.resize(arr,3);
-	return thx_color__$RGBX_RGBX_$Impl_$.create(arr[0] / 255,arr[1] / 255,arr[2] / 255);
+	return thx_color__$Rgbx_Rgbx_$Impl_$.create(arr[0] / 255,arr[1] / 255,arr[2] / 255);
 };
-thx_color__$RGBX_RGBX_$Impl_$.fromString = function(color) {
+thx_color__$Rgbx_Rgbx_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseHex(color);
 	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
@@ -4510,7 +4570,7 @@ thx_color__$RGBX_RGBX_$Impl_$.fromString = function(color) {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			return thx_color__$RGBX_RGBX_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
+			return thx_color__$Rgbx_Rgbx_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3));
 		default:
 			return null;
 		}
@@ -4520,60 +4580,60 @@ thx_color__$RGBX_RGBX_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$RGBX_RGBX_$Impl_$._new = function(channels) {
+thx_color__$Rgbx_Rgbx_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.darker = function(this1,t) {
+thx_color__$Rgbx_Rgbx_$Impl_$.darker = function(this1,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],0),thx_Floats.interpolate(t,this1[1],0),thx_Floats.interpolate(t,this1[2],0)];
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.lighter = function(this1,t) {
+thx_color__$Rgbx_Rgbx_$Impl_$.lighter = function(this1,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],1),thx_Floats.interpolate(t,this1[1],1),thx_Floats.interpolate(t,this1[2],1)];
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Rgbx_Rgbx_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2])];
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.toCSS3 = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toString(this1);
+thx_color__$Rgbx_Rgbx_$Impl_$.toCss3 = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toString(this1);
 };
-thx_color__$RGBX_RGBX_$Impl_$.toString = function(this1) {
-	return "rgb(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%)";
+thx_color__$Rgbx_Rgbx_$Impl_$.toString = function(this1) {
+	return "rgb(" + thx_Floats.roundTo(this1[0] * 100,6) + "%," + thx_Floats.roundTo(this1[1] * 100,6) + "%," + thx_Floats.roundTo(this1[2] * 100,6) + "%)";
 };
-thx_color__$RGBX_RGBX_$Impl_$.toHex = function(this1,prefix) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
-	return "" + prefix + StringTools.hex(thx_color__$RGBX_RGBX_$Impl_$.get_red(this1),2) + StringTools.hex(thx_color__$RGBX_RGBX_$Impl_$.get_green(this1),2) + StringTools.hex(thx_color__$RGBX_RGBX_$Impl_$.get_blue(this1),2);
+	return "" + prefix + StringTools.hex(thx_color__$Rgbx_Rgbx_$Impl_$.get_red(this1),2) + StringTools.hex(thx_color__$Rgbx_Rgbx_$Impl_$.get_green(this1),2) + StringTools.hex(thx_color__$Rgbx_Rgbx_$Impl_$.get_blue(this1),2);
 };
-thx_color__$RGBX_RGBX_$Impl_$.equals = function(this1,other) {
+thx_color__$Rgbx_Rgbx_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$RGBX_RGBX_$Impl_$.withAlpha = function(this1,alpha) {
+thx_color__$Rgbx_Rgbx_$Impl_$.withAlpha = function(this1,alpha) {
 	var channels = this1.concat([alpha < 0?0:alpha > 1?1:alpha]);
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.withRed = function(this1,newred) {
-	var channels = [newred < 0?0:newred > 1?1:newred,thx_color__$RGBX_RGBX_$Impl_$.get_green(this1),thx_color__$RGBX_RGBX_$Impl_$.get_blue(this1)];
+thx_color__$Rgbx_Rgbx_$Impl_$.withRed = function(this1,newred) {
+	var channels = [newred < 0?0:newred > 1?1:newred,thx_color__$Rgbx_Rgbx_$Impl_$.get_green(this1),thx_color__$Rgbx_Rgbx_$Impl_$.get_blue(this1)];
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.withGreen = function(this1,newgreen) {
-	var channels = [thx_color__$RGBX_RGBX_$Impl_$.get_red(this1),newgreen < 0?0:newgreen > 1?1:newgreen,thx_color__$RGBX_RGBX_$Impl_$.get_blue(this1)];
+thx_color__$Rgbx_Rgbx_$Impl_$.withGreen = function(this1,newgreen) {
+	var channels = [thx_color__$Rgbx_Rgbx_$Impl_$.get_red(this1),newgreen < 0?0:newgreen > 1?1:newgreen,thx_color__$Rgbx_Rgbx_$Impl_$.get_blue(this1)];
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.withBlue = function(this1,newblue) {
-	var channels = [thx_color__$RGBX_RGBX_$Impl_$.get_red(this1),thx_color__$RGBX_RGBX_$Impl_$.get_green(this1),newblue < 0?0:newblue > 1?1:newblue];
+thx_color__$Rgbx_Rgbx_$Impl_$.withBlue = function(this1,newblue) {
+	var channels = [thx_color__$Rgbx_Rgbx_$Impl_$.get_red(this1),thx_color__$Rgbx_Rgbx_$Impl_$.get_green(this1),newblue < 0?0:newblue > 1?1:newblue];
 	return channels;
 };
-thx_color__$RGBX_RGBX_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$XYZ_XYZ_$Impl_$.toCIELab(thx_color__$RGBX_RGBX_$Impl_$.toXYZ(this1));
+thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Xyz_Xyz_$Impl_$.toCieLab(thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(this1));
 };
-thx_color__$RGBX_RGBX_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$CIELab_CIELab_$Impl_$.toCIELCh(thx_color__$RGBX_RGBX_$Impl_$.toCIELab(this1));
+thx_color__$Rgbx_Rgbx_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$CieLab_CieLab_$Impl_$.toCieLCh(thx_color__$Rgbx_Rgbx_$Impl_$.toCieLab(this1));
 };
-thx_color__$RGBX_RGBX_$Impl_$.toCMY = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toCmy = function(this1) {
 	return [1 - this1[0],1 - this1[1],1 - this1[2]];
 };
-thx_color__$RGBX_RGBX_$Impl_$.toCMYK = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk = function(this1) {
 	var c = 0.0;
 	var y = 0.0;
 	var m = 0.0;
@@ -4586,17 +4646,17 @@ thx_color__$RGBX_RGBX_$Impl_$.toCMYK = function(this1) {
 	}
 	return [c,m,y,k];
 };
-thx_color__$RGBX_RGBX_$Impl_$.toGrey = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toGrey = function(this1) {
 	return this1[0] * .2126 + this1[1] * .7152 + this1[2] * .0722;
 };
-thx_color__$RGBX_RGBX_$Impl_$.toPerceivedGrey = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toPerceivedGrey = function(this1) {
 	return this1[0] * .299 + this1[1] * .587 + this1[2] * .114;
 };
-thx_color__$RGBX_RGBX_$Impl_$.toPerceivedAccurateGrey = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toPerceivedAccurateGrey = function(this1) {
 	var grey = Math.pow(this1[0],2) * .241 + Math.pow(this1[1],2) * .691 + Math.pow(this1[2],2) * .068;
 	return grey;
 };
-thx_color__$RGBX_RGBX_$Impl_$.toHSL = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toHsl = function(this1) {
 	var min = Math.min(Math.min(this1[0],this1[1]),this1[2]);
 	var max = Math.max(Math.max(this1[0],this1[1]),this1[2]);
 	var delta = max - min;
@@ -4605,12 +4665,12 @@ thx_color__$RGBX_RGBX_$Impl_$.toHSL = function(this1) {
 	var l = (max + min) / 2;
 	if(delta == 0.0) s = h = 0.0; else {
 		if(l < 0.5) s = delta / (max + min); else s = delta / (2 - max - min);
-		if(this1[0] == max) h = (this1[1] - this1[2]) / delta + (this1[1] < thx_color__$RGBX_RGBX_$Impl_$.get_blue(this1)?6:0); else if(this1[1] == max) h = (this1[2] - this1[0]) / delta + 2; else h = (this1[0] - this1[1]) / delta + 4;
+		if(this1[0] == max) h = (this1[1] - this1[2]) / delta + (this1[1] < thx_color__$Rgbx_Rgbx_$Impl_$.get_blue(this1)?6:0); else if(this1[1] == max) h = (this1[2] - this1[0]) / delta + 2; else h = (this1[0] - this1[1]) / delta + 4;
 		h *= 60;
 	}
 	return [h,s,l];
 };
-thx_color__$RGBX_RGBX_$Impl_$.toHSV = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toHsv = function(this1) {
 	var min = Math.min(Math.min(this1[0],this1[1]),this1[2]);
 	var max = Math.max(Math.max(this1[0],this1[1]),this1[2]);
 	var delta = max - min;
@@ -4627,13 +4687,13 @@ thx_color__$RGBX_RGBX_$Impl_$.toHSV = function(this1) {
 	if(h < 0) h += 360;
 	return [h,s,v];
 };
-thx_color__$RGBX_RGBX_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGB_RGB_$Impl_$.createf(this1[0],this1[1],this1[2]);
+thx_color__$Rgbx_Rgbx_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgb_Rgb_$Impl_$.createf(this1[0],this1[1],this1[2]);
 };
-thx_color__$RGBX_RGBX_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.withAlpha(this1,1.0);
+thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.withAlpha(this1,1.0);
 };
-thx_color__$RGBX_RGBX_$Impl_$.toXYZ = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.toXyz = function(this1) {
 	var r = this1[0];
 	var g = this1[1];
 	var b = this1[2];
@@ -4642,41 +4702,41 @@ thx_color__$RGBX_RGBX_$Impl_$.toXYZ = function(this1) {
 	b = 100 * (b > 0.04045?Math.pow((b + 0.055) / 1.055,2.4):b / 12.92);
 	return [r * 0.4124 + g * 0.3576 + b * 0.1805,r * 0.2126 + g * 0.7152 + b * 0.0722,r * 0.0193 + g * 0.1192 + b * 0.9505];
 };
-thx_color__$RGBX_RGBX_$Impl_$.toYxy = function(this1) {
-	return thx_color__$XYZ_XYZ_$Impl_$.toYxy(thx_color__$RGBX_RGBX_$Impl_$.toXYZ(this1));
+thx_color__$Rgbx_Rgbx_$Impl_$.toYxy = function(this1) {
+	return thx_color__$Xyz_Xyz_$Impl_$.toYxy(thx_color__$Rgbx_Rgbx_$Impl_$.toXyz(this1));
 };
-thx_color__$RGBX_RGBX_$Impl_$.get_red = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.get_red = function(this1) {
 	return Math.round(this1[0] * 255);
 };
-thx_color__$RGBX_RGBX_$Impl_$.get_green = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.get_green = function(this1) {
 	return Math.round(this1[1] * 255);
 };
-thx_color__$RGBX_RGBX_$Impl_$.get_blue = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.get_blue = function(this1) {
 	return Math.round(this1[2] * 255);
 };
-thx_color__$RGBX_RGBX_$Impl_$.get_redf = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.get_redf = function(this1) {
 	return this1[0];
 };
-thx_color__$RGBX_RGBX_$Impl_$.get_greenf = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.get_greenf = function(this1) {
 	return this1[1];
 };
-thx_color__$RGBX_RGBX_$Impl_$.get_bluef = function(this1) {
+thx_color__$Rgbx_Rgbx_$Impl_$.get_bluef = function(this1) {
 	return this1[2];
 };
-var thx_color__$RGBXA_RGBXA_$Impl_$ = {};
-thx_color__$RGBXA_RGBXA_$Impl_$.__name__ = ["thx","color","_RGBXA","RGBXA_Impl_"];
-thx_color__$RGBXA_RGBXA_$Impl_$.create = function(red,green,blue,alpha) {
+var thx_color__$Rgbxa_Rgbxa_$Impl_$ = {};
+thx_color__$Rgbxa_Rgbxa_$Impl_$.__name__ = ["thx","color","_Rgbxa","Rgbxa_Impl_"];
+thx_color__$Rgbxa_Rgbxa_$Impl_$.create = function(red,green,blue,alpha) {
 	return [red < 0?0:red > 1?1:red,green < 0?0:green > 1?1:green,blue < 0?0:blue > 1?1:blue,alpha < 0?0:alpha > 1?1:alpha];
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.fromFloats = function(arr) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,4);
-	return thx_color__$RGBXA_RGBXA_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.create(arr[0],arr[1],arr[2],arr[3]);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.fromInts = function(arr) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.fromInts = function(arr) {
 	thx_ArrayInts.resize(arr,4);
-	return thx_color__$RGBXA_RGBXA_$Impl_$.create(arr[0] / 255,arr[1] / 255,arr[2] / 255,arr[3] / 255);
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.create(arr[0] / 255,arr[1] / 255,arr[2] / 255,arr[3] / 255);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.fromString = function(color) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseHex(color);
 	if(null == info) info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
@@ -4684,9 +4744,9 @@ thx_color__$RGBXA_RGBXA_$Impl_$.fromString = function(color) {
 		var _g = info.name;
 		switch(_g) {
 		case "rgb":
-			return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$RGBX_RGBX_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
+			return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Rgbx_Rgbx_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,3)));
 		case "rgba":
-			return thx_color__$RGBXA_RGBXA_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
+			return thx_color__$Rgbxa_Rgbxa_$Impl_$.fromFloats(thx_color_parse_ColorParser.getFloatChannels(info.channels,4));
 		default:
 			return null;
 		}
@@ -4696,106 +4756,106 @@ thx_color__$RGBXA_RGBXA_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$RGBXA_RGBXA_$Impl_$._new = function(channels) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.darker = function(this1,t) {
-	return thx_color__$RGBX_RGBX_$Impl_$.withAlpha(thx_color__$RGBX_RGBX_$Impl_$.darker(thx_color__$RGBXA_RGBXA_$Impl_$.toRGBX(this1),t),thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1));
+thx_color__$Rgbxa_Rgbxa_$Impl_$.darker = function(this1,t) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.withAlpha(thx_color__$Rgbx_Rgbx_$Impl_$.darker(thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgbx(this1),t),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1));
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.lighter = function(this1,t) {
-	return thx_color__$RGBX_RGBX_$Impl_$.withAlpha(thx_color__$RGBX_RGBX_$Impl_$.lighter(thx_color__$RGBXA_RGBXA_$Impl_$.toRGBX(this1),t),thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1));
+thx_color__$Rgbxa_Rgbxa_$Impl_$.lighter = function(this1,t) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.withAlpha(thx_color__$Rgbx_Rgbx_$Impl_$.lighter(thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgbx(this1),t),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1));
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.transparent = function(this1,t) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.transparent = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Ints.interpolate(t,this1[3],0)];
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.opaque = function(this1,t) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.opaque = function(this1,t) {
 	var channels = [this1[0],this1[1],this1[2],thx_Ints.interpolate(t,this1[3],1)];
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Ints.interpolate(t,this1[0],other[0]),thx_Ints.interpolate(t,this1[1],other[1]),thx_Ints.interpolate(t,this1[2],other[2]),thx_Ints.interpolate(t,this1[3],other[3])];
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.withAlpha = function(this1,newalpha) {
-	var channels = [thx_color__$RGBXA_RGBXA_$Impl_$.get_red(this1),thx_color__$RGBXA_RGBXA_$Impl_$.get_green(this1),thx_color__$RGBXA_RGBXA_$Impl_$.get_blue(this1),newalpha < 0?0:newalpha > 1?1:newalpha];
+thx_color__$Rgbxa_Rgbxa_$Impl_$.withAlpha = function(this1,newalpha) {
+	var channels = [thx_color__$Rgbxa_Rgbxa_$Impl_$.get_red(this1),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_green(this1),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_blue(this1),newalpha < 0?0:newalpha > 1?1:newalpha];
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.withRed = function(this1,newred) {
-	var channels = [newred < 0?0:newred > 1?1:newred,thx_color__$RGBXA_RGBXA_$Impl_$.get_green(this1),thx_color__$RGBXA_RGBXA_$Impl_$.get_blue(this1),thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1)];
+thx_color__$Rgbxa_Rgbxa_$Impl_$.withRed = function(this1,newred) {
+	var channels = [newred < 0?0:newred > 1?1:newred,thx_color__$Rgbxa_Rgbxa_$Impl_$.get_green(this1),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_blue(this1),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1)];
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.withGreen = function(this1,newgreen) {
-	var channels = [thx_color__$RGBXA_RGBXA_$Impl_$.get_red(this1),newgreen < 0?0:newgreen > 1?1:newgreen,thx_color__$RGBXA_RGBXA_$Impl_$.get_blue(this1),thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1)];
+thx_color__$Rgbxa_Rgbxa_$Impl_$.withGreen = function(this1,newgreen) {
+	var channels = [thx_color__$Rgbxa_Rgbxa_$Impl_$.get_red(this1),newgreen < 0?0:newgreen > 1?1:newgreen,thx_color__$Rgbxa_Rgbxa_$Impl_$.get_blue(this1),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1)];
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.withBlue = function(this1,newblue) {
-	var channels = [thx_color__$RGBXA_RGBXA_$Impl_$.get_red(this1),thx_color__$RGBXA_RGBXA_$Impl_$.get_green(this1),newblue < 0?0:newblue > 1?1:newblue,thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1)];
+thx_color__$Rgbxa_Rgbxa_$Impl_$.withBlue = function(this1,newblue) {
+	var channels = [thx_color__$Rgbxa_Rgbxa_$Impl_$.get_red(this1),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_green(this1),newblue < 0?0:newblue > 1?1:newblue,thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1)];
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toCSS3 = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toString(this1);
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toCss3 = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toString(this1);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toString = function(this1) {
-	return "rgba(" + this1[0] * 100 + "%," + this1[1] * 100 + "%," + this1[2] * 100 + "%," + this1[3] + ")";
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toString = function(this1) {
+	return "rgba(" + thx_Floats.roundTo(this1[0] * 100,6) + "%," + thx_Floats.roundTo(this1[1] * 100,6) + "%," + thx_Floats.roundTo(this1[2] * 100,6) + "%," + thx_Floats.roundTo(this1[3],6) + ")";
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toHex = function(this1,prefix) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toHex = function(this1,prefix) {
 	if(prefix == null) prefix = "#";
-	return "" + prefix + StringTools.hex(thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1),2) + StringTools.hex(thx_color__$RGBXA_RGBXA_$Impl_$.get_red(this1),2) + StringTools.hex(thx_color__$RGBXA_RGBXA_$Impl_$.get_green(this1),2) + StringTools.hex(thx_color__$RGBXA_RGBXA_$Impl_$.get_blue(this1),2);
+	return "" + prefix + StringTools.hex(thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1),2) + StringTools.hex(thx_color__$Rgbxa_Rgbxa_$Impl_$.get_red(this1),2) + StringTools.hex(thx_color__$Rgbxa_Rgbxa_$Impl_$.get_green(this1),2) + StringTools.hex(thx_color__$Rgbxa_Rgbxa_$Impl_$.get_blue(this1),2);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.equals = function(this1,other) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10 && Math.abs(this1[3] - other[3]) <= 10e-10;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toHSLA = function(this1) {
-	return thx_color__$HSL_HSL_$Impl_$.withAlpha(thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$RGBXA_RGBXA_$Impl_$.toRGBX(this1)),thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1));
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toHsla = function(this1) {
+	return thx_color__$Hsl_Hsl_$Impl_$.withAlpha(thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgbx(this1)),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1));
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toHSVA = function(this1) {
-	return thx_color__$HSV_HSV_$Impl_$.withAlpha(thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$RGBXA_RGBXA_$Impl_$.toRGBX(this1)),thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha(this1));
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toHsva = function(this1) {
+	return thx_color__$Hsv_Hsv_$Impl_$.withAlpha(thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgbx(this1)),thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha(this1));
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$RGBXA_RGBXA_$Impl_$.toRGBX(this1));
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgbx(this1));
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toRGBX = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgbx = function(this1) {
 	var channels = this1.slice(0,3);
 	return channels;
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBA_RGBA_$Impl_$.fromFloats([this1[0],this1[1],this1[2],this1[3]]);
+thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgba_Rgba_$Impl_$.fromFloats([this1[0],this1[1],this1[2],this1[3]]);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_red = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_red = function(this1) {
 	return Math.round(this1[0] * 255);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_green = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_green = function(this1) {
 	return Math.round(this1[1] * 255);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_blue = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_blue = function(this1) {
 	return Math.round(this1[2] * 255);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_alpha = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alpha = function(this1) {
 	return Math.round(this1[3] * 255);
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_redf = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_redf = function(this1) {
 	return this1[0];
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_greenf = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_greenf = function(this1) {
 	return this1[1];
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_bluef = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_bluef = function(this1) {
 	return this1[2];
 };
-thx_color__$RGBXA_RGBXA_$Impl_$.get_alphaf = function(this1) {
+thx_color__$Rgbxa_Rgbxa_$Impl_$.get_alphaf = function(this1) {
 	return this1[3];
 };
-var thx_color__$XYZ_XYZ_$Impl_$ = {};
-thx_color__$XYZ_XYZ_$Impl_$.__name__ = ["thx","color","_XYZ","XYZ_Impl_"];
-thx_color__$XYZ_XYZ_$Impl_$.create = function(x,y,z) {
+var thx_color__$Xyz_Xyz_$Impl_$ = {};
+thx_color__$Xyz_Xyz_$Impl_$.__name__ = ["thx","color","_Xyz","Xyz_Impl_"];
+thx_color__$Xyz_Xyz_$Impl_$.create = function(x,y,z) {
 	return [x,y,z];
 };
-thx_color__$XYZ_XYZ_$Impl_$.fromFloats = function(arr) {
+thx_color__$Xyz_Xyz_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,3);
-	return thx_color__$XYZ_XYZ_$Impl_$.create(arr[0],arr[1],arr[2]);
+	return thx_color__$Xyz_Xyz_$Impl_$.create(arr[0],arr[1],arr[2]);
 };
-thx_color__$XYZ_XYZ_$Impl_$.fromString = function(color) {
+thx_color__$Xyz_Xyz_$Impl_$.fromString = function(color) {
 	var info = thx_color_parse_ColorParser.parseColor(color);
 	if(null == info) return null;
 	try {
@@ -4813,29 +4873,29 @@ thx_color__$XYZ_XYZ_$Impl_$.fromString = function(color) {
 		return null;
 	}
 };
-thx_color__$XYZ_XYZ_$Impl_$._new = function(channels) {
+thx_color__$Xyz_Xyz_$Impl_$._new = function(channels) {
 	return channels;
 };
-thx_color__$XYZ_XYZ_$Impl_$.interpolate = function(this1,other,t) {
+thx_color__$Xyz_Xyz_$Impl_$.interpolate = function(this1,other,t) {
 	var channels = [thx_Floats.interpolate(t,this1[0],other[0]),thx_Floats.interpolate(t,this1[1],other[1]),thx_Floats.interpolate(t,this1[2],other[2])];
 	return channels;
 };
-thx_color__$XYZ_XYZ_$Impl_$.withX = function(this1,newx) {
+thx_color__$Xyz_Xyz_$Impl_$.withX = function(this1,newx) {
 	return [newx,this1[1],this1[2]];
 };
-thx_color__$XYZ_XYZ_$Impl_$.withY = function(this1,newy) {
+thx_color__$Xyz_Xyz_$Impl_$.withY = function(this1,newy) {
 	return [this1[0],newy,this1[2]];
 };
-thx_color__$XYZ_XYZ_$Impl_$.withZ = function(this1,newz) {
+thx_color__$Xyz_Xyz_$Impl_$.withZ = function(this1,newz) {
 	return [this1[0],this1[1],newz];
 };
-thx_color__$XYZ_XYZ_$Impl_$.toString = function(this1) {
-	return "XYZ(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+thx_color__$Xyz_Xyz_$Impl_$.toString = function(this1) {
+	return "Xyz(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1],6) + "," + thx_Floats.roundTo(this1[2],6) + ")";
 };
-thx_color__$XYZ_XYZ_$Impl_$.equals = function(this1,other) {
+thx_color__$Xyz_Xyz_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$XYZ_XYZ_$Impl_$.toCIELab = function(this1) {
+thx_color__$Xyz_Xyz_$Impl_$.toCieLab = function(this1) {
 	var x = this1[0] * 0.0105211106;
 	var y = this1[1] * 0.01;
 	var z = this1[2] * 0.00918417016;
@@ -4845,31 +4905,31 @@ thx_color__$XYZ_XYZ_$Impl_$.toCIELab = function(this1) {
 	if(z > 0.008856) z = Math.pow(z,0.333333333333333315); else z = 7.787 * z + 0.137931034482758619;
 	return y > 0.008856?[116 * y - 16,500 * (x - y),200 * (y - z)]:[903.3 * y,500 * (x - y),200 * (y - z)];
 };
-thx_color__$XYZ_XYZ_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$CIELab_CIELab_$Impl_$.toCIELCh(thx_color__$XYZ_XYZ_$Impl_$.toCIELab(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$CieLab_CieLab_$Impl_$.toCieLCh(thx_color__$Xyz_Xyz_$Impl_$.toCieLab(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$Xyz_Xyz_$Impl_$.toRgbx(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$Xyz_Xyz_$Impl_$.toRgbx(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toGrey = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$Xyz_Xyz_$Impl_$.toRgbx(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Xyz_Xyz_$Impl_$.toRgbx(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Xyz_Xyz_$Impl_$.toRgbx(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Xyz_Xyz_$Impl_$.toRgbx(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$XYZ_XYZ_$Impl_$.toRGBXA(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Xyz_Xyz_$Impl_$.toRgbxa(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toRGBX = function(this1) {
+thx_color__$Xyz_Xyz_$Impl_$.toRgbx = function(this1) {
 	var x = this1[0] / 100;
 	var y = this1[1] / 100;
 	var z = this1[2] / 100;
@@ -4881,20 +4941,20 @@ thx_color__$XYZ_XYZ_$Impl_$.toRGBX = function(this1) {
 	if(b > 0.0031308) b = 1.055 * Math.pow(b,0.416666666666666685) - 0.055; else b = 12.92 * b;
 	return [r,g,b];
 };
-thx_color__$XYZ_XYZ_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$XYZ_XYZ_$Impl_$.toRGBX(this1));
+thx_color__$Xyz_Xyz_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Xyz_Xyz_$Impl_$.toRgbx(this1));
 };
-thx_color__$XYZ_XYZ_$Impl_$.toYxy = function(this1) {
+thx_color__$Xyz_Xyz_$Impl_$.toYxy = function(this1) {
 	var sum = this1[0] + this1[1] + this1[2];
 	return [this1[1],sum == 0?1:this1[0] / sum,sum == 0?1:this1[1] / sum];
 };
-thx_color__$XYZ_XYZ_$Impl_$.get_x = function(this1) {
+thx_color__$Xyz_Xyz_$Impl_$.get_x = function(this1) {
 	return this1[0];
 };
-thx_color__$XYZ_XYZ_$Impl_$.get_y = function(this1) {
+thx_color__$Xyz_Xyz_$Impl_$.get_y = function(this1) {
 	return this1[1];
 };
-thx_color__$XYZ_XYZ_$Impl_$.get_z = function(this1) {
+thx_color__$Xyz_Xyz_$Impl_$.get_z = function(this1) {
 	return this1[2];
 };
 var thx_color__$Yxy_Yxy_$Impl_$ = {};
@@ -4941,45 +5001,45 @@ thx_color__$Yxy_Yxy_$Impl_$.withZ = function(this1,newy2) {
 	return [this1[0],this1[1],this1[2]];
 };
 thx_color__$Yxy_Yxy_$Impl_$.toString = function(this1) {
-	return "Yxy(" + this1[0] + "," + this1[1] + "," + this1[2] + ")";
+	return "Yxy(" + thx_Floats.roundTo(this1[0],6) + "," + thx_Floats.roundTo(this1[1],6) + "," + thx_Floats.roundTo(this1[2],6) + ")";
 };
 thx_color__$Yxy_Yxy_$Impl_$.equals = function(this1,other) {
 	return Math.abs(this1[0] - other[0]) <= 10e-10 && Math.abs(this1[1] - other[1]) <= 10e-10 && Math.abs(this1[2] - other[2]) <= 10e-10;
 };
-thx_color__$Yxy_Yxy_$Impl_$.toCIELab = function(this1) {
-	return thx_color__$XYZ_XYZ_$Impl_$.toCIELab(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toCieLab = function(this1) {
+	return thx_color__$Xyz_Xyz_$Impl_$.toCieLab(thx_color__$Yxy_Yxy_$Impl_$.toXyz(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toCIELCh = function(this1) {
-	return thx_color__$CIELab_CIELab_$Impl_$.toCIELCh(thx_color__$Yxy_Yxy_$Impl_$.toCIELab(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toCieLCh = function(this1) {
+	return thx_color__$CieLab_CieLab_$Impl_$.toCieLCh(thx_color__$Yxy_Yxy_$Impl_$.toCieLab(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toCMY = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMY(thx_color__$Yxy_Yxy_$Impl_$.toRGBX(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toCmy = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmy(thx_color__$Yxy_Yxy_$Impl_$.toRgbx(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toCMYK = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toCMYK(thx_color__$Yxy_Yxy_$Impl_$.toRGBX(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toCmyk = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toCmyk(thx_color__$Yxy_Yxy_$Impl_$.toRgbx(this1));
 };
 thx_color__$Yxy_Yxy_$Impl_$.toGrey = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toGrey(thx_color__$Yxy_Yxy_$Impl_$.toRGBX(this1));
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toGrey(thx_color__$Yxy_Yxy_$Impl_$.toRgbx(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toHSL = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSL(thx_color__$Yxy_Yxy_$Impl_$.toRGBX(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toHsl = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsl(thx_color__$Yxy_Yxy_$Impl_$.toRgbx(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toHSV = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toHSV(thx_color__$Yxy_Yxy_$Impl_$.toRGBX(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toHsv = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toHsv(thx_color__$Yxy_Yxy_$Impl_$.toRgbx(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toRGB = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGB(thx_color__$Yxy_Yxy_$Impl_$.toRGBX(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toRgb = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgb(thx_color__$Yxy_Yxy_$Impl_$.toRgbx(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toRGBA = function(this1) {
-	return thx_color__$RGBXA_RGBXA_$Impl_$.toRGBA(thx_color__$Yxy_Yxy_$Impl_$.toRGBXA(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toRgba = function(this1) {
+	return thx_color__$Rgbxa_Rgbxa_$Impl_$.toRgba(thx_color__$Yxy_Yxy_$Impl_$.toRgbxa(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toRGBX = function(this1) {
-	return thx_color__$XYZ_XYZ_$Impl_$.toRGBX(thx_color__$Yxy_Yxy_$Impl_$.toXYZ(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toRgbx = function(this1) {
+	return thx_color__$Xyz_Xyz_$Impl_$.toRgbx(thx_color__$Yxy_Yxy_$Impl_$.toXyz(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toRGBXA = function(this1) {
-	return thx_color__$RGBX_RGBX_$Impl_$.toRGBXA(thx_color__$Yxy_Yxy_$Impl_$.toRGBX(this1));
+thx_color__$Yxy_Yxy_$Impl_$.toRgbxa = function(this1) {
+	return thx_color__$Rgbx_Rgbx_$Impl_$.toRgbxa(thx_color__$Yxy_Yxy_$Impl_$.toRgbx(this1));
 };
-thx_color__$Yxy_Yxy_$Impl_$.toXYZ = function(this1) {
+thx_color__$Yxy_Yxy_$Impl_$.toXyz = function(this1) {
 	return [this1[1] * (this1[0] / this1[2]),this1[0],(1 - this1[1] - this1[2]) * (this1[0] / this1[2])];
 };
 thx_color__$Yxy_Yxy_$Impl_$.get_y1 = function(this1) {
@@ -5263,7 +5323,7 @@ thx_geom__$Matrix23_Matrix23_$Impl_$.rotationAt = function(center,radians) {
 		return $r;
 	}(this))),radians),center);
 };
-thx_geom__$Matrix23_Matrix23_$Impl_$.scaled = function(scaleFactorX,scaleFactorY) {
+thx_geom__$Matrix23_Matrix23_$Impl_$.scaling = function(scaleFactorX,scaleFactorY) {
 	return thx_geom__$Matrix23_Matrix23_$Impl_$.create(scaleFactorX,0,0,null == scaleFactorY?scaleFactorX:scaleFactorY,0,0);
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.translation = function(x,y) {
@@ -5275,8 +5335,31 @@ thx_geom__$Matrix23_Matrix23_$Impl_$.translationAt = function(point) {
 thx_geom__$Matrix23_Matrix23_$Impl_$.create = function(a,b,c,d,e,f) {
 	return new thx_geom_core_MutableM23(a,b,c,d,e,f);
 };
+thx_geom__$Matrix23_Matrix23_$Impl_$.immutable = function(a,b,c,d,e,f) {
+	return new thx_geom_core_ImmutableM23(a,b,c,d,e,f);
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.linked = function(getA,setA,getB,setB,getC,setC,getD,setD,getE,setE,getF,setF) {
+	return new thx_geom_core_LinkedM23(getA,setA,getB,setB,getC,setC,getD,setD,getE,setE,getF,setF);
+};
 thx_geom__$Matrix23_Matrix23_$Impl_$._new = function(m) {
 	return m;
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.clone = function(this1) {
+	return thx_geom__$Matrix23_Matrix23_$Impl_$.create(this1.get_a(),this1.get_b(),this1.get_c(),this1.get_d(),this1.get_e(),this1.get_f());
+};
+thx_geom__$Matrix23_Matrix23_$Impl_$.copyTo = function(this1,other) {
+	var v = this1.get_a();
+	other.set_a(v);
+	var v1 = this1.get_b();
+	other.set_b(v1);
+	var v2 = this1.get_c();
+	other.set_c(v2);
+	var v3 = this1.get_d();
+	other.set_d(v3);
+	var v4 = this1.get_e();
+	other.set_e(v4);
+	var v5 = this1.get_f();
+	other.set_f(v5);
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.flipX = function(this1) {
 	return thx_geom__$Matrix23_Matrix23_$Impl_$.mul(this1,-1,0,0,1,0,0);
@@ -5288,7 +5371,13 @@ thx_geom__$Matrix23_Matrix23_$Impl_$.multiply = function(this1,other) {
 	return thx_geom__$Matrix23_Matrix23_$Impl_$.mul(this1,other.get_a(),other.get_b(),other.get_c(),other.get_d(),other.get_e(),other.get_f());
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.mul = function(this1,a,b,c,d,e,f) {
-	return thx_geom__$Matrix23_Matrix23_$Impl_$.create(this1.get_a() * a + this1.get_c() * b,this1.get_b() * a + this1.get_d() * b,this1.get_a() * c + this1.get_c() * d,this1.get_b() * c + this1.get_d() * d,this1.get_a() * e + this1.get_c() * f + this1.get_e(),this1.get_b() * e + this1.get_d() * f + this1.get_f());
+	this1.set_a(this1.get_a() * a + this1.get_c() * b);
+	this1.set_b(this1.get_b() * a + this1.get_d() * b);
+	this1.set_c(this1.get_a() * c + this1.get_c() * d);
+	this1.set_d(this1.get_b() * c + this1.get_d() * d);
+	this1.set_e(this1.get_a() * e + this1.get_c() * f + this1.get_e());
+	this1.set_f(this1.get_b() * e + this1.get_d() * f + this1.get_f());
+	return this1;
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.inverse = function(this1) {
 	var det1 = this1.get_a() * this1.get_d() - this1.get_b() * this1.get_c();
@@ -5355,7 +5444,7 @@ thx_geom__$Matrix23_Matrix23_$Impl_$.equals = function(this1,other) {
 	return this1.get_a() == other.get_a() && this1.get_b() == other.get_b() && this1.get_c() == other.get_c() && this1.get_d() == other.get_d() && this1.get_e() == other.get_e() && this1.get_f() == other.get_f();
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.toString = function(this1) {
-	return "matrix(" + this1.get_a() + "," + this1.get_b() + "," + this1.get_c() + "," + this1.get_d() + "," + this1.get_e() + "," + this1.get_f() + ")";
+	return "matrix(" + this1.get_a() + " " + this1.get_b() + " " + this1.get_c() + " " + this1.get_d() + " " + this1.get_e() + " " + this1.get_f() + ")";
 };
 thx_geom__$Matrix23_Matrix23_$Impl_$.get_a = function(this1) {
 	return this1.get_a();
@@ -5401,6 +5490,14 @@ thx_geom_core_Dim.prototype = {
 	,clone: null
 	,__class__: thx_geom_core_Dim
 };
+var thx_geom_core_DimBool = function() { };
+thx_geom_core_DimBool.__name__ = ["thx","geom","core","DimBool"];
+thx_geom_core_DimBool.prototype = {
+	get_value: null
+	,set_value: null
+	,clone: null
+	,__class__: thx_geom_core_DimBool
+};
 var thx_geom_core_ImmutableDim = function(coord) {
 	this._coord = coord;
 };
@@ -5418,6 +5515,24 @@ thx_geom_core_ImmutableDim.prototype = {
 		throw new js__$Boot_HaxeError("this instance of Dim cannot be modified");
 	}
 	,__class__: thx_geom_core_ImmutableDim
+};
+var thx_geom_core_ImmutableDimBool = function(value) {
+	this._value = value;
+};
+thx_geom_core_ImmutableDimBool.__name__ = ["thx","geom","core","ImmutableDimBool"];
+thx_geom_core_ImmutableDimBool.__interfaces__ = [thx_geom_core_DimBool];
+thx_geom_core_ImmutableDimBool.prototype = {
+	_value: null
+	,clone: function() {
+		return new thx_geom_core_MutableDimBool(this._value);
+	}
+	,get_value: function() {
+		return this._value;
+	}
+	,set_value: function(v) {
+		throw new js__$Boot_HaxeError("this instance of DimBool cannot be modified");
+	}
+	,__class__: thx_geom_core_ImmutableDimBool
 };
 var thx_geom_core_XY = function() { };
 thx_geom_core_XY.__name__ = ["thx","geom","core","XY"];
@@ -5475,6 +5590,93 @@ thx_geom_core_LinkedDim.prototype = {
 	}
 	,__class__: thx_geom_core_LinkedDim
 };
+var thx_geom_core_LinkedDimBool = function(getValue,setValue) {
+	this.getValue = getValue;
+	this.setValue = setValue;
+};
+thx_geom_core_LinkedDimBool.__name__ = ["thx","geom","core","LinkedDimBool"];
+thx_geom_core_LinkedDimBool.__interfaces__ = [thx_geom_core_DimBool];
+thx_geom_core_LinkedDimBool.prototype = {
+	getValue: null
+	,setValue: null
+	,clone: function() {
+		return new thx_geom_core_MutableDimBool(this.getValue());
+	}
+	,get_value: function() {
+		return this.getValue();
+	}
+	,set_value: function(v) {
+		return this.setValue(v);
+	}
+	,__class__: thx_geom_core_LinkedDimBool
+};
+var thx_geom_core_LinkedM23 = function(getA,setA,getB,setB,getC,setC,getD,setD,getE,setE,getF,setF) {
+	this.getA = getA;
+	this.getB = getB;
+	this.getC = getC;
+	this.getD = getD;
+	this.getE = getE;
+	this.getF = getF;
+	this.setA = setA;
+	this.setB = setB;
+	this.setC = setC;
+	this.setD = setD;
+	this.setE = setE;
+	this.setF = setF;
+};
+thx_geom_core_LinkedM23.__name__ = ["thx","geom","core","LinkedM23"];
+thx_geom_core_LinkedM23.__interfaces__ = [thx_geom_core_M23];
+thx_geom_core_LinkedM23.prototype = {
+	getA: null
+	,getB: null
+	,getC: null
+	,getD: null
+	,getE: null
+	,getF: null
+	,setA: null
+	,setB: null
+	,setC: null
+	,setD: null
+	,setE: null
+	,setF: null
+	,get_a: function() {
+		return this.getA();
+	}
+	,get_b: function() {
+		return this.getB();
+	}
+	,get_c: function() {
+		return this.getC();
+	}
+	,get_d: function() {
+		return this.getD();
+	}
+	,get_e: function() {
+		return this.getE();
+	}
+	,get_f: function() {
+		return this.getF();
+	}
+	,set_a: function(v) {
+		return this.setA(v);
+	}
+	,set_b: function(v) {
+		return this.setB(v);
+	}
+	,set_c: function(v) {
+		return this.setC(v);
+	}
+	,set_d: function(v) {
+		return this.setD(v);
+	}
+	,set_e: function(v) {
+		return this.setE(v);
+	}
+	,set_f: function(v) {
+		return this.setF(v);
+	}
+	,__class__: thx_geom_core_LinkedM23
+};
 var thx_geom_core_LinkedXY = function(getX,getY,setX,setY) {
 	this.getX = getX;
 	this.getY = getY;
@@ -5522,6 +5724,24 @@ thx_geom_core_MutableDim.prototype = {
 		return this._coord = v;
 	}
 	,__class__: thx_geom_core_MutableDim
+};
+var thx_geom_core_MutableDimBool = function(value) {
+	this._value = value;
+};
+thx_geom_core_MutableDimBool.__name__ = ["thx","geom","core","MutableDimBool"];
+thx_geom_core_MutableDimBool.__interfaces__ = [thx_geom_core_DimBool];
+thx_geom_core_MutableDimBool.prototype = {
+	_value: null
+	,clone: function() {
+		return new thx_geom_core_MutableDimBool(this._value);
+	}
+	,get_value: function() {
+		return this._value;
+	}
+	,set_value: function(v) {
+		return this._value = v;
+	}
+	,__class__: thx_geom_core_MutableDimBool
 };
 var thx_geom_core_MutableM23 = function(a,b,c,d,e,f) {
 	this._a = a;
@@ -5604,6 +5824,64 @@ thx_geom_core_MutableXY.prototype = {
 	}
 	,__class__: thx_geom_core_MutableXY
 };
+var thx_geom_d2__$Angle_Angle_$Impl_$ = {};
+thx_geom_d2__$Angle_Angle_$Impl_$.__name__ = ["thx","geom","d2","_Angle","Angle_Impl_"];
+thx_geom_d2__$Angle_Angle_$Impl_$.fromFloat = function(r) {
+	var r1 = new thx_geom_core_MutableDim(r);
+	return r1;
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.create = function(r) {
+	var r1 = new thx_geom_core_MutableDim(r);
+	return r1;
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.linked = function(getAngle,setAngle) {
+	return new thx_geom_core_LinkedDim(getAngle,setAngle);
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.immutable = function(r) {
+	return new thx_geom_core_ImmutableDim(r);
+};
+thx_geom_d2__$Angle_Angle_$Impl_$._new = function(r) {
+	return r;
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.equals = function(this1,p) {
+	return this1.get_coord() == p.get_coord();
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.notEquals = function(this1,p) {
+	return !(this1.get_coord() == p.get_coord());
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.nearEquals = function(this1,p) {
+	return thx_Floats.nearEquals(this1.get_coord(),p.get_coord());
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.notNearEquals = function(this1,p) {
+	return !thx_geom_d2__$Angle_Angle_$Impl_$.nearEquals(this1,p);
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.isZero = function(this1) {
+	return this1.get_coord() == 0;
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.isNearZero = function(this1) {
+	return thx_Floats.nearZero(this1.get_coord());
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.clone = function(this1) {
+	return this1.clone();
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.toString = function(this1) {
+	return "Angle(" + this1.get_coord() * 57.29577951308232088 + "°)";
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.toFloat = function(this1) {
+	return this1.get_coord();
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.get_radians = function(this1) {
+	return this1.get_coord();
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.set_radians = function(this1,v) {
+	return this1.set_coord(v);
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.get_degrees = function(this1) {
+	return this1.get_coord() * 57.29577951308232088;
+};
+thx_geom_d2__$Angle_Angle_$Impl_$.set_degrees = function(this1,v) {
+	return this1.set_coord(v * 0.01745329251994329577);
+};
 var thx_geom_d2_Segment = function(start,end,cloud) {
 	this.start = start;
 	this.end = end;
@@ -5614,6 +5892,24 @@ thx_geom_d2_Segment.prototype = {
 	start: null
 	,end: null
 	,box: null
+	,equals: function(other) {
+		return thx_Types.sameType(this,other) && (function($this) {
+			var $r;
+			var this1 = $this.start;
+			var p = other.start;
+			$r = this1.get_x() == p.get_x() && this1.get_y() == p.get_y();
+			return $r;
+		}(this)) && (function($this) {
+			var $r;
+			var this2 = $this.end;
+			var p1 = other.end;
+			$r = this2.get_x() == p1.get_x() && this2.get_y() == p1.get_y();
+			return $r;
+		}(this));
+	}
+	,nearEquals: function(other) {
+		return thx_Types.sameType(this,other) && thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.start,other.start) && thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.end,other.end);
+	}
 	,toVector: function() {
 		var _g = this;
 		return new thx_geom_core_LinkedXY(function() {
@@ -5643,14 +5939,124 @@ var thx_geom_d2_ArcSegment = function(start,radius,largeArcFlag,sweepFlag,xAxisR
 	this.xAxisRotate = xAxisRotate;
 };
 thx_geom_d2_ArcSegment.__name__ = ["thx","geom","d2","ArcSegment"];
+thx_geom_d2_ArcSegment.toCubic = function(arc) {
+	var values = thx_geom_d2_ArcSegment.arcToCubic(arc.start.get_x(),arc.start.get_y(),arc.radius.get_x(),arc.radius.get_y(),arc.xAxisRotate.get_coord(),arc.largeArcFlag.get_value(),arc.sweepFlag.get_value(),arc.end.get_x(),arc.end.get_y(),null);
+	var start = arc.start;
+	var result = [];
+	var _g1 = 0;
+	var _g = values.length / 3 | 0;
+	while(_g1 < _g) {
+		var i = _g1++;
+		result.push(new thx_geom_d2_CubicCurveSegment(start,new thx_geom_core_MutableXY(values[i * 3][0],values[i * 3][1]),new thx_geom_core_MutableXY(values[i * 3 + 1][0],values[i * 3 + 1][1]),start = new thx_geom_core_MutableXY(values[i * 3 + 2][0],values[i * 3 + 2][1])));
+	}
+	return result;
+};
+thx_geom_d2_ArcSegment.arcToCubic = function(x1,y1,rx,ry,angle,large_arc_flag,sweep_flag,x2,y2,recursive) {
+	var rotate = function(x,y,rad) {
+		return { x : x * Math.cos(rad) - y * Math.sin(rad), y : x * Math.sin(rad) + y * Math.cos(rad)};
+	};
+	var _120 = Math.PI * 120 / 180;
+	var res = [];
+	var xy;
+	var f1;
+	var f2;
+	var cx;
+	var cy;
+	if(null == recursive) {
+		xy = rotate(x1,y1,-angle);
+		x1 = xy.x;
+		y1 = xy.y;
+		xy = rotate(x2,y2,-angle);
+		x2 = xy.x;
+		y2 = xy.y;
+		var cos = Math.cos(angle);
+		var sin = Math.sin(angle);
+		var x3 = (x1 - x2) / 2;
+		var y3 = (y1 - y2) / 2;
+		var h = x3 * x3 / (rx * rx) + y3 * y3 / (ry * ry);
+		if(h > 1) {
+			h = Math.sqrt(h);
+			rx = h * rx;
+			ry = h * ry;
+		}
+		var rx2 = rx * rx;
+		var ry2 = ry * ry;
+		var k;
+		k = (large_arc_flag == sweep_flag?-1:1) * Math.sqrt(Math.abs((rx2 * ry2 - rx2 * y3 * y3 - ry2 * x3 * x3) / (rx2 * y3 * y3 + ry2 * x3 * x3)));
+		cx = k * rx * y3 / ry + (x1 + x2) / 2;
+		cy = k * -ry * x3 / rx + (y1 + y2) / 2;
+		f1 = Math.asin(thx_Floats.roundTo((y1 - cy) / ry,9));
+		f2 = Math.asin(thx_Floats.roundTo((y2 - cy) / ry,9));
+		if(x1 < cx) f1 = Math.PI - f1; else f1 = f1;
+		if(x2 < cx) f2 = Math.PI - f2; else f2 = f2;
+		if(f1 < 0) f1 = Math.PI * 2 + f1;
+		if(f2 < 0) f2 = Math.PI * 2 + f2;
+		if(sweep_flag && f1 > f2) f1 = f1 - Math.PI * 2;
+		if(!sweep_flag && f2 > f1) f2 = f2 - Math.PI * 2;
+	} else {
+		f1 = recursive[0];
+		f2 = recursive[1];
+		cx = recursive[2];
+		cy = recursive[3];
+	}
+	var df = f2 - f1;
+	if(Math.abs(df) > _120) {
+		var f2old = f2;
+		var x2old = x2;
+		var y2old = y2;
+		f2 = f1 + _120 * (sweep_flag && f2 > f1?1:-1);
+		x2 = cx + rx * Math.cos(f2);
+		y2 = cy + ry * Math.sin(f2);
+		res = thx_geom_d2_ArcSegment.arcToCubic(x2,y2,rx,ry,angle,false,sweep_flag,x2old,y2old,[f2,f2old,cx,cy]);
+	}
+	df = f2 - f1;
+	var c1 = Math.cos(f1);
+	var s1 = Math.sin(f1);
+	var c2 = Math.cos(f2);
+	var s2 = Math.sin(f2);
+	var t = Math.tan(df / 4);
+	var hx = 1.33333333333333326 * rx * t;
+	var hy = 1.33333333333333326 * ry * t;
+	var m1_0 = x1;
+	var m1_1 = y1;
+	var m2 = [x1 + hx * s1,y1 - hy * c1];
+	var m3 = [x2 + hx * s2,y2 - hy * c2];
+	var m4 = [x2,y2];
+	m2[0] = 2 * m1_0 - m2[0];
+	m2[1] = 2 * m1_1 - m2[1];
+	if(null != recursive) return [m2,m3,m4].concat(res); else {
+		var res2 = thx_Arrays.flatten([m2,m3,m4].concat(res));
+		var newres = [];
+		var ii = res2.length;
+		var i = 0;
+		var c = 0;
+		while(i < ii) {
+			newres[c++] = [rotate(res2[i],res2[i + 1],angle).x,rotate(res2[++i - 1],res2[i],angle).y];
+			i++;
+		}
+		return newres;
+	}
+};
 thx_geom_d2_ArcSegment.__super__ = thx_geom_d2_Segment;
 thx_geom_d2_ArcSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
 	radius: null
 	,largeArcFlag: null
 	,sweepFlag: null
 	,xAxisRotate: null
+	,equals: function(other) {
+		return thx_geom_d2_Segment.prototype.equals.call(this,other) && (function($this) {
+			var $r;
+			var this1 = $this.radius;
+			var p = other.radius;
+			$r = this1.get_x() == p.get_x() && this1.get_y() == p.get_y();
+			return $r;
+		}(this)) && this.largeArcFlag.get_value() == other.largeArcFlag.get_value() && this.sweepFlag.get_value() == other.sweepFlag.get_value() && this.xAxisRotate.get_coord() == other.xAxisRotate.get_coord();
+	}
+	,nearEquals: function(other) {
+		return thx_geom_d2_Segment.prototype.equals.call(this,other) && thx_geom_d2__$Vector_Vector_$Impl_$.nearEquals(this.radius,other.radius) && this.largeArcFlag.get_value() == other.largeArcFlag.get_value() && this.sweepFlag.get_value() == other.sweepFlag.get_value() && thx_geom_d2__$Angle_Angle_$Impl_$.nearEquals(this.xAxisRotate,other.xAxisRotate);
+	}
 	,toString: function() {
-		return "ArcSegment(sx:" + this.start.get_x() + ",sy:" + this.start.get_y() + ",xr:" + this.xAxisRotate.get_coord() + ",laf:" + Std.string(this.largeArcFlag) + ",sf:" + Std.string(this.sweepFlag) + ",ex:" + this.end.get_x() + ",ey:" + this.end.get_y() + ")";
+		return "ArcSegment(sx:" + this.start.get_x() + ",sy:" + this.start.get_y() + ",rot:" + this.xAxisRotate.get_coord() * 57.29577951308232088 + "°,laf:" + ("Flag(" + Std.string(this.largeArcFlag.get_value()) + ")") + ",sf:" + ("Flag(" + Std.string(this.sweepFlag.get_value()) + ")") + ",ex:" + this.end.get_x() + ",ey:" + this.end.get_y() + ")";
 	}
 	,__class__: thx_geom_d2_ArcSegment
 });
@@ -5663,43 +6069,50 @@ thx_geom_d2_IShape.prototype = {
 var thx_geom_d2_Circle = function(center,radius) {
 	this.center = center;
 	this.radius = radius;
-	this.box = thx_geom_d2_Rect.fromPoints([this.get_bottomLeft(),this.get_topRight()]);
+	this.box = thx_geom_d2_Rect.fromPoints([this.get_minLeft(),this.get_maxRight()]);
 };
 thx_geom_d2_Circle.__name__ = ["thx","geom","d2","Circle"];
 thx_geom_d2_Circle.__interfaces__ = [thx_geom_d2_IShape];
 thx_geom_d2_Circle.fromPoints = function(a,b) {
-	var c = new thx_geom_core_LinkedXY(function() {
-		return (a.get_x() + b.get_x()) / 2;
-	},function() {
-		return (a.get_y() + b.get_y()) / 2;
-	},function(x) {
-		var dx = x - (a.get_x() + b.get_x()) / 2;
-		var v = a.get_x() + dx;
-		a.set_x(v);
-		return x;
-	},function(y) {
-		var dy = y - (a.get_y() + b.get_y()) / 2;
-		var v1 = a.get_y() + dy;
-		a.set_y(v1);
-		return y;
-	});
-	var r = new thx_geom_core_LinkedDim(function() {
+	var c;
+	c = (function($this) {
+		var $r;
+		var p = new thx_geom_core_LinkedXY(function() {
+			return (a.get_x() + b.get_x()) / 2;
+		},function() {
+			return (a.get_y() + b.get_y()) / 2;
+		},function(x) {
+			var dx = x - (a.get_x() + b.get_x()) / 2;
+			var v = a.get_x() + dx;
+			a.set_x(v);
+			return x;
+		},function(y) {
+			var dy = y - (a.get_y() + b.get_y()) / 2;
+			var v1 = a.get_y() + dy;
+			a.set_y(v1);
+			return y;
+		});
+		$r = p;
+		return $r;
+	}(this));
+	var r;
+	var r1 = new thx_geom_core_LinkedDim(function() {
 		return thx_geom_d2__$Point_Point_$Impl_$.distanceTo(c,a);
 	},function(v2) {
 		var d;
 		var this1;
 		this1 = (function($this) {
 			var $r;
-			var p;
-			p = (function($this) {
+			var p1;
+			p1 = (function($this) {
 				var $r;
 				var x2 = -c.get_x();
 				var y2 = -c.get_y();
 				$r = new thx_geom_core_MutableXY(x2,y2);
 				return $r;
 			}($this));
-			var x1 = b.get_x() + p.get_x();
-			var y1 = b.get_y() + p.get_y();
+			var x1 = b.get_x() + p1.get_x();
+			var y1 = b.get_y() + p1.get_y();
 			$r = new thx_geom_core_MutableXY(x1,y1);
 			return $r;
 		}(this));
@@ -5709,6 +6122,7 @@ thx_geom_d2_Circle.fromPoints = function(a,b) {
 		thx_geom_d2__$Point_Point_$Impl_$.set(a,c.get_x() - d.get_x(),c.get_y() - d.get_y());
 		return v2;
 	});
+	r = r1;
 	return new thx_geom_d2_Circle(c,r);
 };
 thx_geom_d2_Circle.create = function(x,y,r) {
@@ -5720,10 +6134,10 @@ thx_geom_d2_Circle.prototype = {
 	,box: null
 	,centerLeft: null
 	,centerRight: null
-	,centerTop: null
-	,centerBottom: null
-	,bottomLeft: null
-	,topRight: null
+	,centerMax: null
+	,centerMin: null
+	,minLeft: null
+	,maxRight: null
 	,get_area: function() {
 		var this1 = this.radius;
 		return this1.get_coord() * this1.get_coord() * 3.141592653589793238;
@@ -5755,10 +6169,10 @@ thx_geom_d2_Circle.prototype = {
 	,get_right: function() {
 		return this.center.get_x() + this.radius.get_coord();
 	}
-	,get_top: function() {
+	,get_max: function() {
 		return this.center.get_y() - this.radius.get_coord();
 	}
-	,get_bottom: function() {
+	,get_min: function() {
 		return this.center.get_y() + this.radius.get_coord();
 	}
 	,set_left: function(v) {
@@ -5769,11 +6183,11 @@ thx_geom_d2_Circle.prototype = {
 		var v1 = v - this.radius.get_coord();
 		return this.center.set_x(v1);
 	}
-	,set_top: function(v) {
+	,set_max: function(v) {
 		var v1 = v - this.radius.get_coord();
 		return this.center.set_y(v1);
 	}
-	,set_bottom: function(v) {
+	,set_min: function(v) {
 		var v1 = v + this.radius.get_coord();
 		return this.center.set_y(v1);
 	}
@@ -5791,81 +6205,111 @@ thx_geom_d2_Circle.prototype = {
 	}
 	,get_centerLeft: function() {
 		var _g = this;
-		if(null == this.centerLeft) this.centerLeft = new thx_geom_core_LinkedXY(function() {
-			return _g.center.get_x() - _g.radius.get_coord();
-		},function() {
-			return _g.center.get_y();
-		},function(v) {
-			return _g.set_left(v);
-		},function(v1) {
-			return _g.center.set_y(v1);
-		});
+		if(null == this.centerLeft) this.centerLeft = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.center.get_x() - _g.radius.get_coord();
+			},function() {
+				return _g.center.get_y();
+			},function(v) {
+				return _g.set_left(v);
+			},function(v1) {
+				return _g.center.set_y(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
 		return this.centerLeft;
 	}
 	,get_centerRight: function() {
 		var _g = this;
-		if(null == this.centerRight) this.centerRight = new thx_geom_core_LinkedXY(function() {
-			return _g.center.get_x() + _g.radius.get_coord();
-		},function() {
-			return _g.center.get_y();
-		},function(v) {
-			return _g.set_right(v);
-		},function(v1) {
-			return _g.center.set_y(v1);
-		});
+		if(null == this.centerRight) this.centerRight = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.center.get_x() + _g.radius.get_coord();
+			},function() {
+				return _g.center.get_y();
+			},function(v) {
+				return _g.set_right(v);
+			},function(v1) {
+				return _g.center.set_y(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
 		return this.centerRight;
 	}
-	,get_centerTop: function() {
+	,get_centerMax: function() {
 		var _g = this;
-		if(null == this.centerTop) this.centerTop = new thx_geom_core_LinkedXY(function() {
-			return _g.center.get_x();
-		},function() {
-			return _g.center.get_y() - _g.radius.get_coord();
-		},function(v) {
-			return _g.center.set_x(v);
-		},function(v1) {
-			return _g.set_top(v1);
-		});
-		return this.centerTop;
+		if(null == this.centerMax) this.centerMax = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.center.get_x();
+			},function() {
+				return _g.center.get_y() - _g.radius.get_coord();
+			},function(v) {
+				return _g.center.set_x(v);
+			},function(v1) {
+				return _g.set_max(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.centerMax;
 	}
-	,get_centerBottom: function() {
+	,get_centerMin: function() {
 		var _g = this;
-		if(null == this.centerBottom) this.centerBottom = new thx_geom_core_LinkedXY(function() {
-			return _g.center.get_x();
-		},function() {
-			return _g.center.get_y() + _g.radius.get_coord();
-		},function(v) {
-			return _g.center.set_x(v);
-		},function(v1) {
-			return _g.set_bottom(v1);
-		});
-		return this.centerBottom;
+		if(null == this.centerMin) this.centerMin = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.center.get_x();
+			},function() {
+				return _g.center.get_y() + _g.radius.get_coord();
+			},function(v) {
+				return _g.center.set_x(v);
+			},function(v1) {
+				return _g.set_min(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.centerMin;
 	}
-	,get_bottomLeft: function() {
+	,get_minLeft: function() {
 		var _g = this;
-		if(null == this.bottomLeft) this.bottomLeft = new thx_geom_core_LinkedXY(function() {
-			return _g.center.get_x() - _g.radius.get_coord();
-		},function() {
-			return _g.center.get_y() + _g.radius.get_coord();
-		},function(v) {
-			return _g.set_left(v);
-		},function(v1) {
-			return _g.set_bottom(v1);
-		});
-		return this.bottomLeft;
+		if(null == this.minLeft) this.minLeft = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.center.get_x() - _g.radius.get_coord();
+			},function() {
+				return _g.center.get_y() + _g.radius.get_coord();
+			},function(v) {
+				return _g.set_left(v);
+			},function(v1) {
+				return _g.set_min(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.minLeft;
 	}
-	,get_topRight: function() {
+	,get_maxRight: function() {
 		var _g = this;
-		if(null == this.topRight) this.topRight = new thx_geom_core_LinkedXY(function() {
-			return _g.center.get_x() + _g.radius.get_coord();
-		},function() {
-			return _g.center.get_y() - _g.radius.get_coord();
-		},function(v) {
-			return _g.set_right(v);
-		},function(v1) {
-			return _g.set_top(v1);
-		});
-		return this.topRight;
+		if(null == this.maxRight) this.maxRight = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.center.get_x() + _g.radius.get_coord();
+			},function() {
+				return _g.center.get_y() - _g.radius.get_coord();
+			},function(v) {
+				return _g.set_right(v);
+			},function(v1) {
+				return _g.set_max(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.maxRight;
 	}
 	,__class__: thx_geom_d2_Circle
 };
@@ -5879,11 +6323,85 @@ thx_geom_d2_CubicCurveSegment.__super__ = thx_geom_d2_Segment;
 thx_geom_d2_CubicCurveSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
 	c1: null
 	,c2: null
+	,equals: function(other) {
+		return thx_geom_d2_Segment.prototype.equals.call(this,other) && (function($this) {
+			var $r;
+			var this1 = $this.c1;
+			var p = other.c1;
+			$r = this1.get_x() == p.get_x() && this1.get_y() == p.get_y();
+			return $r;
+		}(this)) && (function($this) {
+			var $r;
+			var this2 = $this.c2;
+			var p1 = other.c2;
+			$r = this2.get_x() == p1.get_x() && this2.get_y() == p1.get_y();
+			return $r;
+		}(this));
+	}
+	,nearEquals: function(other) {
+		return thx_geom_d2_Segment.prototype.equals.call(this,other) && thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.c1,other.c1) && thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.c2,other.c2);
+	}
 	,toString: function() {
 		return "CubicCurveSegment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.c1.get_x() + "," + this.c1.get_y() + "," + this.c2.get_x() + "," + this.c2.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
 	}
 	,__class__: thx_geom_d2_CubicCurveSegment
 });
+var thx_geom_d2__$Flag_Flag_$Impl_$ = {};
+thx_geom_d2__$Flag_Flag_$Impl_$.__name__ = ["thx","geom","d2","_Flag","Flag_Impl_"];
+thx_geom_d2__$Flag_Flag_$Impl_$.fromInt = function(r) {
+	var r1 = new thx_geom_core_MutableDimBool(r != 0);
+	return r1;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.create = function(r) {
+	var r1 = new thx_geom_core_MutableDimBool(r);
+	return r1;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.linked = function(getFlag,setFlag) {
+	return new thx_geom_core_LinkedDimBool(getFlag,setFlag);
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.immutable = function(r) {
+	return new thx_geom_core_ImmutableDimBool(r);
+};
+thx_geom_d2__$Flag_Flag_$Impl_$._new = function(r) {
+	return r;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.equals = function(this1,p) {
+	return this1.get_value() == p.get_value();
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.notEquals = function(this1,p) {
+	return !(this1.get_value() == p.get_value());
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.isTrue = function(this1) {
+	return this1.get_value() == true;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.isFalse = function(this1) {
+	return this1.get_value() == false;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.clone = function(this1) {
+	return this1.clone();
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.toString = function(this1) {
+	return "Flag(" + Std.string(this1.get_value()) + ")";
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.toInt = function(this1) {
+	if(this1.get_value()) return 1; else return 0;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.toBool = function(this1) {
+	return this1.get_value();
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.get_int = function(this1) {
+	if(this1.get_value()) return 1; else return 0;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.set_int = function(this1,v) {
+	this1.set_value(v != 0);
+	return v;
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.get_value = function(this1) {
+	return this1.get_value();
+};
+thx_geom_d2__$Flag_Flag_$Impl_$.set_value = function(this1,v) {
+	return this1.set_value(v);
+};
 var thx_geom_d2_LineSegment = function(start,end) {
 	thx_geom_d2_Segment.call(this,start,end,[start,end]);
 };
@@ -5910,9 +6428,15 @@ thx_geom_d2_Path.__interfaces__ = [thx_geom_d2_IShape];
 thx_geom_d2_Path.fromSVGPath = function(d) {
 	return new thx_geom_d2_Path(thx_geom_d2_svg_Svg.parsePath(d));
 };
+thx_geom_d2_Path.r = function(v) {
+	return thx_Floats.roundTo(v,9);
+};
 thx_geom_d2_Path.prototype = {
 	box: null
 	,segments: null
+	,iterator: function() {
+		return HxOverrides.iter(this.segments);
+	}
 	,toSVGPath: function() {
 		var buf = [];
 		var end;
@@ -5931,26 +6455,26 @@ thx_geom_d2_Path.prototype = {
 				$r = end.get_x() == p.get_x() && end.get_y() == p.get_y();
 				return $r;
 			}(this))) {
-				buf.push("M " + segment.start.get_x() + " " + segment.start.get_y());
+				buf.push("M " + thx_geom_d2_Path.r(segment.start.get_x()) + " " + thx_geom_d2_Path.r(segment.start.get_y()));
 				startingPoint = segment.start;
 			}
 			var _g2;
 			if(segment == null) _g2 = null; else _g2 = js_Boot.getClass(segment);
 			if(_g2 != null) switch(_g2) {
 			case thx_geom_d2_LineSegment:
-				buf.push("L " + segment.end.get_x() + " " + segment.end.get_y());
+				buf.push("L " + thx_geom_d2_Path.r(segment.end.get_x()) + " " + thx_geom_d2_Path.r(segment.end.get_y()));
 				break;
 			case thx_geom_d2_QuadraticCurveSegment:
 				var s = segment;
-				buf.push("Q " + s.c1.get_x() + " " + s.c1.get_y() + " " + s.end.get_x() + " " + s.end.get_y());
+				buf.push("Q " + thx_geom_d2_Path.r(s.c1.get_x()) + " " + thx_geom_d2_Path.r(s.c1.get_y()) + " " + thx_geom_d2_Path.r(s.end.get_x()) + " " + thx_geom_d2_Path.r(s.end.get_y()));
 				break;
 			case thx_geom_d2_CubicCurveSegment:
 				var s1 = segment;
-				buf.push("C " + s1.c1.get_x() + " " + s1.c1.get_y() + " " + s1.c2.get_x() + " " + s1.c2.get_y() + " " + s1.end.get_x() + " " + s1.end.get_y());
+				buf.push("C " + thx_geom_d2_Path.r(s1.c1.get_x()) + " " + thx_geom_d2_Path.r(s1.c1.get_y()) + " " + thx_geom_d2_Path.r(s1.c2.get_x()) + " " + thx_geom_d2_Path.r(s1.c2.get_y()) + " " + thx_geom_d2_Path.r(s1.end.get_x()) + " " + thx_geom_d2_Path.r(s1.end.get_y()));
 				break;
 			case thx_geom_d2_ArcSegment:
 				var s2 = segment;
-				buf.push("A " + s2.radius.get_x() + " " + s2.radius.get_y() + " " + s2.xAxisRotate.get_coord() + " " + (s2.largeArcFlag?1:0) + " " + (s2.sweepFlag?1:0) + " " + s2.end.get_x() + " " + s2.end.get_y());
+				buf.push("A " + thx_geom_d2_Path.r(s2.radius.get_x()) + " " + thx_geom_d2_Path.r(s2.radius.get_y()) + " " + thx_geom_d2_Path.r(s2.xAxisRotate.get_coord() * 57.29577951308232088) + " " + (s2.largeArcFlag.get_value()?1:0) + " " + (s2.sweepFlag.get_value()?1:0) + " " + thx_geom_d2_Path.r(s2.end.get_x()) + " " + thx_geom_d2_Path.r(s2.end.get_y()));
 				break;
 			}
 			if((function($this) {
@@ -5971,50 +6495,60 @@ thx_geom_d2_Path.prototype = {
 var thx_geom_d2__$Point_Point_$Impl_$ = {};
 thx_geom_d2__$Point_Point_$Impl_$.__name__ = ["thx","geom","d2","_Point","Point_Impl_"];
 thx_geom_d2__$Point_Point_$Impl_$.linkedMin = function(points) {
-	return new thx_geom_core_LinkedXY(function() {
-		var x = Infinity;
-		var $it0 = $iterator(points)();
-		while( $it0.hasNext() ) {
-			var p = $it0.next();
-			if(p.get_x() < x) x = p.get_x();
-		}
-		return x;
-	},function() {
-		var y = Infinity;
-		var $it1 = $iterator(points)();
-		while( $it1.hasNext() ) {
-			var p1 = $it1.next();
-			if(p1.get_y() < y) y = p1.get_y();
-		}
-		return y;
-	},function(_) {
-		throw new js__$Boot_HaxeError("cannot set X for linkedMin point");
-	},function(_1) {
-		throw new js__$Boot_HaxeError("cannot set Y for linkedMin point");
-	});
+	return (function($this) {
+		var $r;
+		var p2 = new thx_geom_core_LinkedXY(function() {
+			var x = Infinity;
+			var $it0 = $iterator(points)();
+			while( $it0.hasNext() ) {
+				var p = $it0.next();
+				if(p.get_x() < x) x = p.get_x();
+			}
+			return x;
+		},function() {
+			var y = Infinity;
+			var $it1 = $iterator(points)();
+			while( $it1.hasNext() ) {
+				var p1 = $it1.next();
+				if(p1.get_y() < y) y = p1.get_y();
+			}
+			return y;
+		},function(_) {
+			throw new js__$Boot_HaxeError("cannot set X for linkedMin point");
+		},function(_1) {
+			throw new js__$Boot_HaxeError("cannot set Y for linkedMin point");
+		});
+		$r = p2;
+		return $r;
+	}(this));
 };
 thx_geom_d2__$Point_Point_$Impl_$.linkedMax = function(points) {
-	return new thx_geom_core_LinkedXY(function() {
-		var x = -Infinity;
-		var $it0 = $iterator(points)();
-		while( $it0.hasNext() ) {
-			var p = $it0.next();
-			if(p.get_x() > x) x = p.get_x();
-		}
-		return x;
-	},function() {
-		var y = -Infinity;
-		var $it1 = $iterator(points)();
-		while( $it1.hasNext() ) {
-			var p1 = $it1.next();
-			if(p1.get_y() > y) y = p1.get_y();
-		}
-		return y;
-	},function(_) {
-		throw new js__$Boot_HaxeError("cannot set X for linkedMax point");
-	},function(_1) {
-		throw new js__$Boot_HaxeError("cannot set Y for linkedMax point");
-	});
+	return (function($this) {
+		var $r;
+		var p2 = new thx_geom_core_LinkedXY(function() {
+			var x = -Infinity;
+			var $it0 = $iterator(points)();
+			while( $it0.hasNext() ) {
+				var p = $it0.next();
+				if(p.get_x() > x) x = p.get_x();
+			}
+			return x;
+		},function() {
+			var y = -Infinity;
+			var $it1 = $iterator(points)();
+			while( $it1.hasNext() ) {
+				var p1 = $it1.next();
+				if(p1.get_y() > y) y = p1.get_y();
+			}
+			return y;
+		},function(_) {
+			throw new js__$Boot_HaxeError("cannot set X for linkedMax point");
+		},function(_1) {
+			throw new js__$Boot_HaxeError("cannot set Y for linkedMax point");
+		});
+		$r = p2;
+		return $r;
+	}(this));
 };
 thx_geom_d2__$Point_Point_$Impl_$.fromFloats = function(arr) {
 	thx_ArrayFloats.resize(arr,2,0);
@@ -6029,8 +6563,11 @@ thx_geom_d2__$Point_Point_$Impl_$.fromAngle = function(angle) {
 thx_geom_d2__$Point_Point_$Impl_$.create = function(x,y) {
 	return new thx_geom_core_MutableXY(x,y);
 };
-thx_geom_d2__$Point_Point_$Impl_$.linked = function(getX,getY,setX,setY) {
-	return new thx_geom_core_LinkedXY(getX,getY,setX,setY);
+thx_geom_d2__$Point_Point_$Impl_$.linked = function(getX,getY,setX,setY,x,y) {
+	var p = new thx_geom_core_LinkedXY(getX,getY,setX,setY);
+	if(null != x) p.set_x(x);
+	if(null != y) p.set_y(y);
+	return p;
 };
 thx_geom_d2__$Point_Point_$Impl_$.immutable = function(x,y) {
 	return new thx_geom_core_ImmutableXY(x,y);
@@ -6348,6 +6885,18 @@ thx_geom_d2_QuadraticCurveSegment.__name__ = ["thx","geom","d2","QuadraticCurveS
 thx_geom_d2_QuadraticCurveSegment.__super__ = thx_geom_d2_Segment;
 thx_geom_d2_QuadraticCurveSegment.prototype = $extend(thx_geom_d2_Segment.prototype,{
 	c1: null
+	,equals: function(other) {
+		return thx_geom_d2_Segment.prototype.equals.call(this,other) && (function($this) {
+			var $r;
+			var this1 = $this.c1;
+			var p = other.c1;
+			$r = this1.get_x() == p.get_x() && this1.get_y() == p.get_y();
+			return $r;
+		}(this));
+	}
+	,nearEquals: function(other) {
+		return thx_geom_d2_Segment.prototype.equals.call(this,other) && thx_geom_d2__$Point_Point_$Impl_$.nearEquals(this.c1,other.c1);
+	}
 	,toString: function() {
 		return "QuadraticCurveSegment(" + this.start.get_x() + "," + this.start.get_y() + "," + this.c1.get_x() + "," + this.c1.get_y() + "," + this.end.get_x() + "," + this.end.get_y() + ")";
 	}
@@ -6361,8 +6910,10 @@ thx_geom_d2__$Radius_Radius_$Impl_$.fromFloat = function(r) {
 thx_geom_d2__$Radius_Radius_$Impl_$.create = function(r) {
 	return new thx_geom_core_MutableDim(Math.abs(r));
 };
-thx_geom_d2__$Radius_Radius_$Impl_$.linked = function(getRadius,setRadius) {
-	return new thx_geom_core_LinkedDim(getRadius,setRadius);
+thx_geom_d2__$Radius_Radius_$Impl_$.linked = function(getRadius,setRadius,radius) {
+	var r = new thx_geom_core_LinkedDim(getRadius,setRadius);
+	if(null != radius) r.set_coord(radius);
+	return r;
 };
 thx_geom_d2__$Radius_Radius_$Impl_$.immutable = function(r) {
 	return new thx_geom_core_ImmutableDim(r);
@@ -6435,10 +6986,10 @@ thx_geom_d2_Rect.fromPoints = function(points) {
 };
 thx_geom_d2_Rect.fromRects = function(rects) {
 	var min = thx_geom_d2__$Point_Point_$Impl_$.linkedMin(thx_Iterators.map($iterator(rects)(),function(_) {
-		return _.get_bottomLeft();
+		return _.get_minLeft();
 	}));
 	var max = thx_geom_d2__$Point_Point_$Impl_$.linkedMax(thx_Iterators.map($iterator(rects)(),function(_1) {
-		return _1.get_topRight();
+		return _1.get_maxRight();
 	}));
 	return thx_geom_d2_Rect.fromPoints([min,max]);
 };
@@ -6449,129 +7000,174 @@ thx_geom_d2_Rect.prototype = {
 	,center: null
 	,centerLeft: null
 	,centerRight: null
-	,centerTop: null
-	,centerBottom: null
-	,topLeft: null
-	,topRight: null
-	,bottomLeft: null
-	,bottomRight: null
+	,centerMax: null
+	,centerMin: null
+	,maxLeft: null
+	,maxRight: null
+	,minLeft: null
+	,minRight: null
 	,corners: null
 	,get_center: function() {
 		var _g = this;
-		if(null == this.center) this.center = new thx_geom_core_LinkedXY(function() {
-			return _g.position.get_x() + _g.size.get_x() / 2;
-		},function() {
-			return _g.position.get_y() + _g.size.get_y() / 2;
-		},function(v) {
-			return _g.set_x(v - _g.size.get_x() / 2);
-		},function(v1) {
-			return _g.set_y(v1 - _g.size.get_y() / 2);
-		});
+		if(null == this.center) this.center = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.position.get_x() + _g.size.get_x() / 2;
+			},function() {
+				return _g.position.get_y() + _g.size.get_y() / 2;
+			},function(v) {
+				return _g.set_x(v - _g.size.get_x() / 2);
+			},function(v1) {
+				return _g.set_y(v1 - _g.size.get_y() / 2);
+			});
+			$r = p;
+			return $r;
+		}(this));
 		return this.center;
 	}
 	,get_centerLeft: function() {
 		var _g = this;
-		if(null == this.centerLeft) this.centerLeft = new thx_geom_core_LinkedXY(function() {
-			return _g.get_left();
-		},function() {
-			return _g.position.get_y() + _g.size.get_y() / 2;
-		},function(v) {
-			return _g.set_left(v);
-		},function(v1) {
-			return _g.set_y(v1 - _g.size.get_y() / 2);
-		});
+		if(null == this.centerLeft) this.centerLeft = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.get_left();
+			},function() {
+				return _g.position.get_y() + _g.size.get_y() / 2;
+			},function(v) {
+				return _g.set_left(v);
+			},function(v1) {
+				return _g.set_y(v1 - _g.size.get_y() / 2);
+			});
+			$r = p;
+			return $r;
+		}(this));
 		return this.centerLeft;
 	}
 	,get_centerRight: function() {
 		var _g = this;
-		if(null == this.centerRight) this.centerRight = new thx_geom_core_LinkedXY(function() {
-			return _g.get_right();
-		},function() {
-			return _g.position.get_y() + _g.size.get_y() / 2;
-		},function(v) {
-			return _g.set_right(v);
-		},function(v1) {
-			return _g.set_y(v1 - _g.size.get_y() / 2);
-		});
+		if(null == this.centerRight) this.centerRight = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.get_right();
+			},function() {
+				return _g.position.get_y() + _g.size.get_y() / 2;
+			},function(v) {
+				return _g.set_right(v);
+			},function(v1) {
+				return _g.set_y(v1 - _g.size.get_y() / 2);
+			});
+			$r = p;
+			return $r;
+		}(this));
 		return this.centerRight;
 	}
-	,get_centerTop: function() {
+	,get_centerMax: function() {
 		var _g = this;
-		if(null == this.centerTop) this.centerTop = new thx_geom_core_LinkedXY(function() {
-			return _g.position.get_x() + _g.size.get_x() / 2;
-		},function() {
-			return _g.get_top();
-		},function(v) {
-			return _g.set_x(v - _g.size.get_x() / 2);
-		},function(v1) {
-			return _g.set_top(v1);
-		});
-		return this.centerTop;
+		if(null == this.centerMax) this.centerMax = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.position.get_x() + _g.size.get_x() / 2;
+			},function() {
+				return _g.get_max();
+			},function(v) {
+				return _g.set_x(v - _g.size.get_x() / 2);
+			},function(v1) {
+				return _g.set_max(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.centerMax;
 	}
-	,get_centerBottom: function() {
+	,get_centerMin: function() {
 		var _g = this;
-		if(null == this.centerBottom) this.centerBottom = new thx_geom_core_LinkedXY(function() {
-			return _g.position.get_x() + _g.size.get_x() / 2;
-		},function() {
-			return _g.get_bottom();
-		},function(v) {
-			return _g.set_x(v - _g.size.get_x() / 2);
-		},function(v1) {
-			return _g.set_bottom(v1);
-		});
-		return this.centerBottom;
+		if(null == this.centerMin) this.centerMin = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.position.get_x() + _g.size.get_x() / 2;
+			},function() {
+				return _g.get_min();
+			},function(v) {
+				return _g.set_x(v - _g.size.get_x() / 2);
+			},function(v1) {
+				return _g.set_min(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.centerMin;
 	}
-	,get_topLeft: function() {
+	,get_maxLeft: function() {
 		var _g = this;
-		if(null == this.topLeft) this.topLeft = new thx_geom_core_LinkedXY(function() {
-			return _g.get_left();
-		},function() {
-			return _g.get_top();
-		},function(v) {
-			return _g.set_left(v);
-		},function(v1) {
-			return _g.set_top(v1);
-		});
-		return this.topLeft;
+		if(null == this.maxLeft) this.maxLeft = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.get_left();
+			},function() {
+				return _g.get_max();
+			},function(v) {
+				return _g.set_left(v);
+			},function(v1) {
+				return _g.set_max(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.maxLeft;
 	}
-	,get_topRight: function() {
+	,get_maxRight: function() {
 		var _g = this;
-		if(null == this.topRight) this.topRight = new thx_geom_core_LinkedXY(function() {
-			return _g.get_right();
-		},function() {
-			return _g.get_top();
-		},function(v) {
-			return _g.set_right(v);
-		},function(v1) {
-			return _g.set_top(v1);
-		});
-		return this.topRight;
+		if(null == this.maxRight) this.maxRight = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.get_right();
+			},function() {
+				return _g.get_max();
+			},function(v) {
+				return _g.set_right(v);
+			},function(v1) {
+				return _g.set_max(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.maxRight;
 	}
-	,get_bottomLeft: function() {
+	,get_minLeft: function() {
 		var _g = this;
-		if(null == this.bottomLeft) this.bottomLeft = new thx_geom_core_LinkedXY(function() {
-			return _g.get_left();
-		},function() {
-			return _g.get_bottom();
-		},function(v) {
-			return _g.set_left(v);
-		},function(v1) {
-			return _g.set_bottom(v1);
-		});
-		return this.bottomLeft;
+		if(null == this.minLeft) this.minLeft = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.get_left();
+			},function() {
+				return _g.get_min();
+			},function(v) {
+				return _g.set_left(v);
+			},function(v1) {
+				return _g.set_min(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.minLeft;
 	}
-	,get_bottomRight: function() {
+	,get_minRight: function() {
 		var _g = this;
-		if(null == this.bottomRight) this.bottomRight = new thx_geom_core_LinkedXY(function() {
-			return _g.get_right();
-		},function() {
-			return _g.get_bottom();
-		},function(v) {
-			return _g.set_right(v);
-		},function(v1) {
-			return _g.set_bottom(v1);
-		});
-		return this.bottomRight;
+		if(null == this.minRight) this.minRight = (function($this) {
+			var $r;
+			var p = new thx_geom_core_LinkedXY(function() {
+				return _g.get_right();
+			},function() {
+				return _g.get_min();
+			},function(v) {
+				return _g.set_right(v);
+			},function(v1) {
+				return _g.set_min(v1);
+			});
+			$r = p;
+			return $r;
+		}(this));
+		return this.minRight;
 	}
 	,get_area: function() {
 		var this1 = this.size;
@@ -6587,10 +7183,10 @@ thx_geom_d2_Rect.prototype = {
 	,get_right: function() {
 		return this.position.get_x() + (this.size.get_x() > 0?this.size.get_x():0);
 	}
-	,get_top: function() {
+	,get_max: function() {
 		return this.position.get_y() + (this.size.get_y() > 0?this.size.get_y():0);
 	}
-	,get_bottom: function() {
+	,get_min: function() {
 		return this.position.get_y() + (this.size.get_y() < 0?this.size.get_y():0);
 	}
 	,set_left: function(v) {
@@ -6605,14 +7201,14 @@ thx_geom_d2_Rect.prototype = {
 		this.size.set_x(v - l);
 		return v;
 	}
-	,set_top: function(v) {
-		var b = this.get_bottom();
+	,set_max: function(v) {
+		var b = this.get_min();
 		this.position.set_y(b);
 		this.size.set_y(v - b);
 		return v;
 	}
-	,set_bottom: function(v) {
-		var t = this.get_top();
+	,set_min: function(v) {
+		var t = this.get_max();
 		this.position.set_y(v);
 		this.size.set_y(t - v);
 		return v;
@@ -6642,11 +7238,11 @@ thx_geom_d2_Rect.prototype = {
 		return this.position.set_y(v);
 	}
 	,get_corners: function() {
-		if(null == this.corners) this.corners = [this.get_bottomLeft(),this.get_topLeft(),this.get_topRight(),this.get_bottomRight()];
+		if(null == this.corners) this.corners = [this.get_minLeft(),this.get_maxLeft(),this.get_maxRight(),this.get_minRight()];
 		return this.corners;
 	}
 	,equals: function(other) {
-		return this.get_left() == other.get_left() && this.get_right() == other.get_right() && this.get_top() == other.get_top() && this.get_bottom() == other.get_bottom();
+		return this.get_left() == other.get_left() && this.get_right() == other.get_right() && this.get_max() == other.get_max() && this.get_min() == other.get_min();
 	}
 	,toString: function() {
 		return "Rect(" + this.position.get_x() + "," + this.position.get_y() + "," + this.size.get_x() + "," + this.size.get_y() + ")";
@@ -6665,8 +7261,11 @@ thx_geom_d2__$Size_Size_$Impl_$.fromObject = function(o) {
 thx_geom_d2__$Size_Size_$Impl_$.create = function(width,height) {
 	return new thx_geom_core_MutableXY(width,height);
 };
-thx_geom_d2__$Size_Size_$Impl_$.linked = function(getWidth,getHeight,setWidth,setHeight) {
-	return new thx_geom_core_LinkedXY(getWidth,getHeight,setWidth,setHeight);
+thx_geom_d2__$Size_Size_$Impl_$.linked = function(getWidth,getHeight,setWidth,setHeight,width,height) {
+	var size = new thx_geom_core_LinkedXY(getWidth,getHeight,setWidth,setHeight);
+	if(null != width) size.set_x(width);
+	if(null != height) size.set_y(height);
+	return size;
 };
 thx_geom_d2__$Size_Size_$Impl_$.immutable = function(width,height) {
 	return new thx_geom_core_ImmutableXY(width,height);
@@ -7297,13 +7896,33 @@ thx_geom_d2_svg_Svg.parsePath = function(d) {
 			smooth = null;
 			prev = "A";
 			var a = capture(7);
-			list.push(new thx_geom_d2_ArcSegment(last,new thx_geom_core_MutableXY(a[0],a[1]),a[3] != 0,a[4] != 0,new thx_geom_core_MutableDim(a[2]),last = new thx_geom_core_MutableXY(a[5],a[6])));
+			list.push(new thx_geom_d2_ArcSegment(last,new thx_geom_core_MutableXY(a[0],a[1]),(function($this) {
+				var $r;
+				var r = new thx_geom_core_MutableDimBool(a[3] != 0);
+				$r = r;
+				return $r;
+			}(this)),(function($this) {
+				var $r;
+				var r1 = new thx_geom_core_MutableDimBool(a[4] != 0);
+				$r = r1;
+				return $r;
+			}(this)),new thx_geom_core_MutableDim(a[2]),last = new thx_geom_core_MutableXY(a[5],a[6])));
 			break;
 		case "a":
 			smooth = null;
 			prev = "a";
 			var a1 = capture(7);
-			list.push(new thx_geom_d2_ArcSegment(last,new thx_geom_core_MutableXY(a1[0],a1[1]),a1[3] != 0,a1[4] != 0,new thx_geom_core_MutableDim(a1[2]),(function($this) {
+			list.push(new thx_geom_d2_ArcSegment(last,new thx_geom_core_MutableXY(a1[0],a1[1]),(function($this) {
+				var $r;
+				var r2 = new thx_geom_core_MutableDimBool(a1[3] != 0);
+				$r = r2;
+				return $r;
+			}(this)),(function($this) {
+				var $r;
+				var r3 = new thx_geom_core_MutableDimBool(a1[4] != 0);
+				$r = r3;
+				return $r;
+			}(this)),new thx_geom_core_MutableDim(a1[2]),(function($this) {
 				var $r;
 				var p18 = new thx_geom_core_MutableXY(a1[5],a1[6]);
 				var x13 = last.get_x() + p18.get_x();
@@ -7853,23 +8472,18 @@ thx_Floats.pattern_parse = new EReg("^(\\+|-)?\\d+(\\.\\d+)?(e-?\\d+)?$","");
 thx_Ints.pattern_parse = new EReg("^[+-]?(\\d+|0x[0-9A-F]+)$","i");
 thx_Ints.BASE = "0123456789abcdefghijklmnopqrstuvwxyz";
 thx_Strings.UCWORDS = new EReg("[^a-zA-Z]([a-z])","g");
-thx_Strings.UCWORDSWS = new EReg("\\s[a-z]","g");
+thx_Strings.UCWORDSWS = new EReg("[ \t\r\n][a-z]","g");
 thx_Strings.ALPHANUM = new EReg("^[a-z0-9]+$","i");
 thx_Strings.DIGITS = new EReg("^[0-9]+$","");
-thx_Strings.STRIPTAGS = new EReg("</?[a-z]+[^>]*?/?>","gi");
-thx_Strings.WSG = new EReg("\\s+","g");
+thx_Strings.STRIPTAGS = new EReg("</?[a-z]+[^>]*>","gi");
+thx_Strings.WSG = new EReg("[ \t\r\n]+","g");
 thx_Strings.SPLIT_LINES = new EReg("\r\n|\n\r|\n|\r","g");
 thx_Timer.FRAME_RATE = Math.round(16.6666666666666679);
 thx_color__$Grey_Grey_$Impl_$.black = 0;
 thx_color__$Grey_Grey_$Impl_$.white = 1;
 thx_color_parse_ColorParser.parser = new thx_color_parse_ColorParser();
 thx_color_parse_ColorParser.isPureHex = new EReg("^([0-9a-f]{2}){3,4}$","i");
-thx_geom__$Matrix23_Matrix23_$Impl_$.identity = (function($this) {
-	var $r;
-	var m = new thx_geom_core_ImmutableM23(1,0,0,1,0,0);
-	$r = m;
-	return $r;
-}(this));
+thx_geom__$Matrix23_Matrix23_$Impl_$.identity = thx_geom__$Matrix23_Matrix23_$Impl_$.immutable(1,0,0,1,0,0);
 thx_geom_d2__$Point_Point_$Impl_$.zero = new thx_geom_core_ImmutableXY(0,0);
 thx_geom_d2__$Vector_Vector_$Impl_$.zero = new thx_geom_core_ImmutableXY(0,0);
 thx_math_Const.TWO_PI = 6.283185307179586477;

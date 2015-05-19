@@ -7,8 +7,8 @@ import chad.systems.*;
 import thx.geom.d2.*;
 using thx.Arrays;
 using thx.Tuple;
-using thx.color.RGB;
-using thx.color.HSL;
+using thx.color.Rgb;
+using thx.color.Hsl;
 using thx.color.Color;
 
 class Chad {
